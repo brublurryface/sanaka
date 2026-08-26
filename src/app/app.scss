@@ -4,12 +4,189 @@
   z-index: 100;
 }
 
-.spacer {
-  flex: 1 1 auto;
+mat-toolbar {
+  height: 64px;
+
+  padding-inline: clamp(1.5rem, 4vw, 3rem);
+
+  overflow: visible;
+
+  color: var(--sanaka-ivory);
+  background: var(--sanaka-bg);
+
+  border-bottom: 1px solid rgba(199, 154, 67, 0.08);
 }
 
-.active-link {
-  background: var(--mat-sys-primary-container);
-  color: var(--mat-sys-on-primary-container);
-  border-radius: 999px;
+/* -----------------------
+   BRAND
+------------------------ */
+
+.brand {
+  position: relative;
+  top: 12px;
+
+  display: inline-flex;
+  align-items: baseline;
+
+  overflow: visible;
+
+  color: var(--sanaka-gold-soft);
+
+  font-family: Georgia, 'Times New Roman', serif;
+  font-size: 1.65rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.04em;
+
+  text-decoration: none;
+}
+
+.brand-a {
+  position: relative;
+}
+
+/* -----------------------
+   FLAME
+------------------------ */
+
+.brand-flame {
+  position: absolute;
+  bottom: 92%;
+  left: 50%;
+
+  width: 0.55em;
+
+  opacity: 0.96;
+
+  transform: translateX(-50%);
+  transform-origin: 50% 100%;
+
+  filter: brightness(1) drop-shadow(0 0 0.2rem rgba(224, 187, 104, 0.28));
+
+  animation: brand-flame-flicker 2.8s ease-in-out infinite;
+
+  pointer-events: none;
+}
+
+@keyframes brand-flame-flicker {
+  0%,
+  100% {
+    opacity: 0.96;
+
+    transform: translateX(-50%) scaleX(1) scaleY(1) rotate(0deg);
+
+    filter: brightness(1) drop-shadow(0 0 0.2rem rgba(224, 187, 104, 0.28));
+  }
+
+  25% {
+    opacity: 1;
+
+    transform: translateX(-50%) scaleX(0.96) scaleY(1.05) rotate(-1.2deg);
+
+    filter: brightness(1.08) drop-shadow(0 0 0.3rem rgba(217, 90, 26, 0.38));
+  }
+
+  50% {
+    opacity: 0.94;
+
+    transform: translateX(-50%) scaleX(1.03) scaleY(0.98) rotate(0.8deg);
+
+    filter: brightness(0.98) drop-shadow(0 0 0.18rem rgba(224, 187, 104, 0.24));
+  }
+
+  75% {
+    opacity: 1;
+
+    transform: translateX(-50%) scaleX(0.98) scaleY(1.03) rotate(-0.6deg);
+
+    filter: brightness(1.05) drop-shadow(0 0 0.27rem rgba(217, 90, 26, 0.34));
+  }
+}
+
+/* -----------------------
+   K
+------------------------ */
+
+.brand-k {
+  display: inline-block;
+
+  font-size: 1.08em;
+}
+
+/* -----------------------
+   MAIN NAVIGATION
+------------------------ */
+
+.main-nav {
+  display: flex;
+  align-items: center;
+
+  gap: 1.75rem;
+
+  margin-left: auto;
+}
+
+.main-nav a {
+  position: relative;
+
+  padding: 0.45rem 0;
+
+  color: var(--sanaka-ivory-muted);
+
+  font-family: var(--sanaka-font-body);
+  font-size: 0.78rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: 0.07em;
+
+  text-decoration: none;
+
+  transition:
+    color 180ms ease,
+    text-shadow 180ms ease;
+}
+
+.main-nav a::after {
+  content: '';
+
+  position: absolute;
+  right: 50%;
+  bottom: 0;
+  left: 50%;
+
+  height: 1px;
+
+  background: var(--sanaka-gold-soft);
+
+  transition:
+    right 180ms ease,
+    left 180ms ease;
+}
+
+.main-nav a:hover,
+.main-nav a:focus-visible,
+.main-nav a.active-link {
+  color: var(--sanaka-gold-soft);
+}
+
+.main-nav a:hover::after,
+.main-nav a:focus-visible::after,
+.main-nav a.active-link::after {
+  right: 0;
+  left: 0;
+}
+
+.main-nav a:focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 6px;
+}
+
+/* -----------------------
+   ACCESSIBILITY
+------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .brand-flame {
+    animation: none;
+  }
 }

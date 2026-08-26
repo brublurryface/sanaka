@@ -1,12 +1,33 @@
 <header class="app-header">
   <mat-toolbar>
-    <span>{{ title() }}</span>
+    <a class="brand" routerLink="/" aria-label="Sanaka">
+      <span>S</span>
+      <span>A</span>
+      <span>N</span>
 
-    <span class="spacer"></span>
+      <span class="brand-a">
+        A
+        <img class="brand-flame" src="/images/brand/flame-03.png" alt="" aria-hidden="true" />
+      </span>
 
-    <a matButton="text" routerLink="/" routerLinkActive="active-link" [routerLinkActiveOptions]="{ exact: true }" ariaCurrentWhenActive="page">Início</a>
-    <a matButton="text" routerLink="/posts" routerLinkActive="active-link" ariaCurrentWhenActive="page">Posts</a>
-    <a matButton="text" routerLink="/maya" routerLinkActive="active-link" ariaCurrentWhenActive="page">Māyā</a>
+      <span class="brand-k">K</span>
+      <span>A</span>
+    </a>
+
+    <nav class="main-nav" aria-label="Navegação principal">
+      <a
+        routerLink="/"
+        routerLinkActive="active-link"
+        [routerLinkActiveOptions]="{ exact: true }"
+        ariaCurrentWhenActive="page"
+      >
+        Início
+      </a>
+
+      <a routerLink="/posts" routerLinkActive="active-link" ariaCurrentWhenActive="page"> Posts </a>
+
+      <a routerLink="/maya" routerLinkActive="active-link" ariaCurrentWhenActive="page"> Māyā </a>
+    </nav>
   </mat-toolbar>
 </header>
 
