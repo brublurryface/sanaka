@@ -5,6 +5,8 @@
 html {
   height: 100%;
 
+  scroll-behavior: smooth;
+
   @include mat.theme(
     (
       color: (
@@ -72,4 +74,14 @@ body {
 *::before,
 *::after {
   box-sizing: border-box;
+}
+
+/* -----------------------
+   ACCESSIBILITY
+------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
 }
