@@ -1,1 +1,17 @@
-<p>posts works!</p>
+<main class="posts-page">
+  <header class="posts-header">
+    <p class="posts-header__eyebrow">Arquivo</p>
+
+    <h1 class="posts-header__title">Leituras do santuário</h1>
+
+    <p class="posts-header__intro">Escrituras, estudos e reflexões reunidos no Sanaka.</p>
+  </header>
+
+  <section class="posts-list" aria-labelledby="posts-list-title">
+    <h2 id="posts-list-title" class="visually-hidden">Publicações</h2>
+
+    @for (post of posts; track post.id) {
+      <app-post-card [post]="post" />
+    }
+  </section>
+</main>

@@ -1,0 +1,27 @@
+<article class="post-card">
+  @if (post().coverImageUrl) {
+    <div class="post-card__image">
+      <img [src]="post().coverImageUrl" [alt]="post().coverImageAlt ?? ''" />
+    </div>
+  }
+
+  <div class="post-card__content">
+    <div class="post-card__meta">
+      <span class="post-card__category">
+        {{ post().category }}
+      </span>
+
+      <time [attr.datetime]="post().publishedAt">
+        {{ post().publishedAt }}
+      </time>
+    </div>
+
+    <h2 class="post-card__title">
+      {{ post().title }}
+    </h2>
+
+    <p class="post-card__excerpt">
+      {{ post().excerpt }}
+    </p>
+  </div>
+</article>
