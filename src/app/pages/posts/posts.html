@@ -2,16 +2,33 @@
   <header class="posts-header">
     <p class="posts-header__eyebrow">Arquivo</p>
 
-    <h1 class="posts-header__title">Leituras do santuário</h1>
+    <h1 class="posts-header__title">Publicações do santuário</h1>
 
     <p class="posts-header__intro">Escrituras, estudos e reflexões reunidos no Sanaka.</p>
   </header>
 
+  <div class="posts-search">
+    <label class="posts-search__label" for="posts-search"> Buscar nas publicações </label>
+
+    <input
+      id="posts-search"
+      class="posts-search__input"
+      type="search"
+      autocomplete="off"
+      placeholder="Busque por título, tema ou categoria..."
+      [formControl]="searchControl"
+    />
+  </div>
+
   <section class="posts-list" aria-labelledby="posts-list-title">
     <h2 id="posts-list-title" class="visually-hidden">Publicações</h2>
 
-    @for (post of posts; track post.id) {
-      <app-post-card [post]="post" />
+    @if (filteredPosts().length > 0) {
+      @for (post of filteredPosts(); track post.id) {
+        <app-post-card [post]="post" />
+      }
+    } @else {
+      <p class="posts-empty" role="status">Nenhuma publicação encontrada.</p>
     }
   </section>
 </main>

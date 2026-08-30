@@ -1,10 +1,13 @@
 import { Component } from '@angular/core';
+import { toSignal } from '@angular/core/rxjs-interop';
+import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { Post } from './post';
 import { PostCard } from './post-card/post-card';
 
 @Component({
-  imports: [PostCard],
+  imports: [ReactiveFormsModule, PostCard],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',
@@ -13,19 +16,19 @@ export class Posts {
   readonly posts: readonly Post[] = [
     {
       id: 1,
-      slug: 'a-descida-de-narasimha',
-      title: 'A descida de Narasiṃha',
+      slug: 'a-presenca-de-maya',
+      title: 'A presença de Māyā',
       excerpt:
-        'Uma leitura das fontes que narram a manifestação de Narasiṃha e o confronto com Hiraṇyakaśipu.',
+        'Notas sobre as formas pelas quais Māyā aparece nas escrituras, entre criação, percepção e manifestação.',
       publishedAt: '2026-08-28',
       category: 'Escrituras',
     },
     {
       id: 2,
-      slug: 'maya-entre-forma-e-percepcao',
-      title: 'Māyā entre forma e percepção',
+      slug: 'sanaka-como-espaco-de-estudo',
+      title: 'Sanaka como espaço de estudo',
       excerpt:
-        'Notas sobre Māyā, aparência, conhecimento e os modos pelos quais a realidade é percebida.',
+        'Reflexões sobre a construção de um espaço digital dedicado a textos, estudos e experimentação.',
       publishedAt: '2026-08-24',
       category: 'Estudos',
     },
@@ -39,4 +42,40 @@ export class Posts {
       category: 'Reflexões',
     },
   ];
+
+  readonly searchControl = new FormControl('', {
+    nonNullable: true,
+  });
+
+  readonly filteredPosts = toSignal(
+    this.searchControl.valueChanges.pipe(
+      debounceTime(300),
+      map((term) => this.normalizeSearchValue(term)),
+      distinctUntilChanged(),
+      map((term) => this.filterPosts(term)),
+    ),
+    {
+      initialValue: this.posts,
+    },
+  );
+
+  private filterPosts(term: string): readonly Post[] {
+    if (!term) {
+      return this.posts;
+    }
+
+    return this.posts.filter((post) =>
+      [post.title, post.excerpt, post.category].some((value) =>
+        this.normalizeSearchValue(value).includes(term),
+      ),
+    );
+  }
+
+  private normalizeSearchValue(value: string): string {
+    return value
+      .normalize('NFD')
+      .replace(/[\u0300-\u036f]/g, '')
+      .trim()
+      .toLocaleLowerCase('pt-BR');
+  }
 }
