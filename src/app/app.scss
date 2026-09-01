@@ -1,3 +1,26 @@
+:host {
+  display: block;
+
+  --sanaka-bg: #0d1117;
+  --sanaka-surface: #161b22;
+  --sanaka-surface-soft: #1d2430;
+
+  --sanaka-ivory: #f5ecdd;
+  --sanaka-ivory-muted: #d3c4ad;
+
+  --sanaka-gold: #d3a64f;
+  --sanaka-gold-soft: #edc978;
+
+  --sanaka-fire: #e06a2d;
+  --sanaka-fire-deep: #a13a26;
+
+  --sanaka-jewel-blue: #2f4da8;
+  --sanaka-jewel-violet: #7b52b4;
+  --sanaka-jewel-purple: #5a347f;
+
+  --sanaka-maya-mustard: #d49a38;
+}
+
 .app-header {
   position: sticky;
   top: 0;
@@ -5,6 +28,9 @@
 }
 
 mat-toolbar {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
   height: 64px;
 
   padding-inline: clamp(1.5rem, 4vw, 3rem);
@@ -12,9 +38,9 @@ mat-toolbar {
   overflow: visible;
 
   color: var(--sanaka-ivory);
-  background: var(--sanaka-bg);
+  background: rgba(13, 17, 23, 0.96);
 
-  border-bottom: 1px solid rgba(199, 154, 67, 0.08);
+  border-bottom: 1px solid rgba(237, 201, 120, 0.14);
 }
 
 /* -----------------------
@@ -143,7 +169,8 @@ mat-toolbar {
 
   transition:
     color 180ms ease,
-    text-shadow 180ms ease;
+    text-shadow 180ms ease,
+    opacity 180ms ease;
 }
 
 .main-nav a::after {
@@ -179,6 +206,68 @@ mat-toolbar {
 .main-nav a:focus-visible {
   outline: 1px solid var(--sanaka-gold-soft);
   outline-offset: 6px;
+}
+
+/* -----------------------
+   LANGUAGE SWITCHER
+------------------------ */
+
+.lang-switcher {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
+
+  margin-left: 1rem;
+  padding: 0.22rem;
+
+  border: 1px solid rgba(237, 201, 120, 0.32);
+  border-radius: 999px;
+
+  background: rgba(29, 36, 48, 0.82);
+
+  box-shadow:
+    inset 0 0 0 1px rgba(237, 201, 120, 0.04),
+    0 2px 10px rgba(0, 0, 0, 0.14);
+}
+
+.lang-switcher__button {
+  padding: 0.45rem 0.7rem;
+
+  border: 0;
+  border-radius: 999px;
+
+  background: transparent;
+
+  color: var(--sanaka-ivory-muted);
+
+  cursor: pointer;
+
+  font-family: var(--sanaka-font-body);
+  font-size: 0.72rem;
+  font-weight: 700;
+  letter-spacing: 0.08em;
+  line-height: 1;
+
+  transition:
+    color 180ms ease,
+    background-color 180ms ease,
+    opacity 180ms ease,
+    box-shadow 180ms ease;
+}
+
+.lang-switcher__button:hover,
+.lang-switcher__button:focus-visible {
+  color: var(--sanaka-gold-soft);
+  background: rgba(237, 201, 120, 0.08);
+
+  outline: none;
+}
+
+.lang-switcher__button--active {
+  color: var(--sanaka-gold-soft);
+  background: rgba(237, 201, 120, 0.18);
+
+  box-shadow: inset 0 0 0 1px rgba(237, 201, 120, 0.12);
 }
 
 /* -----------------------

@@ -1,19 +1,15 @@
 @use '@angular/material' as mat;
 
-@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600;700&family=Inter:wght@400;500;600;700&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Cormorant+Garamond:wght@400;500;600&family=Inter:wght@400;500;600&display=swap');
 
 html {
-  height: 100%;
-
-  scroll-behavior: smooth;
-
   @include mat.theme(
     (
       color: (
         primary: mat.$azure-palette,
         tertiary: mat.$blue-palette,
       ),
-      typography: Inter,
+      typography: Roboto,
       density: 0,
     )
   );
@@ -24,44 +20,43 @@ html {
      COLORS
   ------------------------ */
 
-  --sanaka-bg: #080a0d;
-  --sanaka-surface: #111419;
-  --sanaka-surface-soft: #171a1f;
+  --sanaka-bg: #0d1117;
+  --sanaka-surface: #161b22;
+  --sanaka-surface-soft: #1d2430;
 
-  --sanaka-ivory: #f0e6d2;
-  --sanaka-ivory-muted: #bdb19d;
+  --sanaka-ivory: #f5ecdd;
+  --sanaka-ivory-muted: #d3c4ad;
 
-  --sanaka-gold: #c79a43;
-  --sanaka-gold-soft: #e0bb68;
+  --sanaka-gold: #d3a64f;
+  --sanaka-gold-soft: #edc978;
 
-  --sanaka-fire: #d95a1a;
-  --sanaka-fire-deep: #8d261b;
+  --sanaka-fire: #e06a2d;
+  --sanaka-fire-deep: #a13a26;
 
-  --sanaka-jewel-blue: #243d8f;
-  --sanaka-jewel-violet: #7040a0;
-  --sanaka-jewel-purple: #4b286d;
+  --sanaka-jewel-blue: #2f4da8;
+  --sanaka-jewel-violet: #7b52b4;
+  --sanaka-jewel-purple: #5a347f;
 
-  --sanaka-maya-mustard: #c58a28;
+  --sanaka-maya-mustard: #d49a38;
 
   /* -----------------------
      TYPOGRAPHY
   ------------------------ */
 
   --sanaka-font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
-
   --sanaka-font-body: 'Inter', Arial, Helvetica, sans-serif;
 }
 
-html,
-body {
-  margin: 0;
+html {
+  height: 100%;
 
-  min-height: 100%;
-
-  background: var(--sanaka-bg);
+  scroll-behavior: smooth;
 }
 
 body {
+  min-height: 100%;
+  margin: 0;
+
   color: var(--sanaka-ivory);
   background-color: var(--sanaka-bg);
 

@@ -1,0 +1,67 @@
+{
+  "app": {
+    "title": "Sanaka",
+    "navigation": {
+      "ariaLabel": "Navegação principal",
+      "home": "Home",
+      "posts": "Posts",
+      "maya": "Māyā"
+    },
+    "language": {
+      "selector": "Seletor de idioma"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Santuário de conhecimento e consciência",
+      "title": {
+        "line1": "Um santuário",
+        "line2": "vivo na escuridão",
+        "line3": "fértil."
+      },
+      "intro": "Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "action": {
+        "enter": "Entrar no santuário",
+        "read": "Ler agora"
+      },
+      "scroll": {
+        "ariaLabel": "Rolar para explorar o santuário",
+        "label": "Rolar"
+      }
+    },
+    "paths": {
+      "eyebrow": "Dentro do santuário",
+      "title": {
+        "line1": "Escolha por onde",
+        "line2": "atravessar."
+      },
+      "intro": "O Sanaka reúne leitura, investigação e diálogo. Cada caminho conduz ao mesmo centro por uma perspectiva diferente.",
+      "card": {
+        "readings": {
+          "label": "Arquivo",
+          "title": "Leituras",
+          "description": "Entre pelos textos, estudos e histórias preservados no santuário."
+        },
+        "maya": {
+          "label": "Presença",
+          "description": "Encontre a companheira do Sanaka e atravesse o conhecimento também pela conversa."
+        }
+      }
+    }
+  },
+  "posts": {
+    "header": {
+      "eyebrow": "Arquivo",
+      "title": "Publicações do santuário",
+      "intro": "Escrituras, estudos e reflexões reunidos em Sanaka."
+    },
+    "search": {
+      "label": "Buscar nas publicações",
+      "placeholder": "Busque por título, tema ou categoria..."
+    },
+    "list": {
+      "title": "Publicações"
+    },
+    "empty": "Nenhuma publicação encontrada."
+  }
+}
