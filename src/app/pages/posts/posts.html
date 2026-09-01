@@ -1,34 +1,36 @@
 <main class="posts-page">
   <header class="posts-header">
-    <p class="posts-header__eyebrow">Arquivo</p>
+    <p class="posts-header__eyebrow">{{ 'posts.header.eyebrow' | transloco }}</p>
 
-    <h1 class="posts-header__title">Publicações do santuário</h1>
+    <h1 class="posts-header__title">{{ 'posts.header.title' | transloco }}</h1>
 
-    <p class="posts-header__intro">Escrituras, estudos e reflexões reunidos no Sanaka.</p>
+    <p class="posts-header__intro">{{ 'posts.header.intro' | transloco }}</p>
   </header>
 
   <div class="posts-search">
-    <label class="posts-search__label" for="posts-search"> Buscar nas publicações </label>
+    <label class="posts-search__label" for="posts-search">
+      {{ 'posts.search.label' | transloco }}
+    </label>
 
     <input
       id="posts-search"
       class="posts-search__input"
       type="search"
       autocomplete="off"
-      placeholder="Busque por título, tema ou categoria..."
+      [placeholder]="'posts.search.placeholder' | transloco"
       [formControl]="searchControl"
     />
   </div>
 
   <section class="posts-list" aria-labelledby="posts-list-title">
-    <h2 id="posts-list-title" class="visually-hidden">Publicações</h2>
+    <h2 id="posts-list-title" class="visually-hidden">{{ 'posts.list.title' | transloco }}</h2>
 
     @if (filteredPosts().length > 0) {
       @for (post of filteredPosts(); track post.id) {
         <app-post-card [post]="post" />
       }
     } @else {
-      <p class="posts-empty" role="status">Nenhuma publicação encontrada.</p>
+      <p class="posts-empty" role="status">{{ 'posts.empty' | transloco }}</p>
     }
   </section>
 </main>

@@ -14,20 +14,46 @@
       <span>A</span>
     </a>
 
-    <nav class="main-nav" aria-label="Navegação principal">
+    <nav class="main-nav" [attr.aria-label]="'app.navigation.ariaLabel' | transloco">
       <a
         routerLink="/"
         routerLinkActive="active-link"
         [routerLinkActiveOptions]="{ exact: true }"
         ariaCurrentWhenActive="page"
       >
-        Início
+        {{ 'app.navigation.home' | transloco }}
       </a>
 
-      <a routerLink="/posts" routerLinkActive="active-link" ariaCurrentWhenActive="page"> Posts </a>
+      <a routerLink="/posts" routerLinkActive="active-link" ariaCurrentWhenActive="page">
+        {{ 'app.navigation.posts' | transloco }}
+      </a>
 
-      <a routerLink="/maya" routerLinkActive="active-link" ariaCurrentWhenActive="page"> Māyā </a>
+      <a routerLink="/maya" routerLinkActive="active-link" ariaCurrentWhenActive="page">
+        {{ 'app.navigation.maya' | transloco }}
+      </a>
     </nav>
+
+    <div class="lang-switcher" role="group" [attr.aria-label]="'app.language.selector' | transloco">
+      <button
+        type="button"
+        class="lang-switcher__button"
+        [class.lang-switcher__button--active]="isActiveLanguage('pt-BR')"
+        [attr.aria-pressed]="isActiveLanguage('pt-BR')"
+        (click)="setLanguage('pt-BR')"
+      >
+        PT
+      </button>
+
+      <button
+        type="button"
+        class="lang-switcher__button"
+        [class.lang-switcher__button--active]="isActiveLanguage('en')"
+        [attr.aria-pressed]="isActiveLanguage('en')"
+        (click)="setLanguage('en')"
+      >
+        EN
+      </button>
+    </div>
   </mat-toolbar>
 </header>
 

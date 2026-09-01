@@ -1,0 +1,67 @@
+{
+  "app": {
+    "title": "Sanaka",
+    "navigation": {
+      "ariaLabel": "Main navigation",
+      "home": "Home",
+      "posts": "Posts",
+      "maya": "Māyā"
+    },
+    "language": {
+      "selector": "Language selector"
+    }
+  },
+  "home": {
+    "hero": {
+      "eyebrow": "Sanctuary of knowledge and consciousness",
+      "title": {
+        "line1": "A living sanctuary",
+        "line2": "in fertile",
+        "line3": "darkness."
+      },
+      "intro": "A space to traverse ideas, symbols and stories with presence. Enter slowly: there is knowledge that only reveals itself when silence also participates.",
+      "action": {
+        "enter": "Enter the sanctuary",
+        "read": "Read now"
+      },
+      "scroll": {
+        "ariaLabel": "Scroll to explore the sanctuary",
+        "label": "Scroll"
+      }
+    },
+    "paths": {
+      "eyebrow": "Inside the sanctuary",
+      "title": {
+        "line1": "Choose how to",
+        "line2": "traverse."
+      },
+      "intro": "Sanaka gathers reading, investigation and dialogue. Each path leads to the same center from a different perspective.",
+      "card": {
+        "readings": {
+          "label": "Archive",
+          "title": "Readings",
+          "description": "Enter through the texts, studies and stories preserved in the sanctuary."
+        },
+        "maya": {
+          "label": "Presence",
+          "description": "Meet Sanaka's companion and traverse knowledge also through conversation."
+        }
+      }
+    }
+  },
+  "posts": {
+    "header": {
+      "eyebrow": "Archive",
+      "title": "Sanctuary publications",
+      "intro": "Scriptures, studies and reflections gathered in Sanaka."
+    },
+    "search": {
+      "label": "Search in publications",
+      "placeholder": "Search by title, theme or category..."
+    },
+    "list": {
+      "title": "Publications"
+    },
+    "empty": "No publications found."
+  }
+}

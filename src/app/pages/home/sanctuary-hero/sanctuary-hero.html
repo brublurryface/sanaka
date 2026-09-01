@@ -2,27 +2,26 @@
   <div class="hero-atmosphere" aria-hidden="true"></div>
 
   <div class="hero-copy">
-    <p class="eyebrow">Santuário de conhecimento e consciência</p>
+    <p class="eyebrow">{{ 'home.hero.eyebrow' | transloco }}</p>
 
     <h1 id="sanctuary-title">
-      <span>Um santuário</span>
-      <span>vivo na escuridão</span>
-      <span class="title-accent">fértil.</span>
+      <span>{{ 'home.hero.title.line1' | transloco }}</span>
+      <span>{{ 'home.hero.title.line2' | transloco }}</span>
+      <span class="title-accent">{{ 'home.hero.title.line3' | transloco }}</span>
     </h1>
 
     <p class="hero-intro">
-      Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há
-      conhecimento que só se revela quando o silêncio também participa.
+      {{ 'home.hero.intro' | transloco }}
     </p>
 
     <div class="hero-actions">
       <a class="action action-primary" routerLink="/maya">
-        Entrar no santuário
+        {{ 'home.hero.action.enter' | transloco }}
         <span aria-hidden="true">→</span>
       </a>
 
       <a class="action action-secondary" routerLink="/posts">
-        Ler agora
+        {{ 'home.hero.action.read' | transloco }}
         <span aria-hidden="true">↗</span>
       </a>
     </div>
@@ -34,11 +33,15 @@
     <img class="maya-character" src="/images/maya/maya-sanaka.png" alt="Māyā" />
   </div>
 
-  <a class="scroll-indicator" href="#sanctuary-paths" aria-label="Rolar para explorar o santuário">
+  <a
+    class="scroll-indicator"
+    href="#sanctuary-paths"
+    [attr.aria-label]="'home.hero.scroll.ariaLabel' | transloco"
+  >
     <span class="scroll-capsule" aria-hidden="true">
       <span class="scroll-dot"></span>
     </span>
 
-    <span class="scroll-label"> Rolar </span>
+    <span class="scroll-label"> {{ 'home.hero.scroll.label' | transloco }} </span>
   </a>
 </section>

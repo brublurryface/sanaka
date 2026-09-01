@@ -1,13 +1,14 @@
 import { Component } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { Post } from './post';
 import { PostCard } from './post-card/post-card';
 
 @Component({
-  imports: [ReactiveFormsModule, PostCard],
+  imports: [ReactiveFormsModule, PostCard, TranslocoPipe],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',
