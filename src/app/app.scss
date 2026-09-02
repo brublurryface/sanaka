@@ -1,24 +1,7 @@
 :host {
   display: block;
 
-  --sanaka-bg: #0d1117;
-  --sanaka-surface: #161b22;
-  --sanaka-surface-soft: #1d2430;
-
-  --sanaka-ivory: #f5ecdd;
-  --sanaka-ivory-muted: #d3c4ad;
-
-  --sanaka-gold: #d3a64f;
-  --sanaka-gold-soft: #edc978;
-
-  --sanaka-fire: #e06a2d;
-  --sanaka-fire-deep: #a13a26;
-
-  --sanaka-jewel-blue: #2f4da8;
-  --sanaka-jewel-violet: #7b52b4;
-  --sanaka-jewel-purple: #5a347f;
-
-  --sanaka-maya-mustard: #d49a38;
+  --sanaka-header-height: 64px;
 }
 
 .app-header {
@@ -31,13 +14,15 @@ mat-toolbar {
   display: flex;
   align-items: center;
   gap: 1rem;
-  height: 64px;
+
+  height: var(--sanaka-header-height);
 
   padding-inline: clamp(1.5rem, 4vw, 3rem);
 
   overflow: visible;
 
   color: var(--sanaka-ivory);
+
   background: rgba(13, 17, 23, 0.96);
 
   border-bottom: 1px solid rgba(237, 201, 120, 0.14);
@@ -53,6 +38,8 @@ mat-toolbar {
 
   display: inline-flex;
   align-items: baseline;
+
+  flex-shrink: 0;
 
   overflow: visible;
 
@@ -217,6 +204,8 @@ mat-toolbar {
   align-items: center;
   gap: 0.35rem;
 
+  flex-shrink: 0;
+
   margin-left: 1rem;
   padding: 0.22rem;
 
@@ -245,8 +234,8 @@ mat-toolbar {
   font-family: var(--sanaka-font-body);
   font-size: 0.72rem;
   font-weight: 700;
-  letter-spacing: 0.08em;
   line-height: 1;
+  letter-spacing: 0.08em;
 
   transition:
     color 180ms ease,
@@ -258,6 +247,7 @@ mat-toolbar {
 .lang-switcher__button:hover,
 .lang-switcher__button:focus-visible {
   color: var(--sanaka-gold-soft);
+
   background: rgba(237, 201, 120, 0.08);
 
   outline: none;
@@ -265,9 +255,130 @@ mat-toolbar {
 
 .lang-switcher__button--active {
   color: var(--sanaka-gold-soft);
+
   background: rgba(237, 201, 120, 0.18);
 
   box-shadow: inset 0 0 0 1px rgba(237, 201, 120, 0.12);
+}
+
+/* -----------------------
+   MOBILE HEADER
+------------------------ */
+
+@media (max-width: 700px) {
+  :host {
+    --sanaka-header-height: 88px;
+  }
+
+  mat-toolbar {
+    grid-template-areas:
+      'brand language'
+      'navigation navigation';
+    grid-template-columns: minmax(0, 1fr) auto;
+    grid-template-rows: 56px 32px;
+
+    display: grid;
+
+    column-gap: 1rem;
+    row-gap: 0;
+
+    padding: 0 1rem;
+  }
+
+  .brand {
+    grid-area: brand;
+
+    top: 7px;
+
+    justify-self: start;
+
+    font-size: 1.5rem;
+    letter-spacing: 0.03em;
+  }
+
+  .main-nav {
+    grid-area: navigation;
+
+    align-self: stretch;
+    justify-self: stretch;
+
+    justify-content: center;
+
+    gap: clamp(1.75rem, 12vw, 3.25rem);
+
+    width: 100%;
+
+    margin-left: 0;
+  }
+
+  .main-nav a {
+    display: inline-flex;
+    align-items: center;
+
+    height: 100%;
+    padding: 0;
+
+    font-size: 0.8rem;
+    font-weight: 500;
+    letter-spacing: 0.05em;
+  }
+
+  .main-nav a::after {
+    bottom: 2px;
+  }
+
+  .main-nav a:focus-visible {
+    outline-offset: 3px;
+  }
+
+  .lang-switcher {
+    grid-area: language;
+
+    align-self: center;
+    justify-self: end;
+
+    gap: 0.2rem;
+
+    margin-left: 0;
+    padding: 0.16rem;
+  }
+
+  .lang-switcher__button {
+    padding: 0.38rem 0.5rem;
+
+    font-size: 0.64rem;
+    letter-spacing: 0.05em;
+  }
+}
+
+/* -----------------------
+   COMPACT MOBILE HEADER
+------------------------ */
+
+@media (max-width: 400px) {
+  mat-toolbar {
+    column-gap: 0.75rem;
+
+    padding-inline: 0.75rem;
+  }
+
+  .brand {
+    font-size: 1.4rem;
+  }
+
+  .main-nav {
+    gap: clamp(1.5rem, 11vw, 2.5rem);
+  }
+
+  .main-nav a {
+    font-size: 0.68rem;
+  }
+
+  .lang-switcher__button {
+    padding: 0.35rem 0.44rem;
+
+    font-size: 0.61rem;
+  }
 }
 
 /* -----------------------
