@@ -62,6 +62,11 @@
     "list": {
       "title": "Publicações"
     },
+    "loading": "Carregando publicações...",
+    "error": {
+      "message": "Não foi possível carregar as publicações.",
+      "retry": "Tentar novamente"
+    },
     "empty": "Nenhuma publicação encontrada."
   }
 }

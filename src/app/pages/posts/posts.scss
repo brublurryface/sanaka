@@ -142,7 +142,8 @@
   border-top: 1px solid rgba(237, 201, 120, 0.22);
 }
 
-.posts-empty {
+.posts-empty,
+.posts-feedback {
   grid-column: 1 / -1;
 
   margin: 0;
@@ -152,6 +153,35 @@
 
   font-family: var(--sanaka-font-body);
   font-size: 0.95rem;
+}
+
+.posts-feedback p {
+  margin: 0;
+}
+
+.posts-feedback button {
+  margin-top: 1rem;
+  padding: 0.75rem 1rem;
+
+  border: 1px solid rgba(237, 201, 120, 0.46);
+
+  background: transparent;
+
+  color: var(--sanaka-gold-soft);
+
+  font: inherit;
+
+  cursor: pointer;
+}
+
+.posts-feedback button:hover,
+.posts-feedback button:focus-visible {
+  border-color: var(--sanaka-gold-soft);
+}
+
+.posts-feedback button:focus-visible {
+  outline: 2px solid rgba(237, 201, 120, 0.16);
+  outline-offset: 2px;
 }
 
 /* -----------------------
