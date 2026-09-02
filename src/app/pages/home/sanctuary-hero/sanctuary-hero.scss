@@ -5,23 +5,34 @@
 .sanctuary-hero {
   isolation: isolate;
   position: relative;
+
   display: grid;
   grid-template-columns:
     minmax(26rem, 0.82fr)
     minmax(30rem, 1.18fr);
   align-items: center;
   gap: clamp(3rem, 6vw, 7rem);
-  height: calc(100dvh - 64px);
+
+  height: calc(100dvh - var(--sanaka-header-height, 64px));
+
   padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 7vw, 7.5rem);
+
   overflow: clip;
+
   background: var(--sanaka-bg);
 }
+
+/* -----------------------
+   ATMOSPHERE
+------------------------ */
 
 .hero-atmosphere {
   position: absolute;
   inset: 0;
   z-index: -2;
+
   pointer-events: none;
+
   background:
     linear-gradient(
       90deg,
@@ -33,6 +44,7 @@
     ),
     linear-gradient(180deg, rgba(8, 10, 13, 0.12), rgba(8, 10, 13, 0.22)),
     url('/images/home/sanctuary-hero.png');
+
   background-repeat: no-repeat;
   background-position: center right;
   background-size: cover;
@@ -40,34 +52,81 @@
 
 .sanctuary-hero::before {
   content: '';
+
   position: absolute;
   inset: 0;
   z-index: -1;
+
   pointer-events: none;
+
   background: radial-gradient(circle at 70% 53%, rgba(217, 90, 26, 0.08), transparent 28%);
 }
+
+.sanctuary-hero::after {
+  content: '';
+
+  position: absolute;
+  right: 0;
+  bottom: 0;
+  left: 0;
+  z-index: 0;
+
+  height: clamp(11rem, 17vw, 17rem);
+
+  pointer-events: none;
+
+  background:
+    radial-gradient(
+      ellipse at 68% 18%,
+      rgba(224, 106, 45, 0.055) 0%,
+      rgba(211, 166, 79, 0.025) 28%,
+      transparent 58%
+    ),
+    linear-gradient(
+      to bottom,
+      rgba(13, 17, 23, 0) 0%,
+      rgba(13, 17, 23, 0.04) 12%,
+      rgba(13, 17, 23, 0.12) 27%,
+      rgba(13, 17, 23, 0.3) 46%,
+      rgba(13, 17, 23, 0.54) 65%,
+      rgba(13, 17, 23, 0.78) 82%,
+      rgba(13, 17, 23, 0.94) 94%,
+      var(--sanaka-bg) 100%
+    );
+}
+
+/* -----------------------
+   COPY
+------------------------ */
 
 .hero-copy {
   position: relative;
   z-index: 2;
+
   align-self: center;
+
   max-width: 42rem;
 }
 
 .eyebrow {
   margin: 0 0 1.6rem;
+
   color: var(--sanaka-gold-soft);
+
   font-family: var(--sanaka-font-body);
-  font-size: 0.67rem;
+  font-size: 0.7rem;
   font-weight: 700;
   line-height: 1.5;
   letter-spacing: 0.2em;
+
   text-transform: uppercase;
 }
 
 h1 {
   margin: 0;
+
   color: var(--sanaka-ivory);
+
   font-family: var(--sanaka-font-display);
   font-size: clamp(3.6rem, 5vw, 5.6rem);
   font-weight: 500;
@@ -86,37 +145,51 @@ h1 span {
 .hero-intro {
   max-width: 34rem;
   margin: 2.25rem 0 0;
+
   color: var(--sanaka-ivory-muted);
+
   font-family: var(--sanaka-font-body);
   font-size: clamp(0.94rem, 1.05vw, 1.04rem);
   font-weight: 400;
   line-height: 1.85;
 }
 
+/* -----------------------
+   ACTIONS
+------------------------ */
+
 .hero-actions {
   display: flex;
   align-items: center;
   flex-wrap: wrap;
   gap: 1.2rem;
+
   margin-top: 2.5rem;
 }
 
 .action {
   position: relative;
+
   display: inline-flex;
   align-items: center;
   justify-content: center;
   gap: 1.1rem;
+
   min-height: 3.65rem;
   padding: 0.95rem 1.65rem;
+
   border: 1px solid var(--sanaka-gold);
+
   color: var(--sanaka-ivory);
+
   font-family: var(--sanaka-font-body);
   font-size: 0.69rem;
   font-weight: 700;
   letter-spacing: 0.1em;
+
   text-decoration: none;
   text-transform: uppercase;
+
   transition:
     color 180ms ease,
     background-color 180ms ease,
@@ -128,27 +201,37 @@ h1 span {
 .action::before,
 .action::after {
   content: '';
+
   position: absolute;
+
   width: 5px;
   height: 5px;
+
   background: var(--sanaka-gold-soft);
+
   opacity: 0;
+
   transform: rotate(45deg);
+
   transition: opacity 180ms ease;
 }
 
 .action::before {
   left: -3px;
 }
+
 .action::after {
   right: -3px;
 }
 
 .action-primary {
   color: #151006;
+
   background:
     linear-gradient(135deg, rgba(255, 255, 255, 0.12), transparent 34%), var(--sanaka-gold);
+
   border-color: var(--sanaka-gold-soft);
+
   box-shadow:
     inset 0 0 0 1px rgba(255, 240, 190, 0.08),
     0 0 0 rgba(217, 90, 26, 0);
@@ -156,7 +239,9 @@ h1 span {
 
 .action-secondary {
   color: var(--sanaka-ivory);
+
   background: rgba(8, 10, 13, 0.56);
+
   border-color: rgba(199, 154, 67, 0.55);
 }
 
@@ -164,18 +249,24 @@ h1 span {
   .action:hover {
     transform: translateY(-2px);
   }
+
   .action:hover::before,
   .action:hover::after {
     opacity: 1;
   }
+
   .action-primary:hover {
     background:
       linear-gradient(135deg, rgba(255, 255, 255, 0.16), transparent 36%), var(--sanaka-gold-soft);
+
     box-shadow: 0 0 1.5rem rgba(217, 90, 26, 0.14);
   }
+
   .action-secondary:hover {
     color: var(--sanaka-gold-soft);
+
     border-color: var(--sanaka-gold-soft);
+
     box-shadow: 0 0 1.2rem rgba(199, 154, 67, 0.07);
   }
 }
@@ -185,26 +276,37 @@ h1 span {
   outline-offset: 5px;
 }
 
+/* -----------------------
+   MĀYĀ
+------------------------ */
+
 .maya-stage {
   position: relative;
   z-index: 1;
+
   align-self: stretch;
+
   display: grid;
   place-items: center;
+
   min-width: 0;
 }
 
 .maya-aura {
   position: absolute;
+
   width: min(26vw, 28rem);
   aspect-ratio: 1;
+
   border-radius: 50%;
+
   background: radial-gradient(
     circle,
     rgba(224, 187, 104, 0.12) 0%,
     rgba(217, 90, 26, 0.06) 35%,
     transparent 68%
   );
+
   filter: blur(8px);
 }
 
@@ -212,11 +314,16 @@ h1 span {
   position: relative;
   left: clamp(1.5rem, 2.2vw, 2.5rem);
   z-index: 2;
+
   width: min(34vw, 31rem);
   max-height: 78%;
+
   object-fit: contain;
+
   filter: drop-shadow(0 1.5rem 2rem rgba(0, 0, 0, 0.45));
+
   transform-origin: center;
+
   animation: maya-float 5s ease-in-out infinite;
 }
 
@@ -225,28 +332,39 @@ h1 span {
   100% {
     transform: translateY(0);
   }
+
   50% {
     transform: translateY(-12px);
   }
 }
+
+/* -----------------------
+   SCROLL INDICATOR
+------------------------ */
 
 .scroll-indicator {
   position: absolute;
   bottom: 1.15rem;
   left: 50%;
   z-index: 3;
+
   display: flex;
   flex-direction: column;
   align-items: center;
   gap: 0.45rem;
+
   color: var(--sanaka-gold);
+
   font-family: var(--sanaka-font-body);
   font-size: 0.52rem;
   font-weight: 600;
   letter-spacing: 0.16em;
+
   text-decoration: none;
   text-transform: uppercase;
+
   transform: translateX(-50%);
+
   transition:
     color 180ms ease,
     opacity 180ms ease;
@@ -254,11 +372,14 @@ h1 span {
 
 .scroll-capsule {
   position: relative;
+
   display: flex;
   justify-content: center;
+
   width: 1.35rem;
   height: 2.2rem;
   padding-top: 0.42rem;
+
   border: 1px solid rgba(224, 187, 104, 0.72);
   border-radius: 999px;
 }
@@ -266,10 +387,15 @@ h1 span {
 .scroll-dot {
   width: 0.16rem;
   height: 0.45rem;
+
   border-radius: 999px;
+
   background: var(--sanaka-gold-soft);
+
   box-shadow: 0 0 0.35rem rgba(224, 187, 104, 0.35);
+
   transform-origin: center top;
+
   animation: scroll-dot-move 1.65s cubic-bezier(0.45, 0, 0.25, 1) infinite;
 }
 
@@ -280,22 +406,31 @@ h1 span {
 @keyframes scroll-dot-move {
   0% {
     opacity: 0.3;
+
     transform: translateY(0) scaleY(0.72);
   }
+
   18% {
     opacity: 1;
+
     transform: translateY(0.08rem) scaleY(1);
   }
+
   58% {
     opacity: 1;
+
     transform: translateY(0.52rem) scaleY(1.12);
   }
+
   78% {
     opacity: 0.55;
+
     transform: translateY(0.7rem) scaleY(0.78);
   }
+
   100% {
     opacity: 0;
+
     transform: translateY(0.76rem) scaleY(0.55);
   }
 }
@@ -310,59 +445,349 @@ h1 span {
   outline-offset: 6px;
 }
 
-@media (prefers-reduced-motion: reduce) {
-  .maya-character,
-  .scroll-dot {
-    animation: none;
+/* -----------------------
+   TABLET / SMALL DESKTOP
+------------------------ */
+
+@media (max-width: 1100px) {
+  .sanctuary-hero {
+    grid-template-columns:
+      minmax(0, 0.9fr)
+      minmax(0, 1.1fr);
+
+    gap: clamp(1.5rem, 4vw, 3rem);
+
+    padding: clamp(2.5rem, 4vw, 4rem) clamp(2rem, 5vw, 4rem);
+  }
+
+  h1 {
+    font-size: clamp(3.2rem, 5.8vw, 4.8rem);
+  }
+
+  .hero-intro {
+    margin-top: 1.75rem;
+
+    font-size: 1rem;
+    line-height: 1.72;
+  }
+
+  .hero-actions {
+    flex-wrap: nowrap;
+
+    gap: 0.85rem;
+
+    margin-top: 1.75rem;
+  }
+
+  .action {
+    gap: 0.65rem;
+
+    min-height: 3.4rem;
+    padding: 0.85rem 1rem;
+
+    font-size: 0.62rem;
+
+    white-space: nowrap;
+  }
+
+  .action-primary {
+    flex: 1.15;
+  }
+
+  .action-secondary {
+    flex: 0.8;
+  }
+
+  .maya-character {
+    left: -0.75rem;
+
+    width: min(40vw, 27rem);
+    max-height: 78%;
+  }
+
+  .maya-aura {
+    width: min(38vw, 25rem);
   }
 }
 
+/* -----------------------
+   LARGE PORTRAIT TABLET
+------------------------ */
+
+@media (min-width: 901px) and (max-width: 1100px) and (orientation: portrait) {
+  .maya-character {
+    top: -1rem;
+    left: -2.5rem;
+
+    width: min(39vw, 27rem);
+  }
+
+  .maya-aura {
+    transform: translate(-1.5rem, -0.75rem);
+  }
+
+  .hero-atmosphere {
+    background-position: 58% center;
+  }
+}
+
+/* -----------------------
+   TABLET PORTRAIT
+------------------------ */
+
 @media (max-width: 900px) {
   .sanctuary-hero {
-    grid-template-columns: 1fr;
-    gap: 3rem;
-    height: auto;
-    min-height: calc(100dvh - 64px);
-    padding: 4.5rem clamp(1.5rem, 7vw, 4rem);
+    grid-template-columns:
+      minmax(0, 1fr)
+      minmax(0, 0.95fr);
+
+    gap: clamp(1rem, 3vw, 2rem);
+
+    padding: 2.5rem clamp(1.5rem, 4vw, 2.5rem);
   }
+
   .hero-copy {
-    max-width: 38rem;
+    max-width: 30rem;
   }
+
+  .eyebrow {
+    margin-bottom: 1.15rem;
+
+    font-size: 0.6rem;
+  }
+
   h1 {
-    font-size: clamp(3.2rem, 11vw, 5.2rem);
+    font-size: clamp(2.9rem, 6.5vw, 4rem);
   }
-  .maya-stage {
-    min-height: 27rem;
+
+  .hero-intro {
+    margin-top: 1.5rem;
+
+    font-size: 1rem;
+    line-height: 1.65;
   }
-  .maya-aura {
-    width: min(65vw, 28rem);
+
+  .hero-actions {
+    margin-top: 1.5rem;
   }
+
+  .action {
+    min-height: 3.2rem;
+
+    font-size: 0.58rem;
+  }
+
   .maya-character {
-    left: 0;
-    width: min(72vw, 27rem);
-    max-height: none;
+    left: -1rem;
+
+    width: min(44vw, 24rem);
+    max-height: 82%;
   }
+
+  .maya-aura {
+    width: min(42vw, 23rem);
+  }
+
+  .hero-atmosphere {
+    background-position: 60% center;
+  }
+}
+
+/* -----------------------
+   MOBILE
+------------------------ */
+
+@media (max-width: 700px) {
+  .sanctuary-hero {
+    --maya-mobile-offset: clamp(1.25rem, 3dvh, 2rem);
+
+    grid-template-columns: 1fr;
+    grid-template-rows: auto 1fr;
+
+    gap: 0.65rem;
+
+    height: calc(100dvh - var(--sanaka-header-height, 88px));
+
+    padding: 1.7rem clamp(1rem, 5vw, 1.5rem) 0.5rem;
+  }
+
+  .hero-copy {
+    max-width: 100%;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.9rem;
+
+    font-size: 0.8rem;
+    letter-spacing: 0.15em;
+  }
+
+  h1 {
+    font-size: clamp(2.55rem, 10vw, 3.6rem);
+
+    line-height: 0.94;
+  }
+
+  .hero-intro {
+    margin-top: 1rem;
+
+    font-size: 0.84rem;
+    line-height: 1.6;
+  }
+
+  .hero-actions {
+    flex-direction: row;
+    flex-wrap: nowrap;
+    gap: 0.6rem;
+
+    margin-top: 1.2rem;
+  }
+
+  .action {
+    gap: 0.4rem;
+
+    min-height: 3rem;
+    padding: 0.7rem 0.75rem;
+
+    font-size: 0.68rem;
+    letter-spacing: 0.06em;
+
+    white-space: nowrap;
+  }
+
+  .action-primary {
+    flex: 1.25;
+  }
+
+  .action-secondary {
+    flex: 0.8;
+  }
+
+  .maya-stage {
+    align-self: stretch;
+    align-items: start;
+    justify-items: center;
+
+    min-height: 0;
+
+    padding-top: var(--maya-mobile-offset);
+  }
+
+  .maya-aura {
+    top: var(--maya-mobile-offset);
+
+    width: min(62vw, 18rem);
+  }
+
+  .maya-character {
+    top: 0;
+    left: 0;
+
+    width: min(64vw, 18rem);
+    max-height: 100%;
+  }
+
+  .hero-atmosphere {
+    background-position: 64% center;
+  }
+
+  .sanctuary-hero::after {
+    height: 8rem;
+  }
+
+  .scroll-indicator {
+    bottom: 0.75rem;
+
+    font-size: 0.48rem;
+  }
+
+  .scroll-capsule {
+    width: 1.15rem;
+    height: 1.9rem;
+  }
+}
+
+/* -----------------------
+   COMPACT MOBILE
+------------------------ */
+
+@media (max-width: 520px) {
+  .sanctuary-hero {
+    gap: 0.45rem;
+
+    padding: 1.4rem 1rem 0.35rem;
+  }
+
+  .eyebrow {
+    margin-bottom: 0.75rem;
+  }
+
+  h1 {
+    font-size: clamp(2.45rem, 11vw, 3.15rem);
+  }
+
+  .hero-intro {
+    margin-top: 1rem;
+
+    font-size: 1rem;
+    line-height: 1.55;
+  }
+
+  .hero-actions {
+    gap: 0.5rem;
+
+    margin-top: 1rem;
+  }
+
+  .action {
+    min-height: 3rem;
+    padding: 0.65rem 0.7rem;
+
+    font-size: 0.7rem;
+  }
+
+  .maya-character {
+    width: min(66vw, 17rem);
+  }
+
+  .maya-aura {
+    width: min(64vw, 17rem);
+  }
+}
+
+/* -----------------------
+   SHORT MOBILE
+------------------------ */
+
+@media (max-width: 700px) and (max-height: 720px) {
   .scroll-indicator {
     display: none;
   }
 }
 
-@media (max-width: 520px) {
-  .sanctuary-hero {
-    padding: 3.5rem 1.25rem;
-  }
+@media (max-width: 380px) {
   h1 {
-    font-size: clamp(3rem, 15vw, 4.4rem);
+    font-size: clamp(2.35rem, 10.8vw, 2.8rem);
   }
-  .hero-actions {
-    align-items: stretch;
-    flex-direction: column;
+
+  .hero-intro {
+    font-size: 0.8rem;
   }
+
   .action {
-    width: 100%;
-    justify-content: space-between;
+    padding-inline: 0.58rem;
+
+    font-size: 0.49rem;
   }
-  .maya-stage {
-    min-height: 22rem;
+}
+
+/* -----------------------
+   ACCESSIBILITY
+------------------------ */
+
+@media (prefers-reduced-motion: reduce) {
+  .maya-character,
+  .scroll-dot {
+    animation: none;
   }
 }
