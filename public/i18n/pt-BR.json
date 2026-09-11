@@ -57,10 +57,25 @@
     },
     "search": {
       "label": "Buscar nas publicações",
-      "placeholder": "Busque por título, tema ou categoria..."
+      "placeholder": "Busque por título ou conteúdo...",
+      "clear": "Limpar busca"
+    },
+    "view": {
+      "label": "Modo de leitura",
+      "continuous": "Contínua",
+      "paged": "Por páginas"
     },
     "list": {
       "title": "Publicações"
+    },
+    "pagination": {
+      "ariaLabel": "Paginação das publicações",
+      "previous": "Anterior",
+      "next": "Próxima",
+      "goToPage": "Ir para a página {{ page }}",
+      "loadMore": "Carregar mais",
+      "loadingMore": "Carregando mais...",
+      "error": "Não foi possível carregar mais publicações."
     },
     "loading": "Carregando publicações...",
     "error": {

@@ -1,4 +1,5 @@
 import { Routes } from '@angular/router';
+
 import { Home } from './pages/home/home';
 
 export const routes: Routes = [
@@ -8,7 +9,7 @@ export const routes: Routes = [
   },
   {
     path: 'posts',
-    loadComponent: () => import('./pages/posts/posts').then((m) => m.Posts),
+    loadChildren: () => import('./pages/posts/posts.routes').then((m) => m.POSTS_ROUTES),
   },
   {
     path: 'maya',

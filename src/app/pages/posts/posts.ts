@@ -1,26 +1,12 @@
-import { ChangeDetectionStrategy, Component, computed, effect, inject } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import {
-  catchError,
-  debounceTime,
-  distinctUntilChanged,
-  map,
-  of,
-  startWith,
-  Subject,
-  switchMap,
-} from 'rxjs';
+import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
-import { Post } from './post';
 import { PostCard } from './post-card/post-card';
-import { WordPressPostsService } from './wordpress-posts.service';
-
-interface PostsState {
-  readonly status: 'loading' | 'success' | 'error';
-  readonly posts: readonly Post[];
-}
+import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
   imports: [ReactiveFormsModule, PostCard, TranslocoPipe],
@@ -30,90 +16,73 @@ interface PostsState {
   changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Posts {
-  private readonly postsService = inject(WordPressPostsService);
-  private readonly reloadPosts = new Subject<void>();
+  private readonly route = inject(ActivatedRoute);
+  private readonly store = inject(PostsStore);
 
-  private readonly state = toSignal(
-    this.reloadPosts.pipe(
-      startWith(undefined),
-      switchMap(() =>
-        this.postsService.getPosts().pipe(
-          map((posts): PostsState => ({
-            status: 'success',
-            posts,
-          })),
-          startWith<PostsState>({
-            status: 'loading',
-            posts: [],
-          }),
-          catchError(() =>
-            of<PostsState>({
-              status: 'error',
-              posts: [],
-            }),
-          ),
-        ),
-      ),
-    ),
-    {
-      initialValue: {
-        status: 'loading',
-        posts: [],
-      } satisfies PostsState,
-    },
-  );
-
-  readonly searchControl = new FormControl('', {
+  readonly searchControl = new FormControl(this.store.search(), {
     nonNullable: true,
   });
 
-  private readonly searchTerm = toSignal(
-    this.searchControl.valueChanges.pipe(
-      startWith(this.searchControl.value),
-      debounceTime(300),
-      map((term) => this.normalizeSearchValue(term)),
-      distinctUntilChanged(),
-    ),
-    {
-      initialValue: '',
-    },
-  );
+  readonly posts = this.store.posts;
+  readonly total = this.store.total;
+  readonly totalPages = this.store.totalPages;
+  readonly isLoading = this.store.isLoading;
+  readonly hasError = this.store.hasError;
+  readonly isLoadingMore = this.store.isLoadingMore;
+  readonly hasLoadMoreError = this.store.hasLoadMoreError;
+  readonly hasMore = this.store.hasMore;
+  readonly pageNumbers = this.store.pageNumbers;
+  readonly viewMode = this.store.viewMode;
+  readonly currentPage = this.store.currentPage;
 
-  readonly posts = computed(() => this.state().posts);
-  readonly isLoading = computed(() => this.state().status === 'loading');
-  readonly hasError = computed(() => this.state().status === 'error');
-  readonly filteredPosts = computed(() => this.filterPosts(this.searchTerm(), this.posts()));
+  constructor() {
+    this.store.activateRoute(
+      this.route.snapshot.data['view'],
+      this.route.snapshot.paramMap.get('page'),
+    );
 
-  private readonly syncSearchAvailability = effect(() => {
-    if (this.isLoading()) {
-      this.searchControl.disable({ emitEvent: false });
-      return;
-    }
+    this.route.paramMap
+      .pipe(takeUntilDestroyed())
+      .subscribe((params) =>
+        this.store.activateRoute(this.route.snapshot.data['view'], params.get('page')),
+      );
 
-    this.searchControl.enable({ emitEvent: false });
-  });
+    this.searchControl.valueChanges
+      .pipe(
+        map((term) => term.trim()),
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(),
+      )
+      .subscribe((search) => this.store.setSearch(search));
+  }
+
+  setViewMode(mode: PostsViewMode): void {
+    this.store.setViewMode(mode);
+  }
+
+  clearSearch(input: HTMLInputElement): void {
+    this.searchControl.setValue('');
+    input.focus();
+  }
+
+  loadMore(): void {
+    this.store.loadMore();
+  }
+
+  goToPage(page: number): void {
+    this.store.goToPage(page);
+  }
+
+  previousPage(): void {
+    this.store.previousPage();
+  }
+
+  nextPage(): void {
+    this.store.nextPage();
+  }
 
   retry(): void {
-    this.reloadPosts.next();
-  }
-
-  private filterPosts(term: string, posts: readonly Post[]): readonly Post[] {
-    if (!term) {
-      return posts;
-    }
-
-    return posts.filter((post) =>
-      [post.title, post.excerpt, post.category].some((value) =>
-        this.normalizeSearchValue(value).includes(term),
-      ),
-    );
-  }
-
-  private normalizeSearchValue(value: string): string {
-    return value
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .toLocaleLowerCase('pt-BR');
+    this.store.retry();
   }
 }

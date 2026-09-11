@@ -3,7 +3,11 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { Post } from './post';
-import { WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
+import {
+  PostsPage,
+  WORDPRESS_API_URL,
+  WordPressPostsService,
+} from './wordpress-posts.service';
 
 describe('WordPressPostsService', () => {
   let httpTesting: HttpTestingController;
@@ -31,38 +35,50 @@ describe('WordPressPostsService', () => {
     httpTesting.verify();
   });
 
-  it('should load and map posts, categories and unique featured media', () => {
-    let result: readonly Post[] | undefined;
+  it('should load one page and expose WordPress pagination metadata', () => {
+    let result: PostsPage | undefined;
 
-    service.getPosts().subscribe((posts) => {
-      result = posts;
-    });
+    service
+      .getPosts({
+        page: 2,
+        perPage: 20,
+        search: 'medo',
+        categoryId: 45,
+      })
+      .subscribe((postsPage) => {
+        result = postsPage;
+      });
 
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
-    expect(postsRequest.request.params.get('per_page')).toBe('100');
+    expect(postsRequest.request.params.get('page')).toBe('2');
+    expect(postsRequest.request.params.get('per_page')).toBe('20');
+    expect(postsRequest.request.params.get('search')).toBe('medo');
+    expect(postsRequest.request.params.get('categories')).toBe('45');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
 
-    postsRequest.flush([
+    postsRequest.flush(
+      [
+        {
+          id: 6667,
+          slug: 'eu-nao-entendi',
+          date: '2023-06-20T19:54:33',
+          title: { rendered: 'Eu &amp; o medo' },
+          excerpt: {
+            rendered:
+              '<p>Primeiro trecho.</p><p>Segundo trecho&#8230;</p><a class="more-link">Continue lendo Eu &amp; o medo →</a>',
+          },
+          featured_media: 6453,
+          categories: [41, 45],
+        },
+      ],
       {
-        id: 6667,
-        slug: 'eu-nao-entendi',
-        date: '2023-06-20T19:54:33',
-        title: { rendered: 'Eu &amp; o medo' },
-        excerpt: { rendered: '<p>Primeiro trecho.</p><p>Segundo trecho&#8230;</p>' },
-        featured_media: 6453,
-        categories: [41, 45],
+        headers: {
+          'X-WP-Total': '99',
+          'X-WP-TotalPages': '5',
+        },
       },
-      {
-        id: 6662,
-        slug: 'outro-post',
-        date: '2022-09-16T21:53:53',
-        title: { rendered: 'Outro post' },
-        excerpt: { rendered: '<p>Outro resumo.</p>' },
-        featured_media: 6453,
-        categories: [45],
-      },
-    ]);
+    );
 
     const categoriesRequest = httpTesting.expectOne(
       (request) => request.url === `${apiUrl}/categories`,
@@ -84,40 +100,42 @@ describe('WordPressPostsService', () => {
       },
     ]);
 
-    expect(result).toEqual([
-      {
-        id: 6667,
-        slug: 'eu-nao-entendi',
-        title: 'Eu & o medo',
-        excerpt: 'Primeiro trecho. Segundo trecho…',
-        publishedAt: '2023-06-20',
-        category: 'Bruna · Pensamentos & Ensaios',
-        coverImageUrl: 'https://example.com/cover.jpg',
-        coverImageAlt: 'Capa do post',
-      },
-      {
-        id: 6662,
-        slug: 'outro-post',
-        title: 'Outro post',
-        excerpt: 'Outro resumo.',
-        publishedAt: '2022-09-16',
-        category: 'Pensamentos & Ensaios',
-        coverImageUrl: 'https://example.com/cover.jpg',
-        coverImageAlt: 'Capa do post',
-      },
-    ]);
+    expect(result).toEqual({
+      posts: [
+        {
+          id: 6667,
+          slug: 'eu-nao-entendi',
+          title: 'Eu & o medo',
+          excerpt: 'Primeiro trecho. Segundo trecho…',
+          publishedAt: '2023-06-20',
+          category: 'Bruna · Pensamentos & Ensaios',
+          coverImageUrl: 'https://example.com/cover.jpg',
+          coverImageAlt: 'Capa do post',
+        },
+      ],
+      page: 2,
+      perPage: 20,
+      total: 99,
+      totalPages: 5,
+    });
   });
 
-  it('should skip the media request when posts have no featured images', () => {
-    let result: readonly Post[] | undefined;
+  it('should use 20 posts per page and skip media when no post has a featured image', () => {
+    let result: PostsPage | undefined;
 
-    service.getPosts().subscribe((posts) => {
-      result = posts;
+    service.getPosts().subscribe((postsPage) => {
+      result = postsPage;
     });
 
-    httpTesting
-      .expectOne((request) => request.url === `${apiUrl}/posts`)
-      .flush([
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('page')).toBe('1');
+    expect(postsRequest.request.params.get('per_page')).toBe('20');
+    expect(postsRequest.request.params.has('search')).toBe(false);
+    expect(postsRequest.request.params.has('categories')).toBe(false);
+
+    postsRequest.flush(
+      [
         {
           id: 1,
           slug: 'sem-imagem',
@@ -127,22 +145,53 @@ describe('WordPressPostsService', () => {
           featured_media: 0,
           categories: [],
         },
-      ]);
+      ],
+      {
+        headers: {
+          'X-WP-Total': '1',
+          'X-WP-TotalPages': '1',
+        },
+      },
+    );
 
     httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
 
-    expect(result).toEqual([
-      {
-        id: 1,
-        slug: 'sem-imagem',
-        title: 'Sem imagem',
-        excerpt: 'Resumo.',
-        publishedAt: '2026-09-02',
-        category: '',
-        coverImageUrl: undefined,
-        coverImageAlt: undefined,
+    expect(result).toEqual({
+      posts: [
+        {
+          id: 1,
+          slug: 'sem-imagem',
+          title: 'Sem imagem',
+          excerpt: 'Resumo.',
+          publishedAt: '2026-09-02',
+          category: '',
+          coverImageUrl: undefined,
+          coverImageAlt: undefined,
+        },
+      ],
+      page: 1,
+      perPage: 20,
+      total: 1,
+      totalPages: 1,
+    });
+  });
+
+  it('should limit perPage to the WordPress maximum of 100', () => {
+    service.getPosts({ perPage: 500 }).subscribe();
+
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('per_page')).toBe('100');
+
+    postsRequest.flush([], {
+      headers: {
+        'X-WP-Total': '0',
+        'X-WP-TotalPages': '0',
       },
-    ]);
+    });
+
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
   });
 });
