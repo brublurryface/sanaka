@@ -56,11 +56,31 @@
       "intro": "Scriptures, studies and reflections gathered in Sanaka."
     },
     "search": {
-      "label": "Search in publications",
-      "placeholder": "Search by title, theme or category..."
+      "label": "Search publications",
+      "placeholder": "Search by title or content...",
+      "clear": "Clear search"
+    },
+    "view": {
+      "label": "Reading mode",
+      "continuous": "Continuous",
+      "paged": "Pages"
     },
     "list": {
       "title": "Publications"
+    },
+    "pagination": {
+      "ariaLabel": "Publications pagination",
+      "previous": "Previous",
+      "next": "Next",
+      "goToPage": "Go to page {{ page }}",
+      "loadMore": "Load more",
+      "loadingMore": "Loading more...",
+      "error": "More publications could not be loaded."
+    },
+    "loading": "Loading publications...",
+    "error": {
+      "message": "The publications could not be loaded.",
+      "retry": "Try again"
     },
     "empty": "No publications found."
   }

@@ -12,25 +12,136 @@
       {{ 'posts.search.label' | transloco }}
     </label>
 
-    <input
-      id="posts-search"
-      class="posts-search__input"
-      type="search"
-      autocomplete="off"
-      [placeholder]="'posts.search.placeholder' | transloco"
-      [formControl]="searchControl"
-    />
+    <div class="posts-search__control">
+      <input
+        #searchInput
+        id="posts-search"
+        class="posts-search__input"
+        type="search"
+        autocomplete="off"
+        [placeholder]="'posts.search.placeholder' | transloco"
+        [formControl]="searchControl"
+      />
+
+      <button
+        type="button"
+        class="posts-search__clear"
+        [attr.aria-label]="'posts.search.clear' | transloco"
+        (click)="clearSearch(searchInput)"
+      ></button>
+    </div>
+  </div>
+
+  <div class="posts-toolbar">
+    <fieldset class="posts-view">
+      <legend class="posts-view__label">{{ 'posts.view.label' | transloco }}</legend>
+
+      <div class="posts-view__options">
+        <button
+          type="button"
+          class="posts-view__option"
+          [class.posts-view__option--active]="viewMode() === 'continuous'"
+          [attr.aria-pressed]="viewMode() === 'continuous'"
+          (click)="setViewMode('continuous')"
+        >
+          {{ 'posts.view.continuous' | transloco }}
+        </button>
+
+        <button
+          type="button"
+          class="posts-view__option"
+          [class.posts-view__option--active]="viewMode() === 'paged'"
+          [attr.aria-pressed]="viewMode() === 'paged'"
+          (click)="setViewMode('paged')"
+        >
+          {{ 'posts.view.paged' | transloco }}
+        </button>
+      </div>
+    </fieldset>
   </div>
 
   <section class="posts-list" aria-labelledby="posts-list-title">
     <h2 id="posts-list-title" class="visually-hidden">{{ 'posts.list.title' | transloco }}</h2>
 
-    @if (filteredPosts().length > 0) {
-      @for (post of filteredPosts(); track post.id) {
+    @if (isLoading()) {
+      <p class="posts-feedback" role="status">{{ 'posts.loading' | transloco }}</p>
+    } @else if (hasError()) {
+      <div class="posts-feedback" role="alert">
+        <p>{{ 'posts.error.message' | transloco }}</p>
+        <button type="button" (click)="retry()">{{ 'posts.error.retry' | transloco }}</button>
+      </div>
+    } @else if (posts().length > 0) {
+      @for (post of posts(); track post.id) {
         <app-post-card [post]="post" />
       }
     } @else {
       <p class="posts-empty" role="status">{{ 'posts.empty' | transloco }}</p>
     }
   </section>
+
+  @if (!isLoading() && !hasError() && posts().length > 0) {
+    @if (viewMode() === 'continuous') {
+      <div class="posts-pagination posts-pagination--continuous">
+        @if (hasLoadMoreError()) {
+          <div class="posts-pagination__error" role="alert">
+            <p>{{ 'posts.pagination.error' | transloco }}</p>
+            <button type="button" (click)="retry()">
+              {{ 'posts.error.retry' | transloco }}
+            </button>
+          </div>
+        } @else if (hasMore()) {
+          <button
+            type="button"
+            class="posts-pagination__load-more"
+            [disabled]="isLoadingMore()"
+            (click)="loadMore()"
+          >
+            @if (isLoadingMore()) {
+              {{ 'posts.pagination.loadingMore' | transloco }}
+            } @else {
+              {{ 'posts.pagination.loadMore' | transloco }}
+            }
+          </button>
+        }
+      </div>
+    } @else if (totalPages() > 1) {
+      <nav
+        class="posts-pagination posts-pagination--paged"
+        [attr.aria-label]="'posts.pagination.ariaLabel' | transloco"
+      >
+        <button
+          type="button"
+          class="posts-pagination__direction"
+          [disabled]="currentPage() === 1"
+          (click)="previousPage()"
+        >
+          {{ 'posts.pagination.previous' | transloco }}
+        </button>
+
+        <div class="posts-pagination__pages">
+          @for (page of pageNumbers(); track page) {
+            <button
+              type="button"
+              class="posts-pagination__page"
+              [class.posts-pagination__page--active]="page === currentPage()"
+              [attr.aria-current]="page === currentPage() ? 'page' : null"
+              [attr.aria-label]="'posts.pagination.goToPage' | transloco: { page }"
+              (click)="goToPage(page)"
+            >
+              {{ page }}
+            </button>
+          }
+        </div>
+
+        <button
+          type="button"
+          class="posts-pagination__direction"
+          [disabled]="currentPage() === totalPages()"
+          (click)="nextPage()"
+        >
+          {{ 'posts.pagination.next' | transloco }}
+        </button>
+      </nav>
+    }
+  }
 </main>

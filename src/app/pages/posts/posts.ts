@@ -1,82 +1,88 @@
-import { Component } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
+import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, map } from 'rxjs';
 
-import { Post } from './post';
 import { PostCard } from './post-card/post-card';
+import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
   imports: [ReactiveFormsModule, PostCard, TranslocoPipe],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',
+  changeDetection: ChangeDetectionStrategy.OnPush,
 })
 export class Posts {
-  readonly posts: readonly Post[] = [
-    {
-      id: 1,
-      slug: 'a-presenca-de-maya',
-      title: 'A presença de Māyā',
-      excerpt:
-        'Notas sobre as formas pelas quais Māyā aparece nas escrituras, entre criação, percepção e manifestação.',
-      publishedAt: '2026-08-28',
-      category: 'Escrituras',
-    },
-    {
-      id: 2,
-      slug: 'sanaka-como-espaco-de-estudo',
-      title: 'Sanaka como espaço de estudo',
-      excerpt:
-        'Reflexões sobre a construção de um espaço digital dedicado a textos, estudos e experimentação.',
-      publishedAt: '2026-08-24',
-      category: 'Estudos',
-    },
-    {
-      id: 3,
-      slug: 'o-silencio-do-santuario',
-      title: 'O silêncio do santuário',
-      excerpt:
-        'Uma investigação sobre silêncio, espaço e presença como princípios da identidade do Sanaka.',
-      publishedAt: '2026-08-20',
-      category: 'Reflexões',
-    },
-  ];
+  private readonly route = inject(ActivatedRoute);
+  private readonly store = inject(PostsStore);
 
-  readonly searchControl = new FormControl('', {
+  readonly searchControl = new FormControl(this.store.search(), {
     nonNullable: true,
   });
 
-  readonly filteredPosts = toSignal(
-    this.searchControl.valueChanges.pipe(
-      debounceTime(300),
-      map((term) => this.normalizeSearchValue(term)),
-      distinctUntilChanged(),
-      map((term) => this.filterPosts(term)),
-    ),
-    {
-      initialValue: this.posts,
-    },
-  );
+  readonly posts = this.store.posts;
+  readonly total = this.store.total;
+  readonly totalPages = this.store.totalPages;
+  readonly isLoading = this.store.isLoading;
+  readonly hasError = this.store.hasError;
+  readonly isLoadingMore = this.store.isLoadingMore;
+  readonly hasLoadMoreError = this.store.hasLoadMoreError;
+  readonly hasMore = this.store.hasMore;
+  readonly pageNumbers = this.store.pageNumbers;
+  readonly viewMode = this.store.viewMode;
+  readonly currentPage = this.store.currentPage;
 
-  private filterPosts(term: string): readonly Post[] {
-    if (!term) {
-      return this.posts;
-    }
-
-    return this.posts.filter((post) =>
-      [post.title, post.excerpt, post.category].some((value) =>
-        this.normalizeSearchValue(value).includes(term),
-      ),
+  constructor() {
+    this.store.activateRoute(
+      this.route.snapshot.data['view'],
+      this.route.snapshot.paramMap.get('page'),
     );
+
+    this.route.paramMap
+      .pipe(takeUntilDestroyed())
+      .subscribe((params) =>
+        this.store.activateRoute(this.route.snapshot.data['view'], params.get('page')),
+      );
+
+    this.searchControl.valueChanges
+      .pipe(
+        map((term) => term.trim()),
+        debounceTime(300),
+        distinctUntilChanged(),
+        takeUntilDestroyed(),
+      )
+      .subscribe((search) => this.store.setSearch(search));
   }
 
-  private normalizeSearchValue(value: string): string {
-    return value
-      .normalize('NFD')
-      .replace(/[\u0300-\u036f]/g, '')
-      .trim()
-      .toLocaleLowerCase('pt-BR');
+  setViewMode(mode: PostsViewMode): void {
+    this.store.setViewMode(mode);
+  }
+
+  clearSearch(input: HTMLInputElement): void {
+    this.searchControl.setValue('');
+    input.focus();
+  }
+
+  loadMore(): void {
+    this.store.loadMore();
+  }
+
+  goToPage(page: number): void {
+    this.store.goToPage(page);
+  }
+
+  previousPage(): void {
+    this.store.previousPage();
+  }
+
+  nextPage(): void {
+    this.store.nextPage();
+  }
+
+  retry(): void {
+    this.store.retry();
   }
 }
