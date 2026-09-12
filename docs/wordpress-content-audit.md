@@ -2,7 +2,8 @@
 
 - Parent issue: #25
 - Delivery issue: #26
-  Snapshot date: 2026-09-12
+
+Snapshot date: 2026-09-12
 
 ## Scope
 
@@ -24,39 +25,39 @@ These items must be investigated separately when work begins on `wod.sanaka.com.
 
 ## Inventory
 
-| Resource                               | Total | Notes                                                                                        |
-| -------------------------------------- | ----: | -------------------------------------------------------------------------------------------- |
-| Published posts                        |    99 | Standard WordPress `post` collection                                                         |
-| Categories                             |     7 | Includes three empty legacy categories                                                       |
-| Tags                                   |     0 | Tags are not currently used                                                                  |
-| Media attachments                      | 2,523 | Historical library; includes the two new editorial covers and is not safe to treat as unused |
-| Featured media used by published posts |     3 | All 99 posts now have a featured image                                                       |
+| Resource | Total | Notes |
+| --- | ---: | --- |
+| Published posts | 99 | Standard WordPress `post` collection |
+| Categories | 7 | Includes three empty legacy categories |
+| Tags | 0 | Tags are not currently used |
+| Media attachments | 2,523 | Historical library; includes the two new editorial covers and is not safe to treat as unused |
+| Featured media used by published posts | 3 | All 99 posts now have a featured image |
 
 ## Category map
 
-|  ID | Name        | Slug          | Posts | Parent | Preliminary destination       |
-| --: | ----------- | ------------- | ----: | -----: | ----------------------------- |
-|  43 | Romance     | `romance`     |    95 |      0 | WoD                           |
-|  41 | Bruna       | `bruna`       |     4 |      0 | Mixed parent category         |
-|  45 | Pensamentos | `pensamentos` |     3 |     41 | Sanaka                        |
-|  46 | De Preto    | `de-preto`    |     1 |     41 | Shared between Sanaka and WoD |
-|  44 | Conto       | `conto`       |     0 |     43 | WoD; currently empty          |
-|   3 | Business    | `business`    |     0 |      0 | Review; likely legacy residue |
-|  42 | Co-escrito  | `co-escrito`  |     0 |     43 | WoD; currently empty          |
+| ID | Name | Slug | Posts | Parent | Preliminary destination |
+| ---: | --- | --- | ---: | ---: | --- |
+| 43 | Romance | `romance` | 95 | 0 | WoD |
+| 41 | Bruna | `bruna` | 4 | 0 | Mixed parent category |
+| 45 | Pensamentos | `pensamentos` | 3 | 41 | Sanaka |
+| 46 | De Preto | `de-preto` | 1 | 41 | Shared between Sanaka and WoD |
+| 44 | Conto | `conto` | 0 | 43 | WoD; currently empty |
+| 3 | Business | `business` | 0 | 0 | Review; likely legacy residue |
+| 42 | Co-escrito | `co-escrito` | 0 | 43 | WoD; currently empty |
 
 ## Post classification
 
 | Category combination | Posts | Destination |
-| -------------------- | ----: | ----------- |
-| Romance              |    95 | WoD         |
-| Bruna + Pensamentos  |     3 | Sanaka      |
-| Bruna + De Preto     |     1 | Shared      |
+| --- | ---: | --- |
+| Romance | 95 | WoD |
+| Bruna + Pensamentos | 3 | Sanaka |
+| Bruna + De Preto | 1 | Shared |
 
 No published post was found without a category. No post combines the Romance and Bruna branches. The archive currently uses no tags.
 
 ### Shared content: Blaike
 
-`I . â€¢ Acordar`, slug `acordar`, belongs to `Bruna + De Preto`. De Preto is connected to Blaike and should be available to both Sanaka and WoD without duplicating the WordPress post.
+`I . • Acordar`, slug `acordar`, belongs to `Bruna + De Preto`. De Preto is connected to Blaike and should be available to both Sanaka and WoD without duplicating the WordPress post.
 
 This exposes a distinction that the parent architecture issue must resolve:
 
@@ -67,11 +68,11 @@ Using categories for both responsibilities may become fragile. Issue #25 must ev
 
 ## Featured media
 
-| Media ID | Slug                              | Posts using it | Purpose                  |
-| -------: | --------------------------------- | -------------: | ------------------------ |
-|     6453 | `not_included`                    |             95 | Shared WoD/Romance cover |
-|     6696 | `pensamentos-maya-raposa-deserto` |              3 | Shared Pensamentos cover |
-|     6695 | `blaike-capa-sanaka`              |              1 | Blaike/De Preto cover    |
+| Media ID | Slug | Posts using it | Purpose |
+| ---: | --- | ---: | --- |
+| 6453 | `not_included` | 95 | Shared WoD/Romance cover |
+| 6696 | `pensamentos-maya-raposa-deserto` | 3 | Shared Pensamentos cover |
+| 6695 | `blaike-capa-sanaka` | 1 | Blaike/De Preto cover |
 
 The REST output displayed no alternative text for these records. Their `alt_text` values should be confirmed and completed in WordPress as a separate editorial accessibility action.
 
@@ -81,10 +82,10 @@ The 2,523 media attachments must not be classified as unused from this audit. Th
 
 These rules document current intent; they are not implemented by this issue.
 
-| Frontend | Included collections     |
-| -------- | ------------------------ |
-| Sanaka   | Pensamentos and De Preto |
-| WoD      | Romance and De Preto     |
+| Frontend | Included collections |
+| --- | --- |
+| Sanaka | Pensamentos and De Preto |
+| WoD | Romance and De Preto |
 
 The same De Preto post should be queried by both frontends rather than duplicated.
 
