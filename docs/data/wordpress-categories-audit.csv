@@ -1,0 +1,8 @@
+﻿"Id","Name","Slug","Count","ParentId","Destination"
+"43","Romance","romance","95","0","WoD"
+"41","Bruna","bruna","4","0","Mixed parent"
+"45","Pensamentos","pensamentos","3","41","Sanaka"
+"46","De Preto","de-preto","1","41","Shared"
+"44","Conto","conto","0","43","WoD"
+"3","Business","business","0","0","Review"
+"42","Co-escrito","co-escrito","0","43","WoD"
