@@ -1,0 +1,40 @@
+<article class="message-node" aria-labelledby="child-node-title">
+  <div class="node-heading">
+    <span class="node-badge" aria-hidden="true">02</span>
+
+    <div>
+      <p>{{ 'matrix.exhibit.child.eyebrow' | transloco }}</p>
+      <h3 id="child-node-title">{{ 'matrix.exhibit.child.title' | transloco }}</h3>
+    </div>
+  </div>
+
+  <div class="received-value" aria-live="polite">
+    <span>{{ 'matrix.exhibit.child.receivedLabel' | transloco }}</span>
+
+    @if (message) {
+      <strong>“{{ message }}”</strong>
+    } @else {
+      <em>{{ 'matrix.exhibit.child.waiting' | transloco }}</em>
+    }
+  </div>
+
+  <fieldset [disabled]="!message">
+    <legend>
+      <span aria-hidden="true">2 ·</span>
+      {{ 'matrix.exhibit.child.reply' | transloco }}
+    </legend>
+
+    <div class="reply-options">
+      @for (option of replyOptions; track option.kind) {
+        <button type="button" (click)="selectReply(option.kind)">
+          {{ option.translationKey | transloco }}
+        </button>
+      }
+    </div>
+  </fieldset>
+
+  <p class="output-note">
+    <code>@Output()</code>
+    {{ 'matrix.exhibit.child.outputNote' | transloco }}
+  </p>
+</article>

@@ -5,21 +5,21 @@
     alt="Māyā, personagem do projeto Sanaka"
   />
 
-  # Sanaka
+# Sanaka
 
-  **Entre devagar. Aqui, código também é linguagem.**<br>
-  **Enter slowly. Here, code is also a language.**
+**Entre devagar. Aqui, código também é linguagem.**<br>
+**Enter slowly. Here, code is also a language.**
 
-  Um santuário digital onde textos, personagens e experimentos de programação compartilham o mesmo espaço.<br>
-  A digital sanctuary where writings, characters, and programming experiments share the same space.
+Um santuário digital onde textos, personagens e experimentos de programação compartilham o mesmo espaço.<br>
+A digital sanctuary where writings, characters, and programming experiments share the same space.
 
-  ![Angular 22](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
-  ![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
-  ![Vitest 4](https://img.shields.io/badge/Vitest-4-6E9F18?logo=vitest&logoColor=white)
-  ![WordPress REST API](https://img.shields.io/badge/WordPress-REST_API-21759B?logo=wordpress&logoColor=white)
-  ![Status](https://img.shields.io/badge/status-em_evolucao-D4A94D)
+![Angular 22](https://img.shields.io/badge/Angular-22-DD0031?logo=angular&logoColor=white)
+![TypeScript 6](https://img.shields.io/badge/TypeScript-6-3178C6?logo=typescript&logoColor=white)
+![Vitest 4](https://img.shields.io/badge/Vitest-4-6E9F18?logo=vitest&logoColor=white)
+![WordPress REST API](https://img.shields.io/badge/WordPress-REST_API-21759B?logo=wordpress&logoColor=white)
+![Status](https://img.shields.io/badge/status-em_evolucao-D4A94D)
 
-  [Português](#português) · [English](#english)
+[Português](#português) · [English](#english)
 </div>
 
 ---
@@ -53,6 +53,7 @@ Essa separação permite evoluir a interface sem perder o histórico já publica
 - capas, categorias, títulos, resumos e datas vindos do WordPress;
 - estados visuais de carregamento, erro, nova tentativa e ausência de resultados;
 - carregamento tardio das rotas de publicações e de Māyā;
+- Matrix Online com demonstrações visuais e interativas de conceitos do Angular;
 - renderização híbrida, combinando prerenderização e execução no navegador;
 - testes unitários com Vitest.
 
@@ -77,7 +78,7 @@ Quando uma publicação aparece na tela, ela já atravessou algumas camadas. Cad
 
 #### Portas abertas somente quando visitadas — Angular standalone e lazy loading
 
-Os componentes são standalone e as áreas de publicações e de Māyā usam imports dinâmicos. Com isso, o código dessas rotas fica em chunks separados e só é baixado quando a pessoa navega até elas, reduzindo o trabalho necessário no carregamento inicial.
+Os componentes são standalone e as áreas de publicações, Matrix Online e Māyā usam imports dinâmicos. Com isso, o código dessas rotas fica em chunks separados e só é baixado quando a pessoa navega até elas, reduzindo o trabalho necessário no carregamento inicial.
 
 #### Pulso e corrente — Signals e RxJS
 
@@ -99,26 +100,28 @@ Os textos da interface usam Transloco e podem ser alternados entre português e 
 
 ### Caminhos disponíveis
 
-| Rota | Finalidade |
-| --- | --- |
-| `/` | Entrada do santuário |
-| `/posts` | Arquivo em leitura contínua |
-| `/posts/paged` | Primeira página do modo paginado |
-| `/posts/paged/:page` | Página específica do arquivo |
-| `/maya` | Espaço reservado para a evolução de Māyā |
+| Rota                 | Finalidade                                             |
+| -------------------- | ------------------------------------------------------ |
+| `/`                  | Entrada do santuário                                   |
+| `/posts`             | Arquivo em leitura contínua                            |
+| `/posts/paged`       | Primeira página do modo paginado                       |
+| `/posts/paged/:page` | Página específica do arquivo                           |
+| `/matrix`            | Catálogo dos experimentos interativos da Matrix Online |
+| `/matrix/components` | Experimento de comunicação entre componentes Angular   |
+| `/maya`              | Espaço reservado para a evolução de Māyā               |
 
 ### Ferramentas do santuário
 
-| Tecnologia | Uso no projeto |
-| --- | --- |
-| Angular 22 | Componentes, rotas, injeção de dependências, Signals e renderização |
-| TypeScript 6 | Tipagem e implementação da aplicação |
-| RxJS 7 | Fluxos assíncronos e requisições reativas |
-| Transloco | Internacionalização da interface |
-| WordPress REST API | Fonte do conteúdo editorial |
-| Angular SSR | Renderização no servidor e prerenderização |
-| Vitest | Testes unitários |
-| SCSS | Estilos, responsividade e identidade visual |
+| Tecnologia         | Uso no projeto                                                      |
+| ------------------ | ------------------------------------------------------------------- |
+| Angular 22         | Componentes, rotas, injeção de dependências, Signals e renderização |
+| TypeScript 6       | Tipagem e implementação da aplicação                                |
+| RxJS 7             | Fluxos assíncronos e requisições reativas                           |
+| Transloco          | Internacionalização da interface                                    |
+| WordPress REST API | Fonte do conteúdo editorial                                         |
+| Angular SSR        | Renderização no servidor e prerenderização                          |
+| Vitest             | Testes unitários                                                    |
+| SCSS               | Estilos, responsividade e identidade visual                         |
 
 ### Abrindo o santuário localmente
 
@@ -161,7 +164,7 @@ O repositório inclui uma auditoria reproduzível do conteúdo público do WordP
 - criar a experiência editorial de leitura de cada publicação;
 - avaliar uma camada de backend entre o Angular e o WordPress;
 - desenvolver Māyā como companheira com estado, memória e permissões controladas;
-- criar a **Matrix Online**, um portfólio técnico interativo com experimentos executáveis e demonstrações visuais de conceitos de programação;
+- ampliar a **Matrix Online** com experimentos sobre Signals, Observables, ciclo de vida, requisições e lazy loading;
 - investigar separadamente personagens, sliders e mídias legadas do antigo site.
 
 ---
@@ -195,6 +198,7 @@ This separation makes it possible to evolve the interface without losing the pub
 - covers, categories, titles, excerpts, and dates supplied by WordPress;
 - loading, error, retry, and empty states;
 - lazy-loaded publication and Māyā routes;
+- Matrix Online with visual and interactive Angular concept demonstrations;
 - hybrid rendering combining prerendering and client-side execution;
 - unit tests with Vitest.
 
@@ -219,7 +223,7 @@ By the time a publication reaches the screen, it has already crossed several lay
 
 #### Doors opened only when visited — standalone Angular and lazy loading
 
-The project uses standalone components, while the publication and Māyā areas use dynamic imports. Their code is emitted into separate chunks and downloaded only when someone navigates to the corresponding route, reducing the work required during the initial load.
+The project uses standalone components, while the publication, Matrix Online, and Māyā areas use dynamic imports. Their code is emitted into separate chunks and downloaded only when someone navigates to the corresponding route, reducing the work required during the initial load.
 
 #### Pulse and current — Signals and RxJS
 
@@ -241,26 +245,28 @@ Interface text is managed with Transloco and can be switched between Portuguese 
 
 ### Available paths
 
-| Route | Purpose |
-| --- | --- |
-| `/` | Sanctuary entrance |
-| `/posts` | Archive in continuous reading mode |
-| `/posts/paged` | First page in paginated mode |
-| `/posts/paged/:page` | Specific archive page |
-| `/maya` | Space reserved for Māyā's evolution |
+| Route                | Purpose                                          |
+| -------------------- | ------------------------------------------------ |
+| `/`                  | Sanctuary entrance                               |
+| `/posts`             | Archive in continuous reading mode               |
+| `/posts/paged`       | First page in paginated mode                     |
+| `/posts/paged/:page` | Specific archive page                            |
+| `/matrix`            | Catalog of Matrix Online interactive experiments |
+| `/matrix/components` | Angular component communication experiment       |
+| `/maya`              | Space reserved for Māyā's evolution              |
 
 ### Tools behind the sanctuary
 
-| Technology | Role in the project |
-| --- | --- |
-| Angular 22 | Components, routing, dependency injection, Signals, and rendering |
-| TypeScript 6 | Application implementation and type safety |
-| RxJS 7 | Asynchronous flows and reactive requests |
-| Transloco | Interface internationalization |
-| WordPress REST API | Editorial content source |
-| Angular SSR | Server-side rendering and prerendering |
-| Vitest | Unit testing |
-| SCSS | Styling, responsiveness, and visual identity |
+| Technology         | Role in the project                                               |
+| ------------------ | ----------------------------------------------------------------- |
+| Angular 22         | Components, routing, dependency injection, Signals, and rendering |
+| TypeScript 6       | Application implementation and type safety                        |
+| RxJS 7             | Asynchronous flows and reactive requests                          |
+| Transloco          | Interface internationalization                                    |
+| WordPress REST API | Editorial content source                                          |
+| Angular SSR        | Server-side rendering and prerendering                            |
+| Vitest             | Unit testing                                                      |
+| SCSS               | Styling, responsiveness, and visual identity                      |
 
 ### Opening the sanctuary locally
 
@@ -303,7 +309,7 @@ The repository includes a reproducible audit of the public WordPress content. It
 - build the editorial reading experience for individual publications;
 - evaluate a backend layer between Angular and WordPress;
 - develop Māyā as a companion with state, memory, and controlled permissions;
-- create **Matrix Online**, an interactive technical portfolio with executable experiments and visual programming demonstrations;
+- expand **Matrix Online** with experiments about Signals, Observables, lifecycle, requests, and lazy loading;
 - investigate legacy characters, sliders, and media separately.
 
 ---

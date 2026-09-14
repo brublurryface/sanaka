@@ -1,0 +1,138 @@
+<section class="code-explorer" aria-labelledby="code-explorer-title">
+  <header class="code-explorer__intro">
+    <div>
+      <p>{{ 'matrix.exhibit.code.eyebrow' | transloco }}</p>
+      <h3 id="code-explorer-title">{{ 'matrix.exhibit.code.title' | transloco }}</h3>
+    </div>
+
+    <span>
+      {{
+        'matrix.exhibit.code.status'
+          | transloco: { current: activeIndex() + 1, total: slides.length }
+      }}
+    </span>
+  </header>
+
+  <p class="code-explorer__announcement" aria-live="polite" aria-atomic="true">
+    {{ activeSlide.titleKey | transloco }}.
+    {{ activeSlide.descriptionKey | transloco }}
+  </p>
+
+  <div class="code-explorer__descriptions">
+    @for (slide of slides; track slide.index) {
+      <p
+        class="code-explorer__description carousel-layer"
+        [class.carousel-layer--active]="activeIndex() === slide.index"
+        [attr.aria-hidden]="activeIndex() !== slide.index"
+      >
+        {{ slide.descriptionKey | transloco }}
+      </p>
+    }
+  </div>
+
+  <div class="code-window">
+    <div class="code-window__bar">
+      <div
+        class="code-window__pages"
+        [attr.aria-label]="'matrix.exhibit.code.pagination' | transloco"
+      >
+        @for (slide of slides; track slide.index) {
+          <button
+            type="button"
+            [class.code-window__page--active]="activeIndex() === slide.index"
+            [attr.aria-current]="activeIndex() === slide.index ? 'true' : null"
+            [attr.aria-label]="'matrix.exhibit.code.goTo' | transloco: { page: slide.index + 1 }"
+            (click)="showSlide(slide.index)"
+          ></button>
+        }
+      </div>
+
+      <strong>{{ activeSlide.fileName }}</strong>
+      <small>{{ activeSlide.language }}</small>
+    </div>
+
+    <div class="code-window__title">
+      @for (slide of slides; track slide.index) {
+        <span
+          class="carousel-layer"
+          [class.carousel-layer--active]="activeIndex() === slide.index"
+          [attr.aria-hidden]="activeIndex() !== slide.index"
+        >
+          {{ slide.titleKey | transloco }}
+        </span>
+      }
+    </div>
+
+    <div class="code-window__viewport">
+      <pre
+        class="code-window__snippet carousel-layer"
+        [class.carousel-layer--active]="activeIndex() === 0"
+        [attr.aria-hidden]="activeIndex() !== 0"
+        [attr.tabindex]="activeIndex() === 0 ? 0 : -1"
+      ><code><span class="token-keyword">readonly</span> draftMessage = <span class="token-call">signal</span>(<span class="token-string">''</span>);
+<span class="token-keyword">readonly</span> deliveredMessage = <span class="token-call">signal</span>(<span class="token-string">''</span>);
+
+<span class="token-function">sendMessage</span>(): <span class="token-type">void</span> {{ '{' }}
+  <span class="token-keyword">const</span> message = <span class="token-keyword">this</span>.draftMessage().<span class="token-call">trim</span>();
+  <span class="token-keyword">this</span>.deliveredMessage.<span class="token-call">set</span>(message);
+{{ '}' }}</code></pre>
+
+      <pre
+        class="code-window__snippet carousel-layer"
+        [class.carousel-layer--active]="activeIndex() === 1"
+        [attr.aria-hidden]="activeIndex() !== 1"
+        [attr.tabindex]="activeIndex() === 1 ? 0 : -1"
+      ><code><span class="token-tag">&lt;app-matrix-message-node</span>
+  <span class="token-attribute">[message]</span>=<span class="token-string">"deliveredMessage()"</span>
+  <span class="token-event">(reply)</span>=<span class="token-string">"receiveReply($event)"</span>
+<span class="token-tag">/&gt;</span></code></pre>
+
+      <pre
+        class="code-window__snippet carousel-layer"
+        [class.carousel-layer--active]="activeIndex() === 2"
+        [attr.aria-hidden]="activeIndex() !== 2"
+        [attr.tabindex]="activeIndex() === 2 ? 0 : -1"
+      ><code><span class="token-decorator">@Input</span>({{ '{' }} required: <span class="token-boolean">true</span> {{ '}' }}) message = <span class="token-string">''</span>;
+<span class="token-decorator">@Output</span>() <span class="token-keyword">readonly</span> reply =
+  <span class="token-keyword">new</span> <span class="token-type">EventEmitter</span>&lt;<span class="token-type">MatrixReply</span>&gt;();
+
+<span class="token-function">selectReply</span>(kind: <span class="token-type">MatrixReplyKind</span>): <span class="token-type">void</span> {{ '{' }}
+  <span class="token-keyword">this</span>.reply.<span class="token-call">emit</span>({{ '{' }}
+    kind,
+    originalMessage: <span class="token-keyword">this</span>.message,
+    characterCount: <span class="token-type">Array</span>.<span class="token-call">from</span>(<span class="token-keyword">this</span>.message).length,
+  {{ '}' }});
+{{ '}' }}</code></pre>
+
+      <pre
+        class="code-window__snippet carousel-layer"
+        [class.carousel-layer--active]="activeIndex() === 3"
+        [attr.aria-hidden]="activeIndex() !== 3"
+        [attr.tabindex]="activeIndex() === 3 ? 0 : -1"
+      ><code><span class="token-function">receiveReply</span>(reply: <span class="token-type">MatrixReply</span>): <span class="token-type">void</span> {{ '{' }}
+  <span class="token-keyword">this</span>.childReply.<span class="token-call">set</span>(reply);
+  <span class="token-keyword">this</span>.stage.<span class="token-call">set</span>(<span class="token-boolean">5</span>);
+{{ '}' }}</code></pre>
+    </div>
+
+    <footer class="code-window__navigation">
+      <button
+        type="button"
+        (click)="previous()"
+        [attr.aria-label]="'matrix.exhibit.code.previous' | transloco"
+      >
+        <span aria-hidden="true">←</span>
+      </button>
+
+      <span>{{ activeSlide.titleKey | transloco }}</span>
+
+      <button
+        type="button"
+        (click)="next()"
+        [attr.aria-label]="'matrix.exhibit.code.next' | transloco"
+      >
+        <span aria-hidden="true">→</span>
+      </button>
+    </footer>
+  </div>
+</section>

@@ -1,0 +1,186 @@
+<section class="matrix-hero" aria-labelledby="matrix-title">
+  <div class="matrix-hero__glow" aria-hidden="true"></div>
+
+  <div class="matrix-shell matrix-hero__content">
+    <a class="matrix-hero__back" routerLink="/matrix">
+      <span aria-hidden="true">←</span>
+      {{ 'matrix.header.back' | transloco }}
+    </a>
+
+    <p class="eyebrow">{{ 'matrix.header.eyebrow' | transloco }}</p>
+
+    <h1 id="matrix-title">
+      <span>{{ 'matrix.header.title.line1' | transloco }}</span>
+      {{ 'matrix.header.title.line2' | transloco }}
+    </h1>
+
+    <p class="matrix-hero__intro">{{ 'matrix.header.intro' | transloco }}</p>
+
+    <a class="matrix-hero__action" href="#component-exhibit">
+      {{ 'matrix.header.action' | transloco }}
+      <span aria-hidden="true">↓</span>
+    </a>
+  </div>
+</section>
+
+<section id="component-exhibit" class="matrix-exhibit" aria-labelledby="component-exhibit-title">
+  <div class="matrix-shell">
+    <header class="exhibit-heading">
+      <div>
+        <p class="eyebrow">{{ 'matrix.exhibit.eyebrow' | transloco }}</p>
+        <h2 id="component-exhibit-title">{{ 'matrix.exhibit.title' | transloco }}</h2>
+      </div>
+
+      <p>{{ 'matrix.exhibit.intro' | transloco }}</p>
+    </header>
+
+    <app-matrix-flow-guide [currentStep]="currentStep()" (reset)="resetExperiment()" />
+
+    <div class="concept-strip" aria-label="Angular concepts">
+      <code>Component</code>
+      <span aria-hidden="true">•</span>
+      <code>@Input()</code>
+      <span aria-hidden="true">•</span>
+      <code>@Output()</code>
+      <span aria-hidden="true">•</span>
+      <code>EventEmitter</code>
+    </div>
+
+    <div class="experiment-grid">
+      <article class="parent-node" aria-labelledby="parent-node-title">
+        <div class="node-heading">
+          <span class="node-badge" aria-hidden="true">01</span>
+
+          <div>
+            <p>{{ 'matrix.exhibit.parent.eyebrow' | transloco }}</p>
+            <h3 id="parent-node-title">{{ 'matrix.exhibit.parent.title' | transloco }}</h3>
+          </div>
+        </div>
+
+        <form (submit)="$event.preventDefault(); sendMessage()">
+          <label for="parent-message">{{ 'matrix.exhibit.parent.label' | transloco }}</label>
+
+          <div id="parent-message-help" class="field-guidance">
+            <span>{{ 'matrix.exhibit.parent.hint' | transloco }}</span>
+            <button type="button" (click)="useExample()">
+              {{ 'matrix.exhibit.parent.useExample' | transloco }}
+            </button>
+          </div>
+
+          <div class="message-control">
+            <input
+              id="parent-message"
+              type="text"
+              maxlength="80"
+              autocomplete="off"
+              aria-describedby="parent-message-help"
+              [value]="draftMessage()"
+              [placeholder]="'matrix.exhibit.parent.placeholder' | transloco"
+              (input)="updateDraft($event)"
+            />
+
+            <button type="submit" [disabled]="!canSend()">
+              <span aria-hidden="true">1 ·</span>
+              {{ 'matrix.exhibit.parent.send' | transloco }}
+            </button>
+          </div>
+        </form>
+
+        <p class="input-note">
+          <code>[message]</code>
+          {{ 'matrix.exhibit.parent.inputNote' | transloco }}
+        </p>
+      </article>
+
+      <div class="binding-bridge" [class.binding-bridge--active]="stage() >= 3" aria-hidden="true">
+        <span></span>
+        <code>[message]</code>
+        <span></span>
+      </div>
+
+      <app-matrix-message-node [message]="deliveredMessage()" (reply)="receiveReply($event)" />
+    </div>
+
+    <div class="return-panel" [class.return-panel--active]="hasReply()" aria-live="polite">
+      <div>
+        <span class="return-panel__label">
+          <span aria-hidden="true">3 ·</span>
+          {{ 'matrix.exhibit.return.label' | transloco }}
+        </span>
+
+        @if (childReply(); as reply) {
+          <strong>
+            @switch (reply.kind) {
+              @case ('acknowledge') {
+                {{ 'matrix.exhibit.return.responses.acknowledge' | transloco }}
+              }
+              @case ('measure') {
+                {{
+                  'matrix.exhibit.return.responses.measure'
+                    | transloco: { count: reply.characterCount }
+                }}
+              }
+              @case ('echo') {
+                {{
+                  'matrix.exhibit.return.responses.echo'
+                    | transloco: { message: reply.originalMessage }
+                }}
+              }
+            }
+          </strong>
+        } @else {
+          <span>{{ 'matrix.exhibit.return.waiting' | transloco }}</span>
+        }
+      </div>
+
+      <code>(reply)</code>
+    </div>
+
+    <section class="timeline" aria-labelledby="timeline-title">
+      <div class="timeline-heading">
+        <div>
+          <p class="eyebrow">{{ 'matrix.exhibit.timeline.eyebrow' | transloco }}</p>
+          <h3 id="timeline-title">{{ 'matrix.exhibit.timeline.title' | transloco }}</h3>
+        </div>
+
+        <span class="timeline-status">{{ 'matrix.exhibit.timeline.automatic' | transloco }}</span>
+      </div>
+
+      <p class="timeline-note">{{ 'matrix.exhibit.timeline.note' | transloco }}</p>
+
+      <ol aria-live="polite">
+        @for (step of timelineSteps; track step.index) {
+          <li
+            [class.timeline-step--complete]="stage() >= step.index"
+            [attr.aria-current]="stage() === step.index ? 'step' : null"
+          >
+            <span>{{ step.index.toString().padStart(2, '0') }}</span>
+            <p>{{ step.translationKey | transloco }}</p>
+          </li>
+        }
+      </ol>
+    </section>
+
+    <app-matrix-code-carousel [currentStep]="currentStep()" />
+
+    <div class="explanation-grid">
+      <article>
+        <span>01</span>
+        <h3>{{ 'matrix.explanation.action.title' | transloco }}</h3>
+        <p>{{ 'matrix.explanation.action.text' | transloco }}</p>
+      </article>
+
+      <article>
+        <span>02</span>
+        <h3>{{ 'matrix.explanation.angular.title' | transloco }}</h3>
+        <p>{{ 'matrix.explanation.angular.text' | transloco }}</p>
+      </article>
+
+      <article>
+        <span>03</span>
+        <h3>{{ 'matrix.explanation.code.title' | transloco }}</h3>
+        <p>{{ 'matrix.explanation.code.text' | transloco }}</p>
+      </article>
+    </div>
+  </div>
+</section>
