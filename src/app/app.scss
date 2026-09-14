@@ -304,7 +304,7 @@ mat-toolbar {
 
     justify-content: center;
 
-    gap: clamp(1.75rem, 12vw, 3.25rem);
+    gap: clamp(0.9rem, 5vw, 2.5rem);
 
     width: 100%;
 
@@ -367,7 +367,7 @@ mat-toolbar {
   }
 
   .main-nav {
-    gap: clamp(1.5rem, 11vw, 2.5rem);
+    gap: clamp(0.7rem, 4vw, 1.4rem);
   }
 
   .main-nav a {

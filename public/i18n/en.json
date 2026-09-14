@@ -5,6 +5,7 @@
       "ariaLabel": "Main navigation",
       "home": "Home",
       "posts": "Posts",
+      "matrix": "Matrix",
       "maya": "Māyā"
     },
     "language": {
@@ -83,5 +84,153 @@
       "retry": "Try again"
     },
     "empty": "No publications found."
+  },
+  "matrix": {
+    "catalog": {
+      "header": {
+        "eyebrow": "Interactive laboratory",
+        "title": {
+          "line1": "Matrix",
+          "line2": "Online"
+        },
+        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening."
+      },
+      "list": {
+        "eyebrow": "Open circuits",
+        "title": "Choose an experiment",
+        "intro": "Each page investigates one idea at a time. You interact with the example, follow the interface reaction, and then visit the code responsible for the movement."
+      },
+      "available": {
+        "status": "Available now",
+        "title": "Components in conversation",
+        "description": "Send a value from the parent component to the child, choose a reply, and watch the event find its way back.",
+        "action": "Enter the circuit"
+      },
+      "upcoming": {
+        "eyebrow": "Next experiments",
+        "title": "The Matrix will keep opening",
+        "status": "Coming soon",
+        "signals": "Signals and reactive state",
+        "observables": "Observables and data flow",
+        "lifecycle": "Component lifecycle"
+      }
+    },
+    "header": {
+      "back": "Back to the Matrix catalog",
+      "eyebrow": "Matrix Online · Experiment 01",
+      "title": {
+        "line1": "Components",
+        "line2": "in conversation"
+      },
+      "intro": "Send a value across the boundary between parent and child. Then follow the reply returning as an event and see the code involved in each passage.",
+      "action": "Start the circuit"
+    },
+    "exhibit": {
+      "eyebrow": "Interactive circuit",
+      "title": "Parent, child, and the path back",
+      "intro": "The parent holds the message and Angular carries it to the child. The child chooses a reply and emits a return event. You trigger the flow; the interface records each passage.",
+      "guide": {
+        "eyebrow": "How to experiment",
+        "title": "Send the message through the circuit",
+        "parent": {
+          "title": "The parent sends",
+          "text": "Write a message or use the example."
+        },
+        "child": {
+          "title": "The child chooses",
+          "text": "Read the received value and select a reply."
+        },
+        "return": {
+          "title": "The parent receives",
+          "text": "Watch the event return with the selected reply."
+        }
+      },
+      "parent": {
+        "eyebrow": "Parent component",
+        "title": "The sender",
+        "label": "Message for the child component",
+        "placeholder": "Write something to send across...",
+        "hint": "Not sure what to write? Start with a ready-made message.",
+        "useExample": "Use example",
+        "exampleMessage": "Did you receive this message?",
+        "send": "Send value",
+        "inputNote": "is a property binding: it carries the value from the parent to the child's input."
+      },
+      "child": {
+        "eyebrow": "Child component",
+        "title": "The receiver",
+        "receivedLabel": "Value received by @Input",
+        "waiting": "The child is still waiting for a value from the parent.",
+        "reply": "Choose a reply from the child",
+        "options": {
+          "acknowledge": "Confirm it was received",
+          "measure": "Count the characters",
+          "echo": "Return an echo"
+        },
+        "outputNote": "creates an output through which the child emits an event to its container."
+      },
+      "return": {
+        "label": "Return to the parent component",
+        "waiting": "No event has returned yet.",
+        "responses": {
+          "acknowledge": "Child: message received. The complete value arrived.",
+          "measure": "Child: I processed the value. It contains {{ count }} characters.",
+          "echo": "Child: returning the echo — “{{ message }}”"
+        }
+      },
+      "timeline": {
+        "eyebrow": "Angular log",
+        "title": "What happened beneath the interface",
+        "automatic": "Updates automatically",
+        "note": "This panel does not receive clicks. It only records, in order, what your actions trigger in the circuit above.",
+        "parentState": "The parent updates the value stored in its state.",
+        "binding": "Angular evaluates the expression bound to the message property.",
+        "childInput": "The child receives the new value through its @Input.",
+        "childOutput": "When clicked, the child emits an event through @Output.",
+        "parentHandler": "The parent handles the event and updates its interface again."
+      },
+      "reset": "Reset",
+      "code": {
+        "eyebrow": "Code in motion",
+        "title": "See inside the circuit",
+        "status": "Snippet {{ current }} of {{ total }}",
+        "previous": "View previous snippet",
+        "next": "View next snippet",
+        "pagination": "Code snippets",
+        "goTo": "View snippet {{ page }}",
+        "slides": {
+          "parent": {
+            "title": "1. The parent prepares and sends the value",
+            "description": "Signals hold the message while the send method updates the value that will be delivered to the child."
+          },
+          "binding": {
+            "title": "2. The template creates the connection",
+            "description": "Property binding sends the value through [message]. Event binding listens for the reply through (reply)."
+          },
+          "child": {
+            "title": "3. The child receives and prepares a reply",
+            "description": "@Input creates the child's entry point. @Output and EventEmitter create the path back to the parent component."
+          },
+          "return": {
+            "title": "4. The parent handles the reply",
+            "description": "The method receives the object emitted by the child, stores the reply in a Signal, and advances the visual log."
+          }
+        }
+      }
+    },
+    "explanation": {
+      "action": {
+        "title": "What do you do?",
+        "text": "Write a message, send it to the child, and ask it to reply. Each action changes the visible stage of the experiment."
+      },
+      "angular": {
+        "title": "What does Angular notice?",
+        "text": "It detects the change, reevaluates the connection between components, and updates only the interface fragments that depend on those values."
+      },
+      "code": {
+        "title": "What moves in the code?",
+        "text": "The value moves down from parent to child through @Input. The event returns from child to parent through @Output and EventEmitter."
+      }
+    }
   }
 }

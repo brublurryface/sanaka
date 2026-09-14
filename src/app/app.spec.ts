@@ -18,6 +18,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             ariaLabel: 'Navegação principal',
             home: 'Início',
             posts: 'Posts',
+            matrix: 'Matrix',
             maya: 'Māyā',
           },
           language: {
@@ -32,6 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             ariaLabel: 'Main navigation',
             home: 'Home',
             posts: 'Posts',
+            matrix: 'Matrix',
             maya: 'Māyā',
           },
           language: {
@@ -113,6 +115,7 @@ describe('App', () => {
     expect(links.length).toBeGreaterThan(0);
     expect(links.map((link) => link.getAttribute('href'))).toContain('/');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
+    expect(links.map((link) => link.getAttribute('href'))).toContain('/matrix');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
   });
 

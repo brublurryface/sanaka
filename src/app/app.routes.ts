@@ -12,6 +12,10 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/posts/posts.routes').then((m) => m.POSTS_ROUTES),
   },
   {
+    path: 'matrix',
+    loadChildren: () => import('./pages/matrix/matrix.routes').then((m) => m.MATRIX_ROUTES),
+  },
+  {
     path: 'maya',
     loadComponent: () => import('./pages/maya/maya').then((m) => m.Maya),
   },

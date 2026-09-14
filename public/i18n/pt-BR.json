@@ -5,6 +5,7 @@
       "ariaLabel": "Navegação principal",
       "home": "Home",
       "posts": "Posts",
+      "matrix": "Matrix",
       "maya": "Māyā"
     },
     "language": {
@@ -83,5 +84,153 @@
       "retry": "Tentar novamente"
     },
     "empty": "Nenhuma publicação encontrada."
+  },
+  "matrix": {
+    "catalog": {
+      "header": {
+        "eyebrow": "Laboratório interativo",
+        "title": {
+          "line1": "Matrix",
+          "line2": "Online"
+        },
+        "intro": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento. Cada circuito transforma um conceito do código em algo que pode ser visto acontecendo."
+      },
+      "list": {
+        "eyebrow": "Circuitos abertos",
+        "title": "Escolha uma experiência",
+        "intro": "Cada página investiga uma ideia por vez. Você interfere no exemplo, acompanha a reação da interface e depois visita o código responsável pelo movimento."
+      },
+      "available": {
+        "status": "Disponível agora",
+        "title": "Componentes em conversa",
+        "description": "Envie um valor do componente pai para o filho, escolha uma resposta e observe o evento encontrar o caminho de volta.",
+        "action": "Entrar no circuito"
+      },
+      "upcoming": {
+        "eyebrow": "Próximas experiências",
+        "title": "A Matrix continuará se abrindo",
+        "status": "Em breve",
+        "signals": "Signals e estado reativo",
+        "observables": "Observables e fluxo de dados",
+        "lifecycle": "Ciclo de vida dos componentes"
+      }
+    },
+    "header": {
+      "back": "Voltar ao catálogo da Matrix",
+      "eyebrow": "Matrix Online · Experimento 01",
+      "title": {
+        "line1": "Componentes",
+        "line2": "em conversa"
+      },
+      "intro": "Faça um valor atravessar a fronteira entre pai e filho. Depois, acompanhe a resposta voltando por um evento e veja o código envolvido em cada passagem.",
+      "action": "Iniciar circuito"
+    },
+    "exhibit": {
+      "eyebrow": "Circuito interativo",
+      "title": "Pai, filho e o caminho de volta",
+      "intro": "O pai guarda a mensagem e o Angular a conduz ao filho. O filho escolhe uma resposta e emite um evento de retorno. Você aciona o fluxo; a interface registra cada passagem.",
+      "guide": {
+        "eyebrow": "Como experimentar",
+        "title": "Faça a mensagem atravessar o circuito",
+        "parent": {
+          "title": "O pai envia",
+          "text": "Escreva uma mensagem ou use o exemplo."
+        },
+        "child": {
+          "title": "O filho escolhe",
+          "text": "Leia o valor recebido e selecione uma resposta."
+        },
+        "return": {
+          "title": "O pai recebe",
+          "text": "Veja o evento retornar com a resposta escolhida."
+        }
+      },
+      "parent": {
+        "eyebrow": "Componente pai",
+        "title": "O emissor",
+        "label": "Mensagem para o componente filho",
+        "placeholder": "Escreva algo para atravessar...",
+        "hint": "Não sabe o que escrever? Comece com uma mensagem pronta.",
+        "useExample": "Usar exemplo",
+        "exampleMessage": "Você recebeu esta mensagem?",
+        "send": "Enviar valor",
+        "inputNote": "é uma property binding: ela conduz o valor do pai para a entrada do filho."
+      },
+      "child": {
+        "eyebrow": "Componente filho",
+        "title": "O receptor",
+        "receivedLabel": "Valor recebido pelo @Input",
+        "waiting": "O filho ainda aguarda um valor do pai.",
+        "reply": "Escolha uma resposta do filho",
+        "options": {
+          "acknowledge": "Confirmar que recebeu",
+          "measure": "Contar os caracteres",
+          "echo": "Devolver um eco"
+        },
+        "outputNote": "cria uma saída pela qual o filho emite um evento para quem o contém."
+      },
+      "return": {
+        "label": "Retorno ao componente pai",
+        "waiting": "Nenhum evento retornou ainda.",
+        "responses": {
+          "acknowledge": "Filho: mensagem recebida. O valor chegou inteiro.",
+          "measure": "Filho: processei o valor. Ele contém {{ count }} caracteres.",
+          "echo": "Filho: devolvendo o eco — “{{ message }}”"
+        }
+      },
+      "timeline": {
+        "eyebrow": "Registro do Angular",
+        "title": "O que aconteceu por baixo da interface",
+        "automatic": "Atualização automática",
+        "note": "Este painel não recebe cliques. Ele apenas registra, em ordem, o que suas ações provocam no circuito acima.",
+        "parentState": "O pai atualiza o valor guardado em seu estado.",
+        "binding": "O Angular avalia a expressão ligada à propriedade message.",
+        "childInput": "O filho recebe o novo valor por sua entrada @Input.",
+        "childOutput": "Ao clicar, o filho emite um evento por @Output.",
+        "parentHandler": "O pai captura o evento e atualiza novamente sua interface."
+      },
+      "reset": "Reiniciar",
+      "code": {
+        "eyebrow": "Código em movimento",
+        "title": "Veja o circuito por dentro",
+        "status": "Trecho {{ current }} de {{ total }}",
+        "previous": "Ver trecho anterior",
+        "next": "Ver próximo trecho",
+        "pagination": "Trechos do código",
+        "goTo": "Ver trecho {{ page }}",
+        "slides": {
+          "parent": {
+            "title": "1. O pai prepara e envia o valor",
+            "description": "Signals guardam a mensagem enquanto o método de envio atualiza o valor que será entregue ao filho."
+          },
+          "binding": {
+            "title": "2. O template cria a ligação",
+            "description": "Property binding envia o valor por [message]. Event binding escuta a resposta por (reply)."
+          },
+          "child": {
+            "title": "3. O filho recebe e prepara uma resposta",
+            "description": "@Input cria a entrada do filho. @Output e EventEmitter criam o caminho de volta para o componente pai."
+          },
+          "return": {
+            "title": "4. O pai trata a resposta",
+            "description": "O método recebe o objeto emitido pelo filho, guarda a resposta em um Signal e avança o registro visual."
+          }
+        }
+      }
+    },
+    "explanation": {
+      "action": {
+        "title": "O que você faz?",
+        "text": "Escreve uma mensagem, envia ao filho e pede que ele responda. Cada ação modifica a etapa visível do experimento."
+      },
+      "angular": {
+        "title": "O que o Angular percebe?",
+        "text": "Ele detecta a mudança, reavalia a ligação entre os componentes e atualiza somente os trechos da interface que dependem daqueles valores."
+      },
+      "code": {
+        "title": "O que se move no código?",
+        "text": "O valor desce do pai para o filho por @Input. O evento retorna do filho para o pai por @Output e EventEmitter."
+      }
+    }
   }
 }

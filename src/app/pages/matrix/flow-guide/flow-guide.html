@@ -1,0 +1,49 @@
+<section class="flow-guide" aria-labelledby="flow-guide-title">
+  <div class="flow-guide__heading">
+    <div>
+      <p class="eyebrow">{{ 'matrix.exhibit.guide.eyebrow' | transloco }}</p>
+      <h3 id="flow-guide-title">{{ 'matrix.exhibit.guide.title' | transloco }}</h3>
+    </div>
+
+    <button type="button" (click)="reset.emit()">
+      {{ 'matrix.exhibit.reset' | transloco }}
+    </button>
+  </div>
+
+  <ol>
+    <li
+      [class.flow-guide__step--active]="currentStep === 1"
+      [class.flow-guide__step--complete]="currentStep > 1"
+      [attr.aria-current]="currentStep === 1 ? 'step' : null"
+    >
+      <span>1</span>
+      <div>
+        <strong>{{ 'matrix.exhibit.guide.parent.title' | transloco }}</strong>
+        <small>{{ 'matrix.exhibit.guide.parent.text' | transloco }}</small>
+      </div>
+    </li>
+
+    <li
+      [class.flow-guide__step--active]="currentStep === 2"
+      [class.flow-guide__step--complete]="currentStep > 2"
+      [attr.aria-current]="currentStep === 2 ? 'step' : null"
+    >
+      <span>2</span>
+      <div>
+        <strong>{{ 'matrix.exhibit.guide.child.title' | transloco }}</strong>
+        <small>{{ 'matrix.exhibit.guide.child.text' | transloco }}</small>
+      </div>
+    </li>
+
+    <li
+      [class.flow-guide__step--active]="currentStep === 3"
+      [attr.aria-current]="currentStep === 3 ? 'step' : null"
+    >
+      <span>3</span>
+      <div>
+        <strong>{{ 'matrix.exhibit.guide.return.title' | transloco }}</strong>
+        <small>{{ 'matrix.exhibit.guide.return.text' | transloco }}</small>
+      </div>
+    </li>
+  </ol>
+</section>

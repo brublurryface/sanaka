@@ -1,0 +1,68 @@
+<main>
+  <section class="catalog-hero" aria-labelledby="matrix-catalog-title">
+    <div class="catalog-glow" aria-hidden="true"></div>
+
+    <div class="catalog-shell catalog-hero__content">
+      <p class="eyebrow">{{ 'matrix.catalog.header.eyebrow' | transloco }}</p>
+
+      <h1 id="matrix-catalog-title">
+        <span>{{ 'matrix.catalog.header.title.line1' | transloco }}</span>
+        {{ 'matrix.catalog.header.title.line2' | transloco }}
+      </h1>
+
+      <p class="catalog-hero__intro">{{ 'matrix.catalog.header.intro' | transloco }}</p>
+    </div>
+  </section>
+
+  <section class="catalog-list" aria-labelledby="experiments-title">
+    <div class="catalog-shell">
+      <header class="catalog-heading">
+        <div>
+          <p class="eyebrow">{{ 'matrix.catalog.list.eyebrow' | transloco }}</p>
+          <h2 id="experiments-title">{{ 'matrix.catalog.list.title' | transloco }}</h2>
+        </div>
+
+        <p>{{ 'matrix.catalog.list.intro' | transloco }}</p>
+      </header>
+
+      <a class="featured-experiment" routerLink="/matrix/components">
+        <div class="featured-experiment__number" aria-hidden="true">01</div>
+
+        <div class="featured-experiment__content">
+          <span class="featured-experiment__status">
+            {{ 'matrix.catalog.available.status' | transloco }}
+          </span>
+          <h3>{{ 'matrix.catalog.available.title' | transloco }}</h3>
+          <p>{{ 'matrix.catalog.available.description' | transloco }}</p>
+
+          <strong>
+            {{ 'matrix.catalog.available.action' | transloco }}
+            <span aria-hidden="true">→</span>
+          </strong>
+        </div>
+
+        <div class="featured-experiment__diagram" aria-hidden="true">
+          <span>Pai</span>
+          <i>→</i>
+          <span>Filho</span>
+          <i>↩</i>
+        </div>
+      </a>
+
+      <div class="upcoming-heading">
+        <p class="eyebrow">{{ 'matrix.catalog.upcoming.eyebrow' | transloco }}</p>
+        <h2>{{ 'matrix.catalog.upcoming.title' | transloco }}</h2>
+      </div>
+
+      <ol class="upcoming-list">
+        @for (experiment of upcomingExperiments; track experiment.number) {
+          <li>
+            <span>{{ experiment.number }}</span>
+            <strong>{{ experiment.translationKey | transloco }}</strong>
+            <small>{{ 'matrix.catalog.upcoming.status' | transloco }}</small>
+          </li>
+        }
+      </ol>
+    </div>
+  </section>
+</main>
