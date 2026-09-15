@@ -34,7 +34,6 @@ mat-toolbar {
 
 .brand {
   position: relative;
-  top: 12px;
 
   display: inline-flex;
   align-items: baseline;
@@ -56,6 +55,25 @@ mat-toolbar {
 
 .brand-a {
   position: relative;
+
+  display: inline-grid;
+
+  isolation: isolate;
+}
+
+.brand-k {
+  position: relative;
+  display: inline-grid;
+  isolation: isolate;
+}
+
+.brand-k__letter {
+  position: relative;
+  z-index: 1;
+
+  grid-area: 1 / 1;
+
+  text-shadow: 0 0 0.18em rgba(224, 187, 104, 0.2);
 }
 
 /* -----------------------
@@ -64,17 +82,19 @@ mat-toolbar {
 
 .brand-flame {
   position: absolute;
-  bottom: 92%;
-  left: 50%;
+  bottom: 0.12em;
+  left: 75%;
+  z-index: 0;
 
   width: 0.55em;
+  height: auto;
 
-  opacity: 0.96;
+  opacity: 0.98;
 
   transform: translateX(-50%);
   transform-origin: 50% 100%;
 
-  filter: brightness(1) drop-shadow(0 0 0.2rem rgba(224, 187, 104, 0.28));
+  filter: brightness(1.12) saturate(1.15) drop-shadow(0 0 0.24rem rgba(224, 187, 104, 0.38));
 
   animation: brand-flame-flicker 2.8s ease-in-out infinite;
 
@@ -84,11 +104,11 @@ mat-toolbar {
 @keyframes brand-flame-flicker {
   0%,
   100% {
-    opacity: 0.96;
+    opacity: 0.98;
 
     transform: translateX(-50%) scaleX(1) scaleY(1) rotate(0deg);
 
-    filter: brightness(1) drop-shadow(0 0 0.2rem rgba(224, 187, 104, 0.28));
+    filter: brightness(1.12) saturate(1.15) drop-shadow(0 0 0.24rem rgba(224, 187, 104, 0.38));
   }
 
   25% {
@@ -96,15 +116,15 @@ mat-toolbar {
 
     transform: translateX(-50%) scaleX(0.96) scaleY(1.05) rotate(-1.2deg);
 
-    filter: brightness(1.08) drop-shadow(0 0 0.3rem rgba(217, 90, 26, 0.38));
+    filter: brightness(1.24) saturate(1.24) drop-shadow(0 0 0.36rem rgba(217, 90, 26, 0.52));
   }
 
   50% {
-    opacity: 0.94;
+    opacity: 0.95;
 
     transform: translateX(-50%) scaleX(1.03) scaleY(0.98) rotate(0.8deg);
 
-    filter: brightness(0.98) drop-shadow(0 0 0.18rem rgba(224, 187, 104, 0.24));
+    filter: brightness(1.08) saturate(1.14) drop-shadow(0 0 0.22rem rgba(224, 187, 104, 0.34));
   }
 
   75% {
@@ -112,19 +132,13 @@ mat-toolbar {
 
     transform: translateX(-50%) scaleX(0.98) scaleY(1.03) rotate(-0.6deg);
 
-    filter: brightness(1.05) drop-shadow(0 0 0.27rem rgba(217, 90, 26, 0.34));
+    filter: brightness(1.2) saturate(1.2) drop-shadow(0 0 0.32rem rgba(217, 90, 26, 0.46));
   }
 }
 
 /* -----------------------
    K
 ------------------------ */
-
-.brand-k {
-  display: inline-block;
-
-  font-size: 1.08em;
-}
 
 /* -----------------------
    MAIN NAVIGATION
@@ -288,8 +302,7 @@ mat-toolbar {
   .brand {
     grid-area: brand;
 
-    top: 7px;
-
+    align-self: center;
     justify-self: start;
 
     font-size: 1.5rem;
