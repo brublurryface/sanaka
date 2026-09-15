@@ -71,9 +71,41 @@ body {
   box-sizing: border-box;
 }
 
+/* Keep every scrollable area in the site's palette without narrowing its controls. */
+@media (forced-colors: none) {
+  html {
+    scrollbar-color: var(--sanaka-gold) var(--sanaka-bg);
+  }
+
+  @supports not (scrollbar-color: auto) {
+    ::-webkit-scrollbar,
+    ::-webkit-scrollbar-track,
+    ::-webkit-scrollbar-corner {
+      background: var(--sanaka-bg);
+    }
+
+    ::-webkit-scrollbar-thumb {
+      border: 3px solid var(--sanaka-bg);
+      border-radius: 999px;
+      background: var(--sanaka-gold);
+    }
+
+    ::-webkit-scrollbar-thumb:hover {
+      background: var(--sanaka-gold-soft);
+    }
+  }
+}
+
 /* -----------------------
    ACCESSIBILITY
 ------------------------ */
+
+/* Search fields use the accessible custom clear button, not the browser's blue icon. */
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
 
 @media (prefers-reduced-motion: reduce) {
   html {

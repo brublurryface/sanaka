@@ -23,6 +23,12 @@ class MockTranslocoLoader implements TranslocoLoader {
             description: 'Parent and child exchange data.',
             action: 'Enter circuit',
           },
+          rest: {
+            status: 'Available',
+            title: 'REST API portal',
+            description: 'A request manifests an image from NASA.',
+            action: 'Open portal',
+          },
           upcoming: {
             eyebrow: 'Next experiments',
             title: 'The Matrix keeps opening',
@@ -56,14 +62,21 @@ describe('MatrixCatalog', () => {
     }).compileComponents();
   });
 
-  it('should link the available experiment to its own route', () => {
+  it('should link each available experiment to its own route', () => {
     const fixture = TestBed.createComponent(MatrixCatalog);
     fixture.detectChanges();
 
-    const link = fixture.nativeElement.querySelector('.featured-experiment') as HTMLAnchorElement;
+    const links = Array.from(
+      fixture.nativeElement.querySelectorAll('.featured-experiment'),
+    ) as HTMLAnchorElement[];
 
-    expect(link.getAttribute('href')).toBe('/matrix/components');
-    expect(link.textContent).toContain('Components in conversation');
+    expect(links).toHaveLength(2);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/matrix/components',
+      '/matrix/rest-api',
+    ]);
+    expect(links[0].textContent).toContain('Components in conversation');
+    expect(links[1].textContent).toContain('REST API portal');
   });
 
   it('should identify future experiments without turning them into links', () => {

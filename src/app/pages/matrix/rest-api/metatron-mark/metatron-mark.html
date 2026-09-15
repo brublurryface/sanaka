@@ -1,0 +1,10 @@
+<svg viewBox="-94 -108 188 216" fill="none" aria-hidden="true" focusable="false">
+  @for (segment of segments; track $index) {
+    <line
+      [attr.x1]="segment.start.x"
+      [attr.y1]="segment.start.y"
+      [attr.x2]="segment.end.x"
+      [attr.y2]="segment.end.y"
+    />
+  }
+</svg>

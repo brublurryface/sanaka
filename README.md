@@ -54,6 +54,7 @@ Essa separação permite evoluir a interface sem perder o histórico já publica
 - estados visuais de carregamento, erro, nova tentativa e ausência de resultados;
 - carregamento tardio das rotas de publicações e de Māyā;
 - Matrix Online com demonstrações visuais e interativas de conceitos do Angular;
+- portal REST interativo com busca de imagens do universo no acervo da NASA;
 - renderização híbrida, combinando prerenderização e execução no navegador;
 - testes unitários com Vitest.
 
@@ -108,6 +109,7 @@ Os textos da interface usam Transloco e podem ser alternados entre português e 
 | `/posts/paged/:page` | Página específica do arquivo                           |
 | `/matrix`            | Catálogo dos experimentos interativos da Matrix Online |
 | `/matrix/components` | Experimento de comunicação entre componentes Angular   |
+| `/matrix/rest-api`   | Experimento visual do ciclo de uma requisição REST     |
 | `/maya`              | Espaço reservado para a evolução de Māyā               |
 
 ### Ferramentas do santuário
@@ -119,6 +121,7 @@ Os textos da interface usam Transloco e podem ser alternados entre português e 
 | RxJS 7             | Fluxos assíncronos e requisições reativas                           |
 | Transloco          | Internacionalização da interface                                    |
 | WordPress REST API | Fonte do conteúdo editorial                                         |
+| NASA Images API    | Fonte de dados e imagens do universo para o experimento REST        |
 | Angular SSR        | Renderização no servidor e prerenderização                          |
 | Vitest             | Testes unitários                                                    |
 | SCSS               | Estilos, responsividade e identidade visual                         |
@@ -164,7 +167,7 @@ O repositório inclui uma auditoria reproduzível do conteúdo público do WordP
 - criar a experiência editorial de leitura de cada publicação;
 - avaliar uma camada de backend entre o Angular e o WordPress;
 - desenvolver Māyā como companheira com estado, memória e permissões controladas;
-- ampliar a **Matrix Online** com experimentos sobre Signals, Observables, ciclo de vida, requisições e lazy loading;
+- ampliar a **Matrix Online** com experimentos sobre Signals, Observables, ciclo de vida e lazy loading;
 - investigar separadamente personagens, sliders e mídias legadas do antigo site.
 
 ---
@@ -199,6 +202,7 @@ This separation makes it possible to evolve the interface without losing the pub
 - loading, error, retry, and empty states;
 - lazy-loaded publication and Māyā routes;
 - Matrix Online with visual and interactive Angular concept demonstrations;
+- interactive REST portal powered by images of the universe from NASA's collection;
 - hybrid rendering combining prerendering and client-side execution;
 - unit tests with Vitest.
 
@@ -245,15 +249,16 @@ Interface text is managed with Transloco and can be switched between Portuguese 
 
 ### Available paths
 
-| Route                | Purpose                                          |
-| -------------------- | ------------------------------------------------ |
-| `/`                  | Sanctuary entrance                               |
-| `/posts`             | Archive in continuous reading mode               |
-| `/posts/paged`       | First page in paginated mode                     |
-| `/posts/paged/:page` | Specific archive page                            |
-| `/matrix`            | Catalog of Matrix Online interactive experiments |
-| `/matrix/components` | Angular component communication experiment       |
-| `/maya`              | Space reserved for Māyā's evolution              |
+| Route                | Purpose                                            |
+| -------------------- | -------------------------------------------------- |
+| `/`                  | Sanctuary entrance                                 |
+| `/posts`             | Archive in continuous reading mode                 |
+| `/posts/paged`       | First page in paginated mode                       |
+| `/posts/paged/:page` | Specific archive page                              |
+| `/matrix`            | Catalog of Matrix Online interactive experiments   |
+| `/matrix/components` | Angular component communication experiment         |
+| `/matrix/rest-api`   | Visual experiment showing a REST request lifecycle |
+| `/maya`              | Space reserved for Māyā's evolution                |
 
 ### Tools behind the sanctuary
 
@@ -264,6 +269,7 @@ Interface text is managed with Transloco and can be switched between Portuguese 
 | RxJS 7             | Asynchronous flows and reactive requests                          |
 | Transloco          | Interface internationalization                                    |
 | WordPress REST API | Editorial content source                                          |
+| NASA Images API    | Universe image and metadata source for the REST experiment        |
 | Angular SSR        | Server-side rendering and prerendering                            |
 | Vitest             | Unit testing                                                      |
 | SCSS               | Styling, responsiveness, and visual identity                      |
@@ -309,7 +315,7 @@ The repository includes a reproducible audit of the public WordPress content. It
 - build the editorial reading experience for individual publications;
 - evaluate a backend layer between Angular and WordPress;
 - develop Māyā as a companion with state, memory, and controlled permissions;
-- expand **Matrix Online** with experiments about Signals, Observables, lifecycle, requests, and lazy loading;
+- expand **Matrix Online** with experiments about Signals, Observables, lifecycle, and lazy loading;
 - investigate legacy characters, sliders, and media separately.
 
 ---

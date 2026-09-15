@@ -106,6 +106,12 @@
         "description": "Envie um valor do componente pai para o filho, escolha uma resposta e observe o evento encontrar o caminho de volta.",
         "action": "Entrar no circuito"
       },
+      "rest": {
+        "status": "Disponível agora",
+        "title": "Portal da API REST",
+        "description": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no centro do portal.",
+        "action": "Abrir o portal"
+      },
       "upcoming": {
         "eyebrow": "Próximas experiências",
         "title": "A Matrix continuará se abrindo",
@@ -230,6 +236,136 @@
       "code": {
         "title": "O que se move no código?",
         "text": "O valor desce do pai para o filho por @Input. O evento retorna do filho para o pai por @Output e EventEmitter."
+      }
+    },
+    "rest": {
+      "header": {
+        "back": "Voltar ao catálogo da Matrix",
+        "eyebrow": "Matrix Online · Experimento 02",
+        "title": {
+          "line1": "Um portal",
+          "line2": "para o universo"
+        },
+        "intro": "Escolha um tema e abra uma passagem até um acervo real. A interface transforma a espera, a resposta e até a falha de uma requisição REST em algo que pode ser acompanhado.",
+        "action": "Atravessar a requisição"
+      },
+      "exhibit": {
+        "eyebrow": "Laboratório REST",
+        "title": "Invoque uma imagem do cosmos",
+        "intro": "Sua ação cria uma requisição HTTP para o acervo da NASA. O JSON traz os dados e o endereço da imagem; o navegador busca esse arquivo em uma segunda requisição para revelar o resultado no portal."
+      },
+      "controls": {
+        "label": "Tema do cosmos · busque em inglês",
+        "placeholder": "Ex.: Orion nebula, mars, black hole...",
+        "clear": "Limpar busca",
+        "submit": "Abrir portal",
+        "searchAgain": "Abrir outro portal",
+        "presetsLabel": "Invocações sugeridas",
+        "presets": {
+          "nebula": "Nebulosa de Órion",
+          "mars": "Marte",
+          "earth": "Terra azul",
+          "blackHole": "Buraco negro · ilustração"
+        }
+      },
+      "portal": {
+        "idle": {
+          "title": "O portal está em repouso",
+          "text": "Nenhuma requisição foi enviada. Escolha um tema para iniciar a travessia.",
+          "action": "Invocar imagem"
+        },
+        "loading": {
+          "title": "Atravessando a rede",
+          "text": "Consultando o acervo da NASA para “{{ query }}”."
+        },
+        "imageLoading": {
+          "title": "Revelando",
+          "text": "Os dados chegaram. Carregando o arquivo visual."
+        },
+        "empty": {
+          "title": "Nada atravessou",
+          "text": "A busca por “{{ query }}” não devolveu um registro com imagem que pudesse ser exibida."
+        },
+        "error": {
+          "title": "A passagem foi interrompida",
+          "text": "A requisição falhou antes de entregar uma resposta utilizável. O estado de erro também faz parte do fluxo."
+        },
+        "imageError": {
+          "title": "A imagem não se manifestou",
+          "text": "Os dados chegaram, mas o arquivo visual não pôde ser carregado."
+        },
+        "retry": "Tentar novamente",
+        "newSearch": "Nova busca",
+        "success": {
+          "label": "Resultado mapeado",
+          "date": "Data do registro",
+          "credit": "Crédito",
+          "center": "Centro NASA",
+          "openSource": "Ver imagem na fonte"
+        },
+        "announcement": {
+          "loading": "Requisição iniciada. O portal está carregando.",
+          "success": "A imagem {{ title }} foi carregada.",
+          "empty": "A requisição terminou sem uma imagem exibível.",
+          "error": "A requisição terminou com erro."
+        }
+      },
+      "inspector": {
+        "eyebrow": "Inspetor da requisição",
+        "title": "O que atravessou o portal",
+        "intro": "Esta não é uma simulação: são o método, o endereço, os parâmetros e o resultado mapeado da requisição real.",
+        "method": "Método",
+        "status": "Status HTTP",
+        "endpoint": "Endpoint",
+        "parameters": "Parâmetros",
+        "requestUrl": "URL completa",
+        "mappedResponse": "Resposta após o mapeamento",
+        "total": "{{ total }} resultados na API"
+      },
+      "source": {
+        "prefix": "Dados e imagens:",
+        "name": "NASA Image and Video Library"
+      },
+      "code": {
+        "eyebrow": "Código em movimento",
+        "title": "Siga a requisição por dentro",
+        "status": "Trecho {{ current }} de {{ total }}",
+        "previous": "Ver trecho anterior",
+        "next": "Ver próximo trecho",
+        "pagination": "Trechos da requisição",
+        "goTo": "Ver trecho {{ page }}",
+        "slides": {
+          "action": {
+            "title": "1. A ação entra no fluxo",
+            "description": "O envio do formulário lê o tema atual e o publica em um Subject, que funciona como a entrada do fluxo assíncrono."
+          },
+          "request": {
+            "title": "2. O serviço monta o GET",
+            "description": "HttpParams monta a busca por texto (q) ou por um registro selecionado (nasa_id). HttpClient envia o GET e devolve um Observable da resposta HTTP tipada."
+          },
+          "stream": {
+            "title": "3. O Observable coordena o tempo",
+            "description": "switchMap abandona uma requisição anterior quando outra começa. catchError transforma uma falha em um estado que a interface consegue apresentar."
+          },
+          "mapping": {
+            "title": "4. O DTO se torna um modelo de tela",
+            "description": "O serviço lê collection.items e preserva a URL HTTPS do preview. Nos exemplos selecionados, também confere o nasa_id para não trocar o registro por outro. Receber os dados não significa que a imagem já carregou: o navegador ainda precisa buscá-la."
+          }
+        }
+      },
+      "explanation": {
+        "action": {
+          "title": "O que você faz?",
+          "text": "Escolhe um tema e envia o formulário. Esse evento é o ponto de partida da requisição."
+        },
+        "angular": {
+          "title": "O que o Angular percebe?",
+          "text": "O estado muda de repouso para carregamento e, depois, para sucesso, vazio ou erro. Cada mudança atualiza somente a representação correspondente."
+        },
+        "code": {
+          "title": "O que se move no código?",
+          "text": "Um texto entra no fluxo RxJS, o HttpClient recebe JSON e o service mapeia o DTO externo para um modelo pequeno e seguro para a interface."
+        }
       }
     }
   }

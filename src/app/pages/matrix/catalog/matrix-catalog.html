@@ -25,29 +25,53 @@
         <p>{{ 'matrix.catalog.list.intro' | transloco }}</p>
       </header>
 
-      <a class="featured-experiment" routerLink="/matrix/components">
-        <div class="featured-experiment__number" aria-hidden="true">01</div>
+      <div class="available-experiments">
+        <a class="featured-experiment" routerLink="/matrix/components">
+          <div class="featured-experiment__number" aria-hidden="true">01</div>
 
-        <div class="featured-experiment__content">
-          <span class="featured-experiment__status">
-            {{ 'matrix.catalog.available.status' | transloco }}
-          </span>
-          <h3>{{ 'matrix.catalog.available.title' | transloco }}</h3>
-          <p>{{ 'matrix.catalog.available.description' | transloco }}</p>
+          <div class="featured-experiment__content">
+            <span class="featured-experiment__status">
+              {{ 'matrix.catalog.available.status' | transloco }}
+            </span>
+            <h3>{{ 'matrix.catalog.available.title' | transloco }}</h3>
+            <p>{{ 'matrix.catalog.available.description' | transloco }}</p>
 
-          <strong>
-            {{ 'matrix.catalog.available.action' | transloco }}
-            <span aria-hidden="true">→</span>
-          </strong>
-        </div>
+            <strong>
+              {{ 'matrix.catalog.available.action' | transloco }}
+              <span aria-hidden="true">→</span>
+            </strong>
+          </div>
 
-        <div class="featured-experiment__diagram" aria-hidden="true">
-          <span>Pai</span>
-          <i>→</i>
-          <span>Filho</span>
-          <i>↩</i>
-        </div>
-      </a>
+          <div class="featured-experiment__diagram" aria-hidden="true">
+            <span>Pai</span>
+            <i>→</i>
+            <span>Filho</span>
+            <i>↩</i>
+          </div>
+        </a>
+
+        <a class="featured-experiment featured-experiment--portal" routerLink="/matrix/rest-api">
+          <div class="featured-experiment__number" aria-hidden="true">02</div>
+
+          <div class="featured-experiment__content">
+            <span class="featured-experiment__status">
+              {{ 'matrix.catalog.rest.status' | transloco }}
+            </span>
+            <h3>{{ 'matrix.catalog.rest.title' | transloco }}</h3>
+            <p>{{ 'matrix.catalog.rest.description' | transloco }}</p>
+
+            <strong>
+              {{ 'matrix.catalog.rest.action' | transloco }}
+              <span aria-hidden="true">→</span>
+            </strong>
+          </div>
+
+          <div class="featured-experiment__portal" aria-hidden="true">
+            <i></i>
+            <span>GET</span>
+          </div>
+        </a>
+      </div>
 
       <div class="upcoming-heading">
         <p class="eyebrow">{{ 'matrix.catalog.upcoming.eyebrow' | transloco }}</p>

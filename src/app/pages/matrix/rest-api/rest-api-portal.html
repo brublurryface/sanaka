@@ -1,0 +1,143 @@
+<main>
+  <section class="rest-hero" aria-labelledby="rest-title">
+    <div class="rest-hero__halo" aria-hidden="true"></div>
+
+    <div class="rest-shell rest-hero__content">
+      <a class="rest-hero__back" routerLink="/matrix">
+        <span aria-hidden="true">←</span>
+        {{ 'matrix.rest.header.back' | transloco }}
+      </a>
+
+      <p class="eyebrow">{{ 'matrix.rest.header.eyebrow' | transloco }}</p>
+
+      <h1 id="rest-title">
+        <span>{{ 'matrix.rest.header.title.line1' | transloco }}</span>
+        {{ 'matrix.rest.header.title.line2' | transloco }}
+      </h1>
+
+      <p class="rest-hero__intro">{{ 'matrix.rest.header.intro' | transloco }}</p>
+
+      <a class="rest-hero__action" href="#rest-exhibit">
+        {{ 'matrix.rest.header.action' | transloco }}
+        <span aria-hidden="true">↓</span>
+      </a>
+    </div>
+  </section>
+
+  <section id="rest-exhibit" class="rest-exhibit" aria-labelledby="rest-exhibit-title">
+    <div class="rest-shell">
+      <header class="rest-exhibit__heading">
+        <div>
+          <p class="eyebrow">{{ 'matrix.rest.exhibit.eyebrow' | transloco }}</p>
+          <h2 id="rest-exhibit-title">{{ 'matrix.rest.exhibit.title' | transloco }}</h2>
+        </div>
+
+        <p>{{ 'matrix.rest.exhibit.intro' | transloco }}</p>
+      </header>
+
+      <div class="rest-workbench">
+        <div class="portal-column">
+          <form class="portal-controls" (submit)="search(); $event.preventDefault()">
+            <label for="image-query">{{ 'matrix.rest.controls.label' | transloco }}</label>
+
+            <div class="portal-controls__field">
+              <div class="portal-controls__search">
+                <input
+                  #queryInput
+                  id="image-query"
+                  type="search"
+                  autocomplete="off"
+                  spellcheck="false"
+                  [attr.maxlength]="queryMaxLength"
+                  [value]="query()"
+                  [placeholder]="'matrix.rest.controls.placeholder' | transloco"
+                  (input)="updateQuery($event)"
+                />
+
+                @if (query().length > 0) {
+                  <button
+                    type="button"
+                    class="portal-controls__clear"
+                    [attr.aria-label]="'matrix.rest.controls.clear' | transloco"
+                    aria-controls="image-query"
+                    (click)="clearQuery(queryInput)"
+                  >
+                    <span aria-hidden="true"></span>
+                  </button>
+                }
+              </div>
+
+              <button class="portal-controls__submit" type="submit" [disabled]="!canSearch()">
+                @if (phase() === 'loading') {
+                  {{ 'matrix.rest.controls.searchAgain' | transloco }}
+                } @else {
+                  {{ 'matrix.rest.controls.submit' | transloco }}
+                }
+              </button>
+            </div>
+
+            <fieldset>
+              <legend>{{ 'matrix.rest.controls.presetsLabel' | transloco }}</legend>
+
+              <div class="portal-controls__presets">
+                @for (preset of presets; track preset.query) {
+                  <button
+                    type="button"
+                    [class.portal-controls__preset--active]="query() === preset.query"
+                    [attr.aria-pressed]="query() === preset.query"
+                    (click)="selectPreset(preset.query)"
+                  >
+                    {{ preset.translationKey | transloco }}
+                  </button>
+                }
+              </div>
+            </fieldset>
+          </form>
+
+          <app-arcane-portal
+            [phase]="phase()"
+            [image]="result()?.image ?? null"
+            [query]="submittedQuery()"
+            [imageFailed]="imageFailed()"
+            [imageLoaded]="imageLoaded()"
+            [canSearch]="canSearch()"
+            (searchRequested)="search()"
+            (retryRequested)="retry()"
+            (resetRequested)="startOver()"
+            (imageLoadFailed)="handleImageError()"
+            (imageLoadSucceeded)="handleImageLoaded()"
+          />
+        </div>
+
+        <app-rest-request-inspector
+          [request]="requestDetails()"
+          [status]="responseStatus()"
+          [total]="result()?.total ?? null"
+          [mappedResponse]="mappedResponse()"
+        />
+      </div>
+
+      <app-rest-code-explorer [currentStep]="currentCodeStep()" />
+
+      <div class="rest-explanation">
+        <article>
+          <span>01</span>
+          <h2>{{ 'matrix.rest.explanation.action.title' | transloco }}</h2>
+          <p>{{ 'matrix.rest.explanation.action.text' | transloco }}</p>
+        </article>
+
+        <article>
+          <span>02</span>
+          <h2>{{ 'matrix.rest.explanation.angular.title' | transloco }}</h2>
+          <p>{{ 'matrix.rest.explanation.angular.text' | transloco }}</p>
+        </article>
+
+        <article>
+          <span>03</span>
+          <h2>{{ 'matrix.rest.explanation.code.title' | transloco }}</h2>
+          <p>{{ 'matrix.rest.explanation.code.text' | transloco }}</p>
+        </article>
+      </div>
+    </div>
+  </section>
+</main>

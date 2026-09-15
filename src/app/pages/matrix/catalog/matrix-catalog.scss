@@ -102,12 +102,17 @@
   line-height: 1.8;
 }
 
+.available-experiments {
+  display: grid;
+  gap: 1.25rem;
+  margin-top: 2.5rem;
+}
+
 .featured-experiment {
   display: grid;
   grid-template-columns: auto minmax(0, 1fr) auto;
   align-items: center;
   gap: clamp(1.5rem, 5vw, 4rem);
-  margin-top: 2.5rem;
   padding: clamp(1.5rem, 4vw, 3rem);
   border: 1px solid rgba(237, 201, 120, 0.34);
   background:
@@ -188,6 +193,61 @@
   font-style: normal;
 }
 
+.featured-experiment--portal {
+  background:
+    radial-gradient(circle at 88% 50%, rgba(224, 106, 45, 0.18), transparent 13rem),
+    radial-gradient(circle at 100% 0%, rgba(47, 77, 168, 0.16), transparent 20rem),
+    rgba(13, 17, 23, 0.74);
+}
+
+.featured-experiment__portal {
+  position: relative;
+  display: grid;
+  place-items: center;
+  width: 7.5rem;
+  aspect-ratio: 1;
+  border: 1px solid rgba(237, 201, 120, 0.62);
+  border-radius: 50%;
+  box-shadow:
+    0 0 1rem rgba(237, 201, 120, 0.22),
+    inset 0 0 1.5rem rgba(224, 106, 45, 0.13);
+}
+
+.featured-experiment__portal::before,
+.featured-experiment__portal::after {
+  position: absolute;
+  border-radius: 50%;
+  content: '';
+}
+
+.featured-experiment__portal::before {
+  inset: 0.55rem;
+  border: 1px dashed rgba(237, 201, 120, 0.5);
+}
+
+.featured-experiment__portal::after {
+  inset: 1.15rem;
+  border: 1px solid rgba(237, 201, 120, 0.3);
+  background: radial-gradient(circle, rgba(47, 77, 168, 0.18), transparent 68%);
+}
+
+.featured-experiment__portal i {
+  position: absolute;
+  inset: -0.3rem;
+  border-radius: 50%;
+  background: repeating-conic-gradient(rgba(237, 201, 120, 0.45) 0 1deg, transparent 1deg 14deg);
+  mask: radial-gradient(circle, transparent 0 88%, #000 89% 92%, transparent 93%);
+}
+
+.featured-experiment__portal span {
+  position: relative;
+  z-index: 1;
+  color: var(--sanaka-gold-soft);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.72rem;
+  letter-spacing: 0.08em;
+}
+
 .upcoming-heading {
   margin-top: clamp(4rem, 8vw, 6rem);
 }
@@ -233,6 +293,10 @@
 
   .featured-experiment__diagram {
     width: fit-content;
+  }
+
+  .featured-experiment__portal {
+    width: 6rem;
   }
 
   .upcoming-list {
