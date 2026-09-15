@@ -257,6 +257,7 @@
       "controls": {
         "label": "Tema do cosmos · busque em inglês",
         "placeholder": "Ex.: Orion nebula, mars, black hole...",
+        "clear": "Limpar busca",
         "submit": "Abrir portal",
         "searchAgain": "Abrir outro portal",
         "presetsLabel": "Invocações sugeridas",

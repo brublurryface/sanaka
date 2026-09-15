@@ -186,10 +186,18 @@
   margin-top: 0.7rem;
 }
 
+.portal-controls__search {
+  position: relative;
+  min-width: 0;
+}
+
 .portal-controls input {
+  display: block;
+  width: 100%;
   min-width: 0;
   min-height: 3.2rem;
-  padding: 0.85rem 1rem;
+  padding: 0.85rem 3.25rem 0.85rem 1rem;
+  appearance: none;
   border: 1px solid rgba(237, 201, 120, 0.35);
   border-right: 0;
   border-radius: 0;
@@ -205,7 +213,7 @@
   outline-offset: -2px;
 }
 
-.portal-controls__field button {
+.portal-controls__submit {
   border: 1px solid var(--sanaka-gold-soft);
   border-radius: 0;
   background: rgba(211, 166, 79, 0.13);
@@ -218,7 +226,7 @@
   text-transform: uppercase;
 }
 
-.portal-controls__field button {
+.portal-controls__submit {
   min-width: 9.5rem;
   padding: 0.75rem 1.1rem;
 }
@@ -237,6 +245,53 @@
 .portal-controls button:disabled {
   cursor: not-allowed;
   opacity: 0.42;
+}
+
+.portal-controls__clear {
+  position: absolute;
+  inset-block: 0;
+  inset-inline-end: 0;
+  z-index: 2;
+  display: grid;
+  place-items: center;
+  width: 3rem;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  background: transparent;
+  color: var(--sanaka-gold-soft);
+  cursor: pointer;
+}
+
+.portal-controls__clear span {
+  position: relative;
+  width: 1rem;
+  height: 1rem;
+  pointer-events: none;
+}
+
+.portal-controls__clear span::before,
+.portal-controls__clear span::after {
+  position: absolute;
+  top: 50%;
+  left: 50%;
+  width: 1rem;
+  height: 2px;
+  background: currentColor;
+  content: '';
+}
+
+.portal-controls__clear span::before {
+  transform: translate(-50%, -50%) rotate(45deg);
+}
+
+.portal-controls__clear span::after {
+  transform: translate(-50%, -50%) rotate(-45deg);
+}
+
+.portal-controls .portal-controls__clear:focus-visible {
+  outline: 2px solid var(--sanaka-gold-soft);
+  outline-offset: -0.4rem;
 }
 
 .portal-controls fieldset {
@@ -346,7 +401,25 @@
     border-bottom: 0;
   }
 
-  .portal-controls__field button {
+  .portal-controls__submit {
     min-height: 3rem;
+  }
+}
+
+@media (forced-colors: active) {
+  .portal-controls .portal-controls__clear,
+  .portal-controls .portal-controls__clear:hover:not(:disabled),
+  .portal-controls .portal-controls__clear:focus-visible {
+    background: ButtonFace;
+    color: ButtonText;
+  }
+
+  .portal-controls__clear span::before,
+  .portal-controls__clear span::after {
+    background: ButtonText;
+  }
+
+  .portal-controls .portal-controls__clear:focus-visible {
+    outline-color: Highlight;
   }
 }

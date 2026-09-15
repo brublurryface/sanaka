@@ -41,18 +41,33 @@
             <label for="image-query">{{ 'matrix.rest.controls.label' | transloco }}</label>
 
             <div class="portal-controls__field">
-              <input
-                id="image-query"
-                type="search"
-                autocomplete="off"
-                spellcheck="false"
-                [attr.maxlength]="queryMaxLength"
-                [value]="query()"
-                [placeholder]="'matrix.rest.controls.placeholder' | transloco"
-                (input)="updateQuery($event)"
-              />
+              <div class="portal-controls__search">
+                <input
+                  #queryInput
+                  id="image-query"
+                  type="search"
+                  autocomplete="off"
+                  spellcheck="false"
+                  [attr.maxlength]="queryMaxLength"
+                  [value]="query()"
+                  [placeholder]="'matrix.rest.controls.placeholder' | transloco"
+                  (input)="updateQuery($event)"
+                />
 
-              <button type="submit" [disabled]="!canSearch()">
+                @if (query().length > 0) {
+                  <button
+                    type="button"
+                    class="portal-controls__clear"
+                    [attr.aria-label]="'matrix.rest.controls.clear' | transloco"
+                    aria-controls="image-query"
+                    (click)="clearQuery(queryInput)"
+                  >
+                    <span aria-hidden="true"></span>
+                  </button>
+                }
+              </div>
+
+              <button class="portal-controls__submit" type="submit" [disabled]="!canSearch()">
                 @if (phase() === 'loading') {
                   {{ 'matrix.rest.controls.searchAgain' | transloco }}
                 } @else {

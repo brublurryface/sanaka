@@ -107,6 +107,11 @@ export class RestApiPortal {
     this.query.set((event.target as HTMLInputElement).value.slice(0, this.queryMaxLength));
   }
 
+  clearQuery(input: HTMLInputElement): void {
+    this.query.set('');
+    input.focus();
+  }
+
   search(): void {
     const query = this.query().trim().replace(/\s+/g, ' ');
 

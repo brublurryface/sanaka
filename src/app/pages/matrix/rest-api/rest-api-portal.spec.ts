@@ -11,7 +11,7 @@ import { RestRequestDetails, ImageSearchResult } from './rest-api.models';
 import { RestApiPortal } from './rest-api-portal';
 
 class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation() {
+  getTranslation(lang: string) {
     return of({
       matrix: {
         rest: {
@@ -30,6 +30,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           controls: {
             label: 'Cosmic subject',
             placeholder: 'Try moon',
+            clear: lang === 'pt-BR' ? 'Limpar busca' : 'Clear search',
             submit: 'Open portal',
             searchAgain: 'Open another portal',
             presetsLabel: 'Suggested invocations',
@@ -161,6 +162,7 @@ describe('RestApiPortal', () => {
             availableLangs: ['pt-BR', 'en'],
             defaultLang: 'pt-BR',
             fallbackLang: 'pt-BR',
+            reRenderOnLangChange: true,
             prodMode: true,
           },
           loader: MockTranslocoLoader,
@@ -180,6 +182,119 @@ describe('RestApiPortal', () => {
     );
     expect(fixture.nativeElement.querySelector('.request-inspector').textContent).toContain('GET');
     expect(fixture.componentInstance.query()).toBe('Orion nebula');
+    expect(api.searchImages).not.toHaveBeenCalled();
+  });
+
+  it('should render a named non-submit clear button while the query contains text', () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    fixture.detectChanges();
+    const clear: HTMLButtonElement = fixture.nativeElement.querySelector('.portal-controls__clear');
+
+    expect(clear).not.toBeNull();
+    expect(clear.type).toBe('button');
+    expect(clear.getAttribute('aria-label')).toBe('Limpar busca');
+    expect(clear.getAttribute('aria-controls')).toBe('image-query');
+    expect(api.searchImages).not.toHaveBeenCalled();
+  });
+
+  it('should clear the query and return focus without requesting another image', () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    fixture.detectChanges();
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('#image-query');
+    const clear: HTMLButtonElement = fixture.nativeElement.querySelector('.portal-controls__clear');
+
+    clear.focus();
+    clear.click();
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.query()).toBe('');
+    expect(input.value).toBe('');
+    expect(document.activeElement).toBe(input);
+    expect(fixture.componentInstance.canSearch()).toBe(false);
+    expect(fixture.nativeElement.querySelector('.portal-controls__clear')).toBeNull();
+    expect(fixture.nativeElement.querySelector('.portal-controls__submit').disabled).toBe(true);
+    expect(fixture.componentInstance.phase()).toBe('idle');
+    expect(api.searchImages).not.toHaveBeenCalled();
+  });
+
+  it('should restore the clear button when the visitor types after emptying the field', () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    fixture.detectChanges();
+    const input: HTMLInputElement = fixture.nativeElement.querySelector('#image-query');
+    fixture.componentInstance.clearQuery(input);
+    fixture.detectChanges();
+
+    input.value = 'mars';
+    input.dispatchEvent(new Event('input', { bubbles: true }));
+    fixture.detectChanges();
+
+    expect(fixture.componentInstance.query()).toBe('mars');
+    expect(fixture.nativeElement.querySelector('.portal-controls__clear')).not.toBeNull();
+    expect(fixture.nativeElement.querySelector('.portal-controls__submit').disabled).toBe(false);
+    expect(api.searchImages).not.toHaveBeenCalled();
+
+    fixture.nativeElement
+      .querySelector('.portal-controls')
+      .dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+
+    expect(api.searchImages).toHaveBeenCalledExactlyOnceWith('mars');
+  });
+
+  it('should preserve the displayed result and request inspector when clearing the draft query', () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    const component = fixture.componentInstance;
+    component.search();
+    component.handleImageLoaded();
+    fixture.detectChanges();
+    const result = component.result();
+    const request = component.requestDetails();
+
+    fixture.nativeElement.querySelector('.portal-controls__clear').click();
+    fixture.detectChanges();
+
+    expect(component.result()).toBe(result);
+    expect(component.requestDetails()).toEqual(request);
+    expect(component.submittedQuery()).toBe('Orion nebula');
+    expect(component.phase()).toBe('success');
+    expect(component.imageLoaded()).toBe(true);
+    expect(api.searchImages).toHaveBeenCalledOnce();
+  });
+
+  it('should keep the current request running when only its draft input is cleared', () => {
+    const pending = new Subject<ImageSearchResult>();
+    api.searchImages.mockReturnValueOnce(pending);
+    const fixture = TestBed.createComponent(RestApiPortal);
+    const component = fixture.componentInstance;
+    component.search();
+    fixture.detectChanges();
+
+    fixture.nativeElement.querySelector('.portal-controls__clear').click();
+    fixture.detectChanges();
+    expect(component.phase()).toBe('loading');
+
+    pending.next(createResult('Requested image'));
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(component.query()).toBe('');
+    expect(component.phase()).toBe('success');
+    expect(component.result()?.image?.title).toBe('Requested image');
+    expect(api.searchImages).toHaveBeenCalledOnce();
+  });
+
+  it('should translate the clear button without triggering a request', async () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    fixture.detectChanges();
+    const clear: HTMLButtonElement = fixture.nativeElement.querySelector('.portal-controls__clear');
+    expect(clear.getAttribute('aria-label')).toBe('Limpar busca');
+
+    TestBed.inject(TranslocoService).setActiveLang('en');
+    await fixture.whenStable();
+    fixture.detectChanges();
+
+    expect(clear.getAttribute('aria-label')).toBe('Clear search');
     expect(api.searchImages).not.toHaveBeenCalled();
   });
 

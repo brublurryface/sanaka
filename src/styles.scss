@@ -100,6 +100,13 @@ body {
    ACCESSIBILITY
 ------------------------ */
 
+/* Search fields use the accessible custom clear button, not the browser's blue icon. */
+input[type='search']::-webkit-search-cancel-button {
+  -webkit-appearance: none;
+  appearance: none;
+  display: none;
+}
+
 @media (prefers-reduced-motion: reduce) {
   html {
     scroll-behavior: auto;

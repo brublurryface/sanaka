@@ -257,6 +257,7 @@
       "controls": {
         "label": "Cosmic subject · search in English",
         "placeholder": "E.g. Orion nebula, mars, black hole...",
+        "clear": "Clear search",
         "submit": "Open portal",
         "searchAgain": "Open another portal",
         "presetsLabel": "Suggested invocations",
