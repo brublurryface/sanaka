@@ -94,10 +94,15 @@ describe('App', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const brand = compiled.querySelector<HTMLAnchorElement>('.brand');
+    const flame = brand?.querySelector<HTMLImageElement>('.brand-flame');
 
     expect(brand).toBeTruthy();
     expect(brand?.getAttribute('aria-label')).toBe('Sanaka');
     expect(brand?.getAttribute('href')).toBe('/');
+    expect(brand?.textContent?.replace(/\s/g, '')).toBe('SANAKA');
+    expect(flame?.getAttribute('src')).toBe('/images/brand/flame-mark.webp');
+    expect(flame?.getAttribute('alt')).toBe('');
+    expect(flame?.getAttribute('aria-hidden')).toBe('true');
   });
 
   it('should render the main navigation links', () => {
