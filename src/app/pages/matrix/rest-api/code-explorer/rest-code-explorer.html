@@ -1,0 +1,149 @@
+<section class="code-explorer" aria-labelledby="rest-code-title">
+  <header class="code-explorer__header">
+    <div>
+      <p>{{ 'matrix.rest.code.eyebrow' | transloco }}</p>
+      <h2 id="rest-code-title">{{ 'matrix.rest.code.title' | transloco }}</h2>
+    </div>
+
+    <span>
+      {{
+        'matrix.rest.code.status' | transloco: { current: activeIndex() + 1, total: slides.length }
+      }}
+    </span>
+  </header>
+
+  <p class="code-explorer__announcement" aria-live="polite" aria-atomic="true">
+    {{ activeSlide.titleKey | transloco }}.
+    {{ activeSlide.descriptionKey | transloco }}
+  </p>
+
+  <div class="code-explorer__descriptions">
+    @for (slide of slides; track slide.index) {
+      <p
+        class="code-explorer__description code-layer"
+        [class.code-layer--active]="activeIndex() === slide.index"
+        [attr.aria-hidden]="activeIndex() !== slide.index"
+      >
+        {{ slide.descriptionKey | transloco }}
+      </p>
+    }
+  </div>
+
+  <div class="code-window">
+    <div class="code-window__bar">
+      <div class="code-window__pages" [attr.aria-label]="'matrix.rest.code.pagination' | transloco">
+        @for (slide of slides; track slide.index) {
+          <button
+            type="button"
+            [class.code-window__page--active]="activeIndex() === slide.index"
+            [attr.aria-current]="activeIndex() === slide.index ? 'true' : null"
+            [attr.aria-label]="'matrix.rest.code.goTo' | transloco: { page: slide.index + 1 }"
+            (click)="showSlide(slide.index)"
+          ></button>
+        }
+      </div>
+
+      <strong>{{ activeSlide.fileName }}</strong>
+      <small>TypeScript</small>
+    </div>
+
+    <div class="code-window__title">
+      @for (slide of slides; track slide.index) {
+        <span
+          class="code-layer"
+          [class.code-layer--active]="activeIndex() === slide.index"
+          [attr.aria-hidden]="activeIndex() !== slide.index"
+        >
+          {{ slide.titleKey | transloco }}
+        </span>
+      }
+    </div>
+
+    <div class="code-window__viewport">
+      <pre
+        class="code-window__snippet code-layer"
+        [class.code-layer--active]="activeIndex() === 0"
+        [attr.aria-hidden]="activeIndex() !== 0"
+        [attr.tabindex]="activeIndex() === 0 ? 0 : -1"
+      ><code><span class="token-function">search</span>(): <span class="token-type">void</span> {{ '{' }}
+  <span class="token-keyword">const</span> query = <span class="token-keyword">this</span>.query().<span class="token-call">trim</span>();
+
+  <span class="token-keyword">if</span> (!query) {{ '{' }}
+    <span class="token-keyword">return</span>;
+  {{ '}' }}
+
+  <span class="token-keyword">this</span>.searchRequests.<span class="token-call">next</span>(query);
+{{ '}' }}</code></pre>
+
+      <pre
+        class="code-window__snippet code-layer"
+        [class.code-layer--active]="activeIndex() === 1"
+        [attr.aria-hidden]="activeIndex() !== 1"
+        [attr.tabindex]="activeIndex() === 1 ? 0 : -1"
+      ><code><span class="token-keyword">const</span> nasaId = <span class="token-keyword">this</span>.<span class="token-call">curatedNasaId</span>(query);
+<span class="token-keyword">const</span> params = <span class="token-keyword">new</span> <span class="token-type">HttpParams</span>()
+  .<span class="token-call">set</span>(nasaId ? <span class="token-string">'nasa_id'</span> : <span class="token-string">'q'</span>, nasaId ?? query)
+  .<span class="token-call">set</span>(<span class="token-string">'media_type'</span>, <span class="token-string">'image'</span>)
+  .<span class="token-call">set</span>(<span class="token-string">'page_size'</span>, <span class="token-string">'12'</span>);
+
+<span class="token-keyword">return this</span>.http.<span class="token-call">get</span>&lt;<span class="token-type">NasaSearchResponseDto</span>&gt;(
+  <span class="token-keyword">this</span>.endpoint,
+  {{ '{' }} params, observe: <span class="token-string">'response'</span> {{ '}' }},
+);</code></pre>
+
+      <pre
+        class="code-window__snippet code-layer"
+        [class.code-layer--active]="activeIndex() === 2"
+        [attr.aria-hidden]="activeIndex() !== 2"
+        [attr.tabindex]="activeIndex() === 2 ? 0 : -1"
+      ><code><span class="token-keyword">this</span>.searchRequests
+  .<span class="token-call">pipe</span>(
+    <span class="token-call">tap</span>((query) =&gt; <span class="token-keyword">this</span>.<span class="token-call">beginRequest</span>(query)),
+    <span class="token-call">switchMap</span>((query) =&gt;
+      <span class="token-keyword">this</span>.api.<span class="token-call">searchImages</span>(query).<span class="token-call">pipe</span>(
+        <span class="token-call">catchError</span>((error) =&gt; <span class="token-call">of</span>({{ '{' }} kind: <span class="token-string">'error'</span>, error {{ '}' }})),
+      ),
+    ),
+    <span class="token-call">takeUntilDestroyed</span>(),
+  )
+  .<span class="token-call">subscribe</span>((outcome) =&gt; <span class="token-keyword">this</span>.<span class="token-call">finishRequest</span>(outcome));</code></pre>
+
+      <pre
+        class="code-window__snippet code-layer"
+        [class.code-layer--active]="activeIndex() === 3"
+        [attr.aria-hidden]="activeIndex() !== 3"
+        [attr.tabindex]="activeIndex() === 3 ? 0 : -1"
+      ><code><span class="token-keyword">const</span> previewUrl = item.links
+  ?.<span class="token-call">find</span>((link) =&gt;
+    link.rel === <span class="token-string">'preview'</span> &amp;&amp; link.render === <span class="token-string">'image'</span>
+  )?.href?.<span class="token-call">trim</span>();
+
+<span class="token-keyword">const</span> image = {{ '{' }}
+  id: data.nasa_id,
+  title: data.title,
+  credit: data.photographer || data.secondary_creator || <span class="token-string">'NASA'</span>,
+  imageUrl: previewUrl,
+{{ '}' }};</code></pre>
+    </div>
+
+    <footer class="code-window__navigation">
+      <button
+        type="button"
+        (click)="previous()"
+        [attr.aria-label]="'matrix.rest.code.previous' | transloco"
+      >
+        <span aria-hidden="true">←</span>
+      </button>
+
+      <span>{{ activeSlide.titleKey | transloco }}</span>
+
+      <button
+        type="button"
+        (click)="next()"
+        [attr.aria-label]="'matrix.rest.code.next' | transloco"
+      >
+        <span aria-hidden="true">→</span>
+      </button>
+    </footer>
+  </div>
+</section>

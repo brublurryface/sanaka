@@ -1,0 +1,54 @@
+<aside class="request-inspector" aria-labelledby="request-inspector-title">
+  <header>
+    <p>{{ 'matrix.rest.inspector.eyebrow' | transloco }}</p>
+    <h2 id="request-inspector-title">{{ 'matrix.rest.inspector.title' | transloco }}</h2>
+    <span>{{ 'matrix.rest.inspector.intro' | transloco }}</span>
+  </header>
+
+  <dl class="request-inspector__summary">
+    <div>
+      <dt>{{ 'matrix.rest.inspector.method' | transloco }}</dt>
+      <dd>
+        <code>{{ request.method }}</code>
+      </dd>
+    </div>
+    <div>
+      <dt>{{ 'matrix.rest.inspector.status' | transloco }}</dt>
+      <dd>
+        <code>{{ status ?? '—' }}</code>
+      </dd>
+    </div>
+  </dl>
+
+  <section>
+    <h3>{{ 'matrix.rest.inspector.endpoint' | transloco }}</h3>
+    <code class="request-inspector__endpoint">{{ request.endpoint }}</code>
+  </section>
+
+  <section>
+    <h3>{{ 'matrix.rest.inspector.parameters' | transloco }}</h3>
+    <dl class="request-parameters">
+      @for (parameter of request.parameters; track parameter.name) {
+        <div>
+          <dt>{{ parameter.name }}</dt>
+          <dd>{{ parameter.value || '—' }}</dd>
+        </div>
+      }
+    </dl>
+  </section>
+
+  <section>
+    <h3>{{ 'matrix.rest.inspector.requestUrl' | transloco }}</h3>
+    <code class="request-inspector__url">{{ request.url }}</code>
+  </section>
+
+  <section>
+    <div class="request-inspector__response-heading">
+      <h3>{{ 'matrix.rest.inspector.mappedResponse' | transloco }}</h3>
+      @if (total !== null) {
+        <span>{{ 'matrix.rest.inspector.total' | transloco: { total } }}</span>
+      }
+    </div>
+    <pre tabindex="0"><code>{{ mappedResponse }}</code></pre>
+  </section>
+</aside>

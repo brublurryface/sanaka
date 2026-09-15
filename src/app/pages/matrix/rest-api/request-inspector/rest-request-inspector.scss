@@ -1,0 +1,147 @@
+:host {
+  display: block;
+  min-width: 0;
+}
+
+.request-inspector {
+  min-width: 0;
+  border: 1px solid rgba(237, 201, 120, 0.24);
+  background: #090d13;
+  box-shadow: 0 2rem 5rem rgba(0, 0, 0, 0.22);
+}
+
+header,
+section {
+  padding: 1.3rem;
+  border-bottom: 1px solid rgba(237, 201, 120, 0.14);
+}
+
+section:last-child {
+  border-bottom: 0;
+}
+
+header p,
+dt,
+h3 {
+  color: var(--sanaka-gold-soft);
+  font-size: 0.62rem;
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+}
+
+header p,
+h3 {
+  margin: 0;
+}
+
+header p {
+  letter-spacing: 0.2em;
+}
+
+h2 {
+  margin: 0.65rem 0 0;
+  font-family: var(--sanaka-font-display);
+  font-size: 2rem;
+  font-weight: 500;
+  line-height: 1;
+  letter-spacing: -0.035em;
+}
+
+header > span {
+  display: block;
+  margin-top: 0.8rem;
+  color: var(--sanaka-ivory-muted);
+  font-size: 0.78rem;
+  line-height: 1.6;
+}
+
+.request-inspector__summary {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  margin: 0;
+  border-bottom: 1px solid rgba(237, 201, 120, 0.14);
+}
+
+.request-inspector__summary > div {
+  padding: 1rem 1.3rem;
+}
+
+.request-inspector__summary > div + div {
+  border-left: 1px solid rgba(237, 201, 120, 0.14);
+}
+
+dd {
+  margin: 0.35rem 0 0;
+}
+
+code {
+  color: #9cdcfe;
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.72rem;
+}
+
+.request-inspector__endpoint,
+.request-inspector__url {
+  display: block;
+  margin-top: 0.7rem;
+  overflow-wrap: anywhere;
+  line-height: 1.6;
+}
+
+.request-inspector__url {
+  max-height: 7rem;
+  padding: 0.75rem;
+  overflow-y: auto;
+  background: #06090d;
+  color: #ce9178;
+}
+
+.request-parameters {
+  display: grid;
+  gap: 0.6rem;
+  margin: 0.8rem 0 0;
+}
+
+.request-parameters div {
+  display: grid;
+  grid-template-columns: minmax(5rem, auto) minmax(0, 1fr);
+  gap: 0.8rem;
+}
+
+.request-parameters dd {
+  overflow-wrap: anywhere;
+  color: var(--sanaka-ivory-muted);
+  font-family: Consolas, 'Courier New', monospace;
+  font-size: 0.68rem;
+}
+
+.request-inspector__response-heading {
+  display: flex;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.request-inspector__response-heading span {
+  color: var(--sanaka-ivory-muted);
+  font-size: 0.65rem;
+}
+
+pre {
+  max-height: 18rem;
+  margin: 0.8rem 0 0;
+  padding: 0.9rem;
+  overflow: auto;
+  background: #06090d;
+  color: #d4d4d4;
+  font-size: 0.68rem;
+  line-height: 1.65;
+  white-space: pre-wrap;
+}
+
+@media (max-width: 560px) {
+  .request-parameters div {
+    grid-template-columns: 1fr;
+    gap: 0.15rem;
+  }
+}

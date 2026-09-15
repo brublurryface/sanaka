@@ -1,0 +1,163 @@
+@let portalImage = image();
+
+<div
+  class="portal"
+  [class.portal--loading]="phase === 'loading'"
+  [class.portal--success]="phase === 'success'"
+  [class.portal--empty]="phase === 'empty'"
+  [class.portal--error]="phase === 'error'"
+  [attr.aria-busy]="phase === 'loading' || (phase === 'success' && !imageLoaded && !imageFailed)"
+>
+  <div class="portal__aura" aria-hidden="true"></div>
+  <div class="portal__ring portal__ring--outer" aria-hidden="true"></div>
+  <div class="portal__ring portal__ring--middle" aria-hidden="true"></div>
+  <div class="portal__ring portal__ring--inner" aria-hidden="true"></div>
+  <div class="portal__sigils" aria-hidden="true"></div>
+
+  <div class="portal__sparks" aria-hidden="true">
+    @for (spark of [1, 2, 3, 4, 5, 6, 7, 8]; track spark) {
+      <i [style.--spark-index]="spark"></i>
+    }
+  </div>
+
+  <div class="portal__core">
+    @switch (phase) {
+      @case ('loading') {
+        <div class="portal-state portal-state--loading">
+          <app-metatron-mark class="portal-state__symbol portal-state__symbol--loading" />
+          <strong>{{ 'matrix.rest.portal.loading.title' | transloco }}</strong>
+          <small>{{ 'matrix.rest.portal.loading.text' | transloco: { query } }}</small>
+        </div>
+      }
+
+      @case ('success') {
+        @if (portalImage) {
+          @if (!imageFailed) {
+            <img
+              class="portal__image"
+              [class.portal__image--ready]="imageLoaded"
+              [src]="portalImage.imageUrl"
+              [alt]="portalImage.imageAlt"
+              (load)="imageLoadSucceeded.emit()"
+              (error)="imageLoadFailed.emit()"
+            />
+            @if (!imageLoaded) {
+              <div class="portal-state portal-state--loading">
+                <app-metatron-mark class="portal-state__symbol portal-state__symbol--loading" />
+                <strong>{{ 'matrix.rest.portal.imageLoading.title' | transloco }}</strong>
+                <small>{{ 'matrix.rest.portal.imageLoading.text' | transloco }}</small>
+              </div>
+            }
+          } @else {
+            <div class="portal-state">
+              <app-metatron-mark class="portal-state__symbol" />
+              <strong>{{ 'matrix.rest.portal.imageError.title' | transloco }}</strong>
+              <small>{{ 'matrix.rest.portal.imageError.text' | transloco }}</small>
+            </div>
+          }
+        }
+      }
+
+      @case ('empty') {
+        <div class="portal-state">
+          <span class="portal-state__symbol" aria-hidden="true">∅</span>
+          <strong>{{ 'matrix.rest.portal.empty.title' | transloco }}</strong>
+          <small>{{ 'matrix.rest.portal.empty.text' | transloco: { query } }}</small>
+          <button type="button" (click)="resetRequested.emit()">
+            {{ 'matrix.rest.portal.newSearch' | transloco }}
+          </button>
+        </div>
+      }
+
+      @case ('error') {
+        <div class="portal-state">
+          <span class="portal-state__symbol" aria-hidden="true">×</span>
+          <strong>{{ 'matrix.rest.portal.error.title' | transloco }}</strong>
+          <small>{{ 'matrix.rest.portal.error.text' | transloco }}</small>
+          <button type="button" (click)="retryRequested.emit()">
+            {{ 'matrix.rest.portal.retry' | transloco }}
+          </button>
+        </div>
+      }
+
+      @default {
+        <div class="portal-state portal-state--idle">
+          <app-metatron-mark class="portal-state__symbol" />
+          <strong>{{ 'matrix.rest.portal.idle.title' | transloco }}</strong>
+          <small>{{ 'matrix.rest.portal.idle.text' | transloco }}</small>
+          <button type="button" [disabled]="!canSearch" (click)="searchRequested.emit()">
+            {{ 'matrix.rest.portal.idle.action' | transloco }}
+          </button>
+        </div>
+      }
+    }
+  </div>
+</div>
+
+<p class="portal-announcement" aria-live="polite" aria-atomic="true">
+  @switch (phase) {
+    @case ('loading') {
+      {{ 'matrix.rest.portal.announcement.loading' | transloco }}
+    }
+    @case ('success') {
+      @if (imageFailed) {
+        {{ 'matrix.rest.portal.imageError.title' | transloco }}.
+        {{ 'matrix.rest.portal.imageError.text' | transloco }}
+      } @else if (!imageLoaded) {
+        {{ 'matrix.rest.portal.imageLoading.text' | transloco }}
+      } @else {
+        {{ 'matrix.rest.portal.announcement.success' | transloco: { title: portalImage?.title } }}
+      }
+    }
+    @case ('empty') {
+      {{ 'matrix.rest.portal.announcement.empty' | transloco }}
+    }
+    @case ('error') {
+      {{ 'matrix.rest.portal.announcement.error' | transloco }}
+    }
+  }
+</p>
+
+@if (phase === 'success' && portalImage) {
+  <article class="image-caption">
+    <p>{{ 'matrix.rest.portal.success.label' | transloco }}</p>
+    <h3>{{ portalImage.title }}</h3>
+
+    <span>{{ 'matrix.rest.portal.success.credit' | transloco }}: {{ portalImage.credit }}</span>
+
+    <dl>
+      @if (formattedRecordDate(); as recordDate) {
+        <div>
+          <dt>{{ 'matrix.rest.portal.success.date' | transloco }}</dt>
+          <dd>
+            <time [attr.datetime]="portalImage.date">{{ recordDate }}</time>
+          </dd>
+        </div>
+      }
+      @if (portalImage.center) {
+        <div>
+          <dt>{{ 'matrix.rest.portal.success.center' | transloco }}</dt>
+          <dd>{{ portalImage.center }}</dd>
+        </div>
+      }
+    </dl>
+
+    <div class="image-caption__actions">
+      <a [href]="portalImage.sourceUrl" target="_blank" rel="noopener noreferrer">
+        {{ 'matrix.rest.portal.success.openSource' | transloco }}
+        <span aria-hidden="true">↗</span>
+      </a>
+
+      <button type="button" (click)="resetRequested.emit()">
+        {{ 'matrix.rest.portal.newSearch' | transloco }}
+      </button>
+    </div>
+  </article>
+}
+
+<p class="portal-source">
+  {{ 'matrix.rest.source.prefix' | transloco }}
+  <a href="https://images.nasa.gov/" target="_blank" rel="noopener noreferrer">
+    {{ 'matrix.rest.source.name' | transloco }}
+  </a>
+</p>

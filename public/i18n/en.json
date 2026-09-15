@@ -106,6 +106,12 @@
         "description": "Send a value from the parent component to the child, choose a reply, and watch the event find its way back.",
         "action": "Enter the circuit"
       },
+      "rest": {
+        "status": "Available now",
+        "title": "REST API portal",
+        "description": "Open a real request, follow its journey across the network, and watch an image of the universe emerge at the portal's center.",
+        "action": "Open the portal"
+      },
       "upcoming": {
         "eyebrow": "Next experiments",
         "title": "The Matrix will keep opening",
@@ -230,6 +236,135 @@
       "code": {
         "title": "What moves in the code?",
         "text": "The value moves down from parent to child through @Input. The event returns from child to parent through @Output and EventEmitter."
+      }
+    },
+    "rest": {
+      "header": {
+        "back": "Back to the Matrix catalog",
+        "eyebrow": "Matrix Online · Experiment 02",
+        "title": {
+          "line1": "A portal",
+          "line2": "to the universe"
+        },
+        "intro": "Choose a subject and open a passage to a real collection. The interface turns the waiting period, the response, and even the failure of a REST request into something you can follow.",
+        "action": "Cross the request"
+      },
+      "exhibit": {
+        "eyebrow": "REST laboratory",
+        "title": "Invoke an image of the cosmos",
+        "intro": "Your action creates an HTTP request to NASA's collection. The JSON provides metadata and an image address; the browser fetches that file in a second request to reveal the result inside the portal."
+      },
+      "controls": {
+        "label": "Cosmic subject · search in English",
+        "placeholder": "E.g. Orion nebula, mars, black hole...",
+        "submit": "Open portal",
+        "searchAgain": "Open another portal",
+        "presetsLabel": "Suggested invocations",
+        "presets": {
+          "nebula": "Orion Nebula",
+          "mars": "Mars",
+          "earth": "Blue Earth",
+          "blackHole": "Black hole · illustration"
+        }
+      },
+      "portal": {
+        "idle": {
+          "title": "The portal is at rest",
+          "text": "No request has been sent. Choose a subject to begin the crossing.",
+          "action": "Invoke image"
+        },
+        "loading": {
+          "title": "Crossing the network",
+          "text": "Querying NASA's archive for “{{ query }}”."
+        },
+        "imageLoading": {
+          "title": "Revealing",
+          "text": "Metadata arrived. Loading the image file."
+        },
+        "empty": {
+          "title": "Nothing crossed",
+          "text": "The search for “{{ query }}” returned no record with a displayable image."
+        },
+        "error": {
+          "title": "The passage was interrupted",
+          "text": "The request failed before delivering a usable response. The error state is also part of the flow."
+        },
+        "imageError": {
+          "title": "The image did not manifest",
+          "text": "The data arrived, but the visual file could not be loaded."
+        },
+        "retry": "Try again",
+        "newSearch": "New search",
+        "success": {
+          "label": "Mapped result",
+          "date": "Record date",
+          "credit": "Credit",
+          "center": "NASA center",
+          "openSource": "View image at the source"
+        },
+        "announcement": {
+          "loading": "Request started. The portal is loading.",
+          "success": "The image {{ title }} has loaded.",
+          "empty": "The request finished without a displayable image.",
+          "error": "The request finished with an error."
+        }
+      },
+      "inspector": {
+        "eyebrow": "Request inspector",
+        "title": "What crossed the portal",
+        "intro": "This is not a simulation: these are the method, address, parameters, and mapped result from the real request.",
+        "method": "Method",
+        "status": "HTTP status",
+        "endpoint": "Endpoint",
+        "parameters": "Parameters",
+        "requestUrl": "Complete URL",
+        "mappedResponse": "Response after mapping",
+        "total": "{{ total }} results in the API"
+      },
+      "source": {
+        "prefix": "Data and images:",
+        "name": "NASA Image and Video Library"
+      },
+      "code": {
+        "eyebrow": "Code in motion",
+        "title": "Follow the request from within",
+        "status": "Snippet {{ current }} of {{ total }}",
+        "previous": "View previous snippet",
+        "next": "View next snippet",
+        "pagination": "Request snippets",
+        "goTo": "View snippet {{ page }}",
+        "slides": {
+          "action": {
+            "title": "1. The action enters the stream",
+            "description": "Submitting the form reads the current subject and publishes it into a Subject, which acts as the entry point to the asynchronous stream."
+          },
+          "request": {
+            "title": "2. The service builds the GET",
+            "description": "HttpParams builds a text search (q) or targets a selected record (nasa_id). HttpClient sends the GET and returns an Observable of the typed HTTP response."
+          },
+          "stream": {
+            "title": "3. The Observable coordinates time",
+            "description": "switchMap abandons an earlier request when another one starts. catchError turns a failure into a state the interface can present."
+          },
+          "mapping": {
+            "title": "4. The DTO becomes a view model",
+            "description": "The service reads collection.items and preserves the HTTPS preview URL. Selected examples also check nasa_id so a different record is not substituted. Receiving metadata does not mean the image has loaded: the browser still needs to fetch it."
+          }
+        }
+      },
+      "explanation": {
+        "action": {
+          "title": "What do you do?",
+          "text": "Choose a subject and submit the form. That event is the request's starting point."
+        },
+        "angular": {
+          "title": "What does Angular notice?",
+          "text": "State changes from idle to loading and then to success, empty, or error. Each change updates only the matching representation."
+        },
+        "code": {
+          "title": "What moves in the code?",
+          "text": "Text enters the RxJS stream, HttpClient receives JSON, and the service maps the external DTO into a small, safe model for the interface."
+        }
       }
     }
   }

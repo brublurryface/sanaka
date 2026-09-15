@@ -10,4 +10,8 @@ export const MATRIX_ROUTES: Routes = [
     path: 'components',
     loadComponent: () => import('./matrix').then((m) => m.Matrix),
   },
+  {
+    path: 'rest-api',
+    loadComponent: () => import('./rest-api/rest-api-portal').then((m) => m.RestApiPortal),
+  },
 ];
