@@ -2,8 +2,8 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { map, Observable, timeout } from 'rxjs';
 
-import { NASA_IMAGE_PRESETS } from './nasa-image-presets';
-import { ImageSearchResult, PortalImageViewModel, RestRequestDetails } from './rest-api.models';
+import { NASA_IMAGE_PRESETS } from '../nasa-image-presets';
+import { ImageSearchResult, PortalImageViewModel, RestRequestDetails } from '../rest-api.models';
 
 export const NASA_IMAGES_API_URL = new InjectionToken<string>('NASA_IMAGES_API_URL', {
   factory: () => 'https://images-api.nasa.gov',
@@ -40,6 +40,7 @@ interface NasaSearchResponseDto {
   };
 }
 
+/** Adaptador HTTP que consulta a NASA e converte a resposta para o modelo do portal. */
 @Injectable({ providedIn: 'root' })
 export class NasaImagesService {
   private readonly http = inject(HttpClient);
@@ -48,6 +49,12 @@ export class NasaImagesService {
 
   readonly endpoint = `${this.apiUrl.replace(/\/$/, '')}/search`;
 
+  /**
+   * Pesquisa imagens usando uma consulta livre ou o identificador de um exemplo curado.
+   *
+   * @param query Assunto informado no portal.
+   * @returns Um fluxo com a primeira imagem válida e os metadados da resposta.
+   */
   searchImages(query: string): Observable<ImageSearchResult> {
     const normalizedQuery = this.normalizeQuery(query);
 
@@ -62,6 +69,12 @@ export class NasaImagesService {
       );
   }
 
+  /**
+   * Produz a mesma requisição exibida pelo inspetor didático, sem enviá-la.
+   *
+   * @param query Assunto que será normalizado para a consulta.
+   * @returns Método, endpoint, parâmetros e URL final da requisição.
+   */
   describeRequest(query: string): RestRequestDetails {
     const params = this.buildParams(this.normalizeQuery(query));
 
@@ -112,7 +125,7 @@ export class NasaImagesService {
         credit: data.photographer?.trim() || data.secondary_creator?.trim() || 'NASA',
         date: data.date_created?.slice(0, 10) || null,
         center: data.center?.trim() || null,
-        // Keep the URL returned by NASA; do not guess an asset path or image size.
+        // Preserva a URL devolvida pela NASA; não deduz caminhos nem tamanhos de imagem.
         imageUrl: previewUrl,
         imageAlt: title,
         sourceUrl: previewUrl,

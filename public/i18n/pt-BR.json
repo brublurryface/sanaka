@@ -43,6 +43,11 @@
           "title": "Leituras",
           "description": "Entre pelos textos, estudos e histórias preservados no santuário."
         },
+        "matrix": {
+          "label": "Laboratório",
+          "title": "Matrix",
+          "description": "Atravesse experiências interativas e observe conceitos do Angular acontecendo diante de você."
+        },
         "maya": {
           "label": "Presença",
           "description": "Encontre a companheira do Sanaka e atravesse o conhecimento também pela conversa."

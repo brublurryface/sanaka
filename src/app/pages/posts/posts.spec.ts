@@ -7,7 +7,11 @@ import { vi } from 'vitest';
 import { Post } from './post';
 import { Posts } from './posts';
 import { PostsStore } from './posts.store';
-import { PostsPage, PostsQuery, WordPressPostsService } from './wordpress-posts.service';
+import {
+  PostsPage,
+  PostsQuery,
+  WordPressPostsService,
+} from './data-access/wordpress-posts.service';
 
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
@@ -276,9 +280,7 @@ describe('Posts', () => {
   });
 
   it('should append the next page in continuous mode', () => {
-    postsService.getPosts
-      .mockReturnValueOnce(of(firstPage))
-      .mockReturnValueOnce(of(secondPage));
+    postsService.getPosts.mockReturnValueOnce(of(firstPage)).mockReturnValueOnce(of(secondPage));
 
     fixture = TestBed.createComponent(Posts);
     component = fixture.componentInstance;

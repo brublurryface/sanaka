@@ -4,8 +4,8 @@ export interface NasaImagePreset {
   readonly nasaId?: string;
 }
 
-// Two examples target documented NASA records rather than an arbitrary search hit.
-// Image URLs and metadata still come from the live API response.
+// Dois exemplos apontam para registros documentados, evitando um resultado arbitrário da busca.
+// URLs e metadados das imagens continuam vindo da resposta real da API.
 export const NASA_IMAGE_PRESETS: readonly NasaImagePreset[] = [
   { query: 'Orion nebula', translationKey: 'matrix.rest.controls.presets.nebula' },
   {

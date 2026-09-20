@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post } from './post';
-import { PostsPage, WordPressPostsService } from './wordpress-posts.service';
+import { PostsPage, WordPressPostsService } from './data-access/wordpress-posts.service';
 
 export type PostsViewMode = 'continuous' | 'paged';
 
@@ -72,13 +72,11 @@ export class PostsStore {
             search: request.search,
           })
           .pipe(
-            map(
-              (page): PostsEvent => ({
-                type: 'success',
-                request,
-                page,
-              }),
-            ),
+            map((page): PostsEvent => ({
+              type: 'success',
+              request,
+              page,
+            })),
             startWith<PostsEvent>({
               type: 'loading',
               request,

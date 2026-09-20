@@ -1,13 +1,13 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { TranslocoLoader, provideTransloco } from '@jsverse/transloco';
+import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
 import { Observable, of } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { routes } from '../../app.routes';
 import { Home } from './home';
 
 class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation(lang: string): Observable<Record<string, any>> {
+  getTranslation(_lang: string): Observable<Translation> {
     return of({
       home: {
         hero: {
@@ -39,6 +39,11 @@ class MockTranslocoLoader implements TranslocoLoader {
               label: 'Archive',
               title: 'Readings',
               description: 'Readings description.',
+            },
+            matrix: {
+              label: 'Laboratory',
+              title: 'Matrix',
+              description: 'Matrix description.',
             },
             maya: {
               label: 'Presence',

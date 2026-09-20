@@ -43,6 +43,11 @@
           "title": "Readings",
           "description": "Enter through the texts, studies and stories preserved in the sanctuary."
         },
+        "matrix": {
+          "label": "Laboratory",
+          "title": "Matrix",
+          "description": "Enter interactive experiments and watch Angular concepts unfold before you."
+        },
         "maya": {
           "label": "Presence",
           "description": "Meet Sanaka's companion and traverse knowledge also through conversation."

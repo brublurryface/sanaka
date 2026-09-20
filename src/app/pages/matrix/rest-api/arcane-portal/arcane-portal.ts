@@ -31,7 +31,7 @@ export class ArcanePortal {
       return null;
     }
 
-    // This is a calendar date, not a local timestamp. UTC prevents a previous-day shift.
+    // É uma data civil, não um horário local. UTC evita o deslocamento para o dia anterior.
     const date = new Date(`${recordDate}T00:00:00Z`);
 
     if (Number.isNaN(date.getTime()) || date.toISOString().slice(0, 10) !== recordDate) {

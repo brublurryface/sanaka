@@ -42,7 +42,7 @@ export class LanguagePreferenceService {
     try {
       browserWindow.localStorage.setItem(this.storageKey, language);
     } catch {
-      // The language still changes even when browser storage is unavailable.
+      // A troca de idioma continua funcionando mesmo quando o armazenamento está indisponível.
     }
   }
 

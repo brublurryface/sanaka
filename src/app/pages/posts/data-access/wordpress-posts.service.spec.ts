@@ -2,12 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { Post } from './post';
-import {
-  PostsPage,
-  WORDPRESS_API_URL,
-  WordPressPostsService,
-} from './wordpress-posts.service';
+import { PostsPage, WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
 
 describe('WordPressPostsService', () => {
   let httpTesting: HttpTestingController;

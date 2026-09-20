@@ -3,12 +3,13 @@ import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
 
-import { Post } from './post';
+import { Post } from '../post';
 
 export const WORDPRESS_API_URL = new InjectionToken<string>('WORDPRESS_API_URL', {
   factory: () => 'https://www.sanaka.com.br/wp-json/wp/v2',
 });
 
+/** Parâmetros aceitos pelo adaptador ao consultar o arquivo do WordPress. */
 export interface PostsQuery {
   readonly page?: number;
   readonly perPage?: number;
@@ -16,6 +17,7 @@ export interface PostsQuery {
   readonly categoryId?: number;
 }
 
+/** Página normalizada entregue à camada de estado, sem expor DTOs do WordPress. */
 export interface PostsPage {
   readonly posts: readonly Post[];
   readonly page: number;
@@ -49,6 +51,12 @@ interface WordPressMedia {
   readonly alt_text: string;
 }
 
+/**
+ * Adaptador HTTP responsável por consultar e normalizar o acervo mantido no WordPress.
+ *
+ * Os DTOs externos permanecem privados para impedir que detalhes da API atravessem a fronteira
+ * de `data-access`.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -67,6 +75,12 @@ export class WordPressPostsService {
     }),
   );
 
+  /**
+   * Busca uma página de publicações e reúne categorias e mídias relacionadas.
+   *
+   * @param query Filtros e paginação solicitados pela store.
+   * @returns Um fluxo com os dados convertidos para os modelos usados pela feature.
+   */
   getPosts(query: PostsQuery = {}): Observable<PostsPage> {
     const page = this.toPositiveInteger(query.page, 1);
     const perPage = Math.min(this.toPositiveInteger(query.perPage, this.defaultPerPage), 100);
@@ -94,10 +108,7 @@ export class WordPressPostsService {
         switchMap((response) => {
           const posts = response.body ?? [];
           const fallbackTotal = (page - 1) * perPage + posts.length;
-          const total = this.readCountHeader(
-            response.headers.get('X-WP-Total'),
-            fallbackTotal,
-          );
+          const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
           const totalPages = this.readCountHeader(
             response.headers.get('X-WP-TotalPages'),
             total === 0 ? 0 : Math.ceil(total / perPage),

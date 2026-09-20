@@ -1,6 +1,6 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { provideTransloco, TranslocoLoader, TranslocoService } from '@jsverse/transloco';
+import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
@@ -126,24 +126,23 @@ describe('App', () => {
 
   it('should switch the interface language at runtime using the PT | EN selector', () => {
     const fixture = TestBed.createComponent(App);
-    const transloco = TestBed.inject(TranslocoService);
     fixture.detectChanges();
 
-    // Verify initial language is pt-BR (component state)
+    // Confirma o idioma inicial pelo estado do componente.
     mockLanguagePreferenceService.isActiveLanguage = vi.fn((lang) => lang === 'pt-BR');
     expect(fixture.componentInstance.isActiveLanguage('pt-BR')).toBe(true);
     expect(fixture.componentInstance.isActiveLanguage('en')).toBe(false);
 
-    // Switch to English
+    // Troca para inglês.
     fixture.componentInstance.setLanguage('en');
     expect(mockLanguagePreferenceService.setLanguage).toHaveBeenCalledWith('en');
 
-    // Update mock to reflect language switch
+    // Atualiza o mock para refletir a troca.
     mockLanguagePreferenceService.isActiveLanguage = vi.fn((lang) => lang === 'en');
     expect(fixture.componentInstance.isActiveLanguage('en')).toBe(true);
     expect(fixture.componentInstance.isActiveLanguage('pt-BR')).toBe(false);
 
-    // Switch back to Portuguese
+    // Retorna ao português.
     fixture.componentInstance.setLanguage('pt-BR');
     expect(mockLanguagePreferenceService.setLanguage).toHaveBeenCalledWith('pt-BR');
   });
