@@ -1,14 +1,15 @@
 import { DOCUMENT } from '@angular/common';
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
 
-import { Post } from './post';
+import { Post } from '../post';
 
 export const WORDPRESS_API_URL = new InjectionToken<string>('WORDPRESS_API_URL', {
   factory: () => 'https://www.sanaka.com.br/wp-json/wp/v2',
 });
 
+/** Parâmetros aceitos pelo adaptador ao consultar o arquivo do WordPress. */
 export interface PostsQuery {
   readonly page?: number;
   readonly perPage?: number;
@@ -16,6 +17,7 @@ export interface PostsQuery {
   readonly categoryId?: number;
 }
 
+/** Página normalizada entregue à camada de estado, sem expor DTOs do WordPress. */
 export interface PostsPage {
   readonly posts: readonly Post[];
   readonly page: number;
@@ -49,6 +51,19 @@ interface WordPressMedia {
   readonly alt_text: string;
 }
 
+interface NormalizedPostsQuery {
+  readonly page: number;
+  readonly perPage: number;
+  readonly search: string;
+  readonly categoryId?: number;
+}
+
+/**
+ * Adaptador HTTP responsável por consultar e normalizar o acervo mantido no WordPress.
+ *
+ * Os DTOs externos permanecem privados para impedir que detalhes da API atravessem a fronteira
+ * de `data-access`.
+ */
 @Injectable({
   providedIn: 'root',
 })
@@ -67,57 +82,66 @@ export class WordPressPostsService {
     }),
   );
 
+  /**
+   * Busca uma página de publicações e reúne categorias e mídias relacionadas.
+   *
+   * @param query Filtros e paginação solicitados pela store.
+   * @returns Um fluxo com os dados convertidos para os modelos usados pela feature.
+   */
   getPosts(query: PostsQuery = {}): Observable<PostsPage> {
-    const page = this.toPositiveInteger(query.page, 1);
-    const perPage = Math.min(this.toPositiveInteger(query.perPage, this.defaultPerPage), 100);
-    const search = query.search?.trim() ?? '';
-
-    let params = new HttpParams()
-      .set('page', String(page))
-      .set('per_page', String(perPage))
-      .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories');
-
-    if (search) {
-      params = params.set('search', search);
-    }
-
-    if (query.categoryId && query.categoryId > 0) {
-      params = params.set('categories', String(query.categoryId));
-    }
+    const normalizedQuery = this.normalizeQuery(query);
 
     return this.http
       .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
-        params,
+        params: this.buildPostsParams(normalizedQuery),
         observe: 'response',
       })
       .pipe(
-        switchMap((response) => {
-          const posts = response.body ?? [];
-          const fallbackTotal = (page - 1) * perPage + posts.length;
-          const total = this.readCountHeader(
-            response.headers.get('X-WP-Total'),
-            fallbackTotal,
-          );
-          const totalPages = this.readCountHeader(
-            response.headers.get('X-WP-TotalPages'),
-            total === 0 ? 0 : Math.ceil(total / perPage),
-          );
-
-          return forkJoin({
-            categories: this.categories$,
-            media: this.getMedia(posts),
-          }).pipe(
-            map(({ categories, media }) => ({
-              posts: this.mapPosts(posts, categories, media),
-              page,
-              perPage,
-              total,
-              totalPages,
-            })),
-          );
-        }),
+        switchMap((response) => this.loadPostsPage(response, normalizedQuery)),
         timeout({ first: this.requestTimeoutMs }),
       );
+  }
+
+  private normalizeQuery(query: PostsQuery): NormalizedPostsQuery {
+    return {
+      page: this.toPositiveInteger(query.page, 1),
+      perPage: Math.min(this.toPositiveInteger(query.perPage, this.defaultPerPage), 100),
+      search: query.search?.trim() ?? '',
+      categoryId: query.categoryId && query.categoryId > 0 ? query.categoryId : undefined,
+    };
+  }
+
+  private buildPostsParams(query: NormalizedPostsQuery): HttpParams {
+    let params = new HttpParams()
+      .set('page', String(query.page))
+      .set('per_page', String(query.perPage))
+      .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories');
+
+    params = query.search ? params.set('search', query.search) : params;
+    return query.categoryId ? params.set('categories', String(query.categoryId)) : params;
+  }
+
+  private loadPostsPage(
+    response: HttpResponse<readonly WordPressPost[]>,
+    query: NormalizedPostsQuery,
+  ): Observable<PostsPage> {
+    const posts = response.body ?? [];
+    const fallbackTotal = (query.page - 1) * query.perPage + posts.length;
+    const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
+    const totalPages = this.readCountHeader(
+      response.headers.get('X-WP-TotalPages'),
+      total === 0 ? 0 : Math.ceil(total / query.perPage),
+    );
+
+    return forkJoin({ categories: this.categories$, media: this.getMedia(posts) }).pipe(
+      map(({ categories, media }) => ({
+        posts: this.mapPosts(posts, categories, media),
+        page: query.page,
+        perPage: query.perPage,
+        total,
+        totalPages,
+      })),
+    );
   }
 
   private loadCategories(): Observable<readonly WordPressCategory[]> {

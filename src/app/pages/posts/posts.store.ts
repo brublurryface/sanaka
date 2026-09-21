@@ -4,7 +4,7 @@ import { Router } from '@angular/router';
 import { catchError, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post } from './post';
-import { PostsPage, WordPressPostsService } from './wordpress-posts.service';
+import { PostsPage, WordPressPostsService } from './data-access/wordpress-posts.service';
 
 export type PostsViewMode = 'continuous' | 'paged';
 
@@ -72,13 +72,11 @@ export class PostsStore {
             search: request.search,
           })
           .pipe(
-            map(
-              (page): PostsEvent => ({
-                type: 'success',
-                request,
-                page,
-              }),
-            ),
+            map((page): PostsEvent => ({
+              type: 'success',
+              request,
+              page,
+            })),
             startWith<PostsEvent>({
               type: 'loading',
               request,
@@ -196,36 +194,32 @@ export class PostsStore {
   }
 
   private reduceState(state: PostsState, event: PostsEvent): PostsState {
-    if (event.type === 'loading') {
-      if (event.request.append) {
-        return {
-          ...state,
-          isLoadingMore: true,
-          hasLoadMoreError: false,
-        };
-      }
-
-      return {
-        ...this.initialState,
-        status: 'loading',
-      };
+    switch (event.type) {
+      case 'loading':
+        return this.reduceLoading(state, event.request);
+      case 'success':
+        return this.reduceSuccess(state, event);
+      case 'error':
+        return this.reduceError(state, event.request);
     }
+  }
 
-    if (event.type === 'error') {
-      if (event.request.append) {
-        return {
-          ...state,
-          isLoadingMore: false,
-          hasLoadMoreError: true,
-        };
-      }
+  private reduceLoading(state: PostsState, request: PostsRequest): PostsState {
+    return request.append
+      ? { ...state, isLoadingMore: true, hasLoadMoreError: false }
+      : { ...this.initialState, status: 'loading' };
+  }
 
-      return {
-        ...this.initialState,
-        status: 'error',
-      };
-    }
+  private reduceError(state: PostsState, request: PostsRequest): PostsState {
+    return request.append
+      ? { ...state, isLoadingMore: false, hasLoadMoreError: true }
+      : { ...this.initialState, status: 'error' };
+  }
 
+  private reduceSuccess(
+    state: PostsState,
+    event: Extract<PostsEvent, { readonly type: 'success' }>,
+  ): PostsState {
     const posts = event.request.append
       ? this.uniquePosts([...state.posts, ...event.page.posts])
       : event.page.posts;

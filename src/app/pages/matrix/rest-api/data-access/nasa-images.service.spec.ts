@@ -5,7 +5,7 @@ import { TimeoutError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { NASA_IMAGES_API_URL, NasaImagesService } from './nasa-images.service';
-import { ImageSearchResult } from './rest-api.models';
+import { ImageSearchResult } from '../rest-api.models';
 
 const previewUrl = 'https://images-assets.nasa.gov/image/test-nebula/test-nebula~thumb.jpg';
 

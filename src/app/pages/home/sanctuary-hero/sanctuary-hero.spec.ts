@@ -1,12 +1,12 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { TranslocoLoader, provideTransloco } from '@jsverse/transloco';
+import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
 import { Observable, of } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 import { SanctuaryHero } from './sanctuary-hero';
 
 class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation(lang: string): Observable<Record<string, any>> {
+  getTranslation(_lang: string): Observable<Translation> {
     return of({
       home: {
         hero: {

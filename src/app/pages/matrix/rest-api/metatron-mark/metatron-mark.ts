@@ -21,8 +21,8 @@ function hexagonVertices(radius: number): readonly Vertex[] {
   });
 }
 
-// Connect the thirteen centers of Metatron's geometry without drawing its circles.
-// The coordinates are created once, when this lazy-loaded module is imported.
+// Conecta os treze centros da geometria de Metatron sem desenhar os círculos.
+// As coordenadas são criadas uma vez, durante a importação deste módulo lazy-loaded.
 const vertices: readonly Vertex[] = [
   { x: 0, y: 0 },
   ...hexagonVertices(50),

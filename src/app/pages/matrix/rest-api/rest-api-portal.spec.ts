@@ -6,7 +6,7 @@ import { Observable, of, Subject } from 'rxjs';
 import { vi } from 'vitest';
 
 import { NASA_IMAGE_PRESETS } from './nasa-image-presets';
-import { NasaImagesService } from './nasa-images.service';
+import { NasaImagesService } from './data-access/nasa-images.service';
 import { RestRequestDetails, ImageSearchResult } from './rest-api.models';
 import { RestApiPortal } from './rest-api-portal';
 

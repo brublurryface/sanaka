@@ -6,7 +6,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { catchError, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import { NASA_IMAGE_PRESETS } from './nasa-image-presets';
-import { NasaImagesService } from './nasa-images.service';
+import { NasaImagesService } from './data-access/nasa-images.service';
 import { ArcanePortal } from './arcane-portal/arcane-portal';
 import { RestCodeExplorer } from './code-explorer/rest-code-explorer';
 import { RestRequestInspector } from './request-inspector/rest-request-inspector';
@@ -45,7 +45,7 @@ export class RestApiPortal {
   );
   readonly responseStatus = computed(() => {
     const status = this.result()?.status ?? this.errorStatus();
-    // Angular uses 0 when no HTTP status is available; it is not a server response code.
+    // O Angular usa 0 quando não há status HTTP; esse valor não é uma resposta do servidor.
     return status && status > 0 ? status : null;
   });
   readonly currentCodeStep = computed(() => {
