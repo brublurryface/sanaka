@@ -11,6 +11,9 @@ do Angular; ela não cria camadas ou abstrações sem uma responsabilidade concr
 ## Linha de base
 
 - 22 arquivos de teste e 131 testes aprovados;
+- cobertura TypeScript de 94,63% de instruções, 91,91% de branches, 93,79% de funções e
+  93,28% de linhas antes da refatoração de métodos;
+- duplicação de 0,89% no TypeScript de produção e 4,77% no conjunto de TypeScript, HTML e SCSS;
 - build de produção aprovado;
 - quatro rotas prerenderizadas;
 - bundles dentro dos limites configurados no Angular;
@@ -35,7 +38,23 @@ classe terminada em `Service`.
 - TypeScript estrito e templates Angular estritos;
 - detecção de variáveis e parâmetros não utilizados;
 - comandos `format`, `format:check`, `test:ci` e `check`;
-- `check` executa formatação, testes e build em sequência.
+- `test:coverage` mede apenas a lógica TypeScript de produção, sem arquivos declarativos de rotas,
+  e exige pelo menos 85% em instruções, branches, funções e linhas;
+- `duplication:check` impede que a duplicação do TypeScript de produção ultrapasse 3%;
+- `duplication:report` também inspeciona HTML e SCSS para orientar refatorações visuais;
+- `check` executa formatação, testes com cobertura, duplicação e build em sequência.
+
+### Métodos e complexidade
+
+O tamanho em linhas é usado como sinal de revisão, não como regra isolada. A decisão considera
+quantidade de responsabilidades, ramificações e esforço necessário para acompanhar o fluxo.
+
+- `WordPressPostsService.getPosts` passou a coordenar normalização, requisição e montagem da página
+  por meio de métodos privados com responsabilidades nomeadas;
+- `NasaImagesService.mapResponse` delega a busca e a conversão de cada item da NASA;
+- `PostsStore.reduceState` explicita os três eventos da união discriminada e delega cada transição;
+- `WordPressPostsService.mapPosts` permaneceu coeso; não foi fragmentado apenas por sua contagem
+  de linhas.
 
 ## Próximas decisões
 
@@ -62,9 +81,9 @@ acesso a dados os parâmetros já escolhidos, e o serviço apenas executa e conv
 
 ### Estado de Posts
 
-`PostsStore` concentra sincronização de rota, paginação, busca e redução de estado. O arquivo
-ainda está coerente, mas deve ser acompanhado: uma nova responsabilidade será o sinal para
-extrair navegação ou redução de estado, não apenas o número de linhas atual.
+`PostsStore` concentra sincronização de rota, paginação, busca e redução de estado. A redução foi
+separada por evento, mas o arquivo deve continuar sendo acompanhado: uma nova responsabilidade
+será o sinal para extrair navegação ou redução, não apenas o número de linhas atual.
 
 ### Rotas desconhecidas
 
@@ -74,5 +93,7 @@ encontrado” nem retorno explícito para a Home.
 ### Arquivos de estilo extensos
 
 Os estilos do hero da Home e das páginas da Matrix são os maiores arquivos do projeto. O build
-continua dentro dos budgets; portanto, a questão é navegabilidade e repetição, não tamanho de
-bundle. A extração deve ocorrer somente quando surgir um padrão reutilizável claro.
+continua dentro dos budgets. A análise encontrou 6,81% de linhas duplicadas em SCSS, sobretudo
+entre os dois exploradores de código da Matrix. Esse valor permanece visível no relatório completo,
+mas ainda não bloqueia o `check`: a extração deve preservar as variações visuais e partir de um
+padrão reutilizável claro, em vez de criar mixins apenas para reduzir uma métrica.

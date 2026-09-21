@@ -100,44 +100,52 @@ export class NasaImagesService {
     query: string,
   ): ImageSearchResult {
     const collection = response.body?.collection;
-    const requestedId = this.curatedNasaId(query);
-    let image: PortalImageViewModel | null = null;
-
-    for (const item of collection?.items ?? []) {
-      const data = item.data?.find((entry) => entry.media_type === 'image');
-      const previewUrl = item.links
-        ?.find((link) => link.rel === 'preview' && link.render === 'image')
-        ?.href?.trim();
-      const id = data?.nasa_id?.trim();
-      const title = data?.title?.trim();
-
-      if (!data || !id || !title || !previewUrl || !this.isHttpsUrl(previewUrl)) {
-        continue;
-      }
-
-      if (requestedId && id !== requestedId) {
-        continue;
-      }
-
-      image = {
-        id,
-        title,
-        credit: data.photographer?.trim() || data.secondary_creator?.trim() || 'NASA',
-        date: data.date_created?.slice(0, 10) || null,
-        center: data.center?.trim() || null,
-        // Preserva a URL devolvida pela NASA; não deduz caminhos nem tamanhos de imagem.
-        imageUrl: previewUrl,
-        imageAlt: title,
-        sourceUrl: previewUrl,
-      };
-      break;
-    }
 
     return {
-      image,
+      image: this.findImage(collection?.items ?? [], this.curatedNasaId(query)),
       query,
       status: response.status,
       total: collection?.metadata?.total_hits ?? 0,
+    };
+  }
+
+  private findImage(
+    items: readonly NasaImageItemDto[],
+    requestedId?: string,
+  ): PortalImageViewModel | null {
+    for (const item of items) {
+      const image = this.toPortalImage(item);
+
+      if (image && (!requestedId || image.id === requestedId)) {
+        return image;
+      }
+    }
+
+    return null;
+  }
+
+  private toPortalImage(item: NasaImageItemDto): PortalImageViewModel | null {
+    const data = item.data?.find((entry) => entry.media_type === 'image');
+    const previewUrl = item.links
+      ?.find((link) => link.rel === 'preview' && link.render === 'image')
+      ?.href?.trim();
+    const id = data?.nasa_id?.trim();
+    const title = data?.title?.trim();
+
+    if (!data || !id || !title || !previewUrl || !this.isHttpsUrl(previewUrl)) {
+      return null;
+    }
+
+    return {
+      id,
+      title,
+      credit: data.photographer?.trim() || data.secondary_creator?.trim() || 'NASA',
+      date: data.date_created?.slice(0, 10) || null,
+      center: data.center?.trim() || null,
+      // Preserva a URL devolvida pela NASA; não deduz caminhos nem tamanhos de imagem.
+      imageUrl: previewUrl,
+      imageAlt: title,
+      sourceUrl: previewUrl,
     };
   }
 
