@@ -96,7 +96,7 @@
         "eyebrow": "Interactive laboratory",
         "title": {
           "line1": "Matrix",
-          "line2": "Online"
+          "line2": "on-line"
         },
         "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening."
       },
@@ -128,7 +128,7 @@
     },
     "header": {
       "back": "Back to the Matrix catalog",
-      "eyebrow": "Matrix Online · Experiment 01",
+      "eyebrow": "Matrix on-line · Experiment 01",
       "title": {
         "line1": "Components",
         "line2": "in conversation"
@@ -246,7 +246,7 @@
     "rest": {
       "header": {
         "back": "Back to the Matrix catalog",
-        "eyebrow": "Matrix Online · Experiment 02",
+        "eyebrow": "Matrix on-line · Experiment 02",
         "title": {
           "line1": "A portal",
           "line2": "to the universe"

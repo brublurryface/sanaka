@@ -13,7 +13,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         catalog: {
           header: {
             eyebrow: 'Interactive laboratory',
-            title: { line1: 'Matrix', line2: 'Online' },
+            title: { line1: 'Matrix', line2: 'on-line' },
             intro: 'Choose an experiment.',
           },
           list: { eyebrow: 'Open circuits', title: 'Experiments', intro: 'Choose one.' },
@@ -60,6 +60,15 @@ describe('MatrixCatalog', () => {
         }),
       ],
     }).compileComponents();
+  });
+
+  it('should render the Matrix on-line title', () => {
+    const fixture = TestBed.createComponent(MatrixCatalog);
+    fixture.detectChanges();
+
+    const title = fixture.nativeElement.querySelector('#matrix-catalog-title') as HTMLElement;
+
+    expect(title.textContent?.replace(/\s+/g, ' ').trim()).toBe('Matrix on-line');
   });
 
   it('should link each available experiment to its own route', () => {

@@ -19,11 +19,59 @@
 .catalog-hero {
   position: relative;
   isolation: isolate;
+
+  display: grid;
+  align-items: center;
+
+  min-height: clamp(25rem, 30vw, 35rem);
   overflow: hidden;
+
+  background: var(--sanaka-bg);
+}
+
+.catalog-hero::before,
+.catalog-hero::after {
+  position: absolute;
+  inset: 0;
+
+  content: '';
+
+  pointer-events: none;
+}
+
+.catalog-hero::before {
+  z-index: -3;
+
+  background: url('/images/matrix/matrix-atmosphere-desktop.webp') center right / auto 100%
+    no-repeat;
+
+  opacity: 0.88;
+}
+
+.catalog-hero::after {
+  z-index: -2;
+
   background:
-    linear-gradient(rgba(13, 17, 23, 0.45), rgba(13, 17, 23, 0.96)),
-    repeating-linear-gradient(90deg, transparent 0 4rem, rgba(237, 201, 120, 0.035) 4rem 4.05rem),
-    var(--sanaka-bg);
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.72) 8%,
+      rgba(13, 17, 23, 0.12) 22%,
+      rgba(13, 17, 23, 0.04) 52%,
+      rgba(13, 17, 23, 0.28) 68%,
+      rgba(13, 17, 23, 0.74) 80%,
+      rgba(13, 17, 23, 0.95) 92%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.96) 22%,
+      rgba(13, 17, 23, 0.78) 42%,
+      rgba(13, 17, 23, 0.26) 64%,
+      rgba(13, 17, 23, 0.04) 84%,
+      transparent 100%
+    );
 }
 
 .catalog-glow {
@@ -44,17 +92,25 @@
 }
 
 .catalog-hero__content {
-  padding-block: clamp(5rem, 11vw, 9rem);
+  position: relative;
+  z-index: 1;
+
+  padding-block: clamp(4rem, 8vw, 7rem);
 }
 
 .catalog-hero h1 {
+  max-width: 38rem;
   margin: 1.2rem 0 0;
+
   color: var(--sanaka-ivory);
+
   font-family: var(--sanaka-font-display);
-  font-size: clamp(4rem, 9vw, 7.5rem);
-  font-weight: 400;
-  line-height: 0.8;
-  letter-spacing: -0.055em;
+  font-size: clamp(3rem, 6vw, 5rem);
+  font-weight: 500;
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+
+  text-wrap: balance;
 }
 
 .catalog-hero h1 span {
@@ -75,7 +131,7 @@
   padding-block: clamp(4rem, 8vw, 7rem);
   background:
     radial-gradient(circle at 12% 30%, rgba(123, 82, 180, 0.08), transparent 25rem),
-    linear-gradient(180deg, #10151d, var(--sanaka-bg));
+    linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));
 }
 
 .catalog-heading {
@@ -286,6 +342,25 @@
 }
 
 @media (max-width: 800px) {
+  .catalog-hero::before {
+    background-position: 70% center;
+    opacity: 0.64;
+  }
+
+  .catalog-hero::after {
+    background:
+      linear-gradient(
+        180deg,
+        var(--sanaka-bg) 0%,
+        rgba(13, 17, 23, 0.68) 10%,
+        rgba(13, 17, 23, 0.16) 30%,
+        rgba(13, 17, 23, 0.4) 68%,
+        rgba(13, 17, 23, 0.94) 90%,
+        var(--sanaka-bg) 100%
+      ),
+      linear-gradient(90deg, rgba(13, 17, 23, 0.94), rgba(13, 17, 23, 0.4));
+  }
+
   .catalog-heading,
   .featured-experiment {
     grid-template-columns: 1fr;
@@ -310,6 +385,6 @@
   }
 
   .catalog-hero h1 {
-    font-size: clamp(3.4rem, 19vw, 5rem);
+    font-size: clamp(3rem, 15vw, 4rem);
   }
 }
