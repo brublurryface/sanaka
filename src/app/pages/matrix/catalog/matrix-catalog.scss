@@ -99,8 +99,15 @@
 }
 
 .catalog-hero h1 {
+  position: relative;
+  isolation: isolate;
+
+  display: grid;
+
+  width: fit-content;
   max-width: 38rem;
   margin: 1.2rem 0 0;
+  padding: 0.08em 0.34em 0.36em 0.04em;
 
   color: var(--sanaka-ivory);
 
@@ -114,9 +121,32 @@
 }
 
 .catalog-hero h1 span {
+  grid-area: 1 / 1;
+
   display: block;
+
+  white-space: nowrap;
+}
+
+.catalog-hero__title-shadow {
+  z-index: -1;
+
   color: transparent;
+
   -webkit-text-stroke: 1px rgba(237, 201, 120, 0.74);
+
+  opacity: 0.62;
+  transform: translate(-0.04em, -0.08em);
+}
+
+.catalog-hero__title-main {
+  color: var(--sanaka-ivory);
+
+  text-shadow:
+    0 0 1.4rem rgba(13, 17, 23, 0.92),
+    0 0 1rem rgba(237, 201, 120, 0.1);
+
+  transform: translate(0.32em, 0.3em);
 }
 
 .catalog-hero__intro {
