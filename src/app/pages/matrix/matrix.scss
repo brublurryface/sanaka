@@ -3,7 +3,7 @@
 }
 
 .matrix-shell {
-  width: min(76rem, calc(100% - 3rem));
+  width: var(--sanaka-page-shell-width);
   margin-inline: auto;
 }
 

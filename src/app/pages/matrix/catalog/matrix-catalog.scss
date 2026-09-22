@@ -3,7 +3,7 @@
 }
 
 .catalog-shell {
-  width: min(76rem, calc(100% - 3rem));
+  width: var(--sanaka-page-shell-width);
   margin-inline: auto;
 }
 
@@ -24,7 +24,6 @@
   display: grid;
   align-items: start;
 
-  min-height: clamp(25rem, 30vw, 35rem);
   overflow: hidden;
 
   background: var(--sanaka-bg);
@@ -43,10 +42,10 @@
 .catalog-hero::before {
   z-index: -3;
 
-  background: url('/images/matrix/matrix-atmosphere-desktop.webp') center right / auto 100%
-    no-repeat;
+  background: url('/images/matrix/matrix-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
 
-  opacity: 0.88;
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
 }
 
 .catalog-hero::after {
@@ -373,11 +372,6 @@
 }
 
 @media (max-width: 800px) {
-  .catalog-hero::before {
-    background-position: 70% center;
-    opacity: 0.64;
-  }
-
   .catalog-hero::after {
     background:
       linear-gradient(
@@ -407,11 +401,5 @@
 
   .upcoming-list {
     grid-template-columns: 1fr;
-  }
-}
-
-@media (max-width: 520px) {
-  .catalog-shell {
-    width: min(100% - 2rem, 76rem);
   }
 }

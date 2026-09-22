@@ -24,6 +24,13 @@ class MockTranslocoLoader implements TranslocoLoader {
           language: {
             selector: 'Seletor de idioma',
           },
+          footer: {
+            description: 'Conhecimento em movimento.',
+            navigation: 'Navegação do rodapé',
+            about: 'Sobre & contato',
+            soon: 'Em breve',
+            signature: 'Entre código, símbolos e presença.',
+          },
         },
       },
       en: {
@@ -38,6 +45,13 @@ class MockTranslocoLoader implements TranslocoLoader {
           },
           language: {
             selector: 'Language selector',
+          },
+          footer: {
+            description: 'Knowledge in motion.',
+            navigation: 'Footer navigation',
+            about: 'About & contact',
+            soon: 'Coming soon',
+            signature: 'Between code, symbols, and presence.',
           },
         },
       },
@@ -122,6 +136,21 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/matrix');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
+  });
+
+  it('should render the footer without exposing an unfinished About route', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const footer = compiled.querySelector<HTMLElement>('.app-footer');
+    const footerNavigation = footer?.querySelector<HTMLElement>('nav');
+    const futureDestination = footer?.querySelector<HTMLElement>('.app-footer__future');
+
+    expect(footer).toBeTruthy();
+    expect(footerNavigation?.getAttribute('aria-label')).toBe('Navegação do rodapé');
+    expect(futureDestination?.textContent).toContain('Sobre & contato');
+    expect(futureDestination?.querySelector('a')).toBeNull();
   });
 
   it('should switch the interface language at runtime using the PT | EN selector', () => {

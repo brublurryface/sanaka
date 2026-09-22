@@ -3,7 +3,7 @@
 }
 
 .posts-page {
-  --posts-content-width: min(calc(100% - clamp(3rem, 12vw, 12rem)), 76rem);
+  --posts-content-width: var(--sanaka-page-shell-width);
 
   min-height: 100vh;
 
@@ -24,7 +24,6 @@
   align-items: start;
 
   width: 100%;
-  min-height: clamp(25rem, 30vw, 35rem);
   margin: 0 0 var(--sanaka-space-page-content-start);
 
   overflow: hidden;
@@ -54,9 +53,10 @@
 .posts-header::before {
   z-index: -2;
 
-  background: url('/images/posts/posts-atmosphere-desktop.webp') center right / auto 100% no-repeat;
+  background: url('/images/posts/posts-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
 
-  opacity: 0.82;
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.82);
 }
 
 .posts-header::after {
@@ -507,22 +507,6 @@
 ------------------------ */
 
 @media (max-width: 700px) {
-  .posts-header {
-    min-height: 28rem;
-  }
-
-  .posts-header__content {
-    align-self: end;
-
-    padding-bottom: 3rem;
-  }
-
-  .posts-header::before {
-    background-position: 68% center;
-
-    opacity: 0.54;
-  }
-
   .posts-header::after {
     background:
       linear-gradient(

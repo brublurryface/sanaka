@@ -10,6 +10,13 @@
     },
     "language": {
       "selector": "Language selector"
+    },
+    "footer": {
+      "description": "A space for knowledge, consciousness, and transformation in motion.",
+      "navigation": "Footer navigation",
+      "about": "About & contact",
+      "soon": "Coming soon",
+      "signature": "Between code, symbols, and presence."
     }
   },
   "home": {

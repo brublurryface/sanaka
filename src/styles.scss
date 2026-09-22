@@ -64,6 +64,7 @@ html {
   --sanaka-type-hero-intro-line-height: 1.8;
   --sanaka-measure-hero-intro: 42rem;
 
+  --sanaka-page-shell-width: min(76rem, calc(100% - 3rem));
   --sanaka-space-page-hero-block: clamp(4rem, 8vw, 7rem);
   --sanaka-space-page-content-start: 1.75rem;
 }
@@ -75,7 +76,7 @@ html {
   display: grid;
   align-items: start;
 
-  min-height: clamp(25rem, 30vw, 35rem);
+  min-height: var(--sanaka-atmosphere-min-height, clamp(25rem, 30vw, 35rem));
   overflow: hidden;
 
   background: var(--sanaka-bg);
@@ -97,24 +98,21 @@ html {
   :root {
     --sanaka-type-home-title-size: clamp(2.55rem, 10vw, 3.6rem);
     --sanaka-type-page-title-size: clamp(2.75rem, 13vw, 4rem);
+    --sanaka-page-shell-width: min(76rem, calc(100% - 2rem));
+    --sanaka-space-page-hero-block: 1.5rem;
     --sanaka-space-page-content-start: 1.5rem;
+  }
+
+  .sanaka-atmosphere-hero {
+    --sanaka-atmosphere-image-opacity: 0.58;
+    --sanaka-atmosphere-image-position: 68% center;
+    --sanaka-atmosphere-min-height: 28rem;
   }
 }
 
 @media (max-width: 520px) {
   :root {
     --sanaka-type-home-title-size: clamp(2.45rem, 11vw, 3.15rem);
-  }
-
-  .sanaka-atmosphere-shell {
-    width: min(100% - 2rem, 76rem);
-  }
-
-  .sanaka-atmosphere-hero {
-    --sanaka-atmosphere-image-opacity: 0.58;
-    --sanaka-atmosphere-image-position: 68% center;
-
-    min-height: 28rem;
   }
 }
 

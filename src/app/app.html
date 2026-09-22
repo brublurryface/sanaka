@@ -71,3 +71,28 @@
 <main>
   <router-outlet />
 </main>
+
+<footer class="app-footer">
+  <div class="app-footer__light" aria-hidden="true"></div>
+
+  <div class="app-footer__content">
+    <div class="app-footer__identity">
+      <a class="app-footer__brand" routerLink="/" aria-label="Sanaka">Sanaka</a>
+      <p>{{ 'app.footer.description' | transloco }}</p>
+    </div>
+
+    <nav class="app-footer__navigation" [attr.aria-label]="'app.footer.navigation' | transloco">
+      <a routerLink="/">{{ 'app.navigation.home' | transloco }}</a>
+      <a routerLink="/posts">{{ 'app.navigation.posts' | transloco }}</a>
+      <a routerLink="/matrix">{{ 'app.navigation.matrix' | transloco }}</a>
+      <a routerLink="/maya">{{ 'app.navigation.maya' | transloco }}</a>
+    </nav>
+
+    <div class="app-footer__future">
+      <span>{{ 'app.footer.about' | transloco }}</span>
+      <small>{{ 'app.footer.soon' | transloco }}</small>
+    </div>
+  </div>
+
+  <p class="app-footer__signature">{{ 'app.footer.signature' | transloco }}</p>
+</footer>

@@ -604,7 +604,7 @@ h1 span {
 
     height: calc(100dvh - var(--sanaka-header-height, 88px));
 
-    padding: 1.7rem clamp(1rem, 5vw, 1.5rem) 0.5rem;
+    padding: 1.5rem 1rem 0.5rem;
   }
 
   .hero-copy {
@@ -706,8 +706,6 @@ h1 span {
 @media (max-width: 520px) {
   .sanctuary-hero {
     gap: 0.45rem;
-
-    padding: 1.4rem 1rem 0.35rem;
   }
 
   .eyebrow {
