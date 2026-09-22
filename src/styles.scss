@@ -68,6 +68,19 @@ html {
   --sanaka-space-page-content-start: 1.75rem;
 }
 
+.sanaka-atmosphere-hero {
+  position: relative;
+  isolation: isolate;
+
+  display: grid;
+  align-items: start;
+
+  min-height: clamp(25rem, 30vw, 35rem);
+  overflow: hidden;
+
+  background: var(--sanaka-bg);
+}
+
 @media (max-width: 1100px) {
   :root {
     --sanaka-type-home-title-size: clamp(3.2rem, 5.8vw, 4.8rem);
@@ -91,6 +104,17 @@ html {
 @media (max-width: 520px) {
   :root {
     --sanaka-type-home-title-size: clamp(2.45rem, 11vw, 3.15rem);
+  }
+
+  .sanaka-atmosphere-shell {
+    width: min(100% - 2rem, 76rem);
+  }
+
+  .sanaka-atmosphere-hero {
+    --sanaka-atmosphere-image-opacity: 0.58;
+    --sanaka-atmosphere-image-position: 68% center;
+
+    min-height: 28rem;
   }
 }
 
