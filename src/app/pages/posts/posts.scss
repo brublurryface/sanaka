@@ -21,7 +21,7 @@
   position: relative;
 
   display: grid;
-  align-items: center;
+  align-items: start;
 
   width: 100%;
   min-height: clamp(25rem, 30vw, 35rem);
@@ -38,6 +38,7 @@
 
   width: var(--posts-content-width);
   margin: 0 auto;
+  padding-block: var(--sanaka-space-page-hero-block);
 }
 
 .posts-header::before,
@@ -121,6 +122,8 @@
   font-family: var(--sanaka-font-body);
   font-size: var(--sanaka-type-hero-intro-size);
   line-height: var(--sanaka-type-hero-intro-line-height);
+
+  white-space: pre-line;
 }
 
 /* -----------------------

@@ -63,6 +63,8 @@ html {
   --sanaka-type-hero-intro-size: clamp(1rem, 1.8vw, 1.15rem);
   --sanaka-type-hero-intro-line-height: 1.8;
   --sanaka-measure-hero-intro: 42rem;
+
+  --sanaka-space-page-hero-block: clamp(4rem, 8vw, 7rem);
 }
 
 @media (max-width: 1100px) {

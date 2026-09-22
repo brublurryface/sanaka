@@ -22,7 +22,7 @@
   isolation: isolate;
 
   display: grid;
-  align-items: center;
+  align-items: start;
 
   min-height: clamp(25rem, 30vw, 35rem);
   overflow: hidden;
@@ -96,7 +96,7 @@
   position: relative;
   z-index: 1;
 
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding-block: var(--sanaka-space-page-hero-block);
 }
 
 .catalog-hero h1 {
