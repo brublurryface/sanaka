@@ -274,7 +274,7 @@ mat-toolbar {
 .app-footer {
   position: relative;
 
-  padding: clamp(3rem, 6vw, 5rem) 0 1.5rem;
+  padding-block: clamp(2.25rem, 4vw, 3.25rem);
 
   overflow: hidden;
 
@@ -309,50 +309,37 @@ mat-toolbar {
   animation: footer-light-breathe 4.5s ease-in-out infinite;
 }
 
-.app-footer__content,
-.app-footer__signature {
+.app-footer__content {
   width: var(--sanaka-page-shell-width);
   margin-inline: auto;
-}
 
-.app-footer__content {
   display: grid;
-  grid-template-columns: minmax(16rem, 1.4fr) auto minmax(11rem, 0.6fr);
-  align-items: start;
-  gap: clamp(2rem, 6vw, 6rem);
+  grid-template-columns: minmax(18rem, 1fr) auto auto;
+  align-items: center;
+  gap: clamp(2rem, 5vw, 5rem);
 }
 
-.app-footer__brand {
-  color: var(--sanaka-gold-soft);
+.app-footer__closing {
+  max-width: 24rem;
+  margin: 0;
+
+  color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: 2rem;
+  font-size: clamp(1.25rem, 2vw, 1.6rem);
   font-weight: 500;
-  letter-spacing: 0.04em;
-
-  text-decoration: none;
-  text-transform: uppercase;
+  line-height: 1.2;
 }
 
-.app-footer__brand:focus-visible,
 .app-footer__navigation a:focus-visible {
   outline: 1px solid var(--sanaka-gold-soft);
   outline-offset: 5px;
 }
 
-.app-footer__identity p {
-  max-width: 28rem;
-  margin: 0.8rem 0 0;
-
-  color: var(--sanaka-ivory-muted);
-
-  font-size: 0.82rem;
-  line-height: 1.7;
-}
-
 .app-footer__navigation {
-  display: grid;
-  gap: 0.75rem;
+  display: flex;
+  align-items: center;
+  gap: clamp(1rem, 2vw, 1.75rem);
 }
 
 .app-footer__navigation a {
@@ -369,10 +356,11 @@ mat-toolbar {
 }
 
 .app-footer__future {
-  display: grid;
-  gap: 0.45rem;
+  display: flex;
+  align-items: baseline;
+  gap: 0.75rem;
 
-  padding-left: 1rem;
+  padding-left: clamp(1rem, 2vw, 1.75rem);
 
   border-left: 1px solid rgba(237, 201, 120, 0.2);
 }
@@ -387,20 +375,11 @@ mat-toolbar {
   text-transform: uppercase;
 }
 
-.app-footer__future small,
-.app-footer__signature {
+.app-footer__future small {
   color: var(--sanaka-ivory-muted);
 
   font-size: 0.68rem;
   letter-spacing: 0.08em;
-}
-
-.app-footer__signature {
-  margin-top: clamp(2.5rem, 5vw, 4rem);
-  margin-bottom: 0;
-  padding-top: 1rem;
-
-  border-top: 1px solid rgba(237, 201, 120, 0.1);
 }
 
 @keyframes footer-light-breathe {
@@ -503,22 +482,23 @@ mat-toolbar {
   }
 
   .app-footer {
-    padding-top: 3rem;
+    padding-block: 2.25rem;
   }
 
   .app-footer__content {
     grid-template-columns: 1fr;
-    gap: 2rem;
+    gap: 1.5rem;
   }
 
   .app-footer__navigation {
-    grid-template-columns: repeat(4, auto);
     justify-content: space-between;
     gap: 0.75rem;
   }
 
   .app-footer__future {
-    padding: 0.9rem 0 0;
+    justify-content: space-between;
+
+    padding: 1rem 0 0;
 
     border-top: 1px solid rgba(237, 201, 120, 0.2);
     border-left: 0;

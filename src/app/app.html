@@ -76,10 +76,7 @@
   <div class="app-footer__light" aria-hidden="true"></div>
 
   <div class="app-footer__content">
-    <div class="app-footer__identity">
-      <a class="app-footer__brand" routerLink="/" aria-label="Sanaka">Sanaka</a>
-      <p>{{ 'app.footer.description' | transloco }}</p>
-    </div>
+    <p class="app-footer__closing">{{ 'app.footer.signature' | transloco }}</p>
 
     <nav class="app-footer__navigation" [attr.aria-label]="'app.footer.navigation' | transloco">
       <a routerLink="/">{{ 'app.navigation.home' | transloco }}</a>
@@ -93,6 +90,4 @@
       <small>{{ 'app.footer.soon' | transloco }}</small>
     </div>
   </div>
-
-  <p class="app-footer__signature">{{ 'app.footer.signature' | transloco }}</p>
 </footer>

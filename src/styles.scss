@@ -108,6 +108,10 @@ html {
     --sanaka-atmosphere-image-position: 68% center;
     --sanaka-atmosphere-min-height: 28rem;
   }
+
+  .sanaka-atmosphere-hero--compact {
+    --sanaka-atmosphere-min-height: 22rem;
+  }
 }
 
 @media (max-width: 520px) {

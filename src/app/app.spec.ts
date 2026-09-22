@@ -25,7 +25,6 @@ class MockTranslocoLoader implements TranslocoLoader {
             selector: 'Seletor de idioma',
           },
           footer: {
-            description: 'Conhecimento em movimento.',
             navigation: 'Navegação do rodapé',
             about: 'Sobre & contato',
             soon: 'Em breve',
@@ -47,7 +46,6 @@ class MockTranslocoLoader implements TranslocoLoader {
             selector: 'Language selector',
           },
           footer: {
-            description: 'Knowledge in motion.',
             navigation: 'Footer navigation',
             about: 'About & contact',
             soon: 'Coming soon',
