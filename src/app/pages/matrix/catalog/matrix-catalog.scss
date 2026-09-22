@@ -159,7 +159,7 @@
 }
 
 .catalog-list {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 8vw, 7rem);
   background:
     radial-gradient(circle at 12% 30%, rgba(123, 82, 180, 0.08), transparent 25rem),
     linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));

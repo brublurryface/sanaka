@@ -25,7 +25,7 @@
 
   width: 100%;
   min-height: clamp(25rem, 30vw, 35rem);
-  margin: 0 0 1.75rem;
+  margin: 0 0 var(--sanaka-space-page-content-start);
 
   overflow: hidden;
 
@@ -509,7 +509,6 @@
 @media (max-width: 700px) {
   .posts-header {
     min-height: 28rem;
-    margin-bottom: 1.5rem;
   }
 
   .posts-header__content {

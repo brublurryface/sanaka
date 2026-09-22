@@ -65,6 +65,7 @@ html {
   --sanaka-measure-hero-intro: 42rem;
 
   --sanaka-space-page-hero-block: clamp(4rem, 8vw, 7rem);
+  --sanaka-space-page-content-start: 1.75rem;
 }
 
 @media (max-width: 1100px) {
@@ -83,6 +84,7 @@ html {
   :root {
     --sanaka-type-home-title-size: clamp(2.55rem, 10vw, 3.6rem);
     --sanaka-type-page-title-size: clamp(2.75rem, 13vw, 4rem);
+    --sanaka-space-page-content-start: 1.5rem;
   }
 }
 
