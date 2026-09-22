@@ -10,9 +10,10 @@
 .eyebrow {
   margin: 0;
   color: var(--sanaka-gold-soft);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-size: var(--sanaka-type-eyebrow-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
   text-transform: uppercase;
 }
 
@@ -112,10 +113,10 @@
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
 
   text-wrap: balance;
 }
@@ -150,11 +151,11 @@
 }
 
 .catalog-hero__intro {
-  max-width: 42rem;
+  max-width: var(--sanaka-measure-hero-intro);
   margin: 2rem 0 0;
   color: var(--sanaka-ivory-muted);
-  font-size: clamp(1rem, 1.8vw, 1.15rem);
-  line-height: 1.8;
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
 .catalog-list {
@@ -412,9 +413,5 @@
 @media (max-width: 520px) {
   .catalog-shell {
     width: min(100% - 2rem, 76rem);
-  }
-
-  .catalog-hero h1 {
-    font-size: clamp(3rem, 15vw, 4rem);
   }
 }

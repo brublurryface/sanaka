@@ -89,9 +89,10 @@
   color: var(--sanaka-gold-soft);
 
   font-family: var(--sanaka-font-body);
-  font-size: 0.8rem;
-  font-weight: 600;
-  letter-spacing: 0.18em;
+  font-size: var(--sanaka-type-eyebrow-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
 
   text-transform: uppercase;
 }
@@ -103,22 +104,23 @@
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(3rem, 6vw, 5rem);
-  font-weight: 500;
-  line-height: 0.95;
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
 
   text-wrap: balance;
 }
 
 .posts-header__intro {
-  max-width: 36rem;
+  max-width: var(--sanaka-measure-hero-intro);
   margin: 1.25rem 0 0;
 
   color: var(--sanaka-ivory-muted);
 
   font-family: var(--sanaka-font-body);
-  font-size: 1rem;
-  line-height: 1.8;
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
 /* -----------------------
@@ -536,10 +538,6 @@
 
   .posts-header__eyebrow {
     margin-bottom: 0.8rem;
-  }
-
-  .posts-header__title {
-    font-size: clamp(2.75rem, 13vw, 4rem);
   }
 
   .posts-toolbar {

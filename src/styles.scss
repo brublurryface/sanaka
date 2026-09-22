@@ -45,6 +45,55 @@ html {
 
   --sanaka-font-display: 'Cormorant Garamond', Georgia, 'Times New Roman', serif;
   --sanaka-font-body: 'Inter', Arial, Helvetica, sans-serif;
+
+  /* Papéis tipográficos compartilhados pelos cabeçalhos do site. */
+  --sanaka-type-eyebrow-size: 0.7rem;
+  --sanaka-type-eyebrow-weight: 700;
+  --sanaka-type-eyebrow-line-height: 1.5;
+  --sanaka-type-eyebrow-spacing: 0.2em;
+
+  --sanaka-type-home-title-size: clamp(3.6rem, 5vw, 5.6rem);
+  --sanaka-type-home-title-line-height: 0.92;
+
+  --sanaka-type-page-title-size: clamp(3rem, 6vw, 5rem);
+  --sanaka-type-page-title-weight: 500;
+  --sanaka-type-page-title-line-height: 0.95;
+  --sanaka-type-page-title-spacing: -0.035em;
+
+  --sanaka-type-hero-intro-size: clamp(1rem, 1.8vw, 1.15rem);
+  --sanaka-type-hero-intro-line-height: 1.8;
+  --sanaka-measure-hero-intro: 42rem;
+}
+
+@media (max-width: 1100px) {
+  :root {
+    --sanaka-type-home-title-size: clamp(3.2rem, 5.8vw, 4.8rem);
+  }
+}
+
+@media (max-width: 900px) {
+  :root {
+    --sanaka-type-home-title-size: clamp(2.9rem, 6.5vw, 4rem);
+  }
+}
+
+@media (max-width: 700px) {
+  :root {
+    --sanaka-type-home-title-size: clamp(2.55rem, 10vw, 3.6rem);
+    --sanaka-type-page-title-size: clamp(2.75rem, 13vw, 4rem);
+  }
+}
+
+@media (max-width: 520px) {
+  :root {
+    --sanaka-type-home-title-size: clamp(2.45rem, 11vw, 3.15rem);
+  }
+}
+
+@media (max-width: 380px) {
+  :root {
+    --sanaka-type-home-title-size: clamp(2.35rem, 10.8vw, 2.8rem);
+  }
 }
 
 html {
