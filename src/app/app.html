@@ -42,6 +42,10 @@
       <a routerLink="/maya" routerLinkActive="active-link" ariaCurrentWhenActive="page">
         {{ 'app.navigation.maya' | transloco }}
       </a>
+
+      <a routerLink="/sobre" routerLinkActive="active-link" ariaCurrentWhenActive="page">
+        {{ 'app.navigation.about' | transloco }}
+      </a>
     </nav>
 
     <div class="lang-switcher" role="group" [attr.aria-label]="'app.language.selector' | transloco">
@@ -86,8 +90,8 @@
     </nav>
 
     <div class="app-footer__future">
-      <span>{{ 'app.footer.about' | transloco }}</span>
-      <small>{{ 'app.footer.soon' | transloco }}</small>
+      <a routerLink="/sobre">{{ 'app.footer.about' | transloco }}</a>
+      <small>{{ 'app.footer.enter' | transloco }}</small>
     </div>
   </div>
 </footer>

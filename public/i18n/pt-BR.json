@@ -6,7 +6,8 @@
       "home": "Home",
       "posts": "Posts",
       "matrix": "Matrix",
-      "maya": "Māyā"
+      "maya": "Māyā",
+      "about": "Sobre"
     },
     "language": {
       "selector": "Seletor de idioma"
@@ -14,8 +15,77 @@
     "footer": {
       "navigation": "Navegação do rodapé",
       "about": "Sobre & contato",
-      "soon": "Em breve",
+      "enter": "Entrar",
       "signature": "Entre código, símbolos e presença."
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Autobiografia em construção",
+      "title": "Quem atravessa Sanaka?",
+      "intro": "Uma vida não cabe em uma apresentação. Esta página percorre quatro ciclos, suas rupturas e as linguagens que acabaram se encontrando em Sanaka."
+    },
+    "map": {
+      "eyebrow": "Cartografia autobiográfica",
+      "title": "Quatro ciclos, uma travessia",
+      "intro": "Escolha um território. Cada passagem antecipa uma parte da história e conduz ao capítulo completo abaixo.",
+      "ariaLabel": "Ciclos da trajetória autobiográfica",
+      "traveler": "Māyā em forma humana acompanha o ciclo selecionado",
+      "open": "Ler este ciclo"
+    },
+    "status": {
+      "provisional": "Texto provisório"
+    },
+    "cycles": {
+      "origin": {
+        "number": "01",
+        "title": "Origem",
+        "teaser": "As primeiras maneiras de observar, imaginar e tentar nomear o mundo.",
+        "body": [
+          "Este primeiro território receberá as memórias que formaram o olhar antes que existisse uma explicação única para ele.",
+          "O texto definitivo ainda está em lapidação. Por enquanto, este capítulo preserva o lugar da origem sem fingir que ela pode ser resumida depressa."
+        ]
+      },
+      "creation": {
+        "number": "02",
+        "title": "Criação",
+        "teaser": "Música, textos, imagens e vínculos abrindo caminhos paralelos.",
+        "body": [
+          "A criação aparece aqui como linguagem e como tentativa de relação: aquilo que podia ser escrito, ouvido, imaginado ou compartilhado.",
+          "Este ciclo será substituído pela versão autobiográfica completa quando sua narrativa estiver pronta."
+        ]
+      },
+      "code": {
+        "number": "03",
+        "title": "Código e transformação",
+        "teaser": "Uma profissão aparentemente externa começa a revelar seus próprios ciclos.",
+        "body": [
+          "A programação parecia uma escolha separada das outras partes da vida. Com o tempo, código, trabalho, criação, morte e transformação começaram a compartilhar a mesma linguagem.",
+          "Aquilo que parecia apenas técnico também ensinava a observar estruturas, dependências, falhas, reconstruções e novas possibilidades."
+        ]
+      },
+      "sanaka": {
+        "number": "04",
+        "title": "E, de repente, Sanaka",
+        "teaser": "A espiritualidade encontra todas as partes e convida a investigá-las novamente.",
+        "body": [
+          "Houve uma quarta fase em que a espiritualidade me encontrou de todos os lados. Ela me convidou a olhar para cada parte da vida e a desmontá-la como quem desmonta um código.",
+          "Passei a depurar lembranças, separar momentos incompreensíveis em componentes, investigar dependências e abrir novas branches em mim. E, de repente, Sanaka."
+        ]
+      }
+    },
+    "contact": {
+      "eyebrow": "Presença atual",
+      "title": "Onde me encontrar",
+      "intro": "Este espaço reunirá minhas redes e formas de contato. Por enquanto, a conversa começa pelo e-mail.",
+      "emailLabel": "Escrever por e-mail",
+      "email": "sanaka@sanaka.com.br"
+    },
+    "universe": {
+      "eyebrow": "Outro portal",
+      "title": "Sanakaverse",
+      "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka terão uma cartografia própria.",
+      "status": "Portal em construção"
     }
   },
   "home": {

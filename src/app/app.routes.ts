@@ -19,4 +19,8 @@ export const routes: Routes = [
     path: 'maya',
     loadComponent: () => import('./pages/maya/maya').then((m) => m.Maya),
   },
+  {
+    path: 'sobre',
+    loadComponent: () => import('./pages/about/about').then((m) => m.About),
+  },
 ];

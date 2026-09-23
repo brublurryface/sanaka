@@ -20,6 +20,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             posts: 'Posts',
             matrix: 'Matrix',
             maya: 'Māyā',
+            about: 'Sobre',
           },
           language: {
             selector: 'Seletor de idioma',
@@ -27,7 +28,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Navegação do rodapé',
             about: 'Sobre & contato',
-            soon: 'Em breve',
+            enter: 'Entrar',
             signature: 'Entre código, símbolos e presença.',
           },
         },
@@ -41,6 +42,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             posts: 'Posts',
             matrix: 'Matrix',
             maya: 'Māyā',
+            about: 'About',
           },
           language: {
             selector: 'Language selector',
@@ -48,7 +50,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Footer navigation',
             about: 'About & contact',
-            soon: 'Coming soon',
+            enter: 'Enter',
             signature: 'Between code, symbols, and presence.',
           },
         },
@@ -134,9 +136,10 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/matrix');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
+    expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
   });
 
-  it('should render the footer without exposing an unfinished About route', () => {
+  it('should link the footer to the About and contact page', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
@@ -148,7 +151,7 @@ describe('App', () => {
     expect(footer).toBeTruthy();
     expect(footerNavigation?.getAttribute('aria-label')).toBe('Navegação do rodapé');
     expect(futureDestination?.textContent).toContain('Sobre & contato');
-    expect(futureDestination?.querySelector('a')).toBeNull();
+    expect(futureDestination?.querySelector('a')?.getAttribute('href')).toBe('/sobre');
   });
 
   it('should switch the interface language at runtime using the PT | EN selector', () => {

@@ -365,14 +365,26 @@ mat-toolbar {
   border-left: 1px solid rgba(237, 201, 120, 0.2);
 }
 
-.app-footer__future span {
+.app-footer__future a {
   color: var(--sanaka-ivory);
 
   font-size: 0.72rem;
   font-weight: 700;
   letter-spacing: 0.12em;
 
+  text-decoration: none;
+
   text-transform: uppercase;
+}
+
+.app-footer__future a:hover,
+.app-footer__future a:focus-visible {
+  color: var(--sanaka-gold-soft);
+}
+
+.app-footer__future a:focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 5px;
 }
 
 .app-footer__future small {
@@ -435,7 +447,7 @@ mat-toolbar {
 
     justify-content: center;
 
-    gap: clamp(0.9rem, 5vw, 2.5rem);
+    gap: clamp(0.65rem, 3.5vw, 2rem);
 
     width: 100%;
 
@@ -449,7 +461,7 @@ mat-toolbar {
     height: 100%;
     padding: 0;
 
-    font-size: 0.8rem;
+    font-size: 0.75rem;
     font-weight: 500;
     letter-spacing: 0.05em;
   }
@@ -521,11 +533,11 @@ mat-toolbar {
   }
 
   .main-nav {
-    gap: clamp(0.7rem, 4vw, 1.4rem);
+    gap: clamp(0.55rem, 3vw, 1rem);
   }
 
   .main-nav a {
-    font-size: 0.68rem;
+    font-size: 0.64rem;
   }
 
   .lang-switcher__button {
