@@ -20,9 +20,16 @@ class MockTranslocoLoader implements TranslocoLoader {
             posts: 'Posts',
             matrix: 'Matrix',
             maya: 'Māyā',
+            about: 'Sobre',
           },
           language: {
             selector: 'Seletor de idioma',
+          },
+          footer: {
+            navigation: 'Navegação do rodapé',
+            about: 'Sobre & contato',
+            enter: 'Entrar',
+            signature: 'Entre código, símbolos e presença.',
           },
         },
       },
@@ -35,9 +42,16 @@ class MockTranslocoLoader implements TranslocoLoader {
             posts: 'Posts',
             matrix: 'Matrix',
             maya: 'Māyā',
+            about: 'About',
           },
           language: {
             selector: 'Language selector',
+          },
+          footer: {
+            navigation: 'Footer navigation',
+            about: 'About & contact',
+            enter: 'Enter',
+            signature: 'Between code, symbols, and presence.',
           },
         },
       },
@@ -122,6 +136,22 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/matrix');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
+    expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
+  });
+
+  it('should link the footer to the About and contact page', () => {
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const footer = compiled.querySelector<HTMLElement>('.app-footer');
+    const footerNavigation = footer?.querySelector<HTMLElement>('nav');
+    const futureDestination = footer?.querySelector<HTMLElement>('.app-footer__future');
+
+    expect(footer).toBeTruthy();
+    expect(footerNavigation?.getAttribute('aria-label')).toBe('Navegação do rodapé');
+    expect(futureDestination?.textContent).toContain('Sobre & contato');
+    expect(futureDestination?.querySelector('a')?.getAttribute('href')).toBe('/sobre');
   });
 
   it('should switch the interface language at runtime using the PT | EN selector', () => {

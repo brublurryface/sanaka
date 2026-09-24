@@ -6,10 +6,86 @@
       "home": "Home",
       "posts": "Posts",
       "matrix": "Matrix",
-      "maya": "Māyā"
+      "maya": "Māyā",
+      "about": "About"
     },
     "language": {
       "selector": "Language selector"
+    },
+    "footer": {
+      "navigation": "Footer navigation",
+      "about": "About & contact",
+      "enter": "Enter",
+      "signature": "Between code, symbols, and presence."
+    }
+  },
+  "about": {
+    "hero": {
+      "eyebrow": "Autobiography in progress",
+      "title": "Who crosses Sanaka?",
+      "intro": "A life cannot fit inside an introduction. This page travels through four cycles, their ruptures, and the languages that eventually met in Sanaka."
+    },
+    "map": {
+      "eyebrow": "Autobiographical cartography",
+      "title": "Four cycles, one crossing",
+      "intro": "Choose a territory. Each passage offers a glimpse of the story and leads to the complete chapter below.",
+      "ariaLabel": "Cycles of the autobiographical journey",
+      "traveler": "Māyā in human form follows the selected cycle",
+      "open": "Read this cycle"
+    },
+    "status": {
+      "provisional": "Provisional text"
+    },
+    "cycles": {
+      "origin": {
+        "number": "01",
+        "title": "Origin",
+        "teaser": "The first ways of observing, imagining, and trying to name the world.",
+        "body": [
+          "This first territory will hold the memories that shaped the gaze before there was a single explanation for it.",
+          "The final text is still being refined. For now, this chapter preserves the place of origin without pretending it can be summarized quickly."
+        ]
+      },
+      "creation": {
+        "number": "02",
+        "title": "Creation",
+        "teaser": "Music, texts, images, and bonds opening parallel paths.",
+        "body": [
+          "Creation appears here as language and as an attempt at connection: what could be written, heard, imagined, or shared.",
+          "This cycle will be replaced by the complete autobiographical version when its narrative is ready."
+        ]
+      },
+      "code": {
+        "number": "03",
+        "title": "Code and transformation",
+        "teaser": "A seemingly external profession begins to reveal its own cycles.",
+        "body": [
+          "Programming seemed like a choice apart from the other pieces of life. Over time, code, work, creation, death, and transformation began to share the same language.",
+          "What seemed merely technical also taught me to observe structures, dependencies, failures, reconstructions, and new possibilities."
+        ]
+      },
+      "sanaka": {
+        "number": "04",
+        "title": "And suddenly, Sanaka",
+        "teaser": "Spirituality finds every piece and invites them to be investigated again.",
+        "body": [
+          "There was a fourth phase when spirituality found me from every direction. It invited me to look at every part of life and take it apart as one takes apart code.",
+          "I began debugging memories, separating incomprehensible moments into components, investigating dependencies, and opening new branches within myself. And suddenly, Sanaka."
+        ]
+      }
+    },
+    "contact": {
+      "eyebrow": "Present presence",
+      "title": "Where to find me",
+      "intro": "This space will gather my networks and ways to connect. For now, the conversation begins by email.",
+      "emailLabel": "Write by email",
+      "email": "sanaka@sanaka.com.br"
+    },
+    "universe": {
+      "eyebrow": "Another portal",
+      "title": "Sanakaverse",
+      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe will have a cartography of their own.",
+      "status": "Portal under construction"
     }
   },
   "home": {
@@ -57,9 +133,9 @@
   },
   "posts": {
     "header": {
-      "eyebrow": "Archive",
+      "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
-      "intro": "Scriptures, studies and reflections gathered in Sanaka."
+      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change."
     },
     "search": {
       "label": "Search publications",
@@ -96,7 +172,7 @@
         "eyebrow": "Interactive laboratory",
         "title": {
           "line1": "Matrix",
-          "line2": "Online"
+          "line2": "on-line"
         },
         "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening."
       },
@@ -128,7 +204,7 @@
     },
     "header": {
       "back": "Back to the Matrix catalog",
-      "eyebrow": "Matrix Online · Experiment 01",
+      "eyebrow": "Matrix on-line · Experiment 01",
       "title": {
         "line1": "Components",
         "line2": "in conversation"
@@ -246,7 +322,7 @@
     "rest": {
       "header": {
         "back": "Back to the Matrix catalog",
-        "eyebrow": "Matrix Online · Experiment 02",
+        "eyebrow": "Matrix on-line · Experiment 02",
         "title": {
           "line1": "A portal",
           "line2": "to the universe"

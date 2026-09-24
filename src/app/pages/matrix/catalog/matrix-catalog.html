@@ -1,13 +1,20 @@
 <main>
-  <section class="catalog-hero" aria-labelledby="matrix-catalog-title">
+  <section
+    class="catalog-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--compact"
+    aria-labelledby="matrix-catalog-title"
+  >
     <div class="catalog-glow" aria-hidden="true"></div>
 
-    <div class="catalog-shell catalog-hero__content">
+    <div class="catalog-shell catalog-hero__content sanaka-atmosphere-shell">
       <p class="eyebrow">{{ 'matrix.catalog.header.eyebrow' | transloco }}</p>
 
       <h1 id="matrix-catalog-title">
-        <span>{{ 'matrix.catalog.header.title.line1' | transloco }}</span>
-        {{ 'matrix.catalog.header.title.line2' | transloco }}
+        <span class="catalog-hero__title-shadow">
+          {{ 'matrix.catalog.header.title.line1' | transloco }}
+        </span>
+        <span class="catalog-hero__title-main">
+          {{ 'matrix.catalog.header.title.line2' | transloco }}
+        </span>
       </h1>
 
       <p class="catalog-hero__intro">{{ 'matrix.catalog.header.intro' | transloco }}</p>

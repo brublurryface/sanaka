@@ -3,64 +3,89 @@
 }
 
 .rest-shell {
-  width: min(78rem, calc(100% - 3rem));
+  width: var(--sanaka-page-shell-width);
   margin-inline: auto;
 }
 
 .eyebrow {
   margin: 0;
   color: var(--sanaka-gold-soft);
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-size: var(--sanaka-type-eyebrow-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
   text-transform: uppercase;
 }
 
 .rest-hero {
   position: relative;
   isolation: isolate;
+
+  display: grid;
+  align-items: start;
+
   overflow: hidden;
-  background:
-    linear-gradient(110deg, rgba(13, 17, 23, 0.96), rgba(13, 17, 23, 0.74)),
-    repeating-radial-gradient(
-      circle at 78% 50%,
-      transparent 0 3.9rem,
-      rgba(237, 201, 120, 0.04) 4rem 4.05rem
-    ),
-    var(--sanaka-bg);
+
+  background: var(--sanaka-bg);
 }
 
-.rest-hero__halo {
+.rest-hero::before,
+.rest-hero::after {
   position: absolute;
-  top: 50%;
-  left: 78%;
+  inset: 0;
+
+  content: '';
+
+  pointer-events: none;
+}
+
+.rest-hero::before {
+  z-index: -2;
+
+  background: url('/images/matrix/rest-api/rest-api-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
+
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
+}
+
+.rest-hero::after {
   z-index: -1;
-  width: min(38rem, 74vw);
-  aspect-ratio: 1;
-  border: 1px solid rgba(237, 201, 120, 0.08);
-  border-radius: 50%;
-  background: radial-gradient(
-    circle,
-    rgba(224, 106, 45, 0.14),
-    rgba(211, 166, 79, 0.07) 34%,
-    rgba(47, 77, 168, 0.05) 52%,
-    transparent 70%
-  );
-  box-shadow:
-    0 0 0 3rem rgba(237, 201, 120, 0.018),
-    0 0 0 7rem rgba(237, 201, 120, 0.012);
-  transform: translate(-50%, -50%);
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.74) 8%,
+      rgba(13, 17, 23, 0.12) 22%,
+      rgba(13, 17, 23, 0.04) 52%,
+      rgba(13, 17, 23, 0.28) 68%,
+      rgba(13, 17, 23, 0.76) 81%,
+      rgba(13, 17, 23, 0.96) 92%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.97) 22%,
+      rgba(13, 17, 23, 0.8) 42%,
+      rgba(13, 17, 23, 0.28) 62%,
+      rgba(13, 17, 23, 0.04) 84%,
+      transparent 100%
+    );
 }
 
 .rest-hero__content {
-  padding-block: clamp(4rem, 10vw, 8rem);
+  position: relative;
+  z-index: 1;
+
+  padding-block: var(--sanaka-space-page-hero-block);
 }
 
 .rest-hero__back {
   display: inline-flex;
   align-items: center;
   gap: 0.65rem;
-  margin-bottom: clamp(2rem, 5vw, 4rem);
+  margin-bottom: 1.5rem;
   color: var(--sanaka-ivory-muted);
   font-size: 0.72rem;
   letter-spacing: 0.08em;
@@ -80,14 +105,16 @@
 }
 
 .rest-hero h1 {
-  max-width: 58rem;
+  max-width: 38rem;
   margin: 1.1rem 0 0;
   color: var(--sanaka-ivory);
   font-family: var(--sanaka-font-display);
-  font-size: clamp(4rem, 9vw, 7.5rem);
-  font-weight: 400;
-  line-height: 0.82;
-  letter-spacing: -0.055em;
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
+
+  text-wrap: balance;
 }
 
 .rest-hero h1 span {
@@ -97,11 +124,11 @@
 }
 
 .rest-hero__intro {
-  max-width: 45rem;
-  margin: 2rem 0 0;
+  max-width: var(--sanaka-measure-hero-intro);
+  margin: 1.25rem 0 0;
   color: var(--sanaka-ivory-muted);
-  font-size: clamp(1rem, 1.8vw, 1.15rem);
-  line-height: 1.8;
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
 .rest-hero__action {
@@ -120,10 +147,10 @@
 }
 
 .rest-exhibit {
-  padding-block: clamp(4rem, 9vw, 8rem);
+  padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 9vw, 8rem);
   background:
     radial-gradient(circle at 18% 22%, rgba(123, 82, 180, 0.08), transparent 28rem),
-    linear-gradient(180deg, #10151d, var(--sanaka-bg) 55%);
+    linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg) 55%);
 }
 
 .rest-exhibit__heading {
@@ -384,12 +411,17 @@
 }
 
 @media (max-width: 560px) {
-  .rest-shell {
-    width: min(100% - 2rem, 78rem);
-  }
-
-  .rest-hero h1 {
-    font-size: clamp(3.5rem, 18vw, 5rem);
+  .rest-hero::after {
+    background:
+      linear-gradient(
+        180deg,
+        var(--sanaka-bg) 0%,
+        rgba(13, 17, 23, 0.62) 12%,
+        rgba(13, 17, 23, 0.3) 48%,
+        rgba(13, 17, 23, 0.88) 84%,
+        var(--sanaka-bg) 100%
+      ),
+      linear-gradient(90deg, rgba(13, 17, 23, 0.94), rgba(13, 17, 23, 0.48));
   }
 
   .portal-controls__field {

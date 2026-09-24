@@ -3,57 +3,65 @@
 }
 
 .matrix-shell {
-  width: min(76rem, calc(100% - 3rem));
+  width: var(--sanaka-page-shell-width);
   margin-inline: auto;
 }
 
-.matrix-hero {
-  position: relative;
-  isolation: isolate;
+.matrix-hero::before,
+.matrix-hero::after {
+  position: absolute;
+  inset: 0;
 
-  display: grid;
-  align-items: center;
+  content: '';
 
-  min-height: calc(58vh - var(--sanaka-header-height, 64px));
-  overflow: hidden;
-
-  background:
-    linear-gradient(rgba(13, 17, 23, 0.58), rgba(13, 17, 23, 0.96)),
-    repeating-linear-gradient(90deg, transparent 0 4rem, rgba(237, 201, 120, 0.035) 4rem 4.05rem),
-    repeating-linear-gradient(0deg, transparent 0 4rem, rgba(237, 201, 120, 0.025) 4rem 4.05rem),
-    var(--sanaka-bg);
+  pointer-events: none;
 }
 
-.matrix-hero__glow {
-  position: absolute;
-  top: 50%;
-  left: 68%;
+.matrix-hero::before {
+  z-index: -2;
+
+  background: url('/images/matrix/components/components-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
+
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
+}
+
+.matrix-hero::after {
   z-index: -1;
 
-  width: min(34rem, 65vw);
-  aspect-ratio: 1;
-
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    rgba(47, 77, 168, 0.2),
-    rgba(123, 82, 180, 0.07) 45%,
-    transparent 69%
-  );
-
-  transform: translate(-50%, -50%);
+  background:
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.62) 12%,
+      rgba(13, 17, 23, 0.1) 28%,
+      rgba(13, 17, 23, 0.08) 58%,
+      rgba(13, 17, 23, 0.46) 76%,
+      rgba(13, 17, 23, 0.94) 90%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.96) 24%,
+      rgba(13, 17, 23, 0.72) 44%,
+      rgba(13, 17, 23, 0.2) 66%,
+      transparent 100%
+    );
 }
 
 .matrix-hero__content {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  position: relative;
+  z-index: 1;
+
+  padding-block: var(--sanaka-space-page-hero-block);
 }
 
 .matrix-hero__back {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
-  margin-bottom: 2rem;
+  margin-bottom: 1.5rem;
   color: var(--sanaka-ivory-muted);
   font-size: 0.7rem;
   font-weight: 700;
@@ -76,23 +84,26 @@
 
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.2em;
+  font-size: var(--sanaka-type-eyebrow-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
   text-transform: uppercase;
 }
 
 .matrix-hero h1 {
-  max-width: 58rem;
-  margin: 1.4rem 0 0;
+  max-width: 38rem;
+  margin: 1.1rem 0 0;
 
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(3.8rem, 7vw, 6.4rem);
-  font-weight: 400;
-  line-height: 0.78;
-  letter-spacing: -0.055em;
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
+
+  text-wrap: balance;
 }
 
 .matrix-hero h1 span {
@@ -103,13 +114,13 @@
 }
 
 .matrix-hero__intro {
-  max-width: 42rem;
-  margin: 1.8rem 0 0;
+  max-width: var(--sanaka-measure-hero-intro);
+  margin: 1.25rem 0 0;
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: clamp(1rem, 1.8vw, 1.15rem);
-  line-height: 1.85;
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
 .matrix-hero__action {
@@ -132,13 +143,13 @@
 }
 
 .matrix-exhibit {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 8vw, 7rem);
 
   scroll-margin-top: var(--sanaka-header-height, 64px);
 
   background:
     radial-gradient(circle at 12% 30%, rgba(123, 82, 180, 0.08), transparent 25rem),
-    linear-gradient(180deg, #10151d, var(--sanaka-bg));
+    linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));
 }
 
 .exhibit-heading {
@@ -609,18 +620,6 @@ button:disabled {
 }
 
 @media (max-width: 520px) {
-  .matrix-shell {
-    width: min(100% - 2rem, 76rem);
-  }
-
-  .matrix-hero {
-    min-height: calc(68vh - var(--sanaka-header-height, 88px));
-  }
-
-  .matrix-hero h1 {
-    font-size: clamp(3.4rem, 19vw, 5rem);
-  }
-
   .message-control {
     grid-template-columns: 1fr;
     gap: 0.7rem;
