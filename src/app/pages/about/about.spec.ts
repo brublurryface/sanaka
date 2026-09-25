@@ -24,9 +24,9 @@ class MockTranslocoLoader implements TranslocoLoader {
     return of({
       about: {
         hero: {
-          eyebrow: 'Autobiografia em construção',
-          title: 'Quem atravessa Sanaka?',
-          intro: 'Uma vida não cabe em uma apresentação.',
+          eyebrow: 'Autobiografia fluída',
+          title: 'Quem transcende Sanaka?',
+          intro: 'Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam.',
         },
         puzzle: {
           eyebrow: 'Identidade em fragmentos',
@@ -97,6 +97,8 @@ describe('About', () => {
     expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
     expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
     expect(compiled.querySelector('.about-puzzle__art image')?.getAttribute('href')).toBe(
       '/images/about/about-cycles-sketch.webp',
@@ -112,6 +114,7 @@ describe('About', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const pieces = compiled.querySelectorAll<HTMLButtonElement>('.about-puzzle__piece');
+    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
 
     pieces[4].click();
     fixture.detectChanges();
@@ -124,6 +127,8 @@ describe('About', () => {
       'https://example.com/cycle-5/',
     );
     expect(pieces[4].getAttribute('aria-pressed')).toBe('true');
+    expect(images[0].classList.contains('about-puzzle__image--active')).toBe(false);
+    expect(images[4].classList.contains('about-puzzle__image--active')).toBe(true);
   });
 
   it('should show a retry action when WordPress cannot load the cycles', () => {

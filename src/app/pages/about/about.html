@@ -31,24 +31,29 @@
     >
       <svg class="about-puzzle__art" viewBox="-16 -16 332 232" aria-hidden="true" focusable="false">
         <defs>
-          <clipPath id="about-puzzle-silhouette" clipPathUnits="userSpaceOnUse">
-            @for (path of puzzlePiecePaths; track $index) {
+          @for (path of puzzlePiecePaths; track $index) {
+            <clipPath
+              [attr.id]="'about-puzzle-piece-' + ($index + 1)"
+              clipPathUnits="userSpaceOnUse"
+            >
               <path [attr.d]="path" />
-            }
-          </clipPath>
+            </clipPath>
+          }
         </defs>
 
-        <image
-          href="/images/about/about-cycles-sketch.webp"
-          x="0"
-          y="0"
-          width="300"
-          height="200"
-          preserveAspectRatio="none"
-          clip-path="url(#about-puzzle-silhouette)"
-        />
-
         @for (cycle of cycles(); track cycle.id) {
+          <image
+            class="about-puzzle__image"
+            [class.about-puzzle__image--active]="selectedCycleId() === cycle.id"
+            [attr.data-piece]="cycle.order"
+            [attr.clip-path]="'url(#about-puzzle-piece-' + cycle.order + ')'"
+            href="/images/about/about-cycles-sketch.webp"
+            x="0"
+            y="0"
+            width="300"
+            height="200"
+            preserveAspectRatio="none"
+          />
           <path
             class="about-puzzle__outline"
             [class.about-puzzle__outline--active]="selectedCycleId() === cycle.id"

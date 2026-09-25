@@ -210,6 +210,14 @@
   filter: drop-shadow(0 1.6rem 2.4rem rgba(0, 0, 0, 0.36));
 }
 
+.about-puzzle__image {
+  filter: saturate(0.72);
+}
+
+.about-puzzle__image--active {
+  filter: saturate(1.28);
+}
+
 .about-puzzle__outline {
   fill: transparent;
   stroke: rgba(237, 201, 120, 0.3);
