@@ -93,6 +93,10 @@ describe('About', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
+    expect(compiled.querySelector('.about-puzzle__art image')?.getAttribute('href')).toBe(
+      '/images/about/about-cycles-sketch.webp',
+    );
     expect(compiled.querySelector('.about-puzzle__hover-text')?.textContent).toContain('Hover 1');
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',

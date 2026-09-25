@@ -26,22 +26,54 @@
       role="group"
       [attr.aria-label]="'about.puzzle.ariaLabel' | transloco"
     >
-      @for (cycle of cycles(); track cycle.id) {
-        <button
-          class="about-puzzle__piece"
-          type="button"
-          [class.about-puzzle__piece--active]="selectedCycleId() === cycle.id"
-          [attr.aria-pressed]="selectedCycleId() === cycle.id"
-          (click)="selectCycle(cycle.id)"
-        >
-          <span class="about-puzzle__number" aria-hidden="true">
-            {{ cycle.order.toString().padStart(2, '0') }}
-          </span>
-          <strong>{{ cycle.title }}</strong>
-          <span class="about-puzzle__hover-text">{{ cycle.hoverText }}</span>
-          <span class="about-puzzle__action">{{ 'about.puzzle.select' | transloco }}</span>
-        </button>
-      }
+      <svg class="about-puzzle__art" viewBox="-16 -16 332 232" aria-hidden="true" focusable="false">
+        <defs>
+          <clipPath id="about-puzzle-silhouette" clipPathUnits="userSpaceOnUse">
+            @for (path of puzzlePiecePaths; track $index) {
+              <path [attr.d]="path" />
+            }
+          </clipPath>
+        </defs>
+
+        <image
+          href="/images/about/about-cycles-sketch.webp"
+          x="0"
+          y="0"
+          width="300"
+          height="200"
+          preserveAspectRatio="none"
+          clip-path="url(#about-puzzle-silhouette)"
+        />
+
+        @for (cycle of cycles(); track cycle.id) {
+          <path
+            class="about-puzzle__outline"
+            [class.about-puzzle__outline--active]="selectedCycleId() === cycle.id"
+            [attr.data-piece]="cycle.order"
+            [attr.d]="puzzlePiecePaths[cycle.order - 1]"
+          />
+        }
+      </svg>
+
+      <div class="about-puzzle__controls">
+        @for (cycle of cycles(); track cycle.id) {
+          <button
+            class="about-puzzle__piece"
+            type="button"
+            [class.about-puzzle__piece--active]="selectedCycleId() === cycle.id"
+            [attr.data-piece]="cycle.order"
+            [attr.aria-pressed]="selectedCycleId() === cycle.id"
+            (click)="selectCycle(cycle.id)"
+          >
+            <span class="about-puzzle__number" aria-hidden="true">
+              {{ cycle.order.toString().padStart(2, '0') }}
+            </span>
+            <strong>{{ cycle.title }}</strong>
+            <span class="about-puzzle__hover-text">{{ cycle.hoverText }}</span>
+            <span class="about-puzzle__action">{{ 'about.puzzle.select' | transloco }}</span>
+          </button>
+        }
+      </div>
     </div>
   }
 </section>
