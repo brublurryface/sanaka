@@ -92,6 +92,10 @@ describe('About', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
+    const heroClasses = compiled.querySelector('.about-hero')?.classList;
+
+    expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
+    expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
     expect(compiled.querySelector('.about-puzzle__art image')?.getAttribute('href')).toBe(

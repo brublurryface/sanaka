@@ -9,53 +9,57 @@
   position: relative;
   isolation: isolate;
 
-  min-height: clamp(24rem, 46vw, 38rem);
   display: grid;
-  align-items: center;
+  align-items: start;
 
   overflow: hidden;
+
+  background: var(--sanaka-bg);
 }
 
 .about-hero::before,
 .about-hero::after {
-  content: '';
-
   position: absolute;
-  z-index: -1;
+  inset: 0;
+
+  content: '';
 
   pointer-events: none;
 }
 
 .about-hero::before {
-  top: -14rem;
-  right: -8rem;
+  z-index: -2;
 
-  width: clamp(28rem, 58vw, 52rem);
-  aspect-ratio: 1;
+  background: url('/images/about/about-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
 
-  border: 1px solid rgba(237, 201, 120, 0.12);
-  border-radius: 50%;
-
-  box-shadow:
-    0 0 8rem rgba(224, 106, 45, 0.08),
-    inset 0 0 8rem rgba(123, 82, 180, 0.04);
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
 }
 
 .about-hero::after {
-  right: clamp(2rem, 14vw, 14rem);
-  bottom: 16%;
+  z-index: -1;
 
-  width: 0.55rem;
-  height: 0.55rem;
-
-  border-radius: 50%;
-  background: var(--sanaka-gold-soft);
-
-  box-shadow:
-    0 0 0.7rem var(--sanaka-gold-soft),
-    4rem -5rem 0 -0.14rem rgba(237, 201, 120, 0.65),
-    -3rem 4rem 0 -0.18rem rgba(237, 201, 120, 0.45),
-    7rem 3rem 0 -0.2rem rgba(237, 201, 120, 0.4);
+  background:
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.7) 8%,
+      rgba(13, 17, 23, 0.12) 22%,
+      rgba(13, 17, 23, 0.04) 52%,
+      rgba(13, 17, 23, 0.3) 68%,
+      rgba(13, 17, 23, 0.76) 80%,
+      rgba(13, 17, 23, 0.95) 92%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.96) 22%,
+      rgba(13, 17, 23, 0.76) 42%,
+      rgba(13, 17, 23, 0.22) 66%,
+      rgba(13, 17, 23, 0.03) 86%,
+      transparent 100%
+    );
 }
 
 .about-hero__content,
@@ -67,11 +71,14 @@
 }
 
 .about-hero__content {
+  position: relative;
+  z-index: 1;
+
   padding-block: var(--sanaka-space-page-hero-block);
 }
 
 .about-eyebrow {
-  margin: 0 0 0.7rem;
+  margin: 0;
 
   color: var(--sanaka-gold-soft);
 
@@ -98,15 +105,19 @@
 
 .about-hero h1 {
   max-width: 11ch;
+  margin: 1.1rem 0 0;
 
   font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
   line-height: var(--sanaka-type-page-title-line-height);
   letter-spacing: var(--sanaka-type-page-title-spacing);
+
+  text-wrap: balance;
 }
 
 .about-hero__intro {
   max-width: var(--sanaka-measure-hero-intro);
-  margin: 2rem 0 0;
+  margin: 1.25rem 0 0;
 
   color: var(--sanaka-ivory-muted);
 
@@ -115,7 +126,7 @@
 }
 
 .about-puzzle {
-  padding-block: clamp(4rem, 8vw, 7rem);
+  padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 8vw, 7rem);
 
   border-top: 1px solid rgba(237, 201, 120, 0.14);
 }
@@ -496,20 +507,8 @@
 }
 
 @media (max-width: 700px) {
-  .about-hero {
-    min-height: 25rem;
-  }
-
-  .about-hero__content {
-    padding-block: 3rem;
-  }
-
-  .about-hero__intro {
-    margin-top: 1.5rem;
-  }
-
   .about-puzzle {
-    padding-block: 3.5rem;
+    padding-bottom: 3.5rem;
   }
 
   .about-puzzle__board {
