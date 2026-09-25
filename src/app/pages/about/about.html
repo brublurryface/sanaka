@@ -6,63 +6,65 @@
   </div>
 </section>
 
-<section class="about-map" aria-labelledby="about-map-title">
+<section class="about-puzzle" aria-labelledby="about-puzzle-title">
   <header class="about-section-heading">
-    <p class="about-eyebrow">{{ 'about.map.eyebrow' | transloco }}</p>
-    <h2 id="about-map-title">{{ 'about.map.title' | transloco }}</h2>
-    <p>{{ 'about.map.intro' | transloco }}</p>
+    <p class="about-eyebrow">{{ 'about.puzzle.eyebrow' | transloco }}</p>
+    <h2 id="about-puzzle-title">{{ 'about.puzzle.title' | transloco }}</h2>
+    <p>{{ 'about.puzzle.intro' | transloco }}</p>
   </header>
 
-  <div
-    class="about-map__board"
-    [attr.data-active-cycle]="selectedCycleId()"
-    role="navigation"
-    [attr.aria-label]="'about.map.ariaLabel' | transloco"
-  >
-    <div class="about-map__path" aria-hidden="true"></div>
-
-    @for (cycle of cycles; track cycle.id) {
-      <a
-        class="about-map__cycle"
-        [class.about-map__cycle--active]="selectedCycleId() === cycle.id"
-        href="#about-story"
-        [attr.aria-current]="selectedCycleId() === cycle.id ? 'step' : null"
-        (click)="selectCycle(cycle.id)"
-      >
-        <span class="about-map__number">
-          {{ 'about.cycles.' + cycle.id + '.number' | transloco }}
-        </span>
-        <strong>{{ 'about.cycles.' + cycle.id + '.title' | transloco }}</strong>
-        <span class="about-map__teaser">
-          {{ 'about.cycles.' + cycle.id + '.teaser' | transloco }}
-        </span>
-        <span class="about-map__action">{{ 'about.map.open' | transloco }}</span>
-      </a>
-    }
-
-    <div class="about-map__traveler" aria-hidden="true">
-      <span>M</span>
+  @if (isLoading()) {
+    <p class="about-feedback" role="status">{{ 'about.puzzle.loading' | transloco }}</p>
+  } @else if (hasError()) {
+    <div class="about-feedback about-feedback--error" role="alert">
+      <p>{{ 'about.puzzle.error' | transloco }}</p>
+      <button type="button" (click)="retry()">{{ 'about.puzzle.retry' | transloco }}</button>
     </div>
-    <span class="visually-hidden">{{ 'about.map.traveler' | transloco }}</span>
-  </div>
+  } @else {
+    <div
+      class="about-puzzle__board"
+      role="group"
+      [attr.aria-label]="'about.puzzle.ariaLabel' | transloco"
+    >
+      @for (cycle of cycles(); track cycle.id) {
+        <button
+          class="about-puzzle__piece"
+          type="button"
+          [class.about-puzzle__piece--active]="selectedCycleId() === cycle.id"
+          [attr.aria-pressed]="selectedCycleId() === cycle.id"
+          (click)="selectCycle(cycle.id)"
+        >
+          <span class="about-puzzle__number" aria-hidden="true">
+            {{ cycle.order.toString().padStart(2, '0') }}
+          </span>
+          <strong>{{ cycle.title }}</strong>
+          <span class="about-puzzle__hover-text">{{ cycle.hoverText }}</span>
+          <span class="about-puzzle__action">{{ 'about.puzzle.select' | transloco }}</span>
+        </button>
+      }
+    </div>
+  }
 </section>
 
-<article id="about-story" class="about-story" aria-live="polite">
-  <div class="about-story__index" aria-hidden="true">
-    {{ 'about.cycles.' + selectedCycle().id + '.number' | transloco }}
-  </div>
+@if (selectedCycle(); as cycle) {
+  <article id="about-story" class="about-story" aria-live="polite">
+    <div class="about-story__index" aria-hidden="true">
+      {{ cycle.order.toString().padStart(2, '0') }}
+    </div>
 
-  <div class="about-story__content">
-    <p class="about-eyebrow">{{ 'about.status.provisional' | transloco }}</p>
-    <h2>{{ 'about.cycles.' + selectedCycle().id + '.title' | transloco }}</h2>
+    <div class="about-story__content">
+      <p class="about-eyebrow">{{ 'about.story.eyebrow' | transloco }}</p>
+      <h2>{{ cycle.title }}</h2>
+      <p>{{ cycle.excerpt }}</p>
+      <a class="about-story__link" [href]="cycle.url">
+        {{ 'about.story.read' | transloco }}
+        <span aria-hidden="true">↗</span>
+      </a>
+    </div>
+  </article>
+}
 
-    @for (paragraph of 'about.cycles.' + selectedCycle().id + '.body' | transloco; track $index) {
-      <p>{{ paragraph }}</p>
-    }
-  </div>
-</article>
-
-<section class="about-destinations" aria-label="Sobre e Sanakaverse">
+<section class="about-destinations" [attr.aria-label]="'about.destinationsLabel' | transloco">
   <article class="about-destination about-destination--contact">
     <p class="about-eyebrow">{{ 'about.contact.eyebrow' | transloco }}</p>
     <h2>{{ 'about.contact.title' | transloco }}</h2>

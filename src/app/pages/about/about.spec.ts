@@ -1,8 +1,23 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of } from 'rxjs';
+import { of, throwError } from 'rxjs';
 
 import { About } from './about';
+import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
+
+const cycles: readonly AboutCyclePost[] = Array.from({ length: 6 }, (_, index) => ({
+  id: index + 1,
+  slug: `cycle-${index + 1}`,
+  title: `${index + 1} — Cycle ${index + 1}`,
+  hoverText: `Hover ${index + 1}`,
+  excerpt: `Excerpt ${index + 1}`,
+  url: `https://example.com/cycle-${index + 1}/`,
+  order: index + 1,
+}));
+
+class MockAboutCyclesService {
+  getCycles = vi.fn(() => of(cycles));
+}
 
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
@@ -13,41 +28,21 @@ class MockTranslocoLoader implements TranslocoLoader {
           title: 'Quem atravessa Sanaka?',
           intro: 'Uma vida não cabe em uma apresentação.',
         },
-        map: {
-          eyebrow: 'Cartografia autobiográfica',
-          title: 'Quatro ciclos, uma travessia',
-          intro: 'Escolha um território.',
-          ariaLabel: 'Ciclos da trajetória autobiográfica',
-          traveler: 'Māyā acompanha o ciclo selecionado',
-          open: 'Ler este ciclo',
+        puzzle: {
+          eyebrow: 'Identidade em fragmentos',
+          title: 'Seis peças, nenhuma conclusão',
+          intro: 'Aproxime-se de uma peça.',
+          ariaLabel: 'Quebra-cabeça autobiográfico',
+          select: 'Selecionar peça',
+          loading: 'Reunindo as peças...',
+          error: 'As peças não puderam ser reunidas.',
+          retry: 'Tentar novamente',
         },
-        status: { provisional: 'Texto provisório' },
-        cycles: {
-          origin: {
-            number: '01',
-            title: 'Origem',
-            teaser: 'Primeiro ciclo',
-            body: ['Origem um.', 'Origem dois.'],
-          },
-          creation: {
-            number: '02',
-            title: 'Criação',
-            teaser: 'Segundo ciclo',
-            body: ['Criação um.', 'Criação dois.'],
-          },
-          code: {
-            number: '03',
-            title: 'Código e transformação',
-            teaser: 'Terceiro ciclo',
-            body: ['Código um.', 'Código dois.'],
-          },
-          sanaka: {
-            number: '04',
-            title: 'E, de repente, Sanaka',
-            teaser: 'Quarto ciclo',
-            body: ['Sanaka um.', 'Sanaka dois.'],
-          },
+        story: {
+          eyebrow: 'Fragmento selecionado',
+          read: 'Ler o ciclo completo',
         },
+        destinationsLabel: 'Sobre e Sanakaverse',
         contact: {
           eyebrow: 'Presença atual',
           title: 'Onde me encontrar',
@@ -68,11 +63,15 @@ class MockTranslocoLoader implements TranslocoLoader {
 
 describe('About', () => {
   let fixture: ComponentFixture<About>;
+  let cyclesService: MockAboutCyclesService;
 
   beforeEach(async () => {
+    cyclesService = new MockAboutCyclesService();
+
     await TestBed.configureTestingModule({
       imports: [About],
       providers: [
+        { provide: AboutCyclesService, useValue: cyclesService },
         provideTransloco({
           config: {
             availableLangs: ['pt-BR'],
@@ -86,33 +85,53 @@ describe('About', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(About);
-    fixture.detectChanges();
   });
 
-  it('should render the four autobiographical cycles and the contact destination', () => {
+  it('should render six WordPress cycles and preserve the contact destinations', () => {
+    fixture.detectChanges();
+
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelectorAll('.about-map__cycle')).toHaveLength(4);
+    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
+    expect(compiled.querySelector('.about-puzzle__hover-text')?.textContent).toContain('Hover 1');
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
     );
-    expect(compiled.querySelector('.about-destination--universe')?.textContent).toContain(
-      'Portal em construção',
-    );
   });
 
-  it('should replace the visible chapter after selecting another cycle', () => {
-    const compiled = fixture.nativeElement as HTMLElement;
-    const cycles = compiled.querySelectorAll<HTMLAnchorElement>('.about-map__cycle');
-
-    expect(compiled.querySelector('.about-story h2')?.textContent).toContain('Origem');
-
-    cycles[3].click();
+  it('should expose the selected excerpt and its complete WordPress link', () => {
     fixture.detectChanges();
 
-    expect(compiled.querySelector('.about-story h2')?.textContent).toContain(
-      'E, de repente, Sanaka',
+    const compiled = fixture.nativeElement as HTMLElement;
+    const pieces = compiled.querySelectorAll<HTMLButtonElement>('.about-puzzle__piece');
+
+    pieces[4].click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('.about-story h2')?.textContent).toContain('Cycle 5');
+    expect(
+      compiled.querySelector('.about-story__content > p:not(.about-eyebrow)')?.textContent,
+    ).toContain('Excerpt 5');
+    expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
+      'https://example.com/cycle-5/',
     );
-    expect(cycles[3].getAttribute('aria-current')).toBe('step');
+    expect(pieces[4].getAttribute('aria-pressed')).toBe('true');
+  });
+
+  it('should show a retry action when WordPress cannot load the cycles', () => {
+    cyclesService.getCycles.mockReturnValueOnce(throwError(() => new Error('offline')));
+
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const retryButton = compiled.querySelector<HTMLButtonElement>('.about-feedback--error button');
+
+    expect(retryButton).not.toBeNull();
+
+    retryButton?.click();
+    fixture.detectChanges();
+
+    expect(cyclesService.getCycles).toHaveBeenCalledTimes(2);
+    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
   });
 });

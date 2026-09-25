@@ -1,18 +1,9 @@
-import { Component, computed, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { finalize } from 'rxjs';
 
-type AboutCycleId = 'origin' | 'creation' | 'code' | 'sanaka';
-
-interface AboutCycle {
-  readonly id: AboutCycleId;
-}
-
-const ABOUT_CYCLES: readonly AboutCycle[] = [
-  { id: 'origin' },
-  { id: 'creation' },
-  { id: 'code' },
-  { id: 'sanaka' },
-];
+import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
 
 @Component({
   selector: 'app-about',
@@ -20,14 +11,53 @@ const ABOUT_CYCLES: readonly AboutCycle[] = [
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })
-export class About {
-  protected readonly cycles = ABOUT_CYCLES;
-  protected readonly selectedCycleId = signal<AboutCycleId>('origin');
+export class About implements OnInit {
+  private readonly cyclesService = inject(AboutCyclesService);
+  private readonly destroyRef = inject(DestroyRef);
+
+  protected readonly cycles = signal<readonly AboutCyclePost[]>([]);
+  protected readonly selectedCycleId = signal<number | null>(null);
+  protected readonly isLoading = signal(true);
+  protected readonly hasError = signal(false);
+
   protected readonly selectedCycle = computed(() => {
-    return this.cycles.find((cycle) => cycle.id === this.selectedCycleId()) ?? this.cycles[0];
+    const cycles = this.cycles();
+    return cycles.find((cycle) => cycle.id === this.selectedCycleId()) ?? cycles[0];
   });
 
-  protected selectCycle(cycleId: AboutCycleId): void {
+  ngOnInit(): void {
+    this.loadCycles();
+  }
+
+  protected selectCycle(cycleId: number): void {
     this.selectedCycleId.set(cycleId);
+  }
+
+  protected retry(): void {
+    this.loadCycles();
+  }
+
+  private loadCycles(): void {
+    this.isLoading.set(true);
+    this.hasError.set(false);
+
+    this.cyclesService
+      .getCycles()
+      .pipe(
+        takeUntilDestroyed(this.destroyRef),
+        finalize(() => this.isLoading.set(false)),
+      )
+      .subscribe({
+        next: (cycles) => {
+          this.cycles.set(cycles);
+          this.selectedCycleId.set(cycles[0]?.id ?? null);
+          this.hasError.set(cycles.length === 0);
+        },
+        error: () => {
+          this.cycles.set([]);
+          this.selectedCycleId.set(null);
+          this.hasError.set(true);
+        },
+      });
   }
 }

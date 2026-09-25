@@ -1,13 +1,12 @@
-import { DOCUMENT } from '@angular/common';
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
-import { inject, Injectable, InjectionToken } from '@angular/core';
+import { inject, Injectable } from '@angular/core';
 import { forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
 
+import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
+import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 import { Post } from '../post';
 
-export const WORDPRESS_API_URL = new InjectionToken<string>('WORDPRESS_API_URL', {
-  factory: () => 'https://www.sanaka.com.br/wp-json/wp/v2',
-});
+export { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 
 /** Parâmetros aceitos pelo adaptador ao consultar o arquivo do WordPress. */
 export interface PostsQuery {
@@ -71,9 +70,9 @@ export class WordPressPostsService {
   private readonly requestTimeoutMs = 10_000;
   private readonly defaultPerPage = 20;
 
-  private readonly document = inject(DOCUMENT);
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
+  private readonly wordpressText = inject(WordPressTextService);
 
   private readonly categories$ = this.loadCategories().pipe(
     shareReplay({
@@ -171,7 +170,7 @@ export class WordPressPostsService {
     media: readonly WordPressMedia[],
   ): readonly Post[] {
     const categoryById = new Map(
-      categories.map((category) => [category.id, this.htmlToText(category.name)]),
+      categories.map((category) => [category.id, this.wordpressText.toText(category.name)]),
     );
     const mediaById = new Map(media.map((item) => [item.id, item]));
 
@@ -185,23 +184,14 @@ export class WordPressPostsService {
       return {
         id: post.id,
         slug: post.slug,
-        title: this.htmlToText(post.title.rendered),
-        excerpt: this.htmlToText(post.excerpt.rendered),
+        title: this.wordpressText.toText(post.title.rendered),
+        excerpt: this.wordpressText.toText(post.excerpt.rendered),
         publishedAt: post.date.slice(0, 10),
         category,
         coverImageUrl: coverImage?.source_url,
         coverImageAlt: coverImage?.alt_text,
       };
     });
-  }
-
-  private htmlToText(html: string): string {
-    const container = this.document.createElement('div');
-
-    container.innerHTML = html.replace(/<\/(?:p|div|blockquote|li|h[1-6])>/gi, ' ');
-    container.querySelectorAll('.more-link, script, style').forEach((element) => element.remove());
-
-    return (container.textContent ?? '').replace(/\s+/g, ' ').trim();
   }
 
   private toPositiveInteger(value: number | undefined, fallback: number): number {
