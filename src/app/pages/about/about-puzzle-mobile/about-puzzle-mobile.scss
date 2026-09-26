@@ -80,16 +80,16 @@
   }
 
   .about-puzzle-mobile__outline {
-    fill: transparent;
+    fill: none;
     stroke: rgba(237, 201, 120, 0.72);
     stroke-linejoin: round;
+    stroke-linecap: round;
     stroke-width: 1.5;
 
     vector-effect: non-scaling-stroke;
   }
 
   .about-puzzle-mobile__outline--active {
-    fill: rgba(211, 166, 79, 0.08);
     stroke: rgba(255, 220, 139, 0.98);
     stroke-width: 2.5;
 
@@ -97,12 +97,13 @@
   }
 
   .about-puzzle-mobile__shade {
-    position: absolute;
-    inset: 12%;
-
-    background: linear-gradient(180deg, transparent 28%, rgba(5, 8, 13, 0.38) 48%, #05080df2 100%);
+    opacity: 0;
 
     pointer-events: none;
+  }
+
+  .about-puzzle-mobile__shade--active {
+    opacity: 1;
   }
 
   .about-puzzle-mobile__copy {

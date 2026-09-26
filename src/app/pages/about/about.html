@@ -45,6 +45,11 @@
     >
       <svg class="about-puzzle__art" viewBox="-16 -16 332 232" aria-hidden="true" focusable="false">
         <defs>
+          <linearGradient id="about-puzzle-active-shade" x1="0" y1="0" x2="0" y2="1">
+            <stop offset="22%" stop-color="#05080d" stop-opacity="0" />
+            <stop offset="52%" stop-color="#05080d" stop-opacity="0.48" />
+            <stop offset="100%" stop-color="#05080d" stop-opacity="0.96" />
+          </linearGradient>
           @for (path of puzzlePiecePaths; track $index) {
             <clipPath
               [attr.id]="'about-puzzle-piece-' + ($index + 1)"
@@ -68,6 +73,17 @@
             height="232"
             preserveAspectRatio="none"
           />
+        }
+
+        @for (cycle of cycles(); track cycle.id) {
+          <path
+            class="about-puzzle__shade"
+            [class.about-puzzle__shade--active]="selectedCycleId() === cycle.id"
+            [attr.d]="puzzlePiecePaths[cycle.order - 1]"
+          />
+        }
+
+        @for (cycle of cycles(); track cycle.id) {
           <path
             class="about-puzzle__outline"
             [class.about-puzzle__outline--active]="selectedCycleId() === cycle.id"

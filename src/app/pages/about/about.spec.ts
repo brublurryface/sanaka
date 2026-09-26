@@ -113,12 +113,14 @@ describe('About', () => {
     expect(compiled.querySelectorAll('.about-puzzle-mobile__piece')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
+    expect(compiled.querySelectorAll('.about-puzzle__shade')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle-mobile__shade')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
     expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
     expect(puzzleImage?.getAttribute('x')).toBe('-16');
     expect(puzzleImage?.getAttribute('width')).toBe('332');
     expect(compiled.querySelector('.about-puzzle-mobile__art')?.getAttribute('viewBox')).toBe(
-      '-16 -16 132 132',
+      '-18 -18 136 136',
     );
     expect(compiled.querySelector('.about-puzzle__hover-text')?.textContent).toContain('Hover 1');
     expect(compiled.querySelector('.about-puzzle__action')?.textContent).toContain(

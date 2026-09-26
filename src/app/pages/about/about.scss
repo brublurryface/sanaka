@@ -249,9 +249,21 @@
   filter: saturate(1.28);
 }
 
+.about-puzzle__shade {
+  fill: url('#about-puzzle-active-shade');
+  opacity: 0;
+
+  pointer-events: none;
+}
+
+.about-puzzle__shade--active {
+  opacity: 1;
+}
+
 .about-puzzle__outline {
-  fill: transparent;
+  fill: none;
   stroke: rgba(237, 201, 120, 0.62);
+  stroke-linecap: round;
   stroke-linejoin: round;
   stroke-width: 1.35;
 
@@ -261,7 +273,6 @@
 }
 
 .about-puzzle__outline--active {
-  fill: rgba(211, 166, 79, 0.08);
   stroke: rgba(255, 220, 139, 0.98);
   stroke-width: 2.4;
 
@@ -287,10 +298,6 @@
   align-items: flex-start;
 
   padding: clamp(0.8rem, 1.9vw, 1.55rem);
-}
-
-.about-puzzle__piece--active {
-  background: linear-gradient(180deg, transparent 26%, rgba(5, 8, 13, 0.36) 48%, #05080def 100%);
 }
 
 .about-puzzle__selector {
