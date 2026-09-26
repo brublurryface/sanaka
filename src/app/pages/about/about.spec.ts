@@ -25,7 +25,10 @@ class MockTranslocoLoader implements TranslocoLoader {
       about: {
         hero: {
           eyebrow: 'Autobiografia fluída',
-          title: 'Quem transcende Sanaka?',
+          title: {
+            line1: 'Quem transcende',
+            line2: 'Sanaka?',
+          },
           intro: 'Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam.',
         },
         puzzle: {
@@ -93,16 +96,18 @@ describe('About', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const heroClasses = compiled.querySelector('.about-hero')?.classList;
+    const puzzleImage = compiled.querySelector('.about-puzzle__art image');
 
     expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
     expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
+    expect(compiled.querySelectorAll('.about-hero h1 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
-    expect(compiled.querySelector('.about-puzzle__art image')?.getAttribute('href')).toBe(
-      '/images/about/about-cycles-sketch.webp',
-    );
+    expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
+    expect(puzzleImage?.getAttribute('x')).toBe('-16');
+    expect(puzzleImage?.getAttribute('width')).toBe('332');
     expect(compiled.querySelector('.about-puzzle__hover-text')?.textContent).toContain('Hover 1');
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
@@ -127,6 +132,7 @@ describe('About', () => {
       'https://example.com/cycle-5/',
     );
     expect(pieces[4].getAttribute('aria-pressed')).toBe('true');
+    expect(pieces[4].getAttribute('aria-label')).toContain('Cycle 5');
     expect(images[0].classList.contains('about-puzzle__image--active')).toBe(false);
     expect(images[4].classList.contains('about-puzzle__image--active')).toBe(true);
   });

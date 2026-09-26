@@ -4,15 +4,20 @@
 >
   <div class="about-hero__content sanaka-atmosphere-shell">
     <p class="about-eyebrow">{{ 'about.hero.eyebrow' | transloco }}</p>
-    <h1 id="about-title">{{ 'about.hero.title' | transloco }}</h1>
+    <h1 id="about-title">
+      <span>{{ 'about.hero.title.line1' | transloco }}</span>
+      <span>{{ 'about.hero.title.line2' | transloco }}</span>
+    </h1>
     <p class="about-hero__intro">{{ 'about.hero.intro' | transloco }}</p>
   </div>
 </section>
 
 <section class="about-puzzle" aria-labelledby="about-puzzle-title">
   <header class="about-section-heading">
-    <p class="about-eyebrow">{{ 'about.puzzle.eyebrow' | transloco }}</p>
-    <h2 id="about-puzzle-title">{{ 'about.puzzle.title' | transloco }}</h2>
+    <div>
+      <p class="about-eyebrow">{{ 'about.puzzle.eyebrow' | transloco }}</p>
+      <h2 id="about-puzzle-title">{{ 'about.puzzle.title' | transloco }}</h2>
+    </div>
     <p>{{ 'about.puzzle.intro' | transloco }}</p>
   </header>
 
@@ -48,10 +53,10 @@
             [attr.data-piece]="cycle.order"
             [attr.clip-path]="'url(#about-puzzle-piece-' + cycle.order + ')'"
             href="/images/about/about-cycles-sketch.webp"
-            x="0"
-            y="0"
-            width="300"
-            height="200"
+            x="-16"
+            y="-16"
+            width="332"
+            height="232"
             preserveAspectRatio="none"
           />
           <path
@@ -70,6 +75,7 @@
             type="button"
             [class.about-puzzle__piece--active]="selectedCycleId() === cycle.id"
             [attr.data-piece]="cycle.order"
+            [attr.aria-label]="cycle.title"
             [attr.aria-pressed]="selectedCycleId() === cycle.id"
             (click)="selectCycle(cycle.id)"
           >
