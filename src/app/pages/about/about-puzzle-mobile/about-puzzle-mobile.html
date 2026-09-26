@@ -5,14 +5,17 @@
 >
   <div class="about-puzzle-mobile__track">
     @for (cycle of cycles(); track cycle.id) {
-      <a
+      <div
         class="about-puzzle-mobile__piece"
-        href="#about-story"
         [class.about-puzzle-mobile__piece--active]="selectedCycleId() === cycle.id"
-        [attr.aria-label]="cycle.title"
-        [attr.aria-current]="selectedCycleId() === cycle.id ? 'true' : null"
-        (click)="cycleSelected.emit(cycle.id)"
       >
+        <button
+          class="about-puzzle-mobile__selector"
+          type="button"
+          [attr.aria-label]="cycle.title"
+          [attr.aria-pressed]="selectedCycleId() === cycle.id"
+          (click)="cycleSelected.emit(cycle.id)"
+        ></button>
         <svg
           class="about-puzzle-mobile__art"
           [attr.viewBox]="puzzleViewBoxes[cycle.order - 1]"
@@ -53,12 +56,16 @@
           </span>
           <strong>{{ cycle.title }}</strong>
           <span class="about-puzzle-mobile__preview">{{ cycle.hoverText }}</span>
-          <span class="about-puzzle-mobile__action">
+          <a
+            class="about-puzzle-mobile__action"
+            href="/sobre#about-story"
+            (click)="cycleSelected.emit(cycle.id)"
+          >
             {{ 'about.puzzle.select' | transloco }}
             <span aria-hidden="true">↓</span>
-          </span>
+          </a>
         </span>
-      </a>
+      </div>
     }
   </div>
 </div>

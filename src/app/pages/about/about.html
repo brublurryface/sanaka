@@ -79,25 +79,28 @@
 
       <div class="about-puzzle__controls">
         @for (cycle of cycles(); track cycle.id) {
-          <a
+          <div
             class="about-puzzle__piece"
-            href="#about-story"
             [class.about-puzzle__piece--active]="selectedCycleId() === cycle.id"
             [attr.data-piece]="cycle.order"
-            [attr.aria-label]="cycle.title"
-            [attr.aria-current]="selectedCycleId() === cycle.id ? 'true' : null"
-            (click)="selectCycle(cycle.id)"
           >
+            <button
+              class="about-puzzle__selector"
+              type="button"
+              [attr.aria-label]="cycle.title"
+              [attr.aria-pressed]="selectedCycleId() === cycle.id"
+              (click)="selectCycle(cycle.id)"
+            ></button>
             <span class="about-puzzle__number" aria-hidden="true">
               {{ cycle.order.toString().padStart(2, '0') }}
             </span>
             <strong>{{ cycle.title }}</strong>
             <span class="about-puzzle__hover-text">{{ cycle.hoverText }}</span>
-            <span class="about-puzzle__action">
+            <a class="about-puzzle__action" href="/sobre#about-story">
               {{ 'about.puzzle.select' | transloco }}
               <span aria-hidden="true">↓</span>
-            </span>
-          </a>
+            </a>
+          </div>
         }
       </div>
     </div>

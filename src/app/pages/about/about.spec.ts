@@ -124,6 +124,9 @@ describe('About', () => {
     expect(compiled.querySelector('.about-puzzle__action')?.textContent).toContain(
       'Ir para fragmento',
     );
+    expect(compiled.querySelector('.about-puzzle__action')?.getAttribute('href')).toBe(
+      '/sobre#about-story',
+    );
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
     );
@@ -133,13 +136,13 @@ describe('About', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const pieces = compiled.querySelectorAll<HTMLAnchorElement>('.about-puzzle__piece');
-    const mobilePieces = compiled.querySelectorAll<HTMLAnchorElement>(
-      '.about-puzzle-mobile__piece',
+    const selectors = compiled.querySelectorAll<HTMLButtonElement>('.about-puzzle__selector');
+    const mobileSelectors = compiled.querySelectorAll<HTMLButtonElement>(
+      '.about-puzzle-mobile__selector',
     );
     const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
 
-    pieces[4].click();
+    selectors[4].click();
     fixture.detectChanges();
 
     expect(compiled.querySelector('.about-story h2')?.textContent).toContain('Cycle 5');
@@ -149,17 +152,20 @@ describe('About', () => {
     expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
       'https://example.com/cycle-5/',
     );
-    expect(pieces[4].getAttribute('href')).toBe('#about-story');
-    expect(pieces[4].getAttribute('aria-current')).toBe('true');
-    expect(pieces[4].getAttribute('aria-label')).toContain('Cycle 5');
+    expect(selectors[4].getAttribute('aria-pressed')).toBe('true');
+    expect(selectors[4].getAttribute('aria-label')).toContain('Cycle 5');
+    expect(selectors[4].getAttribute('href')).toBeNull();
     expect(images[0].classList.contains('about-puzzle__image--active')).toBe(false);
     expect(images[4].classList.contains('about-puzzle__image--active')).toBe(true);
 
-    mobilePieces[2].click();
+    mobileSelectors[2].click();
     fixture.detectChanges();
 
     expect(compiled.querySelector('.about-story h2')?.textContent).toContain('Cycle 3');
-    expect(mobilePieces[2].getAttribute('aria-current')).toBe('true');
+    expect(mobileSelectors[2].getAttribute('aria-pressed')).toBe('true');
+    expect(compiled.querySelector('.about-puzzle-mobile__action')?.getAttribute('href')).toBe(
+      '/sobre#about-story',
+    );
   });
 
   it('should show a retry action when WordPress cannot load the cycles', () => {

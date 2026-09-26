@@ -32,7 +32,6 @@
     aspect-ratio: 1;
 
     color: var(--sanaka-ivory);
-    text-decoration: none;
 
     scroll-snap-align: center;
     scroll-snap-stop: always;
@@ -42,9 +41,20 @@
     margin-inline-start: calc(var(--piece-size) * -0.2424);
   }
 
-  .about-puzzle-mobile__piece:focus-visible {
+  .about-puzzle-mobile__selector {
+    position: absolute;
+    inset: 8%;
+    z-index: 1;
+
+    border: 0;
+    background: transparent;
+
+    cursor: pointer;
+  }
+
+  .about-puzzle-mobile__selector:focus-visible {
     outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: -1rem;
+    outline-offset: -0.25rem;
   }
 
   .about-puzzle-mobile__art {
@@ -57,6 +67,8 @@
     overflow: visible;
 
     filter: drop-shadow(0 1.2rem 1.5rem rgba(0, 0, 0, 0.42));
+
+    pointer-events: none;
   }
 
   .about-puzzle-mobile__image {
@@ -96,6 +108,7 @@
   .about-puzzle-mobile__copy {
     position: absolute;
     inset: 16% 15% 17%;
+    z-index: 2;
 
     display: flex;
     flex-direction: column;
@@ -103,6 +116,8 @@
     justify-content: flex-end;
 
     min-width: 0;
+
+    pointer-events: none;
   }
 
   .about-puzzle-mobile__number {
@@ -144,6 +159,9 @@
   }
 
   .about-puzzle-mobile__action {
+    position: relative;
+    z-index: 3;
+
     display: inline-flex;
     align-items: center;
     gap: 0.55rem;
@@ -155,8 +173,11 @@
     font-size: 0.62rem;
     font-weight: 700;
     letter-spacing: 0.14em;
+    text-decoration: none;
 
     text-shadow: 0 0.1rem 0.45rem rgba(0, 0, 0, 1);
     text-transform: uppercase;
+
+    pointer-events: auto;
   }
 }
