@@ -40,7 +40,7 @@
         "end": "to move around, and wander through the puzzle-shaped fragments about Sanaka. To learn more, choose to enter one of the fragments…"
       },
       "ariaLabel": "Puzzle of the six autobiographical cycles",
-      "select": "Go to fragment",
+      "select": "Fragment",
       "loading": "Gathering fragments of Sanaka",
       "error": "The pieces could not be gathered right now.",
       "retry": "Try again"
@@ -91,9 +91,9 @@
       "intro": "Sanaka gathers reading, investigation and dialogue. Each path leads to the same center from a different perspective.",
       "card": {
         "readings": {
-          "label": "Archive",
-          "title": "Readings",
-          "description": "Enter through the texts, studies and stories preserved in the sanctuary."
+          "label": "Library in Sanaka",
+          "title": "Sanctuary publications",
+          "description": "Dive into the thoughts, texts, studies and stories preserved in the sanctuary."
         },
         "matrix": {
           "label": "Laboratory",
@@ -103,6 +103,11 @@
         "maya": {
           "label": "Presence",
           "description": "Meet Sanaka's companion and traverse knowledge also through conversation."
+        },
+        "about": {
+          "label": "About",
+          "title": "Bruna in Sanaka, Sanaka in Bruna",
+          "description": "Begin to understand the Path that brought you here."
         }
       }
     }

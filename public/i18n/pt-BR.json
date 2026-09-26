@@ -40,7 +40,7 @@
         "end": "para se locomover, e passeie pelos fragmentos em forma de quebra-cabeça sobre Sanaka. Para saber mais, escolha adentrar um dos fragmentos…"
       },
       "ariaLabel": "Quebra-cabeça dos seis ciclos autobiográficos",
-      "select": "Ir para fragmento",
+      "select": "Fragmento",
       "loading": "Reunindo fragmentos de Sanaka",
       "error": "As peças não puderam ser reunidas agora.",
       "retry": "Tentar novamente"
@@ -88,12 +88,12 @@
         "line1": "Escolha por onde",
         "line2": "atravessar."
       },
-      "intro": "O Sanaka reúne leitura, investigação e diálogo. Cada caminho conduz ao mesmo centro por uma perspectiva diferente.",
+      "intro": "Sanaka reúne leitura, investigação e diálogo. Cada caminho conduz ao mesmo centro por uma perspectiva diferente.",
       "card": {
         "readings": {
-          "label": "Arquivo",
-          "title": "Leituras",
-          "description": "Entre pelos textos, estudos e histórias preservados no santuário."
+          "label": "Biblioteca em Sanaka",
+          "title": "Publicações do santuário",
+          "description": "Mergulhe nos pensamentos, textos, estudos e histórias preservados no santuário."
         },
         "matrix": {
           "label": "Laboratório",
@@ -102,7 +102,12 @@
         },
         "maya": {
           "label": "Presença",
-          "description": "Encontre a companheira do Sanaka e atravesse o conhecimento também pela conversa."
+          "description": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa."
+        },
+        "about": {
+          "label": "Sobre",
+          "title": "Bruna em Sanaka, Sanaka em Bruna",
+          "description": "Comece a entender o Caminho que te trouxe aqui."
         }
       }
     }
