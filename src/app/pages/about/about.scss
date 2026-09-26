@@ -129,6 +129,12 @@
   line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
+@media (min-width: 1100px) {
+  .about-hero__intro {
+    max-width: 48rem;
+  }
+}
+
 .about-puzzle {
   padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 8vw, 7rem);
 }
@@ -140,7 +146,6 @@
   gap: clamp(2rem, 7vw, 7rem);
 }
 
-.about-section-heading h2,
 .about-story h2,
 .about-destination h2 {
   font-size: clamp(2.35rem, 5vw, 4rem);
@@ -149,7 +154,18 @@
 }
 
 .about-section-heading h2 {
-  margin-top: 0.8rem;
+  max-width: 32rem;
+  margin: 1rem 0 0;
+
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.about-section-heading h2 span {
+  display: block;
+
+  white-space: nowrap;
 }
 
 .about-section-heading > p:last-child,
@@ -162,6 +178,12 @@
 .about-section-heading > p:last-child {
   max-width: 36rem;
   margin: 0;
+}
+
+.about-section-heading > p:last-child strong {
+  color: var(--sanaka-ivory);
+
+  font-weight: 600;
 }
 
 .about-feedback {
@@ -271,6 +293,7 @@
 
   color: var(--sanaka-ivory);
   text-align: left;
+  text-decoration: none;
 
   cursor: pointer;
 }
@@ -353,6 +376,10 @@
 }
 
 .about-puzzle__action {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+
   margin-top: clamp(0.5rem, 1vw, 0.8rem);
 
   color: var(--sanaka-gold-soft);
@@ -373,6 +400,8 @@
   padding-block: clamp(4rem, 9vw, 8rem);
 
   border-top: 1px solid rgba(237, 201, 120, 0.14);
+
+  scroll-margin-top: calc(var(--sanaka-header-height, 64px) + 1rem);
 }
 
 .about-story__index {
@@ -514,45 +543,25 @@
     padding: clamp(0.6rem, 1.7vw, 1rem);
   }
 
-  .about-puzzle__action {
+  .about-puzzle__board--desktop .about-puzzle__action {
     display: none;
   }
 }
 
 @media (max-width: 700px) {
+  .about-section-heading {
+    gap: 1.5rem;
+  }
+
+  .about-section-heading h2 {
+    font-size: clamp(2.15rem, 11vw, 3.2rem);
+  }
+
   .about-puzzle {
     padding-bottom: 3.5rem;
   }
 
-  .about-puzzle__board {
-    margin-top: 2.5rem;
-  }
-
-  .about-puzzle__piece {
-    padding: 0.42rem;
-  }
-
-  .about-puzzle__number {
-    top: 0.35rem;
-    right: 0.4rem;
-
-    font-size: clamp(0.95rem, 4vw, 1.25rem);
-  }
-
-  .about-puzzle__piece strong {
-    max-width: 100%;
-    display: -webkit-box;
-
-    overflow: hidden;
-
-    font-size: clamp(0.57rem, 2.7vw, 0.8rem);
-    line-height: 1.05;
-
-    -webkit-box-orient: vertical;
-    -webkit-line-clamp: 2;
-  }
-
-  .about-puzzle__hover-text {
+  .about-puzzle__board--desktop {
     display: none;
   }
 

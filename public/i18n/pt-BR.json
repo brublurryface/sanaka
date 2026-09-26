@@ -30,11 +30,18 @@
     },
     "puzzle": {
       "eyebrow": "Identidade em fragmentos",
-      "title": "Seis peças, nenhuma conclusão",
-      "intro": "Aproxime-se de uma peça para ouvir o que ela antecipa. Selecione-a para encontrar o resumo e a passagem para o ciclo completo.",
+      "title": {
+        "line1": "Seis peças,",
+        "line2": "nenhuma conclusão"
+      },
+      "intro": {
+        "start": "Use o seu mouse ou dedo, como",
+        "middle": "sobe no ratinho",
+        "end": "para se locomover, e passeie pelos fragmentos em forma de quebra-cabeça sobre Sanaka. Para saber mais, escolha adentrar um dos fragmentos…"
+      },
       "ariaLabel": "Quebra-cabeça dos seis ciclos autobiográficos",
-      "select": "Selecionar peça",
-      "loading": "Reunindo as peças no WordPress...",
+      "select": "Ir para fragmento",
+      "loading": "Reunindo fragmentos de Sanaka",
       "error": "As peças não puderam ser reunidas agora.",
       "retry": "Tentar novamente"
     },

@@ -1,0 +1,64 @@
+<div
+  class="about-puzzle-mobile"
+  role="group"
+  [attr.aria-label]="'about.puzzle.ariaLabel' | transloco"
+>
+  <div class="about-puzzle-mobile__track">
+    @for (cycle of cycles(); track cycle.id) {
+      <a
+        class="about-puzzle-mobile__piece"
+        href="#about-story"
+        [class.about-puzzle-mobile__piece--active]="selectedCycleId() === cycle.id"
+        [attr.aria-label]="cycle.title"
+        [attr.aria-current]="selectedCycleId() === cycle.id ? 'true' : null"
+        (click)="cycleSelected.emit(cycle.id)"
+      >
+        <svg
+          class="about-puzzle-mobile__art"
+          [attr.viewBox]="puzzleViewBoxes[cycle.order - 1]"
+          aria-hidden="true"
+          focusable="false"
+        >
+          <defs>
+            <clipPath
+              [attr.id]="'about-puzzle-mobile-piece-' + cycle.order"
+              clipPathUnits="userSpaceOnUse"
+            >
+              <path [attr.d]="puzzlePiecePaths[cycle.order - 1]" />
+            </clipPath>
+          </defs>
+
+          <image
+            class="about-puzzle-mobile__image"
+            [class.about-puzzle-mobile__image--active]="selectedCycleId() === cycle.id"
+            [attr.clip-path]="'url(#about-puzzle-mobile-piece-' + cycle.order + ')'"
+            href="/images/about/about-cycles-sketch.webp"
+            x="-16"
+            y="-16"
+            width="332"
+            height="232"
+            preserveAspectRatio="none"
+          />
+          <path
+            class="about-puzzle-mobile__outline"
+            [class.about-puzzle-mobile__outline--active]="selectedCycleId() === cycle.id"
+            [attr.d]="puzzlePiecePaths[cycle.order - 1]"
+          />
+        </svg>
+
+        <span class="about-puzzle-mobile__shade" aria-hidden="true"></span>
+        <span class="about-puzzle-mobile__copy">
+          <span class="about-puzzle-mobile__number" aria-hidden="true">
+            {{ cycle.order.toString().padStart(2, '0') }}
+          </span>
+          <strong>{{ cycle.title }}</strong>
+          <span class="about-puzzle-mobile__preview">{{ cycle.hoverText }}</span>
+          <span class="about-puzzle-mobile__action">
+            {{ 'about.puzzle.select' | transloco }}
+            <span aria-hidden="true">↓</span>
+          </span>
+        </span>
+      </a>
+    }
+  </div>
+</div>

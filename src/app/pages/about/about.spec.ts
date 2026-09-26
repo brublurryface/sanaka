@@ -33,11 +33,18 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
         puzzle: {
           eyebrow: 'Identidade em fragmentos',
-          title: 'Seis peças, nenhuma conclusão',
-          intro: 'Aproxime-se de uma peça.',
+          title: {
+            line1: 'Seis peças,',
+            line2: 'nenhuma conclusão',
+          },
+          intro: {
+            start: 'Use o seu mouse ou dedo, como',
+            middle: 'sobe no ratinho',
+            end: 'para se locomover e passeie pelos fragmentos.',
+          },
           ariaLabel: 'Quebra-cabeça autobiográfico',
-          select: 'Selecionar peça',
-          loading: 'Reunindo as peças...',
+          select: 'Ir para fragmento',
+          loading: 'Reunindo fragmentos de Sanaka',
           error: 'As peças não puderam ser reunidas.',
           retry: 'Tentar novamente',
         },
@@ -101,14 +108,22 @@ describe('About', () => {
     expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
     expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
     expect(compiled.querySelectorAll('.about-hero h1 span')).toHaveLength(2);
+    expect(compiled.querySelectorAll('.about-section-heading h2 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle-mobile__piece')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(6);
     expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
     expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
     expect(puzzleImage?.getAttribute('x')).toBe('-16');
     expect(puzzleImage?.getAttribute('width')).toBe('332');
+    expect(compiled.querySelector('.about-puzzle-mobile__art')?.getAttribute('viewBox')).toBe(
+      '-16 -16 132 132',
+    );
     expect(compiled.querySelector('.about-puzzle__hover-text')?.textContent).toContain('Hover 1');
+    expect(compiled.querySelector('.about-puzzle__action')?.textContent).toContain(
+      'Ir para fragmento',
+    );
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
     );
@@ -118,7 +133,10 @@ describe('About', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const pieces = compiled.querySelectorAll<HTMLButtonElement>('.about-puzzle__piece');
+    const pieces = compiled.querySelectorAll<HTMLAnchorElement>('.about-puzzle__piece');
+    const mobilePieces = compiled.querySelectorAll<HTMLAnchorElement>(
+      '.about-puzzle-mobile__piece',
+    );
     const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
 
     pieces[4].click();
@@ -131,10 +149,17 @@ describe('About', () => {
     expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
       'https://example.com/cycle-5/',
     );
-    expect(pieces[4].getAttribute('aria-pressed')).toBe('true');
+    expect(pieces[4].getAttribute('href')).toBe('#about-story');
+    expect(pieces[4].getAttribute('aria-current')).toBe('true');
     expect(pieces[4].getAttribute('aria-label')).toContain('Cycle 5');
     expect(images[0].classList.contains('about-puzzle__image--active')).toBe(false);
     expect(images[4].classList.contains('about-puzzle__image--active')).toBe(true);
+
+    mobilePieces[2].click();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('.about-story h2')?.textContent).toContain('Cycle 3');
+    expect(mobilePieces[2].getAttribute('aria-current')).toBe('true');
   });
 
   it('should show a retry action when WordPress cannot load the cycles', () => {
