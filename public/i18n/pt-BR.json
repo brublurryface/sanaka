@@ -145,7 +145,21 @@
       "message": "Não foi possível carregar as publicações.",
       "retry": "Tentar novamente"
     },
-    "empty": "Nenhuma publicação encontrada."
+    "empty": "Nenhuma publicação encontrada.",
+    "detail": {
+      "loading": "Abrindo a publicação...",
+      "error": "Não foi possível abrir esta publicação.",
+      "notFound": "Esta publicação não foi encontrada.",
+      "back": "Voltar à biblioteca",
+      "progress": "Progresso da leitura",
+      "categories": "Caminho de categorias",
+      "category": "Categoria",
+      "tags": "Tags",
+      "readingTime": "{{ minutes }} min de leitura",
+      "adjacent": "Publicações próximas",
+      "previous": "Publicação anterior",
+      "next": "Próxima publicação"
+    }
   },
   "matrix": {
     "catalog": {

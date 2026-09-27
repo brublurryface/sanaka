@@ -24,6 +24,10 @@ export const POSTS_ROUTES: Routes = [
         data: { view: 'paged' },
         loadComponent: () => import('./posts').then((m) => m.Posts),
       },
+      {
+        path: ':slug',
+        loadComponent: () => import('./post-detail/post-detail').then((m) => m.PostDetailPage),
+      },
     ],
   },
 ];

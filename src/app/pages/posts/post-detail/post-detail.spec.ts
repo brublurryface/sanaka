@@ -1,0 +1,138 @@
+import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
+import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
+import { Observable, of, throwError } from 'rxjs';
+import { vi } from 'vitest';
+
+import { PostDetail } from '../post';
+import { WordPressPostsService } from '../data-access/wordpress-posts.service';
+import { PostDetailPage } from './post-detail';
+
+class MockTranslocoLoader implements TranslocoLoader {
+  getTranslation(): Observable<Translation> {
+    return of({
+      posts: {
+        error: { retry: 'Tentar novamente' },
+        detail: {
+          loading: 'Abrindo a publicação...',
+          error: 'Não foi possível abrir esta publicação.',
+          notFound: 'Esta publicação não foi encontrada.',
+          back: 'Voltar à biblioteca',
+          progress: 'Progresso da leitura',
+          categories: 'Caminho de categorias',
+          category: 'Categoria',
+          tags: 'Tags',
+          readingTime: '{{ minutes }} min de leitura',
+          adjacent: 'Publicações próximas',
+          previous: 'Publicação anterior',
+          next: 'Próxima publicação',
+        },
+      },
+    });
+  }
+}
+
+describe('PostDetailPage', () => {
+  let fixture: ComponentFixture<PostDetailPage>;
+
+  const post: PostDetail = {
+    id: 77,
+    slug: 'voce',
+    title: 'VOCÊ',
+    excerpt: 'Quem é você?',
+    publishedAt: '2026-09-22',
+    category: 'Bruna · Pensamentos',
+    coverImageUrl: 'https://example.com/voce.jpg',
+    coverImageAlt: 'Maya escrevendo',
+    contentHtml: '<p>Quem é <strong>você</strong>?</p>',
+    categories: [
+      { id: 41, name: 'Bruna', slug: 'bruna' },
+      { id: 45, name: 'Pensamentos', slug: 'pensamentos' },
+    ],
+    tags: [{ id: 9, name: 'Identidade', slug: 'identidade' }],
+    readingMinutes: 4,
+    previous: { slug: 'anterior', title: 'Anterior' },
+    next: { slug: 'proxima', title: 'Próxima' },
+  };
+
+  const postsService = {
+    getPostBySlug: vi.fn<(slug: string) => Observable<PostDetail | null>>(),
+  };
+
+  beforeEach(async () => {
+    postsService.getPostBySlug.mockReset();
+
+    await TestBed.configureTestingModule({
+      imports: [PostDetailPage],
+      providers: [
+        provideRouter([]),
+        {
+          provide: ActivatedRoute,
+          useValue: { paramMap: of(convertToParamMap({ slug: 'voce' })) },
+        },
+        { provide: WordPressPostsService, useValue: postsService },
+        provideTransloco({
+          config: {
+            availableLangs: ['pt-BR', 'en'],
+            defaultLang: 'pt-BR',
+            fallbackLang: 'pt-BR',
+            reRenderOnLangChange: true,
+            prodMode: true,
+          },
+          loader: MockTranslocoLoader,
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  function createComponent(response: Observable<PostDetail | null> = of(post)): HTMLElement {
+    postsService.getPostBySlug.mockReturnValue(response);
+    fixture = TestBed.createComponent(PostDetailPage);
+    fixture.detectChanges();
+    return fixture.nativeElement as HTMLElement;
+  }
+
+  it('should render the complete publication, taxonomy and navigation', () => {
+    const compiled = createComponent();
+
+    expect(postsService.getPostBySlug).toHaveBeenCalledWith('voce');
+    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('VOCÊ');
+    expect(compiled.querySelector('.post-reader__content')?.textContent?.trim()).toBe(
+      'Quem é você?',
+    );
+    expect(compiled.querySelector('.post-reader__categories')?.textContent).toContain('Bruna');
+    expect(compiled.querySelector('.post-reader__categories')?.textContent).toContain(
+      'Pensamentos',
+    );
+    expect(compiled.querySelector('.post-reader__tags')?.textContent).toContain('Identidade');
+    expect(compiled.querySelectorAll('.post-reader__column')).toHaveLength(2);
+    expect(compiled.querySelector('.post-detail__art img')?.getAttribute('src')).toBe(
+      'https://example.com/voce.jpg',
+    );
+    expect(compiled.querySelectorAll('.post-detail__adjacent a')).toHaveLength(2);
+  });
+
+  it('should show the not-found state without rendering an article', () => {
+    const compiled = createComponent(of(null));
+
+    expect(compiled.textContent).toContain('Esta publicação não foi encontrada.');
+    expect(compiled.querySelector('.post-reader')).toBeNull();
+  });
+
+  it('should retry after a loading error', () => {
+    postsService.getPostBySlug
+      .mockReturnValueOnce(throwError(() => new Error('offline')))
+      .mockReturnValueOnce(of(post));
+
+    fixture = TestBed.createComponent(PostDetailPage);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const retry = compiled.querySelector<HTMLButtonElement>('.post-detail__feedback button');
+
+    retry?.click();
+    fixture.detectChanges();
+
+    expect(postsService.getPostBySlug).toHaveBeenCalledTimes(2);
+    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('VOCÊ');
+  });
+});

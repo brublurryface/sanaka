@@ -145,7 +145,21 @@
       "message": "The publications could not be loaded.",
       "retry": "Try again"
     },
-    "empty": "No publications found."
+    "empty": "No publications found.",
+    "detail": {
+      "loading": "Opening the publication...",
+      "error": "This publication could not be opened.",
+      "notFound": "This publication was not found.",
+      "back": "Back to the library",
+      "progress": "Reading progress",
+      "categories": "Category path",
+      "category": "Category",
+      "tags": "Tags",
+      "readingTime": "{{ minutes }} min read",
+      "adjacent": "Nearby publications",
+      "previous": "Previous publication",
+      "next": "Next publication"
+    }
   },
   "matrix": {
     "catalog": {

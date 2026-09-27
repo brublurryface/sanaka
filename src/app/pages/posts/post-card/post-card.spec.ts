@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import {
   Translation,
   TranslocoLoader,
@@ -41,6 +42,7 @@ describe('PostCard', () => {
     await TestBed.configureTestingModule({
       imports: [PostCard],
       providers: [
+        provideRouter([]),
         provideTransloco({
           config: {
             availableLangs: ['pt-BR', 'en'],
@@ -78,6 +80,9 @@ describe('PostCard', () => {
 
     expect(compiled.querySelector('.post-card__excerpt')?.textContent?.trim()).toBe(
       'Uma jornada de presença e renovação.',
+    );
+    expect(compiled.querySelector('.post-card__title a')?.getAttribute('href')).toBe(
+      '/posts/despertando-a-maya',
     );
   });
 

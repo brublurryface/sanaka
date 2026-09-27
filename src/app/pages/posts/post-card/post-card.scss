@@ -9,6 +9,7 @@
 }
 
 .post-card__image {
+  display: block;
   aspect-ratio: 16 / 9;
   overflow: hidden;
 
@@ -50,6 +51,16 @@
   font-size: clamp(1.6rem, 3vw, 2.1rem);
   font-weight: 500;
   line-height: 1.05;
+
+  a {
+    color: inherit;
+    text-decoration: none;
+  }
+
+  a:hover,
+  a:focus-visible {
+    color: var(--sanaka-gold-soft);
+  }
 }
 
 .post-card__excerpt {
