@@ -47,7 +47,8 @@ html {
   --sanaka-font-body: 'Inter', Arial, Helvetica, sans-serif;
 
   /* Papéis tipográficos compartilhados pelos cabeçalhos do site. */
-  --sanaka-type-eyebrow-size: 0.7rem;
+  --sanaka-type-editorial-label-size: 0.8rem;
+  --sanaka-type-eyebrow-size: var(--sanaka-type-editorial-label-size);
   --sanaka-type-eyebrow-weight: 700;
   --sanaka-type-eyebrow-line-height: 1.5;
   --sanaka-type-eyebrow-spacing: 0.2em;

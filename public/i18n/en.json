@@ -21,59 +21,35 @@
   },
   "about": {
     "hero": {
-      "eyebrow": "Autobiography in progress",
-      "title": "Who crosses Sanaka?",
-      "intro": "A life cannot fit inside an introduction. This page travels through four cycles, their ruptures, and the languages that eventually met in Sanaka."
-    },
-    "map": {
-      "eyebrow": "Autobiographical cartography",
-      "title": "Four cycles, one crossing",
-      "intro": "Choose a territory. Each passage offers a glimpse of the story and leads to the complete chapter below.",
-      "ariaLabel": "Cycles of the autobiographical journey",
-      "traveler": "Māyā in human form follows the selected cycle",
-      "open": "Read this cycle"
-    },
-    "status": {
-      "provisional": "Provisional text"
-    },
-    "cycles": {
-      "origin": {
-        "number": "01",
-        "title": "Origin",
-        "teaser": "The first ways of observing, imagining, and trying to name the world.",
-        "body": [
-          "This first territory will hold the memories that shaped the gaze before there was a single explanation for it.",
-          "The final text is still being refined. For now, this chapter preserves the place of origin without pretending it can be summarized quickly."
-        ]
+      "eyebrow": "Fluid autobiography",
+      "title": {
+        "line1": "Who transcends",
+        "line2": "Sanaka?"
       },
-      "creation": {
-        "number": "02",
-        "title": "Creation",
-        "teaser": "Music, texts, images, and bonds opening parallel paths.",
-        "body": [
-          "Creation appears here as language and as an attempt at connection: what could be written, heard, imagined, or shared.",
-          "This cycle will be replaced by the complete autobiographical version when its narrative is ready."
-        ]
-      },
-      "code": {
-        "number": "03",
-        "title": "Code and transformation",
-        "teaser": "A seemingly external profession begins to reveal its own cycles.",
-        "body": [
-          "Programming seemed like a choice apart from the other pieces of life. Over time, code, work, creation, death, and transformation began to share the same language.",
-          "What seemed merely technical also taught me to observe structures, dependencies, failures, reconstructions, and new possibilities."
-        ]
-      },
-      "sanaka": {
-        "number": "04",
-        "title": "And suddenly, Sanaka",
-        "teaser": "Spirituality finds every piece and invites them to be investigated again.",
-        "body": [
-          "There was a fourth phase when spirituality found me from every direction. It invited me to look at every part of life and take it apart as one takes apart code.",
-          "I began debugging memories, separating incomprehensible moments into components, investigating dependencies, and opening new branches within myself. And suddenly, Sanaka."
-        ]
-      }
+      "intro": "Bruna Lourenço da Silva warns: these are areas that change and transmute. Be attentive, because what is here may change without prior notice! Fragments move through death, code, spirituality, and a name that has not finished revealing itself."
     },
+    "puzzle": {
+      "eyebrow": "Identity in fragments",
+      "title": {
+        "line1": "Six pieces,",
+        "line2": "no conclusion"
+      },
+      "intro": {
+        "start": "Use your mouse or finger, as",
+        "middle": "rides the little mouse",
+        "end": "to move around, and wander through the puzzle-shaped fragments about Sanaka. To learn more, choose to enter one of the fragments…"
+      },
+      "ariaLabel": "Puzzle of the six autobiographical cycles",
+      "select": "Fragment",
+      "loading": "Gathering fragments of Sanaka",
+      "error": "The pieces could not be gathered right now.",
+      "retry": "Try again"
+    },
+    "story": {
+      "eyebrow": "Selected fragment",
+      "read": "Read the complete cycle"
+    },
+    "destinationsLabel": "About and Sanakaverse",
     "contact": {
       "eyebrow": "Present presence",
       "title": "Where to find me",
@@ -115,9 +91,9 @@
       "intro": "Sanaka gathers reading, investigation and dialogue. Each path leads to the same center from a different perspective.",
       "card": {
         "readings": {
-          "label": "Archive",
-          "title": "Readings",
-          "description": "Enter through the texts, studies and stories preserved in the sanctuary."
+          "label": "Library in Sanaka",
+          "title": "Sanctuary publications",
+          "description": "Dive into the thoughts, texts, studies and stories preserved in the sanctuary."
         },
         "matrix": {
           "label": "Laboratory",
@@ -127,6 +103,11 @@
         "maya": {
           "label": "Presence",
           "description": "Meet Sanaka's companion and traverse knowledge also through conversation."
+        },
+        "about": {
+          "label": "About",
+          "title": "Bruna in Sanaka, Sanaka in Bruna",
+          "description": "Begin to understand the Path that brought you here."
         }
       }
     }
@@ -164,7 +145,25 @@
       "message": "The publications could not be loaded.",
       "retry": "Try again"
     },
-    "empty": "No publications found."
+    "empty": "No publications found.",
+    "detail": {
+      "loading": "Opening the publication...",
+      "error": "This publication could not be opened.",
+      "notFound": "This publication was not found.",
+      "back": "Back to the library",
+      "progress": "Reading progress",
+      "categories": "Category path",
+      "category": "Category",
+      "categoriesGroup": "Categories",
+      "relatedCategories": "Also in {{ category }}",
+      "tags": "Tags",
+      "exploreCategories": "Explore categories",
+      "exploreTags": "Explore tags",
+      "readingTime": "{{ minutes }} min read",
+      "adjacent": "Nearby publications",
+      "previous": "Previous publication",
+      "next": "Next publication"
+    }
   },
   "matrix": {
     "catalog": {

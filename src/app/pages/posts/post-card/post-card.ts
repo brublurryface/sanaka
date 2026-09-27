@@ -1,10 +1,12 @@
 import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
 import { toSignal } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
 
 import { Post } from '../post';
 
 @Component({
+  imports: [RouterLink],
   selector: 'app-post-card',
   templateUrl: './post-card.html',
   styleUrl: './post-card.scss',

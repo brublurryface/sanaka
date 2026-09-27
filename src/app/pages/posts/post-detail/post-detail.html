@@ -1,0 +1,177 @@
+<main class="post-detail">
+  @switch (state().status) {
+    @case ('loading') {
+      <p class="post-detail__feedback" role="status">{{ 'posts.detail.loading' | transloco }}</p>
+    }
+    @case ('error') {
+      <div class="post-detail__feedback" role="alert">
+        <p>{{ 'posts.detail.error' | transloco }}</p>
+        <button type="button" (click)="retry()">{{ 'posts.error.retry' | transloco }}</button>
+      </div>
+    }
+    @case ('not-found') {
+      <div class="post-detail__feedback" role="status">
+        <p>{{ 'posts.detail.notFound' | transloco }}</p>
+        <a routerLink="/posts">{{ 'posts.detail.back' | transloco }}</a>
+      </div>
+    }
+    @case ('success') {
+      @if (post(); as currentPost) {
+        <figure class="post-detail__art">
+          <img [src]="currentPost.coverImageUrl" [alt]="currentPost.coverImageAlt ?? ''" />
+        </figure>
+
+        <div class="post-detail__threshold">
+          <a class="post-detail__back" routerLink="/posts">
+            <span aria-hidden="true">←</span>
+            {{ 'posts.detail.back' | transloco }}
+          </a>
+
+          <div
+            class="post-detail__progress"
+            role="progressbar"
+            [attr.aria-label]="'posts.detail.progress' | transloco"
+            [attr.aria-valuenow]="readingProgress()"
+            aria-valuemin="0"
+            aria-valuemax="100"
+          >
+            <span [style.width.%]="readingProgress()"></span>
+          </div>
+
+          <span class="post-detail__progress-value">{{ readingProgress() }}%</span>
+        </div>
+
+        <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title">
+          <article class="post-reader__article">
+            <header class="post-reader__header">
+              @if (currentPost.categories.length > 0) {
+                <nav
+                  class="post-reader__categories"
+                  [attr.aria-label]="'posts.detail.categories' | transloco"
+                >
+                  @for (category of currentPost.categories; track category.id; let last = $last) {
+                    @if (last) {
+                      <a routerLink="/posts" [queryParams]="{ category: category.slug }">
+                        {{ category.name }}
+                      </a>
+                    }
+                  }
+                </nav>
+              }
+
+              <h1 id="post-title">{{ currentPost.title }}</h1>
+
+              <div class="post-reader__meta">
+                <time [attr.datetime]="currentPost.publishedAt">{{ formattedPublishedAt() }}</time>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {{
+                    'posts.detail.readingTime' | transloco: { minutes: currentPost.readingMinutes }
+                  }}
+                </span>
+              </div>
+
+              <div class="post-reader__title-rule" aria-hidden="true">
+                <img src="/images/posts/temple/hamsa.svg" alt="" />
+              </div>
+            </header>
+
+            <div class="post-reader__content" [innerHTML]="currentPost.contentHtml"></div>
+          </article>
+
+          <aside class="post-reader__taxonomy">
+            @if (currentPost.categories.length > 0) {
+              <div class="post-reader__taxonomy-group post-reader__taxonomy-group--categories">
+                <p>{{ 'posts.detail.categoriesGroup' | transloco }}</p>
+                <div class="post-reader__taxonomy-values">
+                  @for (category of currentPost.categories; track category.id; let last = $last) {
+                    <a routerLink="/posts" [queryParams]="{ category: category.slug }">
+                      {{ category.name }}
+                    </a>
+                    @if (!last) {
+                      <span aria-hidden="true">→</span>
+                    }
+                  }
+                </div>
+
+                @if (currentPost.relatedCategories.length > 0) {
+                  <span class="post-reader__taxonomy-context">
+                    {{
+                      'posts.detail.relatedCategories'
+                        | transloco: { category: currentPost.categories[0].name }
+                    }}
+                  </span>
+                  <div class="post-reader__taxonomy-list">
+                    @for (category of currentPost.relatedCategories; track category.id) {
+                      <a routerLink="/posts" [queryParams]="{ category: category.slug }">
+                        {{ category.name }}
+                      </a>
+                    }
+                  </div>
+                }
+              </div>
+            }
+
+            @if (currentPost.tags.length > 0) {
+              <div class="post-reader__taxonomy-group post-reader__taxonomy-group--tags">
+                <p>{{ 'posts.detail.tags' | transloco }}</p>
+                <div class="post-reader__tags">
+                  @for (tag of currentPost.tags; track tag.id) {
+                    <a routerLink="/posts" [queryParams]="{ tag: tag.slug }">{{ tag.name }}</a>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (currentPost.exploreCategories.length > 0) {
+              <div class="post-reader__taxonomy-group">
+                <p>{{ 'posts.detail.exploreCategories' | transloco }}</p>
+                <div class="post-reader__taxonomy-list">
+                  @for (category of currentPost.exploreCategories; track category.id) {
+                    <a routerLink="/posts" [queryParams]="{ category: category.slug }">
+                      {{ category.name }}
+                    </a>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (currentPost.exploreTags.length > 0) {
+              <div class="post-reader__taxonomy-group">
+                <p>{{ 'posts.detail.exploreTags' | transloco }}</p>
+                <div class="post-reader__tags">
+                  @for (tag of currentPost.exploreTags; track tag.id) {
+                    <a routerLink="/posts" [queryParams]="{ tag: tag.slug }">{{ tag.name }}</a>
+                  }
+                </div>
+              </div>
+            }
+          </aside>
+        </section>
+
+        @if (currentPost.previous || currentPost.next) {
+          <nav
+            class="post-detail__adjacent"
+            [attr.aria-label]="'posts.detail.adjacent' | transloco"
+          >
+            @if (currentPost.previous; as previous) {
+              <a [routerLink]="['/posts', previous.slug]">
+                <span>{{ 'posts.detail.previous' | transloco }}</span>
+                <strong>← {{ previous.title }}</strong>
+              </a>
+            } @else {
+              <span></span>
+            }
+
+            @if (currentPost.next; as next) {
+              <a class="post-detail__adjacent-next" [routerLink]="['/posts', next.slug]">
+                <span>{{ 'posts.detail.next' | transloco }}</span>
+                <strong>{{ next.title }} →</strong>
+              </a>
+            }
+          </nav>
+        }
+      }
+    }
+  }
+</main>

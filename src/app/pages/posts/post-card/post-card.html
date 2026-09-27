@@ -1,8 +1,8 @@
 <article class="post-card">
   @if (post().coverImageUrl) {
-    <div class="post-card__image">
+    <a class="post-card__image" [routerLink]="['/posts', post().slug]" tabindex="-1">
       <img [src]="post().coverImageUrl" [alt]="post().coverImageAlt ?? ''" />
-    </div>
+    </a>
   }
 
   <div class="post-card__content">
@@ -17,7 +17,7 @@
     </div>
 
     <h2 class="post-card__title">
-      {{ post().title }}
+      <a [routerLink]="['/posts', post().slug]">{{ post().title }}</a>
     </h2>
 
     <p class="post-card__excerpt">

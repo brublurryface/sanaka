@@ -3,7 +3,7 @@ import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { PostCard } from './post-card/post-card';
 import { PostsStore, PostsViewMode } from './posts.store';
@@ -39,12 +39,19 @@ export class Posts {
     this.store.activateRoute(
       this.route.snapshot.data['view'],
       this.route.snapshot.paramMap.get('page'),
+      this.route.snapshot.queryParamMap.get('category'),
+      this.route.snapshot.queryParamMap.get('tag'),
     );
 
-    this.route.paramMap
+    combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(takeUntilDestroyed())
-      .subscribe((params) =>
-        this.store.activateRoute(this.route.snapshot.data['view'], params.get('page')),
+      .subscribe(([params, queryParams]) =>
+        this.store.activateRoute(
+          this.route.snapshot.data['view'],
+          params.get('page'),
+          queryParams.get('category'),
+          queryParams.get('tag'),
+        ),
       );
 
     this.searchControl.valueChanges

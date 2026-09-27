@@ -31,6 +31,11 @@ class MockTranslocoLoader implements TranslocoLoader {
               label: 'Presence',
               description: 'Maya description.',
             },
+            about: {
+              label: 'About',
+              title: 'Bruna in Sanaka, Sanaka in Bruna',
+              description: 'About description.',
+            },
           },
         },
       },
@@ -71,12 +76,17 @@ describe('SanctuaryPaths', () => {
     expect(section.getAttribute('aria-labelledby')).toBe('paths-title');
   });
 
-  it('should contain the posts, Matrix and Maya links', () => {
+  it('should contain the posts, Matrix, Maya and About links', () => {
     const fixture = TestBed.createComponent(SanctuaryPaths);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
     const links = Array.from(element.querySelectorAll('a'));
 
-    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/posts', '/matrix', '/maya']);
+    expect(links.map((link) => link.getAttribute('href'))).toEqual([
+      '/posts',
+      '/matrix',
+      '/maya',
+      '/sobre',
+    ]);
   });
 });

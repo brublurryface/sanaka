@@ -2,6 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
+import { PostDetail } from '../post';
 import { PostsPage, WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
 
 describe('WordPressPostsService', () => {
@@ -39,6 +40,7 @@ describe('WordPressPostsService', () => {
         perPage: 20,
         search: 'medo',
         categoryId: 45,
+        tagId: 9,
       })
       .subscribe((postsPage) => {
         result = postsPage;
@@ -50,6 +52,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
+    expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
 
     postsRequest.flush(
@@ -188,5 +191,155 @@ describe('WordPressPostsService', () => {
 
     httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
+  });
+
+  it('should resolve readable category and tag slugs before loading posts', () => {
+    service.getPosts({ categorySlug: 'de-preto', tagSlug: 'despertar' }).subscribe();
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 46, name: 'De Preto', slug: 'de-preto', parent: 41 }]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/tags`)
+      .flush([{ id: 12, name: 'Despertar', slug: 'despertar' }]);
+
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('categories')).toBe('46');
+    expect(postsRequest.request.params.get('tags')).toBe('12');
+
+    postsRequest.flush([], {
+      headers: {
+        'X-WP-Total': '0',
+        'X-WP-TotalPages': '0',
+      },
+    });
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
+  });
+
+  it('should load a complete post with category lineage, tags, media and adjacent posts', () => {
+    let result: PostDetail | null | undefined;
+
+    service.getPostBySlug('voce').subscribe((post) => {
+      result = post;
+    });
+
+    const postRequest = httpTesting.expectOne(
+      (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'voce',
+    );
+
+    postRequest.flush([
+      {
+        id: 77,
+        slug: 'voce',
+        date: '2026-09-22T12:00:00',
+        title: { rendered: 'VOCÊ' },
+        excerpt: { rendered: '<p>Quem é você?</p>' },
+        content: { rendered: '<p>Quem é <strong>você</strong>?</p><script>bad()</script>' },
+        featured_media: 90,
+        categories: [45],
+        tags: [8, 9],
+      },
+    ]);
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([
+        { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
+        { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
+        { id: 43, name: 'Romance', slug: 'romance', parent: 41 },
+        { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
+      ]);
+    const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
+    expect(tagsRequest.request.params.get('per_page')).toBe('100');
+    expect(tagsRequest.request.params.has('include')).toBe(false);
+    tagsRequest.flush([
+      { id: 8, name: 'Identidade', slug: 'identidade' },
+      { id: 9, name: 'Existência', slug: 'existencia' },
+      { id: 10, name: 'Consciência', slug: 'consciencia' },
+    ]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/media`)
+      .flush([
+        { id: 90, source_url: 'https://example.com/voce.jpg', alt_text: 'Maya no santuário' },
+      ]);
+
+    expect(result?.slug).toBe('voce');
+    expect(result?.title).toBe('VOCÊ');
+    expect(result?.previous).toBeUndefined();
+    expect(result?.next).toBeUndefined();
+
+    const adjacentRequests = httpTesting.match(
+      (request) =>
+        request.url === `${apiUrl}/posts` &&
+        (request.params.has('before') || request.params.has('after')),
+    );
+
+    adjacentRequests
+      .find((request) => request.request.params.has('before'))
+      ?.flush([{ slug: 'anterior', title: { rendered: 'Anterior' } }]);
+    adjacentRequests
+      .find((request) => request.request.params.has('after'))
+      ?.flush([{ slug: 'proxima', title: { rendered: 'Próxima' } }]);
+
+    expect(result).toMatchObject({
+      slug: 'voce',
+      title: 'VOCÊ',
+      contentHtml: '<p>Quem &#233; <strong>voc&#234;</strong>?</p>',
+      coverImageUrl: 'https://example.com/voce.jpg',
+      categories: [
+        { id: 41, name: 'Bruna', slug: 'bruna' },
+        { id: 45, name: 'Pensamentos', slug: 'pensamentos' },
+      ],
+      tags: [
+        { id: 8, name: 'Identidade', slug: 'identidade' },
+        { id: 9, name: 'Existência', slug: 'existencia' },
+      ],
+      relatedCategories: [{ id: 43, name: 'Romance', slug: 'romance' }],
+      exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
+      exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
+      previous: { slug: 'anterior', title: 'Anterior' },
+      next: { slug: 'proxima', title: 'Próxima' },
+    });
+  });
+
+  it('should use the Sanaka fallback image when a complete post has no featured media', () => {
+    let coverImageUrl: string | undefined;
+
+    service.getPostBySlug('sem-imagem').subscribe((post) => {
+      coverImageUrl = post?.coverImageUrl;
+    });
+
+    httpTesting
+      .expectOne(
+        (request) =>
+          request.url === `${apiUrl}/posts` && request.params.get('slug') === 'sem-imagem',
+      )
+      .flush([
+        {
+          id: 88,
+          slug: 'sem-imagem',
+          date: '2026-09-23T12:00:00',
+          title: { rendered: 'Sem imagem' },
+          excerpt: { rendered: '<p>Resumo.</p>' },
+          content: { rendered: '<p>Conteúdo.</p>' },
+          featured_media: 0,
+          categories: [],
+          tags: [],
+        },
+      ]);
+
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
+    httpTesting
+      .match(
+        (request) =>
+          request.url === `${apiUrl}/posts` &&
+          (request.params.has('before') || request.params.has('after')),
+      )
+      .forEach((request) => request.flush([]));
+
+    expect(coverImageUrl).toBe('/images/posts/posts-atmosphere-desktop.webp');
   });
 });
