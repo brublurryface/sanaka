@@ -1,20 +1,18 @@
 <main class="post-detail">
   <div class="post-detail__temple-frame" aria-hidden="true">
     <span class="post-detail__temple-side post-detail__temple-side--left">
-      <img
-        src="/images/posts/temple/pillar-frame.png"
-        alt=""
-        loading="eager"
-        fetchpriority="high"
-      />
+      <span class="post-detail__temple-column">
+        <img src="/images/posts/temple/pillar-capital.png" alt="" fetchpriority="high" />
+        <span class="post-detail__temple-shaft"></span>
+        <img src="/images/posts/temple/pillar-base.png" alt="" fetchpriority="high" />
+      </span>
     </span>
     <span class="post-detail__temple-side post-detail__temple-side--right">
-      <img
-        src="/images/posts/temple/pillar-frame.png"
-        alt=""
-        loading="eager"
-        fetchpriority="high"
-      />
+      <span class="post-detail__temple-column">
+        <img src="/images/posts/temple/pillar-capital.png" alt="" fetchpriority="high" />
+        <span class="post-detail__temple-shaft"></span>
+        <img src="/images/posts/temple/pillar-base.png" alt="" fetchpriority="high" />
+      </span>
     </span>
   </div>
 
@@ -70,7 +68,9 @@
                 >
                   @for (category of currentPost.categories; track category.id; let last = $last) {
                     @if (last) {
-                      <span>{{ category.name }}</span>
+                      <a routerLink="/posts" [queryParams]="{ category: category.id }">
+                        {{ category.name }}
+                      </a>
                     }
                   }
                 </nav>
@@ -102,7 +102,9 @@
                 <p>{{ 'posts.detail.categoriesGroup' | transloco }}</p>
                 <div class="post-reader__taxonomy-values">
                   @for (category of currentPost.categories; track category.id; let last = $last) {
-                    <span>{{ category.name }}</span>
+                    <a routerLink="/posts" [queryParams]="{ category: category.id }">
+                      {{ category.name }}
+                    </a>
                     @if (!last) {
                       <span aria-hidden="true">→</span>
                     }
@@ -118,7 +120,9 @@
                   </span>
                   <div class="post-reader__taxonomy-list">
                     @for (category of currentPost.relatedCategories; track category.id) {
-                      <span>{{ category.name }}</span>
+                      <a routerLink="/posts" [queryParams]="{ category: category.id }">
+                        {{ category.name }}
+                      </a>
                     }
                   </div>
                 }
@@ -130,7 +134,7 @@
                 <p>{{ 'posts.detail.tags' | transloco }}</p>
                 <div class="post-reader__tags">
                   @for (tag of currentPost.tags; track tag.id) {
-                    <span>{{ tag.name }}</span>
+                    <a routerLink="/posts" [queryParams]="{ tag: tag.id }">{{ tag.name }}</a>
                   }
                 </div>
               </div>
@@ -141,7 +145,9 @@
                 <p>{{ 'posts.detail.exploreCategories' | transloco }}</p>
                 <div class="post-reader__taxonomy-list">
                   @for (category of currentPost.exploreCategories; track category.id) {
-                    <span>{{ category.name }}</span>
+                    <a routerLink="/posts" [queryParams]="{ category: category.id }">
+                      {{ category.name }}
+                    </a>
                   }
                 </div>
               </div>
@@ -152,7 +158,7 @@
                 <p>{{ 'posts.detail.exploreTags' | transloco }}</p>
                 <div class="post-reader__tags">
                   @for (tag of currentPost.exploreTags; track tag.id) {
-                    <span>{{ tag.name }}</span>
+                    <a routerLink="/posts" [queryParams]="{ tag: tag.id }">{{ tag.name }}</a>
                   }
                 </div>
               </div>

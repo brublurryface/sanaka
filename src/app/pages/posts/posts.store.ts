@@ -12,6 +12,8 @@ interface PostsRequest {
   readonly page: number;
   readonly search: string;
   readonly append: boolean;
+  readonly categoryId?: number;
+  readonly tagId?: number;
 }
 
 interface PostsState {
@@ -47,6 +49,8 @@ export class PostsStore {
 
   private readonly requests = new Subject<PostsRequest>();
   private readonly searchTerm = signal('');
+  private readonly categoryId = signal<number | undefined>(undefined);
+  private readonly tagId = signal<number | undefined>(undefined);
   private routeInitialized = false;
 
   private readonly initialState: PostsState = {
@@ -70,6 +74,8 @@ export class PostsStore {
             page: request.page,
             perPage: this.perPage,
             search: request.search,
+            ...(request.categoryId ? { categoryId: request.categoryId } : {}),
+            ...(request.tagId ? { tagId: request.tagId } : {}),
           })
           .pipe(
             map((page): PostsEvent => ({
@@ -111,23 +117,38 @@ export class PostsStore {
     Array.from({ length: this.totalPages() }, (_, index) => index + 1),
   );
 
-  activateRoute(view: unknown, pageValue: string | null): void {
+  activateRoute(
+    view: unknown,
+    pageValue: string | null,
+    categoryValue: string | null = null,
+    tagValue: string | null = null,
+  ): void {
     const mode: PostsViewMode = view === 'paged' ? 'paged' : 'continuous';
     const parsedPage = Number(pageValue);
     const hasValidPage = Number.isInteger(parsedPage) && parsedPage > 0;
     const page = mode === 'paged' && hasValidPage ? parsedPage : 1;
+    const categoryId = this.parseTaxonomyId(categoryValue);
+    const tagId = this.parseTaxonomyId(tagValue);
 
     if (mode === 'paged' && pageValue !== null && !hasValidPage) {
       this.navigateTo('paged', 1, true);
     }
 
-    if (this.routeInitialized && mode === this.viewMode() && page === this.currentPage()) {
+    if (
+      this.routeInitialized &&
+      mode === this.viewMode() &&
+      page === this.currentPage() &&
+      categoryId === this.categoryId() &&
+      tagId === this.tagId()
+    ) {
       return;
     }
 
     this.routeInitialized = true;
     this.viewMode.set(mode);
     this.currentPage.set(page);
+    this.categoryId.set(categoryId);
+    this.tagId.set(tagId);
     this.requests.next(this.createRequest(false));
   }
 
@@ -239,6 +260,8 @@ export class PostsStore {
       page: this.currentPage(),
       search: this.searchTerm(),
       append,
+      ...(this.categoryId() ? { categoryId: this.categoryId() } : {}),
+      ...(this.tagId() ? { tagId: this.tagId() } : {}),
     };
   }
 
@@ -250,7 +273,23 @@ export class PostsStore {
           ? ['/posts', 'paged']
           : ['/posts', 'paged', page];
 
-    void this.router.navigate(commands, { replaceUrl });
+    const taxonomyQueryParams = {
+      category: this.categoryId(),
+      tag: this.tagId(),
+    };
+
+    void this.router.navigate(
+      commands,
+      this.categoryId() || this.tagId()
+        ? { replaceUrl, queryParams: taxonomyQueryParams }
+        : { replaceUrl },
+    );
+  }
+
+  private parseTaxonomyId(value: string | null): number | undefined {
+    const id = Number(value);
+
+    return Number.isInteger(id) && id > 0 ? id : undefined;
   }
 
   private uniquePosts(posts: readonly Post[]): readonly Post[] {

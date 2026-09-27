@@ -121,6 +121,12 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Romance');
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Sobre');
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Consciência');
+    expect(
+      compiled.querySelector<HTMLAnchorElement>('.post-reader__categories a')?.getAttribute('href'),
+    ).toBe('/posts?category=45');
+    expect(
+      compiled.querySelector<HTMLAnchorElement>('.post-reader__tags a')?.getAttribute('href'),
+    ).toBe('/posts?tag=9');
     expect(compiled.querySelector('.post-detail__art img')?.getAttribute('src')).toBe(
       'https://example.com/voce.jpg',
     );

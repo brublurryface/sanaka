@@ -15,6 +15,7 @@ export interface PostsQuery {
   readonly perPage?: number;
   readonly search?: string;
   readonly categoryId?: number;
+  readonly tagId?: number;
 }
 
 /** Página normalizada entregue à camada de estado, sem expor DTOs do WordPress. */
@@ -66,6 +67,7 @@ interface NormalizedPostsQuery {
   readonly perPage: number;
   readonly search: string;
   readonly categoryId?: number;
+  readonly tagId?: number;
 }
 
 /**
@@ -163,6 +165,7 @@ export class WordPressPostsService {
       perPage: Math.min(this.toPositiveInteger(query.perPage, this.defaultPerPage), 100),
       search: query.search?.trim() ?? '',
       categoryId: query.categoryId && query.categoryId > 0 ? query.categoryId : undefined,
+      tagId: query.tagId && query.tagId > 0 ? query.tagId : undefined,
     };
   }
 
@@ -173,7 +176,8 @@ export class WordPressPostsService {
       .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories');
 
     params = query.search ? params.set('search', query.search) : params;
-    return query.categoryId ? params.set('categories', String(query.categoryId)) : params;
+    params = query.categoryId ? params.set('categories', String(query.categoryId)) : params;
+    return query.tagId ? params.set('tags', String(query.tagId)) : params;
   }
 
   private loadPostsPage(

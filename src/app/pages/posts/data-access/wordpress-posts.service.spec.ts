@@ -40,6 +40,7 @@ describe('WordPressPostsService', () => {
         perPage: 20,
         search: 'medo',
         categoryId: 45,
+        tagId: 9,
       })
       .subscribe((postsPage) => {
         result = postsPage;
@@ -51,6 +52,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
+    expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
 
     postsRequest.flush(
