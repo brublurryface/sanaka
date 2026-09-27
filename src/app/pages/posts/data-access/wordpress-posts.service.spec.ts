@@ -234,6 +234,11 @@ describe('WordPressPostsService', () => {
         { id: 90, source_url: 'https://example.com/voce.jpg', alt_text: 'Maya no santuário' },
       ]);
 
+    expect(result?.slug).toBe('voce');
+    expect(result?.title).toBe('VOCÊ');
+    expect(result?.previous).toBeUndefined();
+    expect(result?.next).toBeUndefined();
+
     const adjacentRequests = httpTesting.match(
       (request) =>
         request.url === `${apiUrl}/posts` &&

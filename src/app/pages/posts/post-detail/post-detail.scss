@@ -96,6 +96,9 @@
 }
 
 .post-detail__threshold {
+  position: relative;
+  z-index: 2;
+
   display: grid;
   grid-template-columns: minmax(12rem, 1fr) minmax(12rem, 24rem) 3rem;
   align-items: center;
@@ -225,7 +228,7 @@
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(3.4rem, 7vw, 6.5rem);
+  font-size: var(--sanaka-type-page-title-size);
   font-weight: 500;
   line-height: 0.92;
   letter-spacing: -0.04em;
@@ -248,9 +251,9 @@
 
   color: var(--sanaka-ivory);
 
-  font-family: var(--sanaka-font-display);
-  font-size: clamp(1.2rem, 1.7vw, 1.38rem);
-  line-height: 1.72;
+  font-family: var(--sanaka-font-body);
+  font-size: clamp(1rem, 1.3vw, 1.1rem);
+  line-height: 1.9;
 }
 
 :host ::ng-deep .post-reader__content > :first-child {
@@ -380,8 +383,8 @@
   }
 
   .post-reader__taxonomy {
-    grid-row: 1;
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-row: auto;
+    grid-template-columns: 1fr;
 
     padding: 0 0 1.5rem;
 
@@ -409,6 +412,9 @@
     grid-template-columns: 1fr auto;
 
     margin-top: -2.5rem;
+    padding-bottom: 0;
+
+    border-bottom: 0;
   }
 
   .post-detail__progress {
@@ -431,13 +437,21 @@
     grid-template-columns: 1fr;
   }
 
+  .post-reader__taxonomy-group--categories {
+    display: none;
+  }
+
+  .post-reader__taxonomy:not(:has(.post-reader__taxonomy-group--tags)) {
+    display: none;
+  }
+
   .post-reader h1 {
-    font-size: clamp(3rem, 17vw, 5rem);
+    font-size: var(--sanaka-type-page-title-size);
   }
 
   .post-reader__content {
-    font-size: 1.16rem;
-    line-height: 1.75;
+    font-size: 1rem;
+    line-height: 1.85;
   }
 
   .post-detail__adjacent {

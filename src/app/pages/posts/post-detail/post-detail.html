@@ -77,7 +77,7 @@
 
           <aside class="post-reader__taxonomy">
             @if (currentPost.categories.length > 0) {
-              <div>
+              <div class="post-reader__taxonomy-group post-reader__taxonomy-group--categories">
                 <p>{{ 'posts.detail.category' | transloco }}</p>
                 <div class="post-reader__taxonomy-values">
                   @for (category of currentPost.categories; track category.id; let last = $last) {
@@ -91,7 +91,7 @@
             }
 
             @if (currentPost.tags.length > 0) {
-              <div>
+              <div class="post-reader__taxonomy-group post-reader__taxonomy-group--tags">
                 <p>{{ 'posts.detail.tags' | transloco }}</p>
                 <div class="post-reader__tags">
                   @for (tag of currentPost.tags; track tag.id) {

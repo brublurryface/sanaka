@@ -1,7 +1,7 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { SecurityContext, inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
+import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
@@ -133,11 +133,16 @@ export class WordPressPostsService {
           categories: this.categories$,
           tags: this.getTags(post.tags ?? []),
           media: this.getMedia([post]),
-          previous: this.getAdjacentPost(post, 'previous'),
-          next: this.getAdjacentPost(post, 'next'),
         }).pipe(
-          map(({ categories, tags, media, previous, next }) =>
-            this.mapPostDetail(post, categories, tags, media, previous, next),
+          map(({ categories, tags, media }) => this.mapPostDetail(post, categories, tags, media)),
+          switchMap((detail) =>
+            concat(
+              of(detail),
+              forkJoin({
+                previous: this.getAdjacentPost(post, 'previous'),
+                next: this.getAdjacentPost(post, 'next'),
+              }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
+            ),
           ),
         );
       }),
@@ -240,8 +245,6 @@ export class WordPressPostsService {
     categories: readonly WordPressCategory[],
     tags: readonly WordPressTag[],
     media: readonly WordPressMedia[],
-    previous?: PostNavigation,
-    next?: PostNavigation,
   ): PostDetail {
     const coverImage = media.find((item) => item.id === post.featured_media);
     const content = post.content?.rendered ?? '';
@@ -257,8 +260,6 @@ export class WordPressPostsService {
         1,
         Math.ceil(plainContent.split(/\s+/).filter(Boolean).length / 200),
       ),
-      previous,
-      next,
     };
   }
 
