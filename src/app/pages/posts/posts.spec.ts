@@ -338,6 +338,21 @@ describe('Posts', () => {
     });
   });
 
+  it('should request WordPress filters using readable taxonomy slugs', () => {
+    createComponent();
+
+    const store = TestBed.inject(PostsStore);
+    store.activateRoute('continuous', null, 'de-preto', 'despertar');
+
+    expect(postsService.getPosts).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 20,
+      search: '',
+      categorySlug: 'de-preto',
+      tagSlug: 'despertar',
+    });
+  });
+
   it('should switch the UI language without changing editorial content', async () => {
     createComponent();
 

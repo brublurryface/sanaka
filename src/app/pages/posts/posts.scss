@@ -144,7 +144,7 @@
   color: var(--sanaka-gold-soft);
 
   font-family: var(--sanaka-font-body);
-  font-size: 0.8rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 600;
   letter-spacing: 0.12em;
 
@@ -448,7 +448,7 @@
 }
 
 .posts-pagination__direction {
-  font-size: 0.8rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .posts-pagination__page {

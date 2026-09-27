@@ -16,6 +16,8 @@ export interface PostsQuery {
   readonly search?: string;
   readonly categoryId?: number;
   readonly tagId?: number;
+  readonly categorySlug?: string;
+  readonly tagSlug?: string;
 }
 
 /** Página normalizada entregue à camada de estado, sem expor DTOs do WordPress. */
@@ -68,6 +70,8 @@ interface NormalizedPostsQuery {
   readonly search: string;
   readonly categoryId?: number;
   readonly tagId?: number;
+  readonly categorySlug?: string;
+  readonly tagSlug?: string;
 }
 
 /**
@@ -112,15 +116,17 @@ export class WordPressPostsService {
   getPosts(query: PostsQuery = {}): Observable<PostsPage> {
     const normalizedQuery = this.normalizeQuery(query);
 
-    return this.http
-      .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
-        params: this.buildPostsParams(normalizedQuery),
-        observe: 'response',
-      })
-      .pipe(
-        switchMap((response) => this.loadPostsPage(response, normalizedQuery)),
-        timeout({ first: this.requestTimeoutMs }),
-      );
+    return this.resolveTaxonomyFilters(normalizedQuery).pipe(
+      switchMap((resolvedQuery) =>
+        this.http
+          .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
+            params: this.buildPostsParams(resolvedQuery),
+            observe: 'response',
+          })
+          .pipe(switchMap((response) => this.loadPostsPage(response, resolvedQuery))),
+      ),
+      timeout({ first: this.requestTimeoutMs }),
+    );
   }
 
   /** Busca e normaliza uma publicação completa usando o slug público da aplicação. */
@@ -166,7 +172,29 @@ export class WordPressPostsService {
       search: query.search?.trim() ?? '',
       categoryId: query.categoryId && query.categoryId > 0 ? query.categoryId : undefined,
       tagId: query.tagId && query.tagId > 0 ? query.tagId : undefined,
+      categorySlug: query.categorySlug?.trim() || undefined,
+      tagSlug: query.tagSlug?.trim() || undefined,
     };
+  }
+
+  private resolveTaxonomyFilters(query: NormalizedPostsQuery): Observable<NormalizedPostsQuery> {
+    const categoryId$ =
+      query.categoryId || !query.categorySlug
+        ? of(query.categoryId)
+        : this.categories$.pipe(
+            map(
+              (categories) =>
+                categories.find((category) => category.slug === query.categorySlug)?.id ?? -1,
+            ),
+          );
+    const tagId$ =
+      query.tagId || !query.tagSlug
+        ? of(query.tagId)
+        : this.tags$.pipe(map((tags) => tags.find((tag) => tag.slug === query.tagSlug)?.id ?? -1));
+
+    return forkJoin({ categoryId: categoryId$, tagId: tagId$ }).pipe(
+      map(({ categoryId, tagId }) => ({ ...query, categoryId, tagId })),
+    );
   }
 
   private buildPostsParams(query: NormalizedPostsQuery): HttpParams {

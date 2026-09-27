@@ -114,7 +114,6 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector('.post-reader__tags')?.textContent).toContain('Identidade');
     expect(compiled.querySelector('.post-reader__article')).not.toBeNull();
     expect(compiled.querySelector('.post-reader__taxonomy')).not.toBeNull();
-    expect(compiled.querySelectorAll('.post-detail__temple-side')).toHaveLength(2);
     expect(compiled.querySelector('.post-reader__title-rule img')?.getAttribute('src')).toBe(
       '/images/posts/temple/hamsa.svg',
     );
@@ -123,10 +122,10 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Consciência');
     expect(
       compiled.querySelector<HTMLAnchorElement>('.post-reader__categories a')?.getAttribute('href'),
-    ).toBe('/posts?category=45');
+    ).toBe('/posts?category=pensamentos');
     expect(
       compiled.querySelector<HTMLAnchorElement>('.post-reader__tags a')?.getAttribute('href'),
-    ).toBe('/posts?tag=9');
+    ).toBe('/posts?tag=identidade');
     expect(compiled.querySelector('.post-detail__art img')?.getAttribute('src')).toBe(
       'https://example.com/voce.jpg',
     );

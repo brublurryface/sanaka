@@ -193,6 +193,30 @@ describe('WordPressPostsService', () => {
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
   });
 
+  it('should resolve readable category and tag slugs before loading posts', () => {
+    service.getPosts({ categorySlug: 'de-preto', tagSlug: 'despertar' }).subscribe();
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 46, name: 'De Preto', slug: 'de-preto', parent: 41 }]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/tags`)
+      .flush([{ id: 12, name: 'Despertar', slug: 'despertar' }]);
+
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('categories')).toBe('46');
+    expect(postsRequest.request.params.get('tags')).toBe('12');
+
+    postsRequest.flush([], {
+      headers: {
+        'X-WP-Total': '0',
+        'X-WP-TotalPages': '0',
+      },
+    });
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
+  });
+
   it('should load a complete post with category lineage, tags, media and adjacent posts', () => {
     let result: PostDetail | null | undefined;
 
