@@ -42,8 +42,24 @@
         </div>
 
         <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title">
-          <span class="post-reader__column post-reader__column--left" aria-hidden="true"></span>
-          <span class="post-reader__column post-reader__column--right" aria-hidden="true"></span>
+          <div class="post-reader__lintel" aria-hidden="true">
+            <span class="sanaka-eye sanaka-eye--lintel"></span>
+          </div>
+
+          <span class="post-reader__column post-reader__column--left" aria-hidden="true">
+            <span class="post-reader__column-capital"></span>
+            <span class="post-reader__column-shaft">
+              <span class="sanaka-eye"></span>
+            </span>
+            <span class="post-reader__column-base"></span>
+          </span>
+          <span class="post-reader__column post-reader__column--right" aria-hidden="true">
+            <span class="post-reader__column-capital"></span>
+            <span class="post-reader__column-shaft">
+              <span class="sanaka-eye"></span>
+            </span>
+            <span class="post-reader__column-base"></span>
+          </span>
 
           <article class="post-reader__article">
             @if (currentPost.categories.length > 0) {
@@ -72,10 +88,18 @@
               </span>
             </div>
 
+            <div class="post-reader__title-rule" aria-hidden="true">
+              <span class="sanaka-eye"></span>
+            </div>
+
             <div class="post-reader__content" [innerHTML]="currentPost.contentHtml"></div>
           </article>
 
           <aside class="post-reader__taxonomy">
+            <div class="post-reader__taxonomy-ornament" aria-hidden="true">
+              <span class="sanaka-eye"></span>
+            </div>
+
             @if (currentPost.categories.length > 0) {
               <div class="post-reader__taxonomy-group post-reader__taxonomy-group--categories">
                 <p>{{ 'posts.detail.category' | transloco }}</p>

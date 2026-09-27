@@ -106,6 +106,7 @@ describe('PostDetailPage', () => {
     );
     expect(compiled.querySelector('.post-reader__tags')?.textContent).toContain('Identidade');
     expect(compiled.querySelectorAll('.post-reader__column')).toHaveLength(2);
+    expect(compiled.querySelectorAll('.sanaka-eye')).toHaveLength(5);
     expect(compiled.querySelector('.post-detail__art img')?.getAttribute('src')).toBe(
       'https://example.com/voce.jpg',
     );
