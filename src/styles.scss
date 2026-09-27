@@ -157,13 +157,17 @@ body {
 
 .sanaka-eye::before {
   position: absolute;
-  inset: 0.14rem 0;
+  top: 50%;
+  left: 50%;
 
-  border-top: 1px solid currentcolor;
-  border-bottom: 1px solid currentcolor;
-  border-radius: 50%;
+  width: 1.45rem;
+  height: 1.45rem;
+
+  border: 1px solid currentcolor;
+  border-radius: 75% 0;
 
   content: '';
+  transform: translate(-50%, -50%) rotate(45deg) scaleY(0.55);
 }
 
 .sanaka-eye::after {

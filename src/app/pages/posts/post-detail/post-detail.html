@@ -42,10 +42,6 @@
         </div>
 
         <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title">
-          <div class="post-reader__lintel" aria-hidden="true">
-            <span class="sanaka-eye sanaka-eye--lintel"></span>
-          </div>
-
           <span class="post-reader__column post-reader__column--left" aria-hidden="true">
             <span class="post-reader__column-capital"></span>
             <span class="post-reader__column-shaft">
@@ -62,35 +58,37 @@
           </span>
 
           <article class="post-reader__article">
-            @if (currentPost.categories.length > 0) {
-              <nav
-                class="post-reader__categories"
-                [attr.aria-label]="'posts.detail.categories' | transloco"
-              >
-                @for (category of currentPost.categories; track category.id; let last = $last) {
-                  <span>{{ category.name }}</span>
-                  @if (!last) {
-                    <span aria-hidden="true">→</span>
+            <header class="post-reader__header">
+              @if (currentPost.categories.length > 0) {
+                <nav
+                  class="post-reader__categories"
+                  [attr.aria-label]="'posts.detail.categories' | transloco"
+                >
+                  @for (category of currentPost.categories; track category.id; let last = $last) {
+                    <span>{{ category.name }}</span>
+                    @if (!last) {
+                      <span aria-hidden="true">→</span>
+                    }
                   }
-                }
-              </nav>
-            }
+                </nav>
+              }
 
-            <h1 id="post-title">{{ currentPost.title }}</h1>
+              <h1 id="post-title">{{ currentPost.title }}</h1>
 
-            <div class="post-reader__meta">
-              <time [attr.datetime]="currentPost.publishedAt">{{ formattedPublishedAt() }}</time>
-              <span aria-hidden="true">·</span>
-              <span>
-                {{
-                  'posts.detail.readingTime' | transloco: { minutes: currentPost.readingMinutes }
-                }}
-              </span>
-            </div>
+              <div class="post-reader__meta">
+                <time [attr.datetime]="currentPost.publishedAt">{{ formattedPublishedAt() }}</time>
+                <span aria-hidden="true">·</span>
+                <span>
+                  {{
+                    'posts.detail.readingTime' | transloco: { minutes: currentPost.readingMinutes }
+                  }}
+                </span>
+              </div>
 
-            <div class="post-reader__title-rule" aria-hidden="true">
-              <span class="sanaka-eye"></span>
-            </div>
+              <div class="post-reader__title-rule" aria-hidden="true">
+                <span class="sanaka-eye"></span>
+              </div>
+            </header>
 
             <div class="post-reader__content" [innerHTML]="currentPost.contentHtml"></div>
           </article>
