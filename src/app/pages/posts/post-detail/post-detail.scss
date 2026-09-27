@@ -6,7 +6,59 @@
 }
 
 .post-detail {
+  position: relative;
+  isolation: isolate;
+
   min-height: 70vh;
+}
+
+.post-detail > :not(.post-detail__temple-frame) {
+  position: relative;
+  z-index: 1;
+}
+
+.post-detail__temple-frame {
+  position: fixed;
+  inset: 4rem 0 0;
+  z-index: 0;
+
+  pointer-events: none;
+}
+
+.post-detail__temple-side {
+  position: absolute;
+  top: 0;
+  bottom: 0;
+
+  width: clamp(7rem, 9vw, 11rem);
+  display: block;
+  overflow: hidden;
+}
+
+.post-detail__temple-side img {
+  position: absolute;
+  top: 0;
+
+  max-width: none;
+  height: 100%;
+
+  filter: drop-shadow(0 0 1.5rem rgba(211, 166, 79, 0.12));
+}
+
+.post-detail__temple-side--left {
+  left: 0;
+}
+
+.post-detail__temple-side--left img {
+  left: 0;
+}
+
+.post-detail__temple-side--right {
+  right: 0;
+}
+
+.post-detail__temple-side--right img {
+  right: 0;
 }
 
 .post-detail__feedback {
@@ -153,12 +205,11 @@
   position: relative;
   isolation: isolate;
 
-  width: min(100rem, calc(100% - 3rem));
   display: grid;
   grid-template-columns: minmax(0, 2fr) minmax(13rem, 0.72fr);
   gap: clamp(3rem, 5vw, 5rem);
 
-  padding: clamp(5rem, 8vw, 7rem) clamp(10rem, 13vw, 13rem) clamp(6rem, 10vw, 9rem);
+  padding: clamp(5rem, 8vw, 7rem) 0 clamp(6rem, 10vw, 9rem);
 }
 
 .post-reader::before {
@@ -170,75 +221,6 @@
 
   content: '';
   pointer-events: none;
-}
-
-.post-reader__column {
-  position: absolute;
-  top: 2.5rem;
-  bottom: 2.75rem;
-
-  width: clamp(7.5rem, 9vw, 10rem);
-  display: grid;
-  grid-template-rows: clamp(7rem, 9vw, 10rem) minmax(0, 1fr) clamp(9rem, 12vw, 13rem);
-
-  filter: drop-shadow(0 0 1.8rem rgba(211, 166, 79, 0.08));
-
-  pointer-events: none;
-}
-
-.post-reader__column-capital {
-  display: block;
-  background: url('/images/posts/temple/pillar-capital.png') center bottom / 100% 100% no-repeat;
-}
-
-.post-reader__column-shaft {
-  position: relative;
-
-  display: block;
-
-  background: url('/images/posts/temple/pillar-shaft.png') center / 100% auto repeat-y;
-}
-
-.post-reader__column-base {
-  display: block;
-  background: url('/images/posts/temple/pillar-base.png') center top / 100% 100% no-repeat;
-}
-
-.post-reader__column-shaft::before {
-  position: absolute;
-  inset: 0;
-
-  background: linear-gradient(
-    180deg,
-    rgba(13, 17, 23, 0.46),
-    transparent 8% 90%,
-    rgba(13, 17, 23, 0.5)
-  );
-
-  content: '';
-}
-
-.post-reader__column-shaft .sanaka-eye {
-  position: absolute;
-  top: 14%;
-  left: 50%;
-
-  width: 2.7rem;
-  height: 1.4rem;
-
-  color: rgba(244, 180, 67, 0.86);
-  filter: drop-shadow(0 0 0.45rem rgba(224, 106, 45, 0.48));
-  transform: translateX(-50%);
-}
-
-.post-reader__column--left {
-  left: 0;
-}
-
-.post-reader__column--right {
-  right: 0;
-
-  transform: scaleX(-1);
 }
 
 .post-reader__article {
@@ -316,13 +298,12 @@
   transform: scaleX(-1);
 }
 
-.post-reader__title-rule .sanaka-eye {
+.post-reader__title-rule img {
   grid-column: 2;
 
-  width: 3.2rem;
-  height: 1.45rem;
+  width: 2.4rem;
+  height: 2.9rem;
 
-  color: #f4b443;
   filter: drop-shadow(0 0 0.65rem rgba(224, 106, 45, 0.75));
 }
 
@@ -401,7 +382,7 @@
 .post-reader__taxonomy {
   align-self: start;
   display: grid;
-  gap: 2.2rem;
+  gap: 0;
 
   margin-top: 0.4rem;
   padding: 1.5rem 0 1.75rem clamp(1.5rem, 3vw, 2.5rem);
@@ -413,24 +394,16 @@
   box-shadow: -1rem 0 2.5rem rgba(0, 0, 0, 0.2);
 }
 
-.post-reader__taxonomy-ornament {
-  display: flex;
-  align-items: center;
-  gap: 0.75rem;
+.post-reader__taxonomy-group {
+  padding-block: 1.5rem;
+
+  border-top: 1px solid rgba(237, 201, 120, 0.18);
 }
 
-.post-reader__taxonomy-ornament::after {
-  width: min(7rem, 100%);
-  height: 1px;
+.post-reader__taxonomy-group:first-child {
+  padding-top: 0;
 
-  background: linear-gradient(90deg, rgba(237, 201, 120, 0.72), transparent);
-
-  content: '';
-}
-
-.post-reader__taxonomy-ornament .sanaka-eye {
-  color: #eeb65c;
-  filter: drop-shadow(0 0 0.35rem rgba(224, 106, 45, 0.5));
+  border-top: 0;
 }
 
 .post-reader__taxonomy p {
@@ -445,6 +418,7 @@
 }
 
 .post-reader__taxonomy-values,
+.post-reader__taxonomy-list,
 .post-reader__tags {
   display: flex;
   flex-wrap: wrap;
@@ -456,6 +430,23 @@
   line-height: 1.6;
 }
 
+.post-reader__taxonomy-context {
+  margin-top: 1.4rem;
+  display: block;
+
+  color: rgba(211, 196, 173, 0.72);
+
+  font-size: 0.68rem;
+  font-weight: 600;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+}
+
+.post-reader__taxonomy-list {
+  margin-top: 0.7rem;
+}
+
+.post-reader__taxonomy-list span,
 .post-reader__tags span {
   border-bottom: 1px solid rgba(237, 201, 120, 0.38);
 }
@@ -502,14 +493,14 @@
 }
 
 @media (max-width: 900px) {
+  .post-detail__temple-frame {
+    display: none;
+  }
+
   .post-reader {
     grid-template-columns: 1fr;
 
     padding-inline: clamp(2rem, 8vw, 4rem);
-  }
-
-  .post-reader__column {
-    display: none;
   }
 
   .post-reader__taxonomy {
@@ -566,14 +557,6 @@
 
   .post-reader__taxonomy {
     grid-template-columns: 1fr;
-  }
-
-  .post-reader__taxonomy-group--categories {
-    display: none;
-  }
-
-  .post-reader__taxonomy:not(:has(.post-reader__taxonomy-group--tags)) {
-    display: none;
   }
 
   .post-reader h1 {

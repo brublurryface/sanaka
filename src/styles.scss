@@ -144,48 +144,6 @@ body {
   line-height: 1.5;
 }
 
-/* Ornamento compartilhado que identifica os portais editoriais de Sanaka. */
-.sanaka-eye {
-  position: relative;
-
-  width: 2.3rem;
-  height: 1.15rem;
-  display: block;
-
-  color: rgba(237, 201, 120, 0.68);
-}
-
-.sanaka-eye::before {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  width: 1.45rem;
-  height: 1.45rem;
-
-  border: 1px solid currentcolor;
-  border-radius: 75% 0;
-
-  content: '';
-  transform: translate(-50%, -50%) rotate(45deg) scaleY(0.55);
-}
-
-.sanaka-eye::after {
-  position: absolute;
-  top: 50%;
-  left: 50%;
-
-  width: 0.48rem;
-  height: 0.48rem;
-
-  border: 1px solid currentcolor;
-  border-radius: 50%;
-  background: radial-gradient(circle, var(--sanaka-gold-soft) 0 18%, transparent 22%);
-
-  content: '';
-  transform: translate(-50%, -50%);
-}
-
 *,
 *::before,
 *::after {

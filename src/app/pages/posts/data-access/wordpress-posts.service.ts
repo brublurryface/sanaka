@@ -94,6 +94,13 @@ export class WordPressPostsService {
     }),
   );
 
+  private readonly tags$ = this.loadTags().pipe(
+    shareReplay({
+      bufferSize: 1,
+      refCount: false,
+    }),
+  );
+
   /**
    * Busca uma página de publicações e reúne categorias e mídias relacionadas.
    *
@@ -131,7 +138,7 @@ export class WordPressPostsService {
 
         return forkJoin({
           categories: this.categories$,
-          tags: this.getTags(post.tags ?? []),
+          tags: this.tags$,
           media: this.getMedia([post]),
         }).pipe(
           map(({ categories, tags, media }) => this.mapPostDetail(post, categories, tags, media)),
@@ -198,16 +205,9 @@ export class WordPressPostsService {
     });
   }
 
-  private getTags(tagIds: readonly number[]): Observable<readonly WordPressTag[]> {
-    if (tagIds.length === 0) {
-      return of([]);
-    }
-
+  private loadTags(): Observable<readonly WordPressTag[]> {
     return this.http.get<readonly WordPressTag[]>(`${this.apiUrl}/tags`, {
-      params: new HttpParams()
-        .set('include', tagIds.join(','))
-        .set('per_page', String(tagIds.length))
-        .set('_fields', 'id,name,slug'),
+      params: new HttpParams().set('per_page', '100').set('_fields', 'id,name,slug'),
     });
   }
 
@@ -250,12 +250,28 @@ export class WordPressPostsService {
     const content = post.content?.rendered ?? '';
     const plainContent = this.wordpressText.toText(content);
     const mappedCategories = this.mapTaxonomies(post.categories, categories);
+    const selectedCategoryIds = new Set(post.categories);
+    const selectedTagIds = new Set(post.tags ?? []);
+    const rootCategory = mappedCategories[0];
+    const mappedTags = tags.map((tag) => this.toTaxonomy(tag));
 
     return {
       ...this.mapPost(post, categories, coverImage, true),
       contentHtml: this.sanitizer.sanitize(SecurityContext.HTML, content) ?? '',
       categories: mappedCategories,
-      tags: tags.map((tag) => this.toTaxonomy(tag)),
+      relatedCategories: rootCategory
+        ? categories
+            .filter(
+              (category) =>
+                category.parent === rootCategory.id && !selectedCategoryIds.has(category.id),
+            )
+            .map((category) => this.toTaxonomy(category))
+        : [],
+      exploreCategories: categories
+        .filter((category) => category.parent === 0 && category.id !== rootCategory?.id)
+        .map((category) => this.toTaxonomy(category)),
+      tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
+      exploreTags: mappedTags.filter((tag) => !selectedTagIds.has(tag.id)),
       readingMinutes: Math.max(
         1,
         Math.ceil(plainContent.split(/\s+/).filter(Boolean).length / 200),

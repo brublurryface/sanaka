@@ -21,7 +21,11 @@ class MockTranslocoLoader implements TranslocoLoader {
           progress: 'Progresso da leitura',
           categories: 'Caminho de categorias',
           category: 'Categoria',
+          categoriesGroup: 'Categorias',
+          relatedCategories: 'Também em {{ category }}',
           tags: 'Tags',
+          exploreCategories: 'Explore categorias',
+          exploreTags: 'Explore tags',
           readingTime: '{{ minutes }} min de leitura',
           adjacent: 'Publicações próximas',
           previous: 'Publicação anterior',
@@ -50,6 +54,9 @@ describe('PostDetailPage', () => {
       { id: 45, name: 'Pensamentos', slug: 'pensamentos' },
     ],
     tags: [{ id: 9, name: 'Identidade', slug: 'identidade' }],
+    relatedCategories: [{ id: 43, name: 'Romance', slug: 'romance' }],
+    exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
+    exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
     readingMinutes: 4,
     previous: { slug: 'anterior', title: 'Anterior' },
     next: { slug: 'proxima', title: 'Próxima' },
@@ -100,13 +107,20 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector('.post-reader__content')?.textContent?.trim()).toBe(
       'Quem é você?',
     );
-    expect(compiled.querySelector('.post-reader__categories')?.textContent).toContain('Bruna');
     expect(compiled.querySelector('.post-reader__categories')?.textContent).toContain(
       'Pensamentos',
     );
+    expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Bruna');
     expect(compiled.querySelector('.post-reader__tags')?.textContent).toContain('Identidade');
-    expect(compiled.querySelectorAll('.post-reader__column')).toHaveLength(2);
-    expect(compiled.querySelectorAll('.sanaka-eye')).toHaveLength(4);
+    expect(compiled.querySelector('.post-reader__article')).not.toBeNull();
+    expect(compiled.querySelector('.post-reader__taxonomy')).not.toBeNull();
+    expect(compiled.querySelectorAll('.post-detail__temple-side')).toHaveLength(2);
+    expect(compiled.querySelector('.post-reader__title-rule img')?.getAttribute('src')).toBe(
+      '/images/posts/temple/hamsa.svg',
+    );
+    expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Romance');
+    expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Sobre');
+    expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Consciência');
     expect(compiled.querySelector('.post-detail__art img')?.getAttribute('src')).toBe(
       'https://example.com/voce.jpg',
     );

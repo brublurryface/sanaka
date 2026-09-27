@@ -23,7 +23,10 @@ export interface PostNavigation {
 export interface PostDetail extends Post {
   readonly contentHtml: string;
   readonly categories: readonly PostTaxonomy[];
+  readonly relatedCategories: readonly PostTaxonomy[];
+  readonly exploreCategories: readonly PostTaxonomy[];
   readonly tags: readonly PostTaxonomy[];
+  readonly exploreTags: readonly PostTaxonomy[];
   readonly readingMinutes: number;
   readonly previous?: PostNavigation;
   readonly next?: PostNavigation;

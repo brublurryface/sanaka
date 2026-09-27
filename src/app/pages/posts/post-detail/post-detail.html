@@ -1,4 +1,23 @@
 <main class="post-detail">
+  <div class="post-detail__temple-frame" aria-hidden="true">
+    <span class="post-detail__temple-side post-detail__temple-side--left">
+      <img
+        src="/images/posts/temple/pillar-frame.png"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      />
+    </span>
+    <span class="post-detail__temple-side post-detail__temple-side--right">
+      <img
+        src="/images/posts/temple/pillar-frame.png"
+        alt=""
+        loading="eager"
+        fetchpriority="high"
+      />
+    </span>
+  </div>
+
   @switch (state().status) {
     @case ('loading') {
       <p class="post-detail__feedback" role="status">{{ 'posts.detail.loading' | transloco }}</p>
@@ -42,21 +61,6 @@
         </div>
 
         <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title">
-          <span class="post-reader__column post-reader__column--left" aria-hidden="true">
-            <span class="post-reader__column-capital"></span>
-            <span class="post-reader__column-shaft">
-              <span class="sanaka-eye"></span>
-            </span>
-            <span class="post-reader__column-base"></span>
-          </span>
-          <span class="post-reader__column post-reader__column--right" aria-hidden="true">
-            <span class="post-reader__column-capital"></span>
-            <span class="post-reader__column-shaft">
-              <span class="sanaka-eye"></span>
-            </span>
-            <span class="post-reader__column-base"></span>
-          </span>
-
           <article class="post-reader__article">
             <header class="post-reader__header">
               @if (currentPost.categories.length > 0) {
@@ -65,9 +69,8 @@
                   [attr.aria-label]="'posts.detail.categories' | transloco"
                 >
                   @for (category of currentPost.categories; track category.id; let last = $last) {
-                    <span>{{ category.name }}</span>
-                    @if (!last) {
-                      <span aria-hidden="true">→</span>
+                    @if (last) {
+                      <span>{{ category.name }}</span>
                     }
                   }
                 </nav>
@@ -86,7 +89,7 @@
               </div>
 
               <div class="post-reader__title-rule" aria-hidden="true">
-                <span class="sanaka-eye"></span>
+                <img src="/images/posts/temple/hamsa.svg" alt="" />
               </div>
             </header>
 
@@ -94,13 +97,9 @@
           </article>
 
           <aside class="post-reader__taxonomy">
-            <div class="post-reader__taxonomy-ornament" aria-hidden="true">
-              <span class="sanaka-eye"></span>
-            </div>
-
             @if (currentPost.categories.length > 0) {
               <div class="post-reader__taxonomy-group post-reader__taxonomy-group--categories">
-                <p>{{ 'posts.detail.category' | transloco }}</p>
+                <p>{{ 'posts.detail.categoriesGroup' | transloco }}</p>
                 <div class="post-reader__taxonomy-values">
                   @for (category of currentPost.categories; track category.id; let last = $last) {
                     <span>{{ category.name }}</span>
@@ -109,6 +108,20 @@
                     }
                   }
                 </div>
+
+                @if (currentPost.relatedCategories.length > 0) {
+                  <span class="post-reader__taxonomy-context">
+                    {{
+                      'posts.detail.relatedCategories'
+                        | transloco: { category: currentPost.categories[0].name }
+                    }}
+                  </span>
+                  <div class="post-reader__taxonomy-list">
+                    @for (category of currentPost.relatedCategories; track category.id) {
+                      <span>{{ category.name }}</span>
+                    }
+                  </div>
+                }
               </div>
             }
 
@@ -117,6 +130,28 @@
                 <p>{{ 'posts.detail.tags' | transloco }}</p>
                 <div class="post-reader__tags">
                   @for (tag of currentPost.tags; track tag.id) {
+                    <span>{{ tag.name }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (currentPost.exploreCategories.length > 0) {
+              <div class="post-reader__taxonomy-group">
+                <p>{{ 'posts.detail.exploreCategories' | transloco }}</p>
+                <div class="post-reader__taxonomy-list">
+                  @for (category of currentPost.exploreCategories; track category.id) {
+                    <span>{{ category.name }}</span>
+                  }
+                </div>
+              </div>
+            }
+
+            @if (currentPost.exploreTags.length > 0) {
+              <div class="post-reader__taxonomy-group">
+                <p>{{ 'posts.detail.exploreTags' | transloco }}</p>
+                <div class="post-reader__tags">
+                  @for (tag of currentPost.exploreTags; track tag.id) {
                     <span>{{ tag.name }}</span>
                   }
                 </div>

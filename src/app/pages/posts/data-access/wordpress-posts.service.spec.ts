@@ -221,13 +221,17 @@ describe('WordPressPostsService', () => {
       .flush([
         { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
+        { id: 43, name: 'Romance', slug: 'romance', parent: 41 },
+        { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
       ]);
-    httpTesting
-      .expectOne((request) => request.url === `${apiUrl}/tags`)
-      .flush([
-        { id: 8, name: 'Identidade', slug: 'identidade' },
-        { id: 9, name: 'Existência', slug: 'existencia' },
-      ]);
+    const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
+    expect(tagsRequest.request.params.get('per_page')).toBe('100');
+    expect(tagsRequest.request.params.has('include')).toBe(false);
+    tagsRequest.flush([
+      { id: 8, name: 'Identidade', slug: 'identidade' },
+      { id: 9, name: 'Existência', slug: 'existencia' },
+      { id: 10, name: 'Consciência', slug: 'consciencia' },
+    ]);
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/media`)
       .flush([
@@ -265,6 +269,9 @@ describe('WordPressPostsService', () => {
         { id: 8, name: 'Identidade', slug: 'identidade' },
         { id: 9, name: 'Existência', slug: 'existencia' },
       ],
+      relatedCategories: [{ id: 43, name: 'Romance', slug: 'romance' }],
+      exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
+      exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
       previous: { slug: 'anterior', title: 'Anterior' },
       next: { slug: 'proxima', title: 'Próxima' },
     });
@@ -297,6 +304,7 @@ describe('WordPressPostsService', () => {
       ]);
 
     httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
     httpTesting
       .match(
