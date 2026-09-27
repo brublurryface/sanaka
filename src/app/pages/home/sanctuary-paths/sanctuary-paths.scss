@@ -57,10 +57,10 @@
   color: var(--sanaka-gold-soft);
 
   font-family: var(--sanaka-font-body);
-  font-size: 0.65rem;
-  font-weight: 700;
-  line-height: 1.5;
-  letter-spacing: 0.2em;
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
 
   text-transform: uppercase;
 }
@@ -77,9 +77,14 @@
   letter-spacing: -0.03em;
 }
 
-.paths-heading h2 span {
+.paths-title-line {
   display: block;
 
+  width: max-content;
+  white-space: nowrap;
+}
+
+.paths-title-line--accent {
   color: var(--sanaka-gold-soft);
 }
 
@@ -143,7 +148,7 @@
   color: var(--sanaka-ivory-muted);
 
   font-family: var(--sanaka-font-body);
-  font-size: 0.62rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 600;
   letter-spacing: 0.14em;
 
@@ -231,6 +236,10 @@
 
     min-height: auto;
     padding: 2rem 0;
+  }
+
+  .paths-heading h2 {
+    font-size: clamp(2.5rem, 12vw, 3rem);
   }
 
   .path-arrow {
