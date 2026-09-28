@@ -4,6 +4,7 @@ import { DomSanitizer } from '@angular/platform-browser';
 import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
+import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 import { Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
 
@@ -90,6 +91,7 @@ export class WordPressPostsService {
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
+  private readonly contentPolicy = inject(SANAKA_WORDPRESS_CONTENT_POLICY);
   private readonly wordpressText = inject(WordPressTextService);
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -134,6 +136,7 @@ export class WordPressPostsService {
     const params = new HttpParams()
       .set('slug', slug)
       .set('per_page', '1')
+      .set('categories_exclude', this.excludedCategoryIds)
       .set('_fields', 'id,slug,date,title,excerpt,content,featured_media,categories,tags');
 
     return this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
@@ -201,6 +204,7 @@ export class WordPressPostsService {
     let params = new HttpParams()
       .set('page', String(query.page))
       .set('per_page', String(query.perPage))
+      .set('categories_exclude', this.excludedCategoryIds)
       .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories');
 
     params = query.search ? params.set('search', query.search) : params;
@@ -295,12 +299,19 @@ export class WordPressPostsService {
         ? categories
             .filter(
               (category) =>
-                category.parent === rootCategory.id && !selectedCategoryIds.has(category.id),
+                category.parent === rootCategory.id &&
+                !selectedCategoryIds.has(category.id) &&
+                !this.isExcludedCategory(category.id),
             )
             .map((category) => this.toTaxonomy(category))
         : [],
       exploreCategories: categories
-        .filter((category) => category.parent === 0 && category.id !== rootCategory?.id)
+        .filter(
+          (category) =>
+            category.parent === 0 &&
+            category.id !== rootCategory?.id &&
+            !this.isExcludedCategory(category.id),
+        )
         .map((category) => this.toTaxonomy(category)),
       tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
       exploreTags: mappedTags.filter((tag) => !selectedTagIds.has(tag.id)),
@@ -377,6 +388,7 @@ export class WordPressPostsService {
       .set('orderby', 'date')
       .set('order', isPrevious ? 'desc' : 'asc')
       .set('exclude', String(post.id))
+      .set('categories_exclude', this.excludedCategoryIds)
       .set('_fields', 'slug,title');
 
     return this.http
@@ -397,6 +409,14 @@ export class WordPressPostsService {
 
   private toPositiveInteger(value: number | undefined, fallback: number): number {
     return Number.isInteger(value) && Number(value) > 0 ? Number(value) : fallback;
+  }
+
+  private get excludedCategoryIds(): string {
+    return this.contentPolicy.excludedCategoryIds.join(',');
+  }
+
+  private isExcludedCategory(categoryId: number): boolean {
+    return this.contentPolicy.excludedCategoryIds.includes(categoryId);
   }
 
   private readCountHeader(value: string | null, fallback: number): number {

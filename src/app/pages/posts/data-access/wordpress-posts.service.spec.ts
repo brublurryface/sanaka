@@ -52,6 +52,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
     expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
 
@@ -131,6 +132,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.has('search')).toBe(false);
     expect(postsRequest.request.params.has('categories')).toBe(false);
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
 
     postsRequest.flush(
       [
@@ -206,6 +208,7 @@ describe('WordPressPostsService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('46');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
     expect(postsRequest.request.params.get('tags')).toBe('12');
 
     postsRequest.flush([], {
@@ -227,6 +230,8 @@ describe('WordPressPostsService', () => {
     const postRequest = httpTesting.expectOne(
       (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'voce',
     );
+
+    expect(postRequest.request.params.get('categories_exclude')).toBe('43');
 
     postRequest.flush([
       {
@@ -275,6 +280,13 @@ describe('WordPressPostsService', () => {
         (request.params.has('before') || request.params.has('after')),
     );
 
+    expect(adjacentRequests).toHaveLength(2);
+    expect(
+      adjacentRequests.every(
+        (request) => request.request.params.get('categories_exclude') === '43',
+      ),
+    ).toBe(true);
+
     adjacentRequests
       .find((request) => request.request.params.has('before'))
       ?.flush([{ slug: 'anterior', title: { rendered: 'Anterior' } }]);
@@ -295,7 +307,7 @@ describe('WordPressPostsService', () => {
         { id: 8, name: 'Identidade', slug: 'identidade' },
         { id: 9, name: 'Existência', slug: 'existencia' },
       ],
-      relatedCategories: [{ id: 43, name: 'Romance', slug: 'romance' }],
+      relatedCategories: [],
       exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
       exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
       previous: { slug: 'anterior', title: 'Anterior' },
