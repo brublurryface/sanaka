@@ -272,7 +272,7 @@
 .posts-view__option {
   padding: 0.65rem 0.9rem;
 
-  font-size: 0.78rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .posts-view__option + .posts-view__option {
