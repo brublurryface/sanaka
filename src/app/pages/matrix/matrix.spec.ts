@@ -122,6 +122,15 @@ describe('Matrix', () => {
     expect(TestBed.createComponent(Matrix).componentInstance).toBeTruthy();
   });
 
+  it('should keep the experiment anchor inside the components route', () => {
+    const fixture = TestBed.createComponent(Matrix);
+    fixture.detectChanges();
+
+    const action = fixture.nativeElement.querySelector('.matrix-hero__action') as HTMLAnchorElement;
+
+    expect(action.getAttribute('href')).toBe('/matrix/components#component-exhibit');
+  });
+
   it('should send the parent value to the child component', () => {
     const fixture = TestBed.createComponent(Matrix);
     fixture.detectChanges();

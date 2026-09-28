@@ -1,6 +1,15 @@
 {
   "app": {
     "title": "Sanaka",
+    "pageTitles": {
+      "posts": "Publicações do santuário",
+      "post": "Publicação",
+      "matrix": "Matrix on-line",
+      "matrixComponents": "Componentes em conversa",
+      "matrixRestApi": "Portal da API REST",
+      "maya": "Māyā",
+      "about": "Sobre"
+    },
     "navigation": {
       "ariaLabel": "Navegação principal",
       "home": "Home",
@@ -15,8 +24,23 @@
     "footer": {
       "navigation": "Navegação do rodapé",
       "about": "Sobre & contato",
-      "enter": "Entrar",
       "signature": "Entre código, símbolos e presença."
+    }
+  },
+  "common": {
+    "actions": {
+      "clearSearch": "Limpar busca",
+      "retry": "Tentar novamente"
+    },
+    "matrix": {
+      "backToCatalog": "Voltar ao catálogo da Matrix",
+      "code": {
+        "eyebrow": "Código em movimento",
+        "status": "Trecho {{ current }} de {{ total }}",
+        "previous": "Ver trecho anterior",
+        "next": "Ver próximo trecho",
+        "goTo": "Ver trecho {{ page }}"
+      }
     }
   },
   "about": {
@@ -42,12 +66,11 @@
       "ariaLabel": "Quebra-cabeça dos seis ciclos autobiográficos",
       "select": "Fragmento",
       "loading": "Reunindo fragmentos de Sanaka",
-      "error": "As peças não puderam ser reunidas agora.",
-      "retry": "Tentar novamente"
+      "error": "As peças não puderam ser reunidas agora."
     },
     "story": {
       "eyebrow": "Fragmento selecionado",
-      "read": "Ler o ciclo completo"
+      "read": "Ler fragmento inteiro"
     },
     "destinationsLabel": "Sobre e Sanakaverse",
     "contact": {
@@ -120,8 +143,7 @@
     },
     "search": {
       "label": "Buscar nas publicações",
-      "placeholder": "Busque por título ou conteúdo...",
-      "clear": "Limpar busca"
+      "placeholder": "Busque por título ou conteúdo..."
     },
     "view": {
       "label": "Modo de leitura",
@@ -142,8 +164,7 @@
     },
     "loading": "Carregando publicações...",
     "error": {
-      "message": "Não foi possível carregar as publicações.",
-      "retry": "Tentar novamente"
+      "message": "Não foi possível carregar as publicações."
     },
     "empty": "Nenhuma publicação encontrada.",
     "detail": {
@@ -202,7 +223,6 @@
       }
     },
     "header": {
-      "back": "Voltar ao catálogo da Matrix",
       "eyebrow": "Matrix on-line · Experimento 01",
       "title": {
         "line1": "Componentes",
@@ -277,13 +297,8 @@
       },
       "reset": "Reiniciar",
       "code": {
-        "eyebrow": "Código em movimento",
         "title": "Veja o circuito por dentro",
-        "status": "Trecho {{ current }} de {{ total }}",
-        "previous": "Ver trecho anterior",
-        "next": "Ver próximo trecho",
         "pagination": "Trechos do código",
-        "goTo": "Ver trecho {{ page }}",
         "slides": {
           "parent": {
             "title": "1. O pai prepara e envia o valor",
@@ -320,7 +335,6 @@
     },
     "rest": {
       "header": {
-        "back": "Voltar ao catálogo da Matrix",
         "eyebrow": "Matrix on-line · Experimento 02",
         "title": {
           "line1": "Um portal",
@@ -337,7 +351,6 @@
       "controls": {
         "label": "Tema do cosmos · busque em inglês",
         "placeholder": "Ex.: Orion nebula, mars, black hole...",
-        "clear": "Limpar busca",
         "submit": "Abrir portal",
         "searchAgain": "Abrir outro portal",
         "presetsLabel": "Invocações sugeridas",
@@ -352,7 +365,7 @@
         "idle": {
           "title": "O portal está em repouso",
           "text": "Nenhuma requisição foi enviada. Escolha um tema para iniciar a travessia.",
-          "action": "Invocar imagem"
+          "action": "Invocar"
         },
         "loading": {
           "title": "Atravessando a rede",
@@ -374,7 +387,6 @@
           "title": "A imagem não se manifestou",
           "text": "Os dados chegaram, mas o arquivo visual não pôde ser carregado."
         },
-        "retry": "Tentar novamente",
         "newSearch": "Nova busca",
         "success": {
           "label": "Resultado mapeado",
@@ -407,13 +419,8 @@
         "name": "NASA Image and Video Library"
       },
       "code": {
-        "eyebrow": "Código em movimento",
         "title": "Siga a requisição por dentro",
-        "status": "Trecho {{ current }} de {{ total }}",
-        "previous": "Ver trecho anterior",
-        "next": "Ver próximo trecho",
         "pagination": "Trechos da requisição",
-        "goTo": "Ver trecho {{ page }}",
         "slides": {
           "action": {
             "title": "1. A ação entra no fluxo",

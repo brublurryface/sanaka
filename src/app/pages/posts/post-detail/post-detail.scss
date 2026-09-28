@@ -121,9 +121,12 @@
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.9rem;
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 700;
   line-height: 1.5;
+  letter-spacing: 0.1em;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .post-detail__back:hover,
@@ -410,9 +413,15 @@
   margin-top: 0.7rem;
 }
 
+.post-reader__taxonomy-values a,
 .post-reader__taxonomy-list a,
 .post-reader__tags a {
   border-bottom: 1px solid rgba(237, 201, 120, 0.38);
+}
+
+.post-reader__tags {
+  column-gap: 0.85rem;
+  row-gap: 0.6rem;
 }
 
 .post-detail__adjacent {

@@ -6,7 +6,7 @@
     @case ('error') {
       <div class="post-detail__feedback" role="alert">
         <p>{{ 'posts.detail.error' | transloco }}</p>
-        <button type="button" (click)="retry()">{{ 'posts.error.retry' | transloco }}</button>
+        <button type="button" (click)="retry()">{{ 'common.actions.retry' | transloco }}</button>
       </div>
     }
     @case ('not-found') {
@@ -155,7 +155,7 @@
             [attr.aria-label]="'posts.detail.adjacent' | transloco"
           >
             @if (currentPost.previous; as previous) {
-              <a [routerLink]="['/posts', previous.slug]">
+              <a [routerLink]="['/posts', previous.slug]" target="_blank" rel="noopener">
                 <span>{{ 'posts.detail.previous' | transloco }}</span>
                 <strong>← {{ previous.title }}</strong>
               </a>
@@ -164,7 +164,12 @@
             }
 
             @if (currentPost.next; as next) {
-              <a class="post-detail__adjacent-next" [routerLink]="['/posts', next.slug]">
+              <a
+                class="post-detail__adjacent-next"
+                [routerLink]="['/posts', next.slug]"
+                target="_blank"
+                rel="noopener"
+              >
                 <span>{{ 'posts.detail.next' | transloco }}</span>
                 <strong>{{ next.title }} →</strong>
               </a>

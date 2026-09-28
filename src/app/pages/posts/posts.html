@@ -1,7 +1,9 @@
 <main class="posts-page">
   <header class="posts-header sanaka-atmosphere-hero sanaka-atmosphere-hero--compact">
     <div class="posts-header__content sanaka-atmosphere-shell">
-      <p class="posts-header__eyebrow">{{ 'posts.header.eyebrow' | transloco }}</p>
+      <p class="posts-header__eyebrow sanaka-editorial-label">
+        {{ 'posts.header.eyebrow' | transloco }}
+      </p>
 
       <h1 class="posts-header__title">{{ 'posts.header.title' | transloco }}</h1>
 
@@ -28,7 +30,7 @@
       <button
         type="button"
         class="posts-search__clear"
-        [attr.aria-label]="'posts.search.clear' | transloco"
+        [attr.aria-label]="'common.actions.clearSearch' | transloco"
         (click)="clearSearch(searchInput)"
       ></button>
     </div>
@@ -70,7 +72,7 @@
     } @else if (hasError()) {
       <div class="posts-feedback" role="alert">
         <p>{{ 'posts.error.message' | transloco }}</p>
-        <button type="button" (click)="retry()">{{ 'posts.error.retry' | transloco }}</button>
+        <button type="button" (click)="retry()">{{ 'common.actions.retry' | transloco }}</button>
       </div>
     } @else if (posts().length > 0) {
       @for (post of posts(); track post.id) {
@@ -88,7 +90,7 @@
           <div class="posts-pagination__error" role="alert">
             <p>{{ 'posts.pagination.error' | transloco }}</p>
             <button type="button" (click)="retry()">
-              {{ 'posts.error.retry' | transloco }}
+              {{ 'common.actions.retry' | transloco }}
             </button>
           </div>
         } @else if (hasMore()) {

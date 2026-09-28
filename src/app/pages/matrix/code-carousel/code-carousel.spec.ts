@@ -9,6 +9,17 @@ import { MatrixCodeCarousel } from './code-carousel';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        matrix: {
+          code: {
+            eyebrow: 'Code in motion',
+            status: 'Snippet {{ current }} of {{ total }}',
+            previous: 'Previous',
+            next: 'Next',
+            goTo: 'View snippet {{ page }}',
+          },
+        },
+      },
       matrix: {
         exhibit: {
           code: {
@@ -99,7 +110,7 @@ describe('MatrixCodeCarousel', () => {
 
     expect(snippets).toHaveLength(4);
     expect(
-      fixture.nativeElement.querySelectorAll('.code-window__snippet.carousel-layer--active'),
+      fixture.nativeElement.querySelectorAll('.code-window__snippet.matrix-code-layer--active'),
     ).toHaveLength(1);
     expect(snippets[0].getAttribute('aria-hidden')).toBe('false');
     expect(snippets[1].getAttribute('aria-hidden')).toBe('true');

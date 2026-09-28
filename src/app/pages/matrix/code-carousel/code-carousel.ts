@@ -1,12 +1,9 @@
-import { Component, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { CodeExplorerController, CodeExplorerSlide } from '../code-explorer.controller';
 
-interface CodeSlide {
-  readonly index: number;
-  readonly fileName: string;
+interface CodeSlide extends CodeExplorerSlide {
   readonly language: 'TypeScript' | 'HTML';
-  readonly titleKey: string;
-  readonly descriptionKey: string;
 }
 
 @Component({
@@ -15,11 +12,10 @@ interface CodeSlide {
   templateUrl: './code-carousel.html',
   styleUrl: './code-carousel.scss',
 })
-export class MatrixCodeCarousel implements OnChanges {
+export class MatrixCodeCarousel extends CodeExplorerController<CodeSlide> implements OnChanges {
   @Input({ required: true }) currentStep = 1;
 
-  readonly activeIndex = signal(0);
-  readonly slides: readonly CodeSlide[] = [
+  override readonly slides: readonly CodeSlide[] = [
     {
       index: 0,
       fileName: 'matrix.ts',
@@ -50,26 +46,10 @@ export class MatrixCodeCarousel implements OnChanges {
     },
   ];
 
-  get activeSlide(): CodeSlide {
-    return this.slides[this.activeIndex()];
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentStep']) {
       const stepSlide = this.currentStep <= 1 ? 0 : this.currentStep === 2 ? 2 : 3;
       this.showSlide(stepSlide);
     }
-  }
-
-  previous(): void {
-    this.showSlide((this.activeIndex() - 1 + this.slides.length) % this.slides.length);
-  }
-
-  next(): void {
-    this.showSlide((this.activeIndex() + 1) % this.slides.length);
-  }
-
-  showSlide(index: number): void {
-    this.activeIndex.set(index);
   }
 }

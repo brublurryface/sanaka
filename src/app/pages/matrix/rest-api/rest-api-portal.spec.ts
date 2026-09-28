@@ -13,6 +13,22 @@ import { RestApiPortal } from './rest-api-portal';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     return of({
+      common: {
+        actions: {
+          clearSearch: lang === 'pt-BR' ? 'Limpar busca' : 'Clear search',
+          retry: lang === 'pt-BR' ? 'Tentar novamente' : 'Try again',
+        },
+        matrix: {
+          backToCatalog: 'Back to the catalog',
+          code: {
+            eyebrow: 'Code in motion',
+            status: 'Snippet {{ current }} of {{ total }}',
+            previous: 'Previous',
+            next: 'Next',
+            goTo: 'View snippet {{ page }}',
+          },
+        },
+      },
       matrix: {
         rest: {
           header: {
@@ -42,7 +58,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             },
           },
           portal: {
-            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke image' },
+            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke' },
             loading: { title: 'Crossing the network', text: 'Searching for {{ query }}.' },
             imageLoading: { title: 'Revealing image', text: 'The browser is loading the file.' },
             empty: { title: 'Nothing crossed', text: 'No image for {{ query }}.' },

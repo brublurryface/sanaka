@@ -1,6 +1,15 @@
 {
   "app": {
     "title": "Sanaka",
+    "pageTitles": {
+      "posts": "Sanctuary publications",
+      "post": "Publication",
+      "matrix": "Matrix online",
+      "matrixComponents": "Components in conversation",
+      "matrixRestApi": "REST API portal",
+      "maya": "Māyā",
+      "about": "About"
+    },
     "navigation": {
       "ariaLabel": "Main navigation",
       "home": "Home",
@@ -15,8 +24,23 @@
     "footer": {
       "navigation": "Footer navigation",
       "about": "About & contact",
-      "enter": "Enter",
       "signature": "Between code, symbols, and presence."
+    }
+  },
+  "common": {
+    "actions": {
+      "clearSearch": "Clear search",
+      "retry": "Try again"
+    },
+    "matrix": {
+      "backToCatalog": "Back to the Matrix catalog",
+      "code": {
+        "eyebrow": "Code in motion",
+        "status": "Snippet {{ current }} of {{ total }}",
+        "previous": "View previous snippet",
+        "next": "View next snippet",
+        "goTo": "View snippet {{ page }}"
+      }
     }
   },
   "about": {
@@ -42,12 +66,11 @@
       "ariaLabel": "Puzzle of the six autobiographical cycles",
       "select": "Fragment",
       "loading": "Gathering fragments of Sanaka",
-      "error": "The pieces could not be gathered right now.",
-      "retry": "Try again"
+      "error": "The pieces could not be gathered right now."
     },
     "story": {
       "eyebrow": "Selected fragment",
-      "read": "Read the complete cycle"
+      "read": "Read the whole fragment"
     },
     "destinationsLabel": "About and Sanakaverse",
     "contact": {
@@ -120,8 +143,7 @@
     },
     "search": {
       "label": "Search publications",
-      "placeholder": "Search by title or content...",
-      "clear": "Clear search"
+      "placeholder": "Search by title or content..."
     },
     "view": {
       "label": "Reading mode",
@@ -142,8 +164,7 @@
     },
     "loading": "Loading publications...",
     "error": {
-      "message": "The publications could not be loaded.",
-      "retry": "Try again"
+      "message": "The publications could not be loaded."
     },
     "empty": "No publications found.",
     "detail": {
@@ -202,7 +223,6 @@
       }
     },
     "header": {
-      "back": "Back to the Matrix catalog",
       "eyebrow": "Matrix on-line · Experiment 01",
       "title": {
         "line1": "Components",
@@ -277,13 +297,8 @@
       },
       "reset": "Reset",
       "code": {
-        "eyebrow": "Code in motion",
         "title": "See inside the circuit",
-        "status": "Snippet {{ current }} of {{ total }}",
-        "previous": "View previous snippet",
-        "next": "View next snippet",
         "pagination": "Code snippets",
-        "goTo": "View snippet {{ page }}",
         "slides": {
           "parent": {
             "title": "1. The parent prepares and sends the value",
@@ -320,7 +335,6 @@
     },
     "rest": {
       "header": {
-        "back": "Back to the Matrix catalog",
         "eyebrow": "Matrix on-line · Experiment 02",
         "title": {
           "line1": "A portal",
@@ -337,7 +351,6 @@
       "controls": {
         "label": "Cosmic subject · search in English",
         "placeholder": "E.g. Orion nebula, mars, black hole...",
-        "clear": "Clear search",
         "submit": "Open portal",
         "searchAgain": "Open another portal",
         "presetsLabel": "Suggested invocations",
@@ -352,7 +365,7 @@
         "idle": {
           "title": "The portal is at rest",
           "text": "No request has been sent. Choose a subject to begin the crossing.",
-          "action": "Invoke image"
+          "action": "Invoke"
         },
         "loading": {
           "title": "Crossing the network",
@@ -374,7 +387,6 @@
           "title": "The image did not manifest",
           "text": "The data arrived, but the visual file could not be loaded."
         },
-        "retry": "Try again",
         "newSearch": "New search",
         "success": {
           "label": "Mapped result",
@@ -407,13 +419,8 @@
         "name": "NASA Image and Video Library"
       },
       "code": {
-        "eyebrow": "Code in motion",
         "title": "Follow the request from within",
-        "status": "Snippet {{ current }} of {{ total }}",
-        "previous": "View previous snippet",
-        "next": "View next snippet",
         "pagination": "Request snippets",
-        "goTo": "View snippet {{ page }}",
         "slides": {
           "action": {
             "title": "1. The action enters the stream",

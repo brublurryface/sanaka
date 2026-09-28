@@ -7,6 +7,17 @@ import { RestCodeExplorer } from './rest-code-explorer';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        matrix: {
+          code: {
+            eyebrow: 'Code in motion',
+            status: 'Snippet {{ current }} of {{ total }}',
+            previous: 'Previous',
+            next: 'Next',
+            goTo: 'View snippet {{ page }}',
+          },
+        },
+      },
       matrix: {
         rest: {
           code: {
@@ -82,7 +93,7 @@ describe('RestCodeExplorer', () => {
 
     const snippets = fixture.nativeElement.querySelectorAll('.code-window__snippet');
     const activeSnippets = fixture.nativeElement.querySelectorAll(
-      '.code-window__snippet.code-layer--active',
+      '.code-window__snippet.matrix-code-layer--active',
     );
 
     expect(component.activeIndex()).toBe(3);
@@ -95,7 +106,9 @@ describe('RestCodeExplorer', () => {
     fixture.componentRef.setInput('currentStep', 1);
     fixture.detectChanges();
 
-    const snippet = fixture.nativeElement.querySelector('.code-window__snippet.code-layer--active');
+    const snippet = fixture.nativeElement.querySelector(
+      '.code-window__snippet.matrix-code-layer--active',
+    );
     expect(fixture.nativeElement.querySelector('.code-window__bar strong').textContent).toContain(
       'nasa-images.service.ts',
     );

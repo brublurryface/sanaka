@@ -9,10 +9,13 @@ import { ArcanePortal } from './arcane-portal';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        actions: { retry: 'Try again' },
+      },
       matrix: {
         rest: {
           portal: {
-            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke image' },
+            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke' },
             loading: { title: 'Crossing the network', text: 'Searching for {{ query }}.' },
             imageLoading: { title: 'Revealing image', text: 'The browser is loading the file.' },
             empty: { title: 'Nothing crossed', text: 'No image for {{ query }}.' },

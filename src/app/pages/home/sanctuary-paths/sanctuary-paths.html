@@ -3,8 +3,10 @@
     <p class="section-eyebrow">{{ 'home.paths.eyebrow' | transloco }}</p>
 
     <h2 id="paths-title">
-      {{ 'home.paths.title.line1' | transloco }}
-      <span>{{ 'home.paths.title.line2' | transloco }}</span>
+      <span class="paths-title-line">{{ 'home.paths.title.line1' | transloco }}</span>
+      <span class="paths-title-line paths-title-line--accent">
+        {{ 'home.paths.title.line2' | transloco }}
+      </span>
     </h2>
 
     <p class="paths-intro">
@@ -55,7 +57,7 @@
       <span class="path-arrow" aria-hidden="true"> ↗ </span>
     </a>
 
-    <a class="path-card" routerLink="/sobre">
+    <a class="path-card path-card--about" routerLink="/sobre">
       <span class="path-index" aria-hidden="true"> 04 </span>
 
       <div class="path-content">
