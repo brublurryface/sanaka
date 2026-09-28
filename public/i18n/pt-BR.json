@@ -1,6 +1,15 @@
 {
   "app": {
     "title": "Sanaka",
+    "pageTitles": {
+      "posts": "Publicações do santuário",
+      "post": "Publicação",
+      "matrix": "Matrix on-line",
+      "matrixComponents": "Componentes em conversa",
+      "matrixRestApi": "Portal da API REST",
+      "maya": "Māyā",
+      "about": "Sobre"
+    },
     "navigation": {
       "ariaLabel": "Navegação principal",
       "home": "Home",

@@ -139,7 +139,12 @@
       <p class="about-eyebrow">{{ 'about.story.eyebrow' | transloco }}</p>
       <h2>{{ cycle.title }}</h2>
       <p>{{ cycle.excerpt }}</p>
-      <a class="about-story__link" [routerLink]="['/posts', cycle.slug]">
+      <a
+        class="about-story__link"
+        [routerLink]="['/posts', cycle.slug]"
+        target="_blank"
+        rel="noopener"
+      >
         {{ 'about.story.read' | transloco }}
         <span aria-hidden="true">↗</span>
       </a>

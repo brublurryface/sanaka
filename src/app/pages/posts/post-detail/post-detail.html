@@ -155,7 +155,7 @@
             [attr.aria-label]="'posts.detail.adjacent' | transloco"
           >
             @if (currentPost.previous; as previous) {
-              <a [routerLink]="['/posts', previous.slug]">
+              <a [routerLink]="['/posts', previous.slug]" target="_blank" rel="noopener">
                 <span>{{ 'posts.detail.previous' | transloco }}</span>
                 <strong>← {{ previous.title }}</strong>
               </a>
@@ -164,7 +164,12 @@
             }
 
             @if (currentPost.next; as next) {
-              <a class="post-detail__adjacent-next" [routerLink]="['/posts', next.slug]">
+              <a
+                class="post-detail__adjacent-next"
+                [routerLink]="['/posts', next.slug]"
+                target="_blank"
+                rel="noopener"
+              >
                 <span>{{ 'posts.detail.next' | transloco }}</span>
                 <strong>{{ next.title }} →</strong>
               </a>

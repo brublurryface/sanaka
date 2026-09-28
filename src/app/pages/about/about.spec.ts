@@ -152,9 +152,11 @@ describe('About', () => {
     expect(
       compiled.querySelector('.about-story__content > p:not(.about-eyebrow)')?.textContent,
     ).toContain('Excerpt 5');
-    expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
-      '/posts/cycle-5',
-    );
+    const storyLink = compiled.querySelector<HTMLAnchorElement>('.about-story__link');
+
+    expect(storyLink?.getAttribute('href')).toBe('/posts/cycle-5');
+    expect(storyLink?.target).toBe('_blank');
+    expect(storyLink?.rel).toBe('noopener');
     expect(selectors[4].getAttribute('aria-pressed')).toBe('true');
     expect(selectors[4].getAttribute('aria-label')).toContain('Cycle 5');
     expect(selectors[4].getAttribute('href')).toBeNull();

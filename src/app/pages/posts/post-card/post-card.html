@@ -1,6 +1,12 @@
 <article class="post-card">
   @if (post().coverImageUrl) {
-    <a class="post-card__image" [routerLink]="['/posts', post().slug]" tabindex="-1">
+    <a
+      class="post-card__image"
+      [routerLink]="['/posts', post().slug]"
+      target="_blank"
+      rel="noopener"
+      tabindex="-1"
+    >
       <img [src]="post().coverImageUrl" [alt]="post().coverImageAlt ?? ''" />
     </a>
   }
@@ -17,7 +23,9 @@
     </div>
 
     <h2 class="post-card__title">
-      <a [routerLink]="['/posts', post().slug]">{{ post().title }}</a>
+      <a [routerLink]="['/posts', post().slug]" target="_blank" rel="noopener">
+        {{ post().title }}
+      </a>
     </h2>
 
     <p class="post-card__excerpt">

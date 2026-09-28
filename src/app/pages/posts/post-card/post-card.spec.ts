@@ -84,6 +84,8 @@ describe('PostCard', () => {
     expect(compiled.querySelector('.post-card__title a')?.getAttribute('href')).toBe(
       '/posts/despertando-a-maya',
     );
+    expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.target).toBe('_blank');
+    expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.rel).toBe('noopener');
   });
 
   it('should preserve the ISO publication date in the datetime attribute', () => {

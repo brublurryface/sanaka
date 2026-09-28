@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
 import { Observable, of, throwError } from 'rxjs';
@@ -32,6 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           next: 'Próxima publicação',
         },
       },
+      app: { pageTitles: { post: 'Publicação' } },
     });
   }
 }
@@ -130,6 +132,38 @@ describe('PostDetailPage', () => {
       'https://example.com/voce.jpg',
     );
     expect(compiled.querySelectorAll('.post-detail__adjacent a')).toHaveLength(2);
+    expect(TestBed.inject(Title).getTitle()).toBe('VOCÊ | Sanaka');
+    expect(compiled.querySelector<HTMLAnchorElement>('.post-detail__adjacent a')?.target).toBe(
+      '_blank',
+    );
+    expect(compiled.querySelector<HTMLAnchorElement>('.post-detail__adjacent a')?.rel).toBe(
+      'noopener',
+    );
+  });
+
+  it('should calculate reading progress from the article position in the document', () => {
+    createComponent();
+    const component = fixture.componentInstance;
+    const article = document.getElementById('post-reading-nave');
+
+    vi.spyOn(article!, 'getBoundingClientRect').mockReturnValue({
+      top: -500,
+      bottom: 700,
+      height: 1200,
+      left: 0,
+      right: 0,
+      width: 0,
+      x: 0,
+      y: -500,
+      toJSON: () => ({}),
+    });
+    Object.defineProperty(article, 'scrollHeight', { configurable: true, value: 1200 });
+    Object.defineProperty(window, 'scrollY', { configurable: true, value: 700 });
+    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 700 });
+
+    component.updateReadingProgress();
+
+    expect(component.readingProgress()).toBe(100);
   });
 
   it('should show the not-found state without rendering an article', () => {

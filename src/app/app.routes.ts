@@ -17,10 +17,12 @@ export const routes: Routes = [
   },
   {
     path: 'maya',
+    data: { titleKey: 'app.pageTitles.maya' },
     loadComponent: () => import('./pages/maya/maya').then((m) => m.Maya),
   },
   {
     path: 'sobre',
+    data: { titleKey: 'app.pageTitles.about' },
     loadComponent: () => import('./pages/about/about').then((m) => m.About),
   },
 ];
