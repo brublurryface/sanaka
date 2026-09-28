@@ -1,5 +1,5 @@
-<section class="code-explorer" aria-labelledby="code-explorer-title">
-  <header class="code-explorer__intro">
+<section class="code-explorer matrix-code-explorer" aria-labelledby="code-explorer-title">
+  <header class="code-explorer__header">
     <div>
       <p>{{ 'common.matrix.code.eyebrow' | transloco }}</p>
       <h3 id="code-explorer-title">{{ 'matrix.exhibit.code.title' | transloco }}</h3>
@@ -21,8 +21,8 @@
   <div class="code-explorer__descriptions">
     @for (slide of slides; track slide.index) {
       <p
-        class="code-explorer__description carousel-layer"
-        [class.carousel-layer--active]="activeIndex() === slide.index"
+        class="code-explorer__description matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === slide.index"
         [attr.aria-hidden]="activeIndex() !== slide.index"
       >
         {{ slide.descriptionKey | transloco }}
@@ -54,8 +54,8 @@
     <div class="code-window__title">
       @for (slide of slides; track slide.index) {
         <span
-          class="carousel-layer"
-          [class.carousel-layer--active]="activeIndex() === slide.index"
+          class="matrix-code-layer"
+          [class.matrix-code-layer--active]="activeIndex() === slide.index"
           [attr.aria-hidden]="activeIndex() !== slide.index"
         >
           {{ slide.titleKey | transloco }}
@@ -65,8 +65,8 @@
 
     <div class="code-window__viewport">
       <pre
-        class="code-window__snippet carousel-layer"
-        [class.carousel-layer--active]="activeIndex() === 0"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 0"
         [attr.aria-hidden]="activeIndex() !== 0"
         [attr.tabindex]="activeIndex() === 0 ? 0 : -1"
       ><code><span class="token-keyword">readonly</span> draftMessage = <span class="token-call">signal</span>(<span class="token-string">''</span>);
@@ -78,8 +78,8 @@
 {{ '}' }}</code></pre>
 
       <pre
-        class="code-window__snippet carousel-layer"
-        [class.carousel-layer--active]="activeIndex() === 1"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 1"
         [attr.aria-hidden]="activeIndex() !== 1"
         [attr.tabindex]="activeIndex() === 1 ? 0 : -1"
       ><code><span class="token-tag">&lt;app-matrix-message-node</span>
@@ -88,8 +88,8 @@
 <span class="token-tag">/&gt;</span></code></pre>
 
       <pre
-        class="code-window__snippet carousel-layer"
-        [class.carousel-layer--active]="activeIndex() === 2"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 2"
         [attr.aria-hidden]="activeIndex() !== 2"
         [attr.tabindex]="activeIndex() === 2 ? 0 : -1"
       ><code><span class="token-decorator">@Input</span>({{ '{' }} required: <span class="token-boolean">true</span> {{ '}' }}) message = <span class="token-string">''</span>;
@@ -105,8 +105,8 @@
 {{ '}' }}</code></pre>
 
       <pre
-        class="code-window__snippet carousel-layer"
-        [class.carousel-layer--active]="activeIndex() === 3"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 3"
         [attr.aria-hidden]="activeIndex() !== 3"
         [attr.tabindex]="activeIndex() === 3 ? 0 : -1"
       ><code><span class="token-function">receiveReply</span>(reply: <span class="token-type">MatrixReply</span>): <span class="token-type">void</span> {{ '{' }}

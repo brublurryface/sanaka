@@ -1,4 +1,4 @@
-<section class="code-explorer" aria-labelledby="rest-code-title">
+<section class="code-explorer matrix-code-explorer" aria-labelledby="rest-code-title">
   <header class="code-explorer__header">
     <div>
       <p>{{ 'common.matrix.code.eyebrow' | transloco }}</p>
@@ -21,8 +21,8 @@
   <div class="code-explorer__descriptions">
     @for (slide of slides; track slide.index) {
       <p
-        class="code-explorer__description code-layer"
-        [class.code-layer--active]="activeIndex() === slide.index"
+        class="code-explorer__description matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === slide.index"
         [attr.aria-hidden]="activeIndex() !== slide.index"
       >
         {{ slide.descriptionKey | transloco }}
@@ -51,8 +51,8 @@
     <div class="code-window__title">
       @for (slide of slides; track slide.index) {
         <span
-          class="code-layer"
-          [class.code-layer--active]="activeIndex() === slide.index"
+          class="matrix-code-layer"
+          [class.matrix-code-layer--active]="activeIndex() === slide.index"
           [attr.aria-hidden]="activeIndex() !== slide.index"
         >
           {{ slide.titleKey | transloco }}
@@ -62,8 +62,8 @@
 
     <div class="code-window__viewport">
       <pre
-        class="code-window__snippet code-layer"
-        [class.code-layer--active]="activeIndex() === 0"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 0"
         [attr.aria-hidden]="activeIndex() !== 0"
         [attr.tabindex]="activeIndex() === 0 ? 0 : -1"
       ><code><span class="token-function">search</span>(): <span class="token-type">void</span> {{ '{' }}
@@ -77,8 +77,8 @@
 {{ '}' }}</code></pre>
 
       <pre
-        class="code-window__snippet code-layer"
-        [class.code-layer--active]="activeIndex() === 1"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 1"
         [attr.aria-hidden]="activeIndex() !== 1"
         [attr.tabindex]="activeIndex() === 1 ? 0 : -1"
       ><code><span class="token-keyword">const</span> nasaId = <span class="token-keyword">this</span>.<span class="token-call">curatedNasaId</span>(query);
@@ -93,8 +93,8 @@
 );</code></pre>
 
       <pre
-        class="code-window__snippet code-layer"
-        [class.code-layer--active]="activeIndex() === 2"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 2"
         [attr.aria-hidden]="activeIndex() !== 2"
         [attr.tabindex]="activeIndex() === 2 ? 0 : -1"
       ><code><span class="token-keyword">this</span>.searchRequests
@@ -110,8 +110,8 @@
   .<span class="token-call">subscribe</span>((outcome) =&gt; <span class="token-keyword">this</span>.<span class="token-call">finishRequest</span>(outcome));</code></pre>
 
       <pre
-        class="code-window__snippet code-layer"
-        [class.code-layer--active]="activeIndex() === 3"
+        class="code-window__snippet matrix-code-layer"
+        [class.matrix-code-layer--active]="activeIndex() === 3"
         [attr.aria-hidden]="activeIndex() !== 3"
         [attr.tabindex]="activeIndex() === 3 ? 0 : -1"
       ><code><span class="token-keyword">const</span> previewUrl = item.links

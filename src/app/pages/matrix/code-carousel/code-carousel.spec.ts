@@ -110,7 +110,7 @@ describe('MatrixCodeCarousel', () => {
 
     expect(snippets).toHaveLength(4);
     expect(
-      fixture.nativeElement.querySelectorAll('.code-window__snippet.carousel-layer--active'),
+      fixture.nativeElement.querySelectorAll('.code-window__snippet.matrix-code-layer--active'),
     ).toHaveLength(1);
     expect(snippets[0].getAttribute('aria-hidden')).toBe('false');
     expect(snippets[1].getAttribute('aria-hidden')).toBe('true');

@@ -93,7 +93,7 @@ describe('RestCodeExplorer', () => {
 
     const snippets = fixture.nativeElement.querySelectorAll('.code-window__snippet');
     const activeSnippets = fixture.nativeElement.querySelectorAll(
-      '.code-window__snippet.code-layer--active',
+      '.code-window__snippet.matrix-code-layer--active',
     );
 
     expect(component.activeIndex()).toBe(3);
@@ -106,7 +106,9 @@ describe('RestCodeExplorer', () => {
     fixture.componentRef.setInput('currentStep', 1);
     fixture.detectChanges();
 
-    const snippet = fixture.nativeElement.querySelector('.code-window__snippet.code-layer--active');
+    const snippet = fixture.nativeElement.querySelector(
+      '.code-window__snippet.matrix-code-layer--active',
+    );
     expect(fixture.nativeElement.querySelector('.code-window__bar strong').textContent).toContain(
       'nasa-images.service.ts',
     );
