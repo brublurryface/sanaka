@@ -1,15 +1,16 @@
 <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 120" role="img" aria-labelledby="title">
   <title id="title">Hamsa</title>
   <defs>
-    <mask id="eye-cutout">
+    <mask id="symbol-cutouts">
       <rect width="100" height="120" fill="#fff" />
       <path d="M25 78Q50 59 75 78Q50 97 25 78Z" fill="#000" />
+      <path d="M42 25V61M58 25V61" fill="none" stroke="#000" stroke-width="1.4" stroke-linecap="round" />
     </mask>
   </defs>
   <path
     fill="#d3a64f"
-    mask="url(#eye-cutout)"
-    d="M50 116c-22 0-36-15-37-36C12 70 5 64 2 58c6-7 14-5 22 3V30c0-7 4-11 10-11s10 4 10 11V15C44 7 46 3 50 3s6 4 6 12v15c0-7 4-11 10-11s10 4 10 11v31c8-8 16-10 22-3-3 6-10 12-11 22-1 21-15 36-37 36Z"
+    mask="url(#symbol-cutouts)"
+    d="M50 116c-22 0-36-15-37-36C12 70 5 64 2 58c6-7 14-5 25 4V30c0-7 3-11 7.5-11S42 23 42 30V15C42 7 45 3 50 3s8 4 8 12v15c0-7 3-11 7.5-11S73 23 73 30v32c11-9 19-11 25-4-3 6-10 12-11 22-1 21-15 36-37 36Z"
   />
   <circle cx="50" cy="78" r="8" fill="none" stroke="#edc978" stroke-width="2" />
   <circle cx="50" cy="78" r="3" fill="#edc978" />
