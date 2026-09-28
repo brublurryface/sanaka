@@ -59,12 +59,12 @@ No published post was found without a category. No post combines the Romance and
 
 `I . • Acordar`, slug `acordar`, belongs to `Bruna + De Preto`. De Preto is connected to Blaike and should be available to both Sanaka and WoD without duplicating the WordPress post.
 
-This exposes a distinction that the parent architecture issue must resolve:
+This exposes a distinction preserved by the current architecture:
 
 - category describes the editorial collection;
 - frontend destination describes where content may appear.
 
-Using categories for both responsibilities may become fragile. Issue #25 must evaluate whether a dedicated destination taxonomy is required, with values such as `sanaka` and `wod`. Shared content could receive both values.
+Sanaka treats `Romance` as the explicit WoD boundary. Content outside that branch, including De Preto, remains eligible for Sanaka. A dedicated destination taxonomy is unnecessary while this rule remains sufficient for the editorial workflow.
 
 ## Featured media
 
@@ -78,9 +78,9 @@ The REST output displayed no alternative text for these records. Their `alt_text
 
 The 2,523 media attachments must not be classified as unused from this audit. This total increased from 2,521 after the Pensamentos and Blaike covers were added. Old theme content, Revolution Slider, plugin tables, pages, or unregistered custom post types may still reference the remaining media.
 
-## Preliminary frontend rules
+## Frontend rules
 
-These rules document current intent; they are not implemented by this issue.
+These rules describe the boundary adopted for the shared WordPress installation.
 
 | Frontend | Included collections     |
 | -------- | ------------------------ |
@@ -89,14 +89,24 @@ These rules document current intent; they are not implemented by this issue.
 
 The same De Preto post should be queried by both frontends rather than duplicated.
 
+### Sanaka enforcement
+
+Since 2026-09-28, every post query made by Sanaka sends `categories_exclude=43`, including:
+
+- archive, search, pagination, category, and tag filters;
+- direct lookup by slug;
+- previous and next post navigation.
+
+The application also removes `Romance` from related and exploratory category links. The rule is centralized in `wordpress-content-policy.ts`; a future migration that changes WordPress taxonomy IDs must update that policy.
+
 ## Risks and unresolved decisions
 
 - The `not_included` slug is a legacy name even though the underlying image was replaced.
-- Category hierarchy currently mixes organization and destination concerns.
+- The category ID is stable inside the current WordPress installation but must be reviewed during a taxonomy migration.
 - Empty categories must not be deleted until their historical purpose is reviewed.
 - Character profiles and slider content may remain in the database outside the standard post endpoint.
 - Media cleanup requires a backup and an audit of plugin, page, database, and filesystem references.
-- The final REST queries for each frontend depend on the taxonomy decision in issue #25.
+- The WoD frontend query remains to be implemented when work begins on `wod.sanaka.com.br`.
 
 ## Reproducing the audit
 
