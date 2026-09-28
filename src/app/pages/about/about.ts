@@ -1,5 +1,6 @@
 import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
+import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
@@ -9,7 +10,7 @@ import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.s
 
 @Component({
   selector: 'app-about',
-  imports: [TranslocoPipe, AboutPuzzleMobile],
+  imports: [RouterLink, TranslocoPipe, AboutPuzzleMobile],
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })

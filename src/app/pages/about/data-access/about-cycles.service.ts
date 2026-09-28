@@ -11,7 +11,6 @@ export interface AboutCyclePost {
   readonly title: string;
   readonly hoverText: string;
   readonly excerpt: string;
-  readonly url: string;
   readonly order: number;
 }
 
@@ -26,7 +25,6 @@ interface WordPressCategory {
 interface WordPressCyclePost {
   readonly id: number;
   readonly slug: string;
-  readonly link: string;
   readonly title: WordPressRenderedField;
   readonly excerpt: WordPressRenderedField;
   readonly hover_text?: string | WordPressRenderedField;
@@ -79,7 +77,7 @@ export class AboutCyclesService {
     const postsParams = new HttpParams()
       .set('categories', String(categoryId))
       .set('per_page', '100')
-      .set('_fields', 'id,slug,link,title,excerpt,hover_text,meta');
+      .set('_fields', 'id,slug,title,excerpt,hover_text,meta');
 
     return this.http
       .get<readonly WordPressCyclePost[]>(`${this.apiUrl}/posts`, {
@@ -99,7 +97,6 @@ export class AboutCyclesService {
           title,
           hoverText: this.readRenderedText(post.hover_text ?? post.meta?.hover_text),
           excerpt: this.wordpressText.toText(post.excerpt.rendered),
-          url: post.link,
           order: this.readCycleOrder(title),
         };
       })

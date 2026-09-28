@@ -1,4 +1,5 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
 import { of, throwError } from 'rxjs';
 
@@ -11,7 +12,6 @@ const cycles: readonly AboutCyclePost[] = Array.from({ length: 6 }, (_, index) =
   title: `${index + 1} — Cycle ${index + 1}`,
   hoverText: `Hover ${index + 1}`,
   excerpt: `Excerpt ${index + 1}`,
-  url: `https://example.com/cycle-${index + 1}/`,
   order: index + 1,
 }));
 
@@ -50,7 +50,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
         story: {
           eyebrow: 'Fragmento selecionado',
-          read: 'Ler o ciclo completo',
+          read: 'Ler fragmento inteiro',
         },
         destinationsLabel: 'Sobre e Sanakaverse',
         contact: {
@@ -81,6 +81,7 @@ describe('About', () => {
     await TestBed.configureTestingModule({
       imports: [About],
       providers: [
+        provideRouter([]),
         { provide: AboutCyclesService, useValue: cyclesService },
         provideTransloco({
           config: {
@@ -134,7 +135,7 @@ describe('About', () => {
     );
   });
 
-  it('should expose the selected excerpt and its complete WordPress link', () => {
+  it('should expose the selected excerpt and its internal publication link', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -152,7 +153,7 @@ describe('About', () => {
       compiled.querySelector('.about-story__content > p:not(.about-eyebrow)')?.textContent,
     ).toContain('Excerpt 5');
     expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
-      'https://example.com/cycle-5/',
+      '/posts/cycle-5',
     );
     expect(selectors[4].getAttribute('aria-pressed')).toBe('true');
     expect(selectors[4].getAttribute('aria-label')).toContain('Cycle 5');

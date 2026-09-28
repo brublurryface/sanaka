@@ -48,14 +48,13 @@ describe('AboutCyclesService', () => {
 
     expect(postsRequest.request.params.get('categories')).toBe('62');
     expect(postsRequest.request.params.get('per_page')).toBe('100');
-    expect(postsRequest.request.params.get('_fields')).toContain('link');
+    expect(postsRequest.request.params.get('_fields')).not.toContain('link');
     expect(postsRequest.request.params.get('_fields')).toContain('meta');
 
     postsRequest.flush([
       {
         id: 6,
         slug: 'om-sanakaya-namah',
-        link: 'https://example.com/om-sanakaya-namah/',
         title: { rendered: 'VI — Oṁ Sanakāya Namaḥ' },
         hover_text: 'Um nome antigo. Uma forma jovem.',
         excerpt: { rendered: '<p>Um nome antigo.</p>' },
@@ -63,7 +62,6 @@ describe('AboutCyclesService', () => {
       {
         id: 1,
         slug: 'morte',
-        link: 'https://example.com/morte/',
         title: { rendered: 'I — Morte' },
         hover_text: { rendered: '<p>Uma janela e uma pergunta.</p>' },
         excerpt: {
@@ -73,7 +71,6 @@ describe('AboutCyclesService', () => {
       {
         id: 4,
         slug: 'renascimento',
-        link: 'https://example.com/renascimento/',
         title: { rendered: 'IV — Renascimento' },
         meta: { hover_text: 'E se o eu pudesse ser desmontado?' },
         excerpt: { rendered: '<p>Desmontar o eu.</p>' },
@@ -87,7 +84,6 @@ describe('AboutCyclesService', () => {
         title: 'I — Morte',
         hoverText: 'Uma janela e uma pergunta.',
         excerpt: 'Uma janela & um reflexo.',
-        url: 'https://example.com/morte/',
         order: 1,
       },
       {
@@ -96,7 +92,6 @@ describe('AboutCyclesService', () => {
         title: 'IV — Renascimento',
         hoverText: 'E se o eu pudesse ser desmontado?',
         excerpt: 'Desmontar o eu.',
-        url: 'https://example.com/renascimento/',
         order: 4,
       },
       {
@@ -105,7 +100,6 @@ describe('AboutCyclesService', () => {
         title: 'VI — Oṁ Sanakāya Namaḥ',
         hoverText: 'Um nome antigo. Uma forma jovem.',
         excerpt: 'Um nome antigo.',
-        url: 'https://example.com/om-sanakaya-namah/',
         order: 6,
       },
     ]);
