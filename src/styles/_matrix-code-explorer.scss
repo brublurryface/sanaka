@@ -46,6 +46,7 @@
     grid-area: 1 / 1;
     margin: 0;
     color: var(--sanaka-ivory-muted);
+    font-size: 1rem;
     line-height: var(--matrix-code-description-line-height, 1.65);
   }
 
@@ -76,7 +77,7 @@
     padding: 0.7rem 1rem;
     border-bottom: 1px solid rgba(237, 201, 120, 0.18);
     color: var(--sanaka-ivory-muted);
-    font-size: 0.7rem;
+    font-size: var(--sanaka-type-editorial-label-size);
   }
 
   .code-window__bar small {

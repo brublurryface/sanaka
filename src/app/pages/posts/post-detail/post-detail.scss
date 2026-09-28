@@ -121,9 +121,12 @@
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.9rem;
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 700;
   line-height: 1.5;
+  letter-spacing: 0.1em;
   text-decoration: none;
+  text-transform: uppercase;
 }
 
 .post-detail__back:hover,

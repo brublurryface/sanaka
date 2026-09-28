@@ -376,7 +376,7 @@ mat-toolbar {
 .app-footer__future a {
   color: var(--sanaka-ivory);
 
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.12em;
 

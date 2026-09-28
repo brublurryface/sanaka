@@ -378,11 +378,11 @@ button:disabled {
 }
 
 .timeline-note {
-  max-width: 42rem;
+  max-width: none;
   margin: 1rem 0 0;
 
   color: var(--sanaka-ivory-muted);
-  font-size: 0.82rem;
+  font-size: 1rem;
   line-height: 1.65;
 }
 
@@ -428,7 +428,7 @@ button:disabled {
 .timeline li > span {
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.62rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.1em;
 }
@@ -437,7 +437,7 @@ button:disabled {
   max-width: 11rem;
   margin: 0.55rem 0 0;
 
-  font-size: 0.77rem;
+  font-size: 1rem;
   line-height: 1.55;
 }
 
@@ -460,7 +460,7 @@ button:disabled {
 .explanation-grid span {
   color: var(--sanaka-gold);
 
-  font-size: 0.62rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.12em;
 }
@@ -478,7 +478,7 @@ button:disabled {
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.83rem;
+  font-size: 1rem;
   line-height: 1.7;
 }
 
