@@ -202,7 +202,7 @@
   color: var(--sanaka-gold-soft);
   cursor: pointer;
   font: inherit;
-  font-size: 0.7rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.09em;
   text-transform: uppercase;
@@ -297,7 +297,7 @@
   color: var(--sanaka-ivory-muted);
   cursor: pointer;
   font: inherit;
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .portal-controls__presets .portal-controls__preset--active {

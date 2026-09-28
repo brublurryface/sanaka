@@ -228,7 +228,7 @@ input:focus-visible {
 
   cursor: pointer;
 
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.06em;
 }
@@ -245,7 +245,7 @@ input:focus-visible {
   margin-bottom: 0.6rem;
 
   color: var(--sanaka-ivory-muted);
-  font-size: 0.75rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .field-guidance button {
@@ -280,7 +280,7 @@ button:disabled {
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.75rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   line-height: 1.6;
 }
 

@@ -78,7 +78,7 @@ dd {
 code {
   color: #9cdcfe;
   font-family: Consolas, 'Courier New', monospace;
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .request-inspector__endpoint,
@@ -113,7 +113,7 @@ code {
   overflow-wrap: anywhere;
   color: var(--sanaka-ivory-muted);
   font-family: Consolas, 'Courier New', monospace;
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
 }
 
 .request-inspector__response-heading {
@@ -134,7 +134,7 @@ pre {
   overflow: auto;
   background: #06090d;
   color: #d4d4d4;
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   line-height: 1.65;
   white-space: pre-wrap;
 }

@@ -28,7 +28,6 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Navegação do rodapé',
             about: 'Sobre & contato',
-            enter: 'Entrar',
             signature: 'Entre código, símbolos e presença.',
           },
         },
@@ -50,7 +49,6 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Footer navigation',
             about: 'About & contact',
-            enter: 'Enter',
             signature: 'Between code, symbols, and presence.',
           },
         },
