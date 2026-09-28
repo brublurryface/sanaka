@@ -365,7 +365,7 @@
         "idle": {
           "title": "O portal está em repouso",
           "text": "Nenhuma requisição foi enviada. Escolha um tema para iniciar a travessia.",
-          "action": "Invocar imagem"
+          "action": "Invocar"
         },
         "loading": {
           "title": "Atravessando a rede",

@@ -50,6 +50,8 @@ html {
 
   /* Papéis tipográficos compartilhados pelos cabeçalhos do site. */
   --sanaka-type-editorial-label-size: 0.8rem;
+  --sanaka-type-interface-meta-size: 0.9rem;
+  --sanaka-type-code-size: clamp(1rem, 1.5vw, 1.08rem);
   --sanaka-type-eyebrow-size: var(--sanaka-type-editorial-label-size);
   --sanaka-type-eyebrow-weight: 700;
   --sanaka-type-eyebrow-line-height: 1.5;

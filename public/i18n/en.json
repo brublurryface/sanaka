@@ -365,7 +365,7 @@
         "idle": {
           "title": "The portal is at rest",
           "text": "No request has been sent. Choose a subject to begin the crossing.",
-          "action": "Invoke image"
+          "action": "Invoke"
         },
         "loading": {
           "title": "Crossing the network",

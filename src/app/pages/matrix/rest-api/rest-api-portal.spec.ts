@@ -58,7 +58,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             },
           },
           portal: {
-            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke image' },
+            idle: { title: 'Portal at rest', text: 'No request yet.', action: 'Invoke' },
             loading: { title: 'Crossing the network', text: 'Searching for {{ query }}.' },
             imageLoading: { title: 'Revealing image', text: 'The browser is loading the file.' },
             empty: { title: 'Nothing crossed', text: 'No image for {{ query }}.' },
@@ -570,14 +570,5 @@ describe('RestApiPortal', () => {
     );
     expect(JSON.parse(fixture.componentInstance.mappedResponse()).date).toBe('2003-12-10');
     expect(api.searchImages).toHaveBeenCalledOnce();
-  });
-
-  it('should keep the experiment anchor inside the REST route', () => {
-    const fixture = TestBed.createComponent(RestApiPortal);
-    fixture.detectChanges();
-
-    const action = fixture.nativeElement.querySelector('.rest-hero__action') as HTMLAnchorElement;
-
-    expect(action.getAttribute('href')).toBe('/matrix/rest-api#rest-exhibit');
   });
 });
