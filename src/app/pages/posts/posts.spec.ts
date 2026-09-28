@@ -17,6 +17,9 @@ class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations = {
       'pt-BR': {
+        common: {
+          actions: { clearSearch: 'Limpar busca', retry: 'Tentar novamente' },
+        },
         posts: {
           header: {
             eyebrow: 'Arquivo',
@@ -54,6 +57,9 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
       },
       en: {
+        common: {
+          actions: { clearSearch: 'Clear search', retry: 'Try again' },
+        },
         posts: {
           header: {
             eyebrow: 'Archive',

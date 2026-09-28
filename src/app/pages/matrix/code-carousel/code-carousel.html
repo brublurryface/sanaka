@@ -1,13 +1,13 @@
 <section class="code-explorer" aria-labelledby="code-explorer-title">
   <header class="code-explorer__intro">
     <div>
-      <p>{{ 'matrix.exhibit.code.eyebrow' | transloco }}</p>
+      <p>{{ 'common.matrix.code.eyebrow' | transloco }}</p>
       <h3 id="code-explorer-title">{{ 'matrix.exhibit.code.title' | transloco }}</h3>
     </div>
 
     <span>
       {{
-        'matrix.exhibit.code.status'
+        'common.matrix.code.status'
           | transloco: { current: activeIndex() + 1, total: slides.length }
       }}
     </span>
@@ -41,7 +41,7 @@
             type="button"
             [class.code-window__page--active]="activeIndex() === slide.index"
             [attr.aria-current]="activeIndex() === slide.index ? 'true' : null"
-            [attr.aria-label]="'matrix.exhibit.code.goTo' | transloco: { page: slide.index + 1 }"
+            [attr.aria-label]="'common.matrix.code.goTo' | transloco: { page: slide.index + 1 }"
             (click)="showSlide(slide.index)"
           ></button>
         }
@@ -119,7 +119,7 @@
       <button
         type="button"
         (click)="previous()"
-        [attr.aria-label]="'matrix.exhibit.code.previous' | transloco"
+        [attr.aria-label]="'common.matrix.code.previous' | transloco"
       >
         <span aria-hidden="true">←</span>
       </button>
@@ -129,7 +129,7 @@
       <button
         type="button"
         (click)="next()"
-        [attr.aria-label]="'matrix.exhibit.code.next' | transloco"
+        [attr.aria-label]="'common.matrix.code.next' | transloco"
       >
         <span aria-hidden="true">→</span>
       </button>

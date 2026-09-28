@@ -6,25 +6,7 @@
 }
 
 .about-hero {
-  position: relative;
-  isolation: isolate;
-
-  display: grid;
-  align-items: start;
-
-  overflow: hidden;
-
   background: var(--sanaka-bg);
-}
-
-.about-hero::before,
-.about-hero::after {
-  position: absolute;
-  inset: 0;
-
-  content: '';
-
-  pointer-events: none;
 }
 
 .about-hero::before {
@@ -71,24 +53,7 @@
 }
 
 .about-hero__content {
-  position: relative;
-  z-index: 1;
-
-  padding-block: var(--sanaka-space-page-hero-block);
-}
-
-.about-eyebrow {
-  margin: 0;
-
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-eyebrow-size);
-  font-weight: var(--sanaka-type-eyebrow-weight);
-  line-height: var(--sanaka-type-eyebrow-line-height);
-  letter-spacing: var(--sanaka-type-eyebrow-spacing);
-
-  text-transform: uppercase;
+  width: var(--sanaka-page-shell-width);
 }
 
 .about-hero h1,
@@ -140,10 +105,7 @@
 }
 
 .about-section-heading {
-  display: grid;
-  grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 1.2fr);
-  align-items: end;
-  gap: clamp(2rem, 7vw, 7rem);
+  --sanaka-section-heading-intro-width: 36rem;
 }
 
 .about-story h2,
@@ -176,8 +138,7 @@
 }
 
 .about-section-heading > p:last-child {
-  max-width: 36rem;
-  margin: 0;
+  max-width: var(--sanaka-section-heading-intro-width);
 }
 
 .about-section-heading > p:last-child strong {

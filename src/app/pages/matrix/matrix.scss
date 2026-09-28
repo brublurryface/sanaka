@@ -7,16 +7,6 @@
   margin-inline: auto;
 }
 
-.matrix-hero::before,
-.matrix-hero::after {
-  position: absolute;
-  inset: 0;
-
-  content: '';
-
-  pointer-events: none;
-}
-
 .matrix-hero::before {
   z-index: -2;
 
@@ -50,20 +40,13 @@
     );
 }
 
-.matrix-hero__content {
-  position: relative;
-  z-index: 1;
-
-  padding-block: var(--sanaka-space-page-hero-block);
-}
-
 .matrix-hero__back {
   display: inline-flex;
   align-items: center;
   gap: 0.6rem;
   margin-bottom: 1.5rem;
   color: var(--sanaka-ivory-muted);
-  font-size: 0.7rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-decoration: none;
@@ -77,18 +60,6 @@
 .matrix-hero__back:focus-visible {
   outline: 2px solid var(--sanaka-gold-soft);
   outline-offset: 5px;
-}
-
-.eyebrow {
-  margin: 0;
-
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-eyebrow-size);
-  font-weight: var(--sanaka-type-eyebrow-weight);
-  line-height: var(--sanaka-type-eyebrow-line-height);
-  letter-spacing: var(--sanaka-type-eyebrow-spacing);
-  text-transform: uppercase;
 }
 
 .matrix-hero h1 {
@@ -135,7 +106,7 @@
 
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.12em;
   text-decoration: none;
@@ -152,13 +123,6 @@
     linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));
 }
 
-.exhibit-heading {
-  display: grid;
-  grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 1.2fr);
-  align-items: end;
-  gap: clamp(2rem, 7vw, 7rem);
-}
-
 .exhibit-heading h2 {
   max-width: 32rem;
   margin: 1rem 0 0;
@@ -171,11 +135,6 @@
 }
 
 .exhibit-heading > p {
-  max-width: 36rem;
-  margin: 0;
-
-  color: var(--sanaka-ivory-muted);
-
   line-height: 1.85;
 }
 
@@ -246,7 +205,7 @@
 .node-heading p {
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.63rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.16em;
   text-transform: uppercase;
@@ -271,7 +230,7 @@ label {
 
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;
@@ -426,7 +385,7 @@ button:disabled {
 
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.63rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.13em;
   text-transform: uppercase;
@@ -461,7 +420,7 @@ button:disabled {
 .timeline-status {
   color: var(--sanaka-gold-soft);
 
-  font-size: 0.65rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;

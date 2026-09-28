@@ -1,12 +1,8 @@
-import { Component, Input, OnChanges, SimpleChanges, signal } from '@angular/core';
+import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { CodeExplorerController, CodeExplorerSlide } from '../../code-explorer.controller';
 
-interface RestCodeSlide {
-  readonly index: number;
-  readonly fileName: string;
-  readonly titleKey: string;
-  readonly descriptionKey: string;
-}
+type RestCodeSlide = CodeExplorerSlide;
 
 @Component({
   selector: 'app-rest-code-explorer',
@@ -14,11 +10,10 @@ interface RestCodeSlide {
   templateUrl: './rest-code-explorer.html',
   styleUrl: './rest-code-explorer.scss',
 })
-export class RestCodeExplorer implements OnChanges {
+export class RestCodeExplorer extends CodeExplorerController<RestCodeSlide> implements OnChanges {
   @Input({ required: true }) currentStep = 0;
 
-  readonly activeIndex = signal(0);
-  readonly slides: readonly RestCodeSlide[] = [
+  override readonly slides: readonly RestCodeSlide[] = [
     {
       index: 0,
       fileName: 'rest-api-portal.ts',
@@ -45,25 +40,9 @@ export class RestCodeExplorer implements OnChanges {
     },
   ];
 
-  get activeSlide(): RestCodeSlide {
-    return this.slides[this.activeIndex()];
-  }
-
   ngOnChanges(changes: SimpleChanges): void {
     if (changes['currentStep']) {
       this.showSlide(Math.min(Math.max(this.currentStep, 0), this.slides.length - 1));
     }
-  }
-
-  previous(): void {
-    this.showSlide((this.activeIndex() - 1 + this.slides.length) % this.slides.length);
-  }
-
-  next(): void {
-    this.showSlide((this.activeIndex() + 1) % this.slides.length);
-  }
-
-  showSlide(index: number): void {
-    this.activeIndex.set(index);
   }
 }

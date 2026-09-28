@@ -13,6 +13,22 @@ import { RestApiPortal } from './rest-api-portal';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     return of({
+      common: {
+        actions: {
+          clearSearch: lang === 'pt-BR' ? 'Limpar busca' : 'Clear search',
+          retry: lang === 'pt-BR' ? 'Tentar novamente' : 'Try again',
+        },
+        matrix: {
+          backToCatalog: 'Back to the catalog',
+          code: {
+            eyebrow: 'Code in motion',
+            status: 'Snippet {{ current }} of {{ total }}',
+            previous: 'Previous',
+            next: 'Next',
+            goTo: 'View snippet {{ page }}',
+          },
+        },
+      },
       matrix: {
         rest: {
           header: {

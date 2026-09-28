@@ -3,10 +3,12 @@
     <div class="rest-shell rest-hero__content sanaka-atmosphere-shell">
       <a class="rest-hero__back" routerLink="/matrix">
         <span aria-hidden="true">←</span>
-        {{ 'matrix.rest.header.back' | transloco }}
+        {{ 'common.matrix.backToCatalog' | transloco }}
       </a>
 
-      <p class="eyebrow">{{ 'matrix.rest.header.eyebrow' | transloco }}</p>
+      <p class="eyebrow sanaka-editorial-label">
+        {{ 'matrix.rest.header.eyebrow' | transloco }}
+      </p>
 
       <h1 id="rest-title">
         <span>{{ 'matrix.rest.header.title.line1' | transloco }}</span>
@@ -24,9 +26,11 @@
 
   <section id="rest-exhibit" class="rest-exhibit" aria-labelledby="rest-exhibit-title">
     <div class="rest-shell">
-      <header class="rest-exhibit__heading">
+      <header class="rest-exhibit__heading sanaka-section-heading">
         <div>
-          <p class="eyebrow">{{ 'matrix.rest.exhibit.eyebrow' | transloco }}</p>
+          <p class="eyebrow sanaka-editorial-label">
+            {{ 'matrix.rest.exhibit.eyebrow' | transloco }}
+          </p>
           <h2 id="rest-exhibit-title">{{ 'matrix.rest.exhibit.title' | transloco }}</h2>
         </div>
 
@@ -56,7 +60,7 @@
                   <button
                     type="button"
                     class="portal-controls__clear"
-                    [attr.aria-label]="'matrix.rest.controls.clear' | transloco"
+                    [attr.aria-label]="'common.actions.clearSearch' | transloco"
                     aria-controls="image-query"
                     (click)="clearQuery(queryInput)"
                   >

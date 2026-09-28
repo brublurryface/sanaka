@@ -3,7 +3,7 @@
   aria-labelledby="about-title"
 >
   <div class="about-hero__content sanaka-atmosphere-shell">
-    <p class="about-eyebrow">{{ 'about.hero.eyebrow' | transloco }}</p>
+    <p class="about-eyebrow sanaka-editorial-label">{{ 'about.hero.eyebrow' | transloco }}</p>
     <h1 id="about-title">
       <span>{{ 'about.hero.title.line1' | transloco }}</span>
       <span>{{ 'about.hero.title.line2' | transloco }}</span>
@@ -13,9 +13,9 @@
 </section>
 
 <section class="about-puzzle" aria-labelledby="about-puzzle-title">
-  <header class="about-section-heading">
+  <header class="about-section-heading sanaka-section-heading">
     <div>
-      <p class="about-eyebrow">{{ 'about.puzzle.eyebrow' | transloco }}</p>
+      <p class="about-eyebrow sanaka-editorial-label">{{ 'about.puzzle.eyebrow' | transloco }}</p>
       <h2 id="about-puzzle-title">
         <span>{{ 'about.puzzle.title.line1' | transloco }}</span>
         <span>{{ 'about.puzzle.title.line2' | transloco }}</span>
@@ -35,7 +35,7 @@
   } @else if (hasError()) {
     <div class="about-feedback about-feedback--error" role="alert">
       <p>{{ 'about.puzzle.error' | transloco }}</p>
-      <button type="button" (click)="retry()">{{ 'about.puzzle.retry' | transloco }}</button>
+      <button type="button" (click)="retry()">{{ 'common.actions.retry' | transloco }}</button>
     </div>
   } @else {
     <div
@@ -136,7 +136,7 @@
     </div>
 
     <div class="about-story__content">
-      <p class="about-eyebrow">{{ 'about.story.eyebrow' | transloco }}</p>
+      <p class="about-eyebrow sanaka-editorial-label">{{ 'about.story.eyebrow' | transloco }}</p>
       <h2>{{ cycle.title }}</h2>
       <p>{{ cycle.excerpt }}</p>
       <a
@@ -154,7 +154,7 @@
 
 <section class="about-destinations" [attr.aria-label]="'about.destinationsLabel' | transloco">
   <article class="about-destination about-destination--contact">
-    <p class="about-eyebrow">{{ 'about.contact.eyebrow' | transloco }}</p>
+    <p class="about-eyebrow sanaka-editorial-label">{{ 'about.contact.eyebrow' | transloco }}</p>
     <h2>{{ 'about.contact.title' | transloco }}</h2>
     <p>{{ 'about.contact.intro' | transloco }}</p>
     <a class="about-destination__link" href="mailto:sanaka@sanaka.com.br">
@@ -164,7 +164,7 @@
   </article>
 
   <article class="about-destination about-destination--universe">
-    <p class="about-eyebrow">{{ 'about.universe.eyebrow' | transloco }}</p>
+    <p class="about-eyebrow sanaka-editorial-label">{{ 'about.universe.eyebrow' | transloco }}</p>
     <h2>{{ 'about.universe.title' | transloco }}</h2>
     <p>{{ 'about.universe.intro' | transloco }}</p>
     <span class="about-destination__status">{{ 'about.universe.status' | transloco }}</span>

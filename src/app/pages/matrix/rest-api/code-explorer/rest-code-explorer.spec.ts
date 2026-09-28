@@ -7,6 +7,17 @@ import { RestCodeExplorer } from './rest-code-explorer';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        matrix: {
+          code: {
+            eyebrow: 'Code in motion',
+            status: 'Snippet {{ current }} of {{ total }}',
+            previous: 'Previous',
+            next: 'Next',
+            goTo: 'View snippet {{ page }}',
+          },
+        },
+      },
       matrix: {
         rest: {
           code: {

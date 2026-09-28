@@ -83,6 +83,55 @@ html {
   background: var(--sanaka-bg);
 }
 
+.sanaka-atmosphere-hero::before,
+.sanaka-atmosphere-hero::after {
+  position: absolute;
+  inset: 0;
+
+  content: '';
+
+  pointer-events: none;
+}
+
+.sanaka-atmosphere-shell {
+  position: relative;
+  z-index: 1;
+
+  width: var(--sanaka-page-shell-width);
+  margin-inline: auto;
+  padding-block: var(--sanaka-space-page-hero-block);
+}
+
+.sanaka-editorial-label {
+  margin: 0;
+
+  color: var(--sanaka-gold-soft);
+
+  font-family: var(--sanaka-font-body);
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
+
+  text-transform: uppercase;
+}
+
+.sanaka-section-heading {
+  display: grid;
+  grid-template-columns: minmax(18rem, 0.8fr) minmax(22rem, 1.2fr);
+  align-items: end;
+  gap: clamp(2rem, 7vw, 7rem);
+}
+
+.sanaka-section-heading > :last-child {
+  max-width: 36rem;
+  margin: 0;
+
+  color: var(--sanaka-ivory-muted);
+
+  line-height: 1.8;
+}
+
 @media (max-width: 1100px) {
   :root {
     --sanaka-type-home-title-size: clamp(3.2rem, 5.8vw, 4.8rem);
@@ -112,6 +161,12 @@ html {
 
   .sanaka-atmosphere-hero--compact {
     --sanaka-atmosphere-min-height: 22rem;
+  }
+
+  .sanaka-section-heading {
+    grid-template-columns: 1fr;
+    align-items: start;
+    gap: 1.5rem;
   }
 }
 

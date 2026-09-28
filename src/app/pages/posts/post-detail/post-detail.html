@@ -6,7 +6,7 @@
     @case ('error') {
       <div class="post-detail__feedback" role="alert">
         <p>{{ 'posts.detail.error' | transloco }}</p>
-        <button type="button" (click)="retry()">{{ 'posts.error.retry' | transloco }}</button>
+        <button type="button" (click)="retry()">{{ 'common.actions.retry' | transloco }}</button>
       </div>
     }
     @case ('not-found') {

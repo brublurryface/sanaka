@@ -2,10 +2,10 @@
   <div class="matrix-shell matrix-hero__content sanaka-atmosphere-shell">
     <a class="matrix-hero__back" routerLink="/matrix">
       <span aria-hidden="true">←</span>
-      {{ 'matrix.header.back' | transloco }}
+      {{ 'common.matrix.backToCatalog' | transloco }}
     </a>
 
-    <p class="eyebrow">{{ 'matrix.header.eyebrow' | transloco }}</p>
+    <p class="eyebrow sanaka-editorial-label">{{ 'matrix.header.eyebrow' | transloco }}</p>
 
     <h1 id="matrix-title">
       <span>{{ 'matrix.header.title.line1' | transloco }}</span>
@@ -23,9 +23,9 @@
 
 <section id="component-exhibit" class="matrix-exhibit" aria-labelledby="component-exhibit-title">
   <div class="matrix-shell">
-    <header class="exhibit-heading">
+    <header class="exhibit-heading sanaka-section-heading">
       <div>
-        <p class="eyebrow">{{ 'matrix.exhibit.eyebrow' | transloco }}</p>
+        <p class="eyebrow sanaka-editorial-label">{{ 'matrix.exhibit.eyebrow' | transloco }}</p>
         <h2 id="component-exhibit-title">{{ 'matrix.exhibit.title' | transloco }}</h2>
       </div>
 
@@ -137,7 +137,9 @@
     <section class="timeline" aria-labelledby="timeline-title">
       <div class="timeline-heading">
         <div>
-          <p class="eyebrow">{{ 'matrix.exhibit.timeline.eyebrow' | transloco }}</p>
+          <p class="eyebrow sanaka-editorial-label">
+            {{ 'matrix.exhibit.timeline.eyebrow' | transloco }}
+          </p>
           <h3 id="timeline-title">{{ 'matrix.exhibit.timeline.title' | transloco }}</h3>
         </div>
 

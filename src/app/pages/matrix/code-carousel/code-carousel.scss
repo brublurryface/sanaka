@@ -13,7 +13,7 @@
 .code-explorer__intro p {
   margin: 0;
   color: var(--sanaka-gold-soft);
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.2em;
   text-transform: uppercase;
@@ -29,7 +29,7 @@
 
 .code-explorer__intro > span {
   color: var(--sanaka-gold-soft);
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.1em;
   text-transform: uppercase;

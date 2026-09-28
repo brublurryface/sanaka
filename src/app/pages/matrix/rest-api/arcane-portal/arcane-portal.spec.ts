@@ -9,6 +9,9 @@ import { ArcanePortal } from './arcane-portal';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        actions: { retry: 'Try again' },
+      },
       matrix: {
         rest: {
           portal: {

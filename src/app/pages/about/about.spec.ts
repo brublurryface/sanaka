@@ -22,6 +22,9 @@ class MockAboutCyclesService {
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      common: {
+        actions: { retry: 'Tentar novamente' },
+      },
       about: {
         hero: {
           eyebrow: 'Autobiografia fluída',
