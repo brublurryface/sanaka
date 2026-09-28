@@ -164,60 +164,11 @@
 }
 
 .parent-node {
+  --matrix-node-border: rgba(47, 77, 168, 0.56);
+  --matrix-node-glow: rgba(47, 77, 168, 0.18);
+  --matrix-node-glow-position: 0% 0%;
+
   min-width: 0;
-  padding: clamp(1.4rem, 3vw, 2rem);
-
-  border: 1px solid rgba(47, 77, 168, 0.56);
-  background:
-    radial-gradient(circle at 0% 0%, rgba(47, 77, 168, 0.18), transparent 14rem),
-    rgba(13, 17, 23, 0.72);
-}
-
-.node-heading {
-  display: flex;
-  align-items: flex-start;
-  gap: 1rem;
-}
-
-.node-badge {
-  display: grid;
-  place-items: center;
-  flex: 0 0 2.4rem;
-
-  width: 2.4rem;
-  height: 2.4rem;
-
-  border: 1px solid rgba(237, 201, 120, 0.45);
-  border-radius: 50%;
-
-  color: var(--sanaka-gold-soft);
-
-  font-size: 0.68rem;
-  font-weight: 700;
-  letter-spacing: 0.08em;
-}
-
-.node-heading p,
-.node-heading h3 {
-  margin: 0;
-}
-
-.node-heading p {
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
-}
-
-.node-heading h3 {
-  margin-top: 0.25rem;
-
-  font-family: var(--sanaka-font-display);
-  font-size: clamp(1.8rem, 3vw, 2.5rem);
-  font-weight: 500;
-  line-height: 1;
 }
 
 form {
