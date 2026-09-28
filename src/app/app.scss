@@ -161,7 +161,7 @@ mat-toolbar {
   color: var(--sanaka-ivory-muted);
 
   font-family: var(--sanaka-font-body);
-  font-size: 0.78rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 500;
   line-height: 1;
   letter-spacing: 0.07em;
@@ -353,7 +353,7 @@ mat-toolbar {
 .app-footer__navigation a {
   color: var(--sanaka-ivory-muted);
 
-  font-size: 0.78rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   letter-spacing: 0.08em;
 
   text-decoration: none;
