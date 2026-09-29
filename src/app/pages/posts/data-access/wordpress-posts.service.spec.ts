@@ -54,7 +54,9 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('categories')).toBe('45');
     expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
     expect(postsRequest.request.params.get('tags')).toBe('9');
+    expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
+    expect(postsRequest.request.params.get('_fields')).toContain('_embedded');
 
     postsRequest.flush(
       [
@@ -69,6 +71,20 @@ describe('WordPressPostsService', () => {
           },
           featured_media: 6453,
           categories: [41, 45],
+          _embedded: {
+            'wp:featuredmedia': [
+              {
+                id: 6453,
+                source_url: 'https://example.com/cover.jpg',
+                alt_text: 'Capa do post',
+                media_details: {
+                  sizes: {
+                    medium_large: { source_url: 'https://example.com/cover-768.jpg' },
+                  },
+                },
+              },
+            ],
+          },
         },
       ],
       {
@@ -82,21 +98,10 @@ describe('WordPressPostsService', () => {
     const categoriesRequest = httpTesting.expectOne(
       (request) => request.url === `${apiUrl}/categories`,
     );
-    const mediaRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/media`);
-
-    expect(mediaRequest.request.params.get('include')).toBe('6453');
-    expect(mediaRequest.request.params.get('per_page')).toBe('1');
 
     categoriesRequest.flush([
       { id: 41, name: 'Bruna' },
       { id: 45, name: 'Pensamentos &amp; Ensaios' },
-    ]);
-    mediaRequest.flush([
-      {
-        id: 6453,
-        source_url: 'https://example.com/cover.jpg',
-        alt_text: 'Capa do post',
-      },
     ]);
 
     expect(result).toEqual({
@@ -108,7 +113,7 @@ describe('WordPressPostsService', () => {
           excerpt: 'Primeiro trecho. Segundo trecho…',
           publishedAt: '2023-06-20',
           category: 'Bruna · Pensamentos & Ensaios',
-          coverImageUrl: 'https://example.com/cover.jpg',
+          coverImageUrl: 'https://example.com/cover-768.jpg',
           coverImageAlt: 'Capa do post',
         },
       ],
@@ -119,7 +124,7 @@ describe('WordPressPostsService', () => {
     });
   });
 
-  it('should use 20 posts per page and skip media when no post has a featured image', () => {
+  it('should use 20 posts per page and handle posts without embedded media', () => {
     let result: PostsPage | undefined;
 
     service.getPosts().subscribe((postsPage) => {
@@ -133,6 +138,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.has('search')).toBe(false);
     expect(postsRequest.request.params.has('categories')).toBe(false);
     expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
 
     postsRequest.flush(
       [
@@ -232,6 +238,8 @@ describe('WordPressPostsService', () => {
     );
 
     expect(postRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
+    expect(postRequest.request.params.get('_fields')).toContain('_embedded');
 
     postRequest.flush([
       {
@@ -244,6 +252,15 @@ describe('WordPressPostsService', () => {
         featured_media: 90,
         categories: [45],
         tags: [8, 9],
+        _embedded: {
+          'wp:featuredmedia': [
+            {
+              id: 90,
+              source_url: 'https://example.com/voce.jpg',
+              alt_text: 'Maya no santuário',
+            },
+          ],
+        },
       },
     ]);
 
@@ -263,12 +280,6 @@ describe('WordPressPostsService', () => {
       { id: 9, name: 'Existência', slug: 'existencia' },
       { id: 10, name: 'Consciência', slug: 'consciencia' },
     ]);
-    httpTesting
-      .expectOne((request) => request.url === `${apiUrl}/media`)
-      .flush([
-        { id: 90, source_url: 'https://example.com/voce.jpg', alt_text: 'Maya no santuário' },
-      ]);
-
     expect(result?.slug).toBe('voce');
     expect(result?.title).toBe('VOCÊ');
     expect(result?.previous).toBeUndefined();

@@ -44,6 +44,11 @@ interface WordPressPost {
   readonly featured_media: number;
   readonly categories: readonly number[];
   readonly tags?: readonly number[];
+  readonly _embedded?: WordPressEmbeddedResources;
+}
+
+interface WordPressEmbeddedResources {
+  readonly 'wp:featuredmedia'?: readonly WordPressMedia[];
 }
 
 interface WordPressCategory {
@@ -63,6 +68,13 @@ interface WordPressMedia {
   readonly id: number;
   readonly source_url: string;
   readonly alt_text: string;
+  readonly media_details?: {
+    readonly sizes?: Readonly<Record<string, WordPressMediaSize>>;
+  };
+}
+
+interface WordPressMediaSize {
+  readonly source_url: string;
 }
 
 interface NormalizedPostsQuery {
@@ -110,7 +122,7 @@ export class WordPressPostsService {
   );
 
   /**
-   * Busca uma página de publicações e reúne categorias e mídias relacionadas.
+   * Busca uma página de publicações com categorias e mídias incorporadas em paralelo.
    *
    * @param query Filtros e paginação solicitados pela store.
    * @returns Um fluxo com os dados convertidos para os modelos usados pela feature.
@@ -120,12 +132,15 @@ export class WordPressPostsService {
 
     return this.resolveTaxonomyFilters(normalizedQuery).pipe(
       switchMap((resolvedQuery) =>
-        this.http
-          .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
+        forkJoin({
+          response: this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
             params: this.buildPostsParams(resolvedQuery),
             observe: 'response',
-          })
-          .pipe(switchMap((response) => this.loadPostsPage(response, resolvedQuery))),
+          }),
+          categories: this.categories$,
+        }).pipe(
+          map(({ response, categories }) => this.mapPostsPage(response, resolvedQuery, categories)),
+        ),
       ),
       timeout({ first: this.requestTimeoutMs }),
     );
@@ -137,31 +152,32 @@ export class WordPressPostsService {
       .set('slug', slug)
       .set('per_page', '1')
       .set('categories_exclude', this.excludedCategoryIds)
-      .set('_fields', 'id,slug,date,title,excerpt,content,featured_media,categories,tags');
+      .set('_embed', 'wp:featuredmedia')
+      .set(
+        '_fields',
+        'id,slug,date,title,excerpt,content,featured_media,categories,tags,_links,_embedded',
+      );
 
-    return this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
-      switchMap((posts) => {
+    return forkJoin({
+      posts: this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }),
+      categories: this.categories$,
+      tags: this.tags$,
+    }).pipe(
+      switchMap(({ posts, categories, tags }) => {
         const post = posts[0];
 
         if (!post) {
           return of(null);
         }
 
-        return forkJoin({
-          categories: this.categories$,
-          tags: this.tags$,
-          media: this.getMedia([post]),
-        }).pipe(
-          map(({ categories, tags, media }) => this.mapPostDetail(post, categories, tags, media)),
-          switchMap((detail) =>
-            concat(
-              of(detail),
-              forkJoin({
-                previous: this.getAdjacentPost(post, 'previous'),
-                next: this.getAdjacentPost(post, 'next'),
-              }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
-            ),
-          ),
+        const detail = this.mapPostDetail(post, categories, tags);
+
+        return concat(
+          of(detail),
+          forkJoin({
+            previous: this.getAdjacentPost(post, 'previous'),
+            next: this.getAdjacentPost(post, 'next'),
+          }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
         );
       }),
       timeout({ first: this.requestTimeoutMs }),
@@ -205,17 +221,19 @@ export class WordPressPostsService {
       .set('page', String(query.page))
       .set('per_page', String(query.perPage))
       .set('categories_exclude', this.excludedCategoryIds)
-      .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories');
+      .set('_embed', 'wp:featuredmedia')
+      .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories,_links,_embedded');
 
     params = query.search ? params.set('search', query.search) : params;
     params = query.categoryId ? params.set('categories', String(query.categoryId)) : params;
     return query.tagId ? params.set('tags', String(query.tagId)) : params;
   }
 
-  private loadPostsPage(
+  private mapPostsPage(
     response: HttpResponse<readonly WordPressPost[]>,
     query: NormalizedPostsQuery,
-  ): Observable<PostsPage> {
+    categories: readonly WordPressCategory[],
+  ): PostsPage {
     const posts = response.body ?? [];
     const fallbackTotal = (query.page - 1) * query.perPage + posts.length;
     const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
@@ -224,15 +242,13 @@ export class WordPressPostsService {
       total === 0 ? 0 : Math.ceil(total / query.perPage),
     );
 
-    return forkJoin({ categories: this.categories$, media: this.getMedia(posts) }).pipe(
-      map(({ categories, media }) => ({
-        posts: this.mapPosts(posts, categories, media),
-        page: query.page,
-        perPage: query.perPage,
-        total,
-        totalPages,
-      })),
-    );
+    return {
+      posts: this.mapPosts(posts, categories),
+      page: query.page,
+      perPage: query.perPage,
+      total,
+      totalPages,
+    };
   }
 
   private loadCategories(): Observable<readonly WordPressCategory[]> {
@@ -247,42 +263,19 @@ export class WordPressPostsService {
     });
   }
 
-  private getMedia(posts: readonly WordPressPost[]): Observable<readonly WordPressMedia[]> {
-    const mediaIds = [...new Set(posts.map((post) => post.featured_media).filter((id) => id > 0))];
-
-    if (mediaIds.length === 0) {
-      return of([]);
-    }
-
-    return this.http.get<readonly WordPressMedia[]>(`${this.apiUrl}/media`, {
-      params: new HttpParams()
-        .set('include', mediaIds.join(','))
-        .set('per_page', String(mediaIds.length))
-        .set('_fields', 'id,source_url,alt_text'),
-    });
-  }
-
   private mapPosts(
     posts: readonly WordPressPost[],
     categories: readonly WordPressCategory[],
-    media: readonly WordPressMedia[],
   ): readonly Post[] {
-    const mediaById = new Map(media.map((item) => [item.id, item]));
-
-    return posts.map((post) => {
-      const coverImage = mediaById.get(post.featured_media);
-
-      return this.mapPost(post, categories, coverImage);
-    });
+    return posts.map((post) => this.mapPost(post, categories, this.getFeaturedMedia(post)));
   }
 
   private mapPostDetail(
     post: WordPressPost,
     categories: readonly WordPressCategory[],
     tags: readonly WordPressTag[],
-    media: readonly WordPressMedia[],
   ): PostDetail {
-    const coverImage = media.find((item) => item.id === post.featured_media);
+    const coverImage = this.getFeaturedMedia(post);
     const content = post.content?.rendered ?? '';
     const plainContent = this.wordpressText.toText(content);
     const mappedCategories = this.mapTaxonomies(post.categories, categories);
@@ -292,7 +285,7 @@ export class WordPressPostsService {
     const mappedTags = tags.map((tag) => this.toTaxonomy(tag));
 
     return {
-      ...this.mapPost(post, categories, coverImage, true),
+      ...this.mapPost(post, categories, coverImage, { detail: true }),
       contentHtml: this.sanitizer.sanitize(SecurityContext.HTML, content) ?? '',
       categories: mappedCategories,
       relatedCategories: rootCategory
@@ -326,7 +319,7 @@ export class WordPressPostsService {
     post: WordPressPost,
     categories: readonly WordPressCategory[],
     coverImage?: WordPressMedia,
-    useDefaultCover = false,
+    options: { readonly detail: boolean } = { detail: false },
   ): Post {
     return {
       id: post.id,
@@ -338,8 +331,9 @@ export class WordPressPostsService {
         .map((item) => item.name)
         .join(' · '),
       coverImageUrl:
-        coverImage?.source_url ?? (useDefaultCover ? this.defaultCoverImageUrl : undefined),
-      coverImageAlt: coverImage?.alt_text ?? (useDefaultCover ? '' : undefined),
+        this.getCoverImageUrl(coverImage, options.detail) ??
+        (options.detail ? this.defaultCoverImageUrl : undefined),
+      coverImageAlt: coverImage?.alt_text ?? (options.detail ? '' : undefined),
     };
   }
 
@@ -375,6 +369,29 @@ export class WordPressPostsService {
       name: this.wordpressText.toText(item.name),
       slug: item.slug,
     };
+  }
+
+  private getFeaturedMedia(post: WordPressPost): WordPressMedia | undefined {
+    return post._embedded?.['wp:featuredmedia']?.find((media) => media.id === post.featured_media);
+  }
+
+  private getCoverImageUrl(
+    coverImage: WordPressMedia | undefined,
+    useOriginalImage: boolean,
+  ): string | undefined {
+    if (!coverImage) {
+      return undefined;
+    }
+
+    if (useOriginalImage) {
+      return coverImage.source_url;
+    }
+
+    const sizes = coverImage.media_details?.sizes;
+
+    return (
+      sizes?.['medium_large']?.source_url ?? sizes?.['large']?.source_url ?? coverImage.source_url
+    );
   }
 
   private getAdjacentPost(

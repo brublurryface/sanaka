@@ -28,26 +28,17 @@ describe('AboutCyclesService', () => {
     httpTesting.verify();
   });
 
-  it('should resolve the category slug and order the six cycles by their roman numerals', () => {
+  it('should load the configured category directly and order cycles by their roman numerals', () => {
     let result: readonly AboutCyclePost[] | undefined;
 
     service.getCycles().subscribe((cycles) => {
       result = cycles;
     });
 
-    const categoryRequest = httpTesting.expectOne(
-      (request) => request.url === `${apiUrl}/categories`,
-    );
-
-    expect(categoryRequest.request.params.get('slug')).toBe('sobre');
-    expect(categoryRequest.request.params.get('_fields')).toBe('id');
-
-    categoryRequest.flush([{ id: 62 }]);
-
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('62');
-    expect(postsRequest.request.params.get('per_page')).toBe('100');
+    expect(postsRequest.request.params.get('per_page')).toBe('6');
     expect(postsRequest.request.params.get('_fields')).not.toContain('link');
     expect(postsRequest.request.params.get('_fields')).toContain('meta');
 
@@ -105,18 +96,15 @@ describe('AboutCyclesService', () => {
     ]);
   });
 
-  it('should fail without requesting posts when the category does not exist', () => {
-    let receivedError: unknown;
+  it('should return an empty collection when WordPress has no autobiographical cycles', () => {
+    let result: readonly AboutCyclePost[] | undefined;
 
-    service.getCycles().subscribe({
-      error: (error) => {
-        receivedError = error;
-      },
+    service.getCycles().subscribe((cycles) => {
+      result = cycles;
     });
 
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
-    httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`).flush([]);
 
-    expect(receivedError).toBeInstanceOf(Error);
+    expect(result).toEqual([]);
   });
 });
