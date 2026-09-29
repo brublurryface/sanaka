@@ -1,8 +1,9 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, switchMap, timeout } from 'rxjs';
+import { map, Observable, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
+import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 
 export interface AboutCyclePost {
@@ -16,10 +17,6 @@ export interface AboutCyclePost {
 
 interface WordPressRenderedField {
   readonly rendered: string;
-}
-
-interface WordPressCategory {
-  readonly id: number;
 }
 
 interface WordPressCyclePost {
@@ -48,42 +45,29 @@ export class AboutCyclesService {
   private readonly requestTimeoutMs = 10_000;
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
+  private readonly contentPolicy = inject(SANAKA_WORDPRESS_CONTENT_POLICY);
   private readonly wordpressText = inject(WordPressTextService);
 
   /**
-   * Resolve a categoria por slug antes de carregar seus capítulos.
+   * Carrega os seis fragmentos autobiográficos diretamente pela política editorial.
    *
-   * O slug é estável entre ambientes; o ID numérico pertence à instalação atual do WordPress.
+   * O ID fica centralizado porque pertence à instalação atual do WordPress e deve ser revisto
+   * somente em uma eventual migração das taxonomias.
    */
-  getCycles(categorySlug = 'sobre'): Observable<readonly AboutCyclePost[]> {
-    const categoryParams = new HttpParams().set('slug', categorySlug).set('_fields', 'id');
-
-    return this.http
-      .get<readonly WordPressCategory[]>(`${this.apiUrl}/categories`, {
-        params: categoryParams,
-      })
-      .pipe(
-        map((categories) => categories[0]?.id),
-        switchMap((categoryId) => this.loadCycles(categoryId)),
-        timeout({ first: this.requestTimeoutMs }),
-      );
-  }
-
-  private loadCycles(categoryId: number | undefined): Observable<readonly AboutCyclePost[]> {
-    if (!categoryId) {
-      throw new Error('Categoria autobiográfica não encontrada no WordPress.');
-    }
-
+  getCycles(): Observable<readonly AboutCyclePost[]> {
     const postsParams = new HttpParams()
-      .set('categories', String(categoryId))
-      .set('per_page', '100')
+      .set('categories', String(this.contentPolicy.aboutCycleCategoryId))
+      .set('per_page', '6')
       .set('_fields', 'id,slug,title,excerpt,hover_text,meta');
 
     return this.http
       .get<readonly WordPressCyclePost[]>(`${this.apiUrl}/posts`, {
         params: postsParams,
       })
-      .pipe(map((posts) => this.normalizeCycles(posts)));
+      .pipe(
+        map((posts) => this.normalizeCycles(posts)),
+        timeout({ first: this.requestTimeoutMs }),
+      );
   }
 
   private normalizeCycles(posts: readonly WordPressCyclePost[]): readonly AboutCyclePost[] {
