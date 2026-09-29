@@ -7,7 +7,12 @@
       rel="noopener"
       tabindex="-1"
     >
-      <img [src]="post().coverImageUrl" [alt]="post().coverImageAlt ?? ''" />
+      <img
+        [src]="post().coverImageUrl"
+        [alt]="post().coverImageAlt ?? ''"
+        loading="lazy"
+        decoding="async"
+      />
     </a>
   }
 

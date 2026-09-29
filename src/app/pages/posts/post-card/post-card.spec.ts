@@ -123,6 +123,8 @@ describe('PostCard', () => {
     expect(image).toBeTruthy();
     expect(image?.getAttribute('src')).toBe('/images/home/hero.jpg');
     expect(image?.getAttribute('alt')).toBe('Pessoa meditando em silêncio');
+    expect(image?.getAttribute('loading')).toBe('lazy');
+    expect(image?.getAttribute('decoding')).toBe('async');
   });
 
   it('should not render the image when coverImageUrl is missing', () => {
