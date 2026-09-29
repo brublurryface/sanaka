@@ -8,7 +8,8 @@
       "matrixComponents": "Components in conversation",
       "matrixRestApi": "REST API portal",
       "maya": "Māyā",
-      "about": "About"
+      "about": "About",
+      "sanakaverse": "Sanakaverse library"
     },
     "navigation": {
       "ariaLabel": "Main navigation",
@@ -84,7 +85,38 @@
       "eyebrow": "Another portal",
       "title": "Sanakaverse",
       "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe will have a cartography of their own.",
-      "status": "Portal under construction"
+      "status": "Cross the portal"
+    }
+  },
+  "sanakaverse": {
+    "hero": {
+      "eyebrow": "Sanakaverse",
+      "title": {
+        "line1": "A library",
+        "line2": "between worlds"
+      },
+      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe."
+    },
+    "collection": {
+      "eyebrow": "Volumes in orbit",
+      "title": "Choose a book",
+      "intro": "Approach the covers and cross into the volume that calls to you.",
+      "ariaLabel": "Sanakaverse books"
+    },
+    "book": {
+      "open": "Open volume",
+      "untitled": "Untitled volume",
+      "unrevealed": "Cover not yet revealed"
+    },
+    "loading": "Aligning the books with the stars…",
+    "empty": {
+      "eyebrow": "Between pages",
+      "title": "The first volumes are still being bound.",
+      "intro": "When a story is ready to cross the portal, its cover will appear here."
+    },
+    "error": {
+      "title": "The books' orbit came apart for a moment.",
+      "retry": "Gather the volumes again"
     }
   },
   "home": {

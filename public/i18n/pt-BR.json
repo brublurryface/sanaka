@@ -8,7 +8,8 @@
       "matrixComponents": "Componentes em conversa",
       "matrixRestApi": "Portal da API REST",
       "maya": "Māyā",
-      "about": "Sobre"
+      "about": "Sobre",
+      "sanakaverse": "Biblioteca do Sanakaverse"
     },
     "navigation": {
       "ariaLabel": "Navegação principal",
@@ -84,7 +85,38 @@
       "eyebrow": "Outro portal",
       "title": "Sanakaverse",
       "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka terão uma cartografia própria.",
-      "status": "Portal em construção"
+      "status": "Atravessar o portal"
+    }
+  },
+  "sanakaverse": {
+    "hero": {
+      "eyebrow": "Sanakaverse",
+      "title": {
+        "line1": "Biblioteca",
+        "line2": "entre mundos"
+      },
+      "intro": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo."
+    },
+    "collection": {
+      "eyebrow": "Volumes em órbita",
+      "title": "Escolha um livro",
+      "intro": "Aproxime-se das capas e atravesse o volume que chamar por você.",
+      "ariaLabel": "Livros do Sanakaverse"
+    },
+    "book": {
+      "open": "Abrir volume",
+      "untitled": "Volume sem título",
+      "unrevealed": "Capa ainda não revelada"
+    },
+    "loading": "Alinhando os livros às estrelas…",
+    "empty": {
+      "eyebrow": "Entre páginas",
+      "title": "Os primeiros volumes ainda estão sendo encadernados.",
+      "intro": "Quando uma história estiver pronta para atravessar o portal, sua capa surgirá aqui."
+    },
+    "error": {
+      "title": "A órbita dos livros se desfez por um instante.",
+      "retry": "Tentar reunir os volumes"
     }
   },
   "home": {

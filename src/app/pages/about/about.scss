@@ -471,7 +471,7 @@
 
 .about-destination__link span,
 .about-destination__status {
-  font-size: 0.68rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.14em;
 
@@ -494,13 +494,29 @@
 }
 
 .about-destination__status {
-  display: inline-block;
+  display: inline-flex;
+  gap: 0.7rem;
+  align-items: center;
 
   padding: 0.7rem 0.9rem;
 
   border: 1px solid rgba(237, 201, 120, 0.22);
 
   color: var(--sanaka-ivory-muted);
+
+  text-decoration: none;
+}
+
+.about-destination__status:hover,
+.about-destination__status:focus-visible {
+  border-color: rgba(237, 201, 120, 0.72);
+
+  color: var(--sanaka-gold-soft);
+}
+
+.about-destination__status:focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 7px;
 }
 
 @media (max-width: 900px) {

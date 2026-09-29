@@ -136,6 +136,9 @@ describe('About', () => {
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
     );
+    expect(compiled.querySelector('.about-destination--universe a')?.getAttribute('href')).toBe(
+      '/sanakaverse',
+    );
   });
 
   it('should expose the selected excerpt and its internal publication link', () => {
