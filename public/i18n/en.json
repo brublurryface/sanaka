@@ -100,7 +100,7 @@
     "collection": {
       "eyebrow": "Volumes in orbit",
       "title": "Choose a book",
-      "intro": "Approach the covers and cross into the volume that calls to you.",
+      "intro": "When a story is ready to cross the portal, its cover will appear here. Approach the covers and immerse yourself in the volume that calls to you.",
       "ariaLabel": "Sanakaverse books"
     },
     "book": {
@@ -109,11 +109,6 @@
       "unrevealed": "Cover not yet revealed"
     },
     "loading": "Aligning the books with the stars…",
-    "empty": {
-      "eyebrow": "Between pages",
-      "title": "The first volumes are still being bound.",
-      "intro": "When a story is ready to cross the portal, its cover will appear here."
-    },
     "error": {
       "title": "The books' orbit came apart for a moment.",
       "retry": "Gather the volumes again"

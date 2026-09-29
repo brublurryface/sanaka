@@ -26,6 +26,12 @@ const books: readonly SanakaverseBook[] = [
     title: 'Kālikā',
     coverImageUrl: 'https://example.com/kalika.webp',
   },
+  {
+    id: 4,
+    slug: 'bhu',
+    title: 'Bhū',
+    coverImageUrl: 'https://example.com/bhu.webp',
+  },
 ];
 
 class MockSanakaverseBooksService {
@@ -53,11 +59,6 @@ class MockTranslocoLoader implements TranslocoLoader {
           unrevealed: 'Capa ainda não revelada',
         },
         loading: 'Alinhando os livros às estrelas…',
-        empty: {
-          eyebrow: 'Entre páginas',
-          title: 'Os primeiros volumes ainda estão sendo encadernados.',
-          intro: 'As capas surgirão aqui.',
-        },
         error: {
           title: 'A órbita se desfez.',
           retry: 'Tentar reunir os volumes',
@@ -94,7 +95,7 @@ describe('Sanakaverse', () => {
     fixture = TestBed.createComponent(Sanakaverse);
   });
 
-  it('should render WordPress volumes as varied books that open internal posts in new tabs', () => {
+  it('should render WordPress volumes as square covers that open internal posts in new tabs', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -103,26 +104,28 @@ describe('Sanakaverse', () => {
     const images = compiled.querySelectorAll<HTMLImageElement>('.sanakaverse-book__volume > img');
 
     expect(compiled.querySelectorAll('.sanakaverse-hero h1 span')).toHaveLength(2);
-    expect(renderedBooks).toHaveLength(3);
-    expect(images).toHaveLength(2);
+    expect(renderedBooks).toHaveLength(4);
+    expect(images).toHaveLength(3);
     expect(images[0].getAttribute('src')).toBe('https://example.com/maya.webp');
     expect(images[0].getAttribute('alt')).toBe('Maya diante de um portal');
+    expect(images[0].getAttribute('width')).toBe('1200');
+    expect(images[0].getAttribute('height')).toBe('1200');
     expect(compiled.querySelectorAll('.sanakaverse-book__placeholder')).toHaveLength(1);
     expect(links[0].getAttribute('href')).toBe('/posts/maya');
     expect(links[0].target).toBe('_blank');
     expect(links[0].rel).toBe('noopener');
   });
 
-  it('should show an intentional empty state before the first volume is published', () => {
+  it('should keep the stellar collection open without adding an empty-state card', () => {
     booksService.getBooks.mockReturnValueOnce(of([]));
 
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.sanakaverse-empty')).not.toBeNull();
+    expect(compiled.querySelector('.sanakaverse-empty')).toBeNull();
     expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(0);
-    expect(compiled.textContent).toContain('Os primeiros volumes ainda estão sendo encadernados.');
+    expect(compiled.textContent).toContain('Escolha um livro');
   });
 
   it('should offer a retry when WordPress cannot load the collection', () => {
@@ -141,6 +144,6 @@ describe('Sanakaverse', () => {
     fixture.detectChanges();
 
     expect(booksService.getBooks).toHaveBeenCalledTimes(2);
-    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(3);
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(4);
   });
 });

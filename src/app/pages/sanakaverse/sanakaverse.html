@@ -26,6 +26,7 @@
             <span></span>
             <span></span>
             <span></span>
+            <span></span>
           </div>
           <p>{{ 'sanakaverse.loading' | transloco }}</p>
         </div>
@@ -55,7 +56,7 @@
                       [src]="book.coverImageUrl"
                       [alt]="book.coverImageAlt || book.title"
                       width="1200"
-                      height="1800"
+                      height="1200"
                       loading="lazy"
                     />
                   } @else {
@@ -77,17 +78,6 @@
             </li>
           }
         </ol>
-      } @else {
-        <div class="sanakaverse-empty">
-          <div class="sanakaverse-empty__volume" aria-hidden="true">
-            <img src="/images/posts/temple/hamsa.svg" alt="" />
-          </div>
-          <div class="sanakaverse-empty__text">
-            <p class="sanaka-editorial-label">{{ 'sanakaverse.empty.eyebrow' | transloco }}</p>
-            <h3>{{ 'sanakaverse.empty.title' | transloco }}</h3>
-            <p>{{ 'sanakaverse.empty.intro' | transloco }}</p>
-          </div>
-        </div>
       }
     </section>
   </div>

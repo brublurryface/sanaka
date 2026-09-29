@@ -100,7 +100,7 @@
     "collection": {
       "eyebrow": "Volumes em órbita",
       "title": "Escolha um livro",
-      "intro": "Aproxime-se das capas e atravesse o volume que chamar por você.",
+      "intro": "Quando uma história estiver pronta para atravessar o portal, sua capa surgirá aqui. Aproxime-se das capas e mergulhe no volume que chamar por você.",
       "ariaLabel": "Livros do Sanakaverse"
     },
     "book": {
@@ -109,11 +109,6 @@
       "unrevealed": "Capa ainda não revelada"
     },
     "loading": "Alinhando os livros às estrelas…",
-    "empty": {
-      "eyebrow": "Entre páginas",
-      "title": "Os primeiros volumes ainda estão sendo encadernados.",
-      "intro": "Quando uma história estiver pronta para atravessar o portal, sua capa surgirá aqui."
-    },
     "error": {
       "title": "A órbita dos livros se desfez por um instante.",
       "retry": "Tentar reunir os volumes"

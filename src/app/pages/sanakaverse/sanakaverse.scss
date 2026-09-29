@@ -18,26 +18,51 @@
   z-index: 0;
 
   background:
-    radial-gradient(circle at 14% 18%, rgba(123, 82, 180, 0.14), transparent 27rem),
-    radial-gradient(circle at 82% 34%, rgba(47, 77, 168, 0.12), transparent 29rem),
-    radial-gradient(circle at 52% 92%, rgba(224, 106, 45, 0.06), transparent 24rem),
-    radial-gradient(circle at 18% 28%, rgba(245, 236, 221, 0.62) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 73% 16%, rgba(237, 201, 120, 0.68) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 88% 67%, rgba(245, 236, 221, 0.48) 0 1px, transparent 1.5px),
-    radial-gradient(circle at 31% 78%, rgba(237, 201, 120, 0.42) 0 1px, transparent 1.5px),
-    linear-gradient(180deg, #090c14 0%, #0d1119 48%, #080b12 100%);
+    radial-gradient(ellipse at 14% 16%, rgba(111, 64, 181, 0.62), transparent 34rem),
+    radial-gradient(ellipse at 84% 24%, rgba(47, 77, 168, 0.54), transparent 38rem),
+    radial-gradient(ellipse at 57% 72%, rgba(92, 42, 121, 0.38), transparent 42rem),
+    radial-gradient(circle at 18% 88%, rgba(224, 106, 45, 0.2), transparent 25rem),
+    linear-gradient(145deg, #070913 0%, #10162b 42%, #171027 70%, #080a12 100%);
 }
 
+.sanakaverse__cosmos::before,
 .sanakaverse__cosmos::after {
   position: absolute;
   inset: 0;
 
-  background-image: radial-gradient(rgba(245, 236, 221, 0.26) 0.7px, transparent 0.9px);
-  background-size: 3.7rem 3.7rem;
-
   content: '';
+}
 
-  opacity: 0.38;
+.sanakaverse__cosmos::before {
+  background:
+    linear-gradient(
+      118deg,
+      transparent 18%,
+      rgba(123, 82, 180, 0.08) 36%,
+      rgba(78, 106, 202, 0.24) 49%,
+      rgba(237, 201, 120, 0.08) 57%,
+      transparent 72%
+    ),
+    radial-gradient(ellipse at 68% 48%, rgba(142, 88, 190, 0.22), transparent 34rem);
+
+  filter: blur(1.1rem);
+}
+
+.sanakaverse__cosmos::after {
+  background-image:
+    radial-gradient(circle, rgba(255, 244, 214, 0.95) 0 1.3px, transparent 1.8px),
+    radial-gradient(circle, rgba(174, 196, 255, 0.82) 0 1px, transparent 1.5px),
+    radial-gradient(circle, rgba(237, 201, 120, 0.72) 0 0.7px, transparent 1.2px);
+  background-position:
+    0 0,
+    2.4rem 1.7rem,
+    1.1rem 3.2rem;
+  background-size:
+    8.5rem 8.5rem,
+    5.7rem 5.7rem,
+    3.8rem 3.8rem;
+
+  opacity: 0.86;
 }
 
 .sanakaverse__content {
@@ -53,8 +78,7 @@
 }
 
 .sanakaverse-hero h1,
-.sanakaverse-heading h2,
-.sanakaverse-empty h3 {
+.sanakaverse-heading h2 {
   margin: 0;
 
   color: var(--sanaka-ivory);
@@ -106,9 +130,9 @@
 
 .sanakaverse-grid {
   display: grid;
-  grid-template-columns: repeat(auto-fit, minmax(12rem, 1fr));
-  align-items: end;
-  gap: clamp(3rem, 7vw, 6rem) clamp(2rem, 4vw, 4rem);
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 3vw, 2.5rem);
 
   margin: clamp(4rem, 8vw, 7rem) 0 0;
   padding: 0;
@@ -117,24 +141,10 @@
 }
 
 .sanakaverse-book {
-  --sanakaverse-book-width: 11.25rem;
-  --sanakaverse-book-tilt: -1deg;
-
   min-width: 0;
 }
 
-.sanakaverse-book:nth-child(3n + 2) {
-  --sanakaverse-book-width: 10rem;
-  --sanakaverse-book-tilt: 1.35deg;
-}
-
-.sanakaverse-book:nth-child(3n) {
-  --sanakaverse-book-width: 12rem;
-  --sanakaverse-book-tilt: -0.35deg;
-}
-
 .sanakaverse-book__link {
-  min-height: 25rem;
   display: flex;
   flex-direction: column;
   justify-content: flex-end;
@@ -148,61 +158,24 @@
 
 .sanakaverse-book__volume {
   position: relative;
+  overflow: hidden;
 
-  width: min(var(--sanakaverse-book-width), calc(100% - 1.5rem));
+  width: 100%;
   display: block;
 
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 1;
 
   border: 1px solid rgba(237, 201, 120, 0.38);
   background: #111521;
 
   box-shadow:
-    -0.8rem 0.6rem 0 -0.55rem rgba(8, 5, 11, 0.88),
-    0 1.8rem 2.6rem rgba(0, 0, 0, 0.42),
-    0 0 2.2rem rgba(90, 52, 127, 0.1);
-
-  transform: rotate(var(--sanakaverse-book-tilt));
-  transform-origin: center bottom;
+    0 1.6rem 2.6rem rgba(0, 0, 0, 0.38),
+    0 0 2.4rem rgba(90, 52, 127, 0.18);
 
   transition:
     transform 240ms ease,
     border-color 240ms ease,
     box-shadow 240ms ease;
-}
-
-.sanakaverse-book__volume::before {
-  position: absolute;
-  top: 0.35rem;
-  bottom: 0.25rem;
-  left: -0.65rem;
-  z-index: -1;
-
-  width: 0.7rem;
-
-  border: 1px solid rgba(237, 201, 120, 0.26);
-  border-right: 0;
-  background: linear-gradient(90deg, #080a0f, #30233d 72%, #121622);
-
-  content: '';
-}
-
-.sanakaverse-book__volume::after {
-  position: absolute;
-  right: 0.25rem;
-  bottom: -0.45rem;
-  left: 0.35rem;
-  z-index: -1;
-
-  height: 0.5rem;
-
-  border: 1px solid rgba(211, 196, 173, 0.3);
-  background: repeating-linear-gradient(180deg, #d3c4ad 0 1px, #8b806f 1px 2px, #c4b59f 2px 3px);
-
-  content: '';
-
-  transform: skewX(-42deg);
-  transform-origin: left top;
 }
 
 .sanakaverse-book__volume > img,
@@ -295,11 +268,10 @@
   border-color: rgba(237, 201, 120, 0.82);
 
   box-shadow:
-    -0.8rem 0.6rem 0 -0.55rem rgba(8, 5, 11, 0.88),
     0 2.3rem 3rem rgba(0, 0, 0, 0.5),
-    0 0 3rem rgba(123, 82, 180, 0.24);
+    0 0 3.2rem rgba(123, 82, 180, 0.38);
 
-  transform: translateY(-0.75rem) rotate(0deg);
+  transform: translateY(-0.75rem);
 }
 
 .sanakaverse-book__link:hover .sanakaverse-book__caption strong {
@@ -311,12 +283,8 @@
   outline-offset: 0.8rem;
 }
 
-.sanakaverse-feedback,
-.sanakaverse-empty {
-  margin-top: clamp(3.5rem, 7vw, 6rem);
-}
-
 .sanakaverse-feedback {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
   min-height: 22rem;
   display: grid;
   place-items: center;
@@ -350,90 +318,24 @@
 }
 
 .sanakaverse-loading-books {
-  height: 12rem;
-  display: flex;
-  align-items: flex-end;
-  gap: 1rem;
+  width: min(100%, 44rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
 }
 
 .sanakaverse-loading-books span {
-  width: 4.8rem;
   display: block;
 
-  aspect-ratio: 2 / 3;
+  aspect-ratio: 1;
 
   border: 1px solid rgba(237, 201, 120, 0.18);
   background: linear-gradient(135deg, rgba(123, 82, 180, 0.1), rgba(29, 36, 48, 0.46));
 }
 
-.sanakaverse-loading-books span:nth-child(2) {
-  width: 4.15rem;
-
-  transform: translateY(-1rem);
-}
-
-.sanakaverse-loading-books span:nth-child(3) {
-  width: 5.2rem;
-
-  transform: translateY(0.65rem);
-}
-
-.sanakaverse-empty {
-  display: grid;
-  grid-template-columns: minmax(10rem, 0.65fr) minmax(18rem, 1.35fr);
-  align-items: center;
-  gap: clamp(2rem, 7vw, 7rem);
-
-  max-width: 58rem;
-  margin-inline: auto;
-  padding: clamp(2rem, 5vw, 4rem);
-
-  border-block: 1px solid rgba(237, 201, 120, 0.14);
-  background: radial-gradient(circle at 18% 50%, rgba(123, 82, 180, 0.12), transparent 32%);
-}
-
-.sanakaverse-empty__volume {
-  width: min(10rem, 100%);
-  display: grid;
-  place-items: center;
-  justify-self: center;
-
-  aspect-ratio: 2 / 3;
-
-  border: 1px solid rgba(237, 201, 120, 0.28);
-  background: linear-gradient(145deg, #171220, #0e1420);
-
-  box-shadow: 0 1.6rem 2.5rem rgba(0, 0, 0, 0.4);
-
-  transform: rotate(-2deg);
-}
-
-.sanakaverse-empty__volume img {
-  width: 3.5rem;
-  height: auto;
-
-  opacity: 0.72;
-}
-
-.sanakaverse-empty__text h3 {
-  margin-top: 0.85rem;
-
-  font-size: clamp(2rem, 4vw, 3.25rem);
-  line-height: 1;
-}
-
-.sanakaverse-empty__text > p:last-child {
-  max-width: 34rem;
-  margin: 1.2rem 0 0;
-
-  color: var(--sanaka-ivory-muted);
-
-  line-height: 1.8;
-}
-
-@media (max-width: 900px) {
+@media (max-width: 1000px) {
   .sanakaverse-grid {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
+    grid-template-columns: repeat(3, minmax(0, 1fr));
   }
 }
 
@@ -451,56 +353,17 @@
   }
 
   .sanakaverse-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
     gap: 3rem 1.25rem;
     margin-top: 3.5rem;
-  }
-
-  .sanakaverse-book {
-    --sanakaverse-book-width: 9rem;
-  }
-
-  .sanakaverse-book:nth-child(3n + 2) {
-    --sanakaverse-book-width: 8.35rem;
-  }
-
-  .sanakaverse-book:nth-child(3n) {
-    --sanakaverse-book-width: 9.4rem;
-  }
-
-  .sanakaverse-book__link {
-    min-height: 22rem;
   }
 
   .sanakaverse-book__caption strong {
     font-size: 1.3rem;
   }
 
-  .sanakaverse-empty {
-    grid-template-columns: 1fr;
-
-    text-align: center;
-  }
-
-  .sanakaverse-empty__text > p:last-child {
-    margin-inline: auto;
-  }
-}
-
-@media (max-width: 420px) {
-  .sanakaverse-grid {
-    grid-template-columns: 1fr;
-  }
-
-  .sanakaverse-book {
-    --sanakaverse-book-width: 11.25rem;
-  }
-
-  .sanakaverse-book:nth-child(3n + 2) {
-    --sanakaverse-book-width: 10rem;
-  }
-
-  .sanakaverse-book:nth-child(3n) {
-    --sanakaverse-book-width: 12rem;
+  .sanakaverse-loading-books {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

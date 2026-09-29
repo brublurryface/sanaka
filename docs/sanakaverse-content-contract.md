@@ -8,7 +8,7 @@ volume com a imagem destacada da publicação.
 1. Criar ou editar a publicação correspondente no WordPress.
 2. Associá-la à categoria **Sanakaverse**, cujo slug deve permanecer `sanakaverse`.
 3. Manter a imagem destacada como a composição horizontal usada no cabeçalho do post.
-4. Selecionar a capa vertical no campo próprio **Capa do Sanakaverse**.
+4. Selecionar a composição quadrada no campo próprio **Capa do Sanakaverse**.
 
 Quando a publicação estiver pública, a aplicação a transforma automaticamente em um livro e o
 link interno abre `/posts/:slug` em uma nova aba.
@@ -33,15 +33,17 @@ elegante, sem reutilizar indevidamente a imagem destacada.
 
 ## Modelo recomendado da imagem
 
-- Proporção: **2:3**, vertical.
-- Tamanho de origem: **1200 × 1800 px**.
+- Proporção: **1:1**, quadrada.
+- Tamanho de origem: **1200 × 1200 px**.
 - Formato preferencial: **WebP**.
 - Peso recomendado: até **350 KB**, preservando a qualidade do traço.
-- Composição: manter rostos, símbolos e textos importantes afastados das extremidades.
+- Composição: a imagem quadrada funciona como palco; o livro desenhado dentro dela pode ser aberto,
+  fechado, fino, espesso ou assumir outra forma coerente com a personagem.
+- Área segura: manter rostos, símbolos e textos importantes afastados das extremidades.
 - Identidade visual: arte em mangá coerente com o Projeto Sanaka.
 
-Os livros podem variar em escala e inclinação na interface, mas a proporção-base evita cortes e
-deformações das capas.
+O formato quadrado mantém quatro volumes alinhados por linha no desktop sem impor ao livro
+representado dentro da arte uma anatomia única.
 
 ## Limites editoriais
 
