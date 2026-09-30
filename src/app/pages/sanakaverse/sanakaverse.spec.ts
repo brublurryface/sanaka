@@ -102,7 +102,11 @@ describe('Sanakaverse', () => {
     const renderedBooks = compiled.querySelectorAll('.sanakaverse-book');
     const links = compiled.querySelectorAll<HTMLAnchorElement>('.sanakaverse-book__link');
     const images = compiled.querySelectorAll<HTMLImageElement>('.sanakaverse-book__volume > img');
+    const heroClasses = compiled.querySelector('.sanakaverse-hero')?.classList;
 
+    expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
+    expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
+    expect(compiled.querySelector('.sanakaverse-hero__content')).not.toBeNull();
     expect(compiled.querySelectorAll('.sanakaverse-hero h1 span')).toHaveLength(2);
     expect(renderedBooks).toHaveLength(4);
     expect(images).toHaveLength(3);

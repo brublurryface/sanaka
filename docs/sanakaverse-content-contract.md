@@ -17,6 +17,9 @@ link interno abre `/posts/:slug` em uma nova aba.
 
 Nome técnico: `sanakaverse_cover`.
 
+Na API REST, o campo pode chegar como URL simples, objeto de mídia ou array de metadados. A
+aplicação normaliza essas formas para preservar compatibilidade com o cadastro atual do WordPress.
+
 O campo REST deverá entregar um objeto com este formato:
 
 ```json

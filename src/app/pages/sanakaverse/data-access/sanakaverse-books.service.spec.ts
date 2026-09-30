@@ -77,6 +77,12 @@ describe('SanakaverseBooksService', () => {
       },
       {
         id: 3,
+        slug: 'mors',
+        title: { rendered: 'Mors' },
+        sanakaverse_cover: ['https://example.com/mors.webp'],
+      },
+      {
+        id: 4,
         slug: 'kalika',
         title: { rendered: 'Kālikā' },
       },
@@ -99,6 +105,13 @@ describe('SanakaverseBooksService', () => {
       },
       {
         id: 3,
+        slug: 'mors',
+        title: 'Mors',
+        coverImageUrl: 'https://example.com/mors.webp',
+        coverImageAlt: undefined,
+      },
+      {
+        id: 4,
         slug: 'kalika',
         title: 'Kālikā',
         coverImageUrl: undefined,

@@ -18,11 +18,19 @@ interface WordPressCategory {
 interface WordPressBookCover {
   readonly source_url?: string;
   readonly url?: string;
+  readonly rendered?: string;
+  readonly value?: string | readonly string[];
   readonly alt_text?: string;
   readonly alt?: string;
 }
 
-type WordPressBookCoverField = string | WordPressBookCover;
+type WordPressBookCoverField = string | WordPressBookCover | readonly WordPressBookCoverField[];
+
+function isCoverFieldList(
+  cover: WordPressBookCoverField,
+): cover is readonly WordPressBookCoverField[] {
+  return Array.isArray(cover);
+}
 
 interface WordPressBookPost {
   readonly id: number;
@@ -100,12 +108,25 @@ export class SanakaverseBooksService {
   }
 
   private readCoverUrl(cover: WordPressBookCoverField | undefined): string | undefined {
-    const url = typeof cover === 'string' ? cover : (cover?.source_url ?? cover?.url);
+    if (cover && isCoverFieldList(cover)) {
+      return cover.map((entry) => this.readCoverUrl(entry)).find(Boolean);
+    }
+
+    if (!cover || typeof cover === 'string') {
+      return cover?.trim() || undefined;
+    }
+
+    const value = Array.isArray(cover.value) ? cover.value[0] : cover.value;
+    const url = cover.source_url ?? cover.url ?? cover.rendered ?? value;
 
     return url?.trim() || undefined;
   }
 
   private readCoverAlt(cover: WordPressBookCoverField | undefined): string | undefined {
+    if (cover && isCoverFieldList(cover)) {
+      return cover.map((entry) => this.readCoverAlt(entry)).find(Boolean);
+    }
+
     if (!cover || typeof cover === 'string') {
       return undefined;
     }
