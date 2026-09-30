@@ -57,17 +57,17 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
         destinationsLabel: 'Sobre e Sanakaverse',
         contact: {
-          eyebrow: 'Presença atual',
+          eyebrow: 'Presença do agora',
           title: 'Onde me encontrar',
           intro: 'A conversa começa pelo e-mail.',
           emailLabel: 'Escrever por e-mail',
           email: 'sanaka@sanaka.com.br',
         },
         universe: {
-          eyebrow: 'Outro portal',
+          eyebrow: 'Presença criativa',
           title: 'Sanakaverse',
-          intro: 'Uma cartografia própria.',
-          status: 'Portal em construção',
+          intro: 'Personagens, símbolos e relações que habitam o universo narrativo de Sanaka.',
+          status: 'Viajar para Sanakaverse',
         },
       },
     });
@@ -136,9 +136,13 @@ describe('About', () => {
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
       'mailto:sanaka@sanaka.com.br',
     );
-    expect(compiled.querySelector('.about-destination--universe a')?.getAttribute('href')).toBe(
-      '/sanakaverse',
+    const sanakaverseLink = compiled.querySelector<HTMLAnchorElement>(
+      '.about-destination--universe a',
     );
+
+    expect(sanakaverseLink?.getAttribute('href')).toBe('/sanakaverse');
+    expect(sanakaverseLink?.target).toBe('_blank');
+    expect(sanakaverseLink?.rel).toBe('noopener');
   });
 
   it('should expose the selected excerpt and its internal publication link', () => {

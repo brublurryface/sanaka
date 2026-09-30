@@ -25,7 +25,8 @@
     "footer": {
       "navigation": "Footer navigation",
       "about": "About & contact",
-      "signature": "Between code, symbols, and presence."
+      "signature": "Between code, symbols, and presence.",
+      "sanakaverse": "Sanakaverse"
     }
   },
   "common": {
@@ -75,17 +76,17 @@
     },
     "destinationsLabel": "About and Sanakaverse",
     "contact": {
-      "eyebrow": "Present presence",
+      "eyebrow": "Presence in the now",
       "title": "Where to find me",
       "intro": "This space will gather my networks and ways to connect. For now, the conversation begins by email.",
       "emailLabel": "Write by email",
       "email": "sanaka@sanaka.com.br"
     },
     "universe": {
-      "eyebrow": "Another portal",
+      "eyebrow": "Creative presence",
       "title": "Sanakaverse",
-      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe will have a cartography of their own.",
-      "status": "Cross the portal"
+      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe.",
+      "status": "Travel to Sanakaverse"
     }
   },
   "sanakaverse": {

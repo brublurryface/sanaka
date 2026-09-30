@@ -180,24 +180,17 @@
 
 .sanakaverse-book__volume {
   position: relative;
-  overflow: hidden;
+  overflow: visible;
 
   width: 100%;
   display: block;
 
   aspect-ratio: 1;
 
-  border: 1px solid rgba(237, 201, 120, 0.38);
-  background: #111521;
+  border: 0;
+  background: transparent;
 
-  box-shadow:
-    0 1.6rem 2.6rem rgba(0, 0, 0, 0.38),
-    0 0 2.4rem rgba(90, 52, 127, 0.18);
-
-  transition:
-    transform 240ms ease,
-    border-color 240ms ease,
-    box-shadow 240ms ease;
+  transition: transform 240ms ease;
 }
 
 .sanakaverse-book__volume > img,
@@ -208,7 +201,13 @@
 }
 
 .sanakaverse-book__volume > img {
-  object-fit: cover;
+  object-fit: contain;
+
+  filter:
+    drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.3))
+    drop-shadow(0 0.8rem 1.2rem rgba(0, 0, 0, 0.46));
+
+  transition: filter 240ms ease;
 }
 
 .sanakaverse-book__placeholder {
@@ -289,13 +288,15 @@
 
 .sanakaverse-book__link:hover .sanakaverse-book__volume,
 .sanakaverse-book__link:focus-visible .sanakaverse-book__volume {
-  border-color: rgba(237, 201, 120, 0.82);
+  transform: translateY(-0.75rem) scale(1.025);
+}
 
-  box-shadow:
-    0 2.3rem 3rem rgba(0, 0, 0, 0.5),
-    0 0 3.2rem rgba(123, 82, 180, 0.38);
-
-  transform: translateY(-0.75rem);
+.sanakaverse-book__link:hover .sanakaverse-book__volume > img,
+.sanakaverse-book__link:focus-visible .sanakaverse-book__volume > img {
+  filter:
+    drop-shadow(0 0 0.8rem rgba(237, 201, 120, 0.68))
+    drop-shadow(0 0 1.9rem rgba(211, 166, 79, 0.46))
+    drop-shadow(0 1.1rem 1.4rem rgba(0, 0, 0, 0.52));
 }
 
 .sanakaverse-book__link:hover .sanakaverse-book__caption strong {
@@ -384,7 +385,8 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
-  .sanakaverse-book__volume {
+  .sanakaverse-book__volume,
+  .sanakaverse-book__volume > img {
     transition: none;
   }
 }
