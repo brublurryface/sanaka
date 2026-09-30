@@ -1,7 +1,7 @@
 :host {
   display: block;
 
-  background: #080b12;
+  background: var(--sanaka-bg);
 }
 
 .sanakaverse {
@@ -17,9 +17,12 @@
   inset: 0;
   z-index: 0;
 
-  background:
-    linear-gradient(180deg, rgba(8, 11, 18, 0.12), rgba(8, 11, 18, 0.48)),
-    url('/images/sanakaverse/sanakaverse-stars.webp') center / cover no-repeat;
+  background-color: var(--sanaka-bg);
+  background-image: url('/images/sanakaverse/sanakaverse-stars.webp');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
 }
 
 .sanakaverse__content {
@@ -105,11 +108,38 @@
 }
 
 .sanakaverse-collection {
+  position: relative;
+  isolation: isolate;
+
   width: var(--sanaka-page-shell-width);
   margin-inline: auto;
   padding: var(--sanaka-space-page-content-start) 0 clamp(6rem, 12vw, 10rem);
 
   border-top: 1px solid rgba(237, 201, 120, 0.16);
+}
+
+.sanakaverse-collection::before {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  z-index: -1;
+
+  width: 100vw;
+  height: clamp(12rem, 24vw, 20rem);
+
+  background: linear-gradient(
+    180deg,
+    var(--sanaka-bg) 0%,
+    rgba(13, 17, 23, 0.96) 18%,
+    rgba(13, 17, 23, 0.72) 46%,
+    rgba(13, 17, 23, 0.34) 72%,
+    transparent 100%
+  );
+
+  content: '';
+  pointer-events: none;
+
+  transform: translateX(-50%);
 }
 
 .sanakaverse-heading h2 {
