@@ -17,6 +17,8 @@
   inset: 0;
   z-index: 0;
 
+  opacity: 0.52;
+
   background-color: var(--sanaka-bg);
   background-image: url('/images/sanakaverse/sanakaverse-stars.webp');
   background-position: center;
@@ -203,8 +205,7 @@
 .sanakaverse-book__volume > img {
   object-fit: contain;
 
-  filter:
-    drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.3))
+  filter: drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.3))
     drop-shadow(0 0.8rem 1.2rem rgba(0, 0, 0, 0.46));
 
   transition: filter 240ms ease;
@@ -293,8 +294,7 @@
 
 .sanakaverse-book__link:hover .sanakaverse-book__volume > img,
 .sanakaverse-book__link:focus-visible .sanakaverse-book__volume > img {
-  filter:
-    drop-shadow(0 0 0.8rem rgba(237, 201, 120, 0.68))
+  filter: drop-shadow(0 0 0.8rem rgba(237, 201, 120, 0.68))
     drop-shadow(0 0 1.9rem rgba(211, 166, 79, 0.46))
     drop-shadow(0 1.1rem 1.4rem rgba(0, 0, 0, 0.52));
 }
