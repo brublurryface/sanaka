@@ -1,0 +1,392 @@
+:host {
+  display: block;
+
+  background: var(--sanaka-bg);
+}
+
+.sanakaverse {
+  position: relative;
+  isolation: isolate;
+
+  min-height: 100vh;
+  overflow: clip;
+}
+
+.sanakaverse__cosmos {
+  position: fixed;
+  inset: 0;
+  z-index: 0;
+
+  opacity: 0.52;
+
+  background-color: var(--sanaka-bg);
+  background-image: url('/images/sanakaverse/sanakaverse-stars.webp');
+  background-position: center;
+  background-size: cover;
+  background-repeat: no-repeat;
+  background-blend-mode: screen;
+}
+
+.sanakaverse__content {
+  position: relative;
+  z-index: 1;
+}
+
+.sanakaverse-hero {
+  background: var(--sanaka-bg);
+}
+
+.sanakaverse-hero::before {
+  z-index: -2;
+
+  background: url('/images/sanakaverse/sanakaverse-atmosphere-desktop.webp')
+    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
+
+  opacity: var(--sanaka-atmosphere-image-opacity, 0.9);
+}
+
+.sanakaverse-hero::after {
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.72) 8%,
+      rgba(13, 17, 23, 0.08) 25%,
+      rgba(13, 17, 23, 0.04) 58%,
+      rgba(13, 17, 23, 0.5) 76%,
+      rgba(13, 17, 23, 0.94) 93%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.96) 20%,
+      rgba(13, 17, 23, 0.78) 38%,
+      rgba(13, 17, 23, 0.2) 62%,
+      transparent 100%
+    );
+}
+
+.sanakaverse-hero__content {
+  width: var(--sanaka-page-shell-width);
+}
+
+.sanakaverse-hero h1,
+.sanakaverse-heading h2 {
+  margin: 0;
+
+  color: var(--sanaka-ivory);
+
+  font-family: var(--sanaka-font-display);
+  font-weight: 500;
+}
+
+.sanakaverse-hero h1 {
+  max-width: 12ch;
+  margin: 1.1rem 0 0;
+
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
+}
+
+.sanakaverse-hero h1 span {
+  display: block;
+
+  white-space: nowrap;
+}
+
+.sanakaverse-hero__intro {
+  max-width: var(--sanaka-measure-hero-intro);
+  margin: 1.25rem 0 0;
+
+  color: var(--sanaka-ivory-muted);
+
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
+}
+
+.sanakaverse-collection {
+  position: relative;
+  isolation: isolate;
+
+  width: var(--sanaka-page-shell-width);
+  margin-inline: auto;
+  padding: var(--sanaka-space-page-content-start) 0 clamp(6rem, 12vw, 10rem);
+
+  border-top: 1px solid rgba(237, 201, 120, 0.16);
+}
+
+.sanakaverse-collection::before {
+  position: absolute;
+  top: -1px;
+  left: 50%;
+  z-index: -1;
+
+  width: 100vw;
+  height: clamp(12rem, 24vw, 20rem);
+
+  background: linear-gradient(
+    180deg,
+    var(--sanaka-bg) 0%,
+    rgba(13, 17, 23, 0.96) 18%,
+    rgba(13, 17, 23, 0.72) 46%,
+    rgba(13, 17, 23, 0.34) 72%,
+    transparent 100%
+  );
+
+  content: '';
+  pointer-events: none;
+
+  transform: translateX(-50%);
+}
+
+.sanakaverse-heading h2 {
+  margin-top: 1rem;
+
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+.sanakaverse-grid {
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  align-items: start;
+  gap: clamp(3rem, 6vw, 5rem) clamp(1.25rem, 3vw, 2.5rem);
+
+  margin: clamp(4rem, 8vw, 7rem) 0 0;
+  padding: 0;
+
+  list-style: none;
+}
+
+.sanakaverse-book {
+  min-width: 0;
+}
+
+.sanakaverse-book__link {
+  display: flex;
+  flex-direction: column;
+  justify-content: flex-end;
+  align-items: center;
+
+  color: inherit;
+
+  text-align: center;
+  text-decoration: none;
+}
+
+.sanakaverse-book__volume {
+  position: relative;
+  overflow: visible;
+
+  width: 100%;
+  display: block;
+
+  aspect-ratio: 1;
+
+  border: 0;
+  background: transparent;
+
+  transition: transform 240ms ease;
+}
+
+.sanakaverse-book__volume > img,
+.sanakaverse-book__placeholder {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+.sanakaverse-book__volume > img {
+  object-fit: contain;
+
+  filter: drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.3))
+    drop-shadow(0 0.8rem 1.2rem rgba(0, 0, 0, 0.46));
+
+  transition: filter 240ms ease;
+}
+
+.sanakaverse-book__placeholder {
+  position: relative;
+  overflow: hidden;
+
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  gap: 1.15rem;
+
+  padding: 1.5rem;
+
+  background:
+    linear-gradient(135deg, transparent 42%, rgba(237, 201, 120, 0.08) 43% 44%, transparent 45%),
+    radial-gradient(circle at 50% 33%, rgba(123, 82, 180, 0.24), transparent 38%),
+    linear-gradient(160deg, #191326, #0e1420 58%, #13101a);
+}
+
+.sanakaverse-book__placeholder::before {
+  position: absolute;
+  inset: 0.65rem;
+
+  border: 1px solid rgba(237, 201, 120, 0.18);
+
+  content: '';
+}
+
+.sanakaverse-book__placeholder img {
+  width: 3.2rem;
+  height: auto;
+
+  filter: drop-shadow(0 0 0.8rem rgba(237, 201, 120, 0.25));
+}
+
+.sanakaverse-book__placeholder > span {
+  position: relative;
+
+  color: var(--sanaka-ivory);
+
+  font-family: var(--sanaka-font-display);
+  font-size: 1.45rem;
+  line-height: 1.05;
+  text-transform: uppercase;
+}
+
+.sanakaverse-book__placeholder small {
+  position: relative;
+
+  color: var(--sanaka-gold-soft);
+
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 700;
+  letter-spacing: 0.12em;
+  line-height: 1.5;
+  text-transform: uppercase;
+}
+
+.sanakaverse-book__caption {
+  width: min(14rem, 100%);
+  display: flex;
+  flex-direction: column;
+  gap: 0.55rem;
+
+  margin-top: 1.75rem;
+}
+
+.sanakaverse-book__caption strong {
+  color: var(--sanaka-ivory);
+
+  font-family: var(--sanaka-font-display);
+  font-size: 1.55rem;
+  font-weight: 500;
+  line-height: 1.08;
+  text-transform: uppercase;
+}
+
+.sanakaverse-book__link:hover .sanakaverse-book__volume,
+.sanakaverse-book__link:focus-visible .sanakaverse-book__volume {
+  transform: translateY(-0.75rem) scale(1.025);
+}
+
+.sanakaverse-book__link:hover .sanakaverse-book__volume > img,
+.sanakaverse-book__link:focus-visible .sanakaverse-book__volume > img {
+  filter: drop-shadow(0 0 0.8rem rgba(237, 201, 120, 0.68))
+    drop-shadow(0 0 1.9rem rgba(211, 166, 79, 0.46))
+    drop-shadow(0 1.1rem 1.4rem rgba(0, 0, 0, 0.52));
+}
+
+.sanakaverse-book__link:hover .sanakaverse-book__caption strong {
+  color: var(--sanaka-gold-soft);
+}
+
+.sanakaverse-book__link:focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 0.8rem;
+}
+
+.sanakaverse-feedback {
+  margin-top: clamp(3.5rem, 7vw, 6rem);
+  min-height: 22rem;
+  display: grid;
+  place-items: center;
+  align-content: center;
+  gap: 2rem;
+
+  color: var(--sanaka-ivory-muted);
+
+  text-align: center;
+}
+
+.sanakaverse-feedback p {
+  margin: 0;
+}
+
+.sanakaverse-feedback button {
+  padding: 0.8rem 1rem;
+
+  border: 1px solid var(--sanaka-gold-soft);
+  background: rgba(13, 17, 23, 0.78);
+
+  color: var(--sanaka-gold-soft);
+
+  font: inherit;
+  cursor: pointer;
+}
+
+.sanakaverse-feedback button:focus-visible {
+  outline: 1px solid var(--sanaka-ivory);
+  outline-offset: 5px;
+}
+
+.sanakaverse-loading-books {
+  width: min(100%, 44rem);
+  display: grid;
+  grid-template-columns: repeat(4, minmax(0, 1fr));
+  gap: 1.25rem;
+}
+
+.sanakaverse-loading-books span {
+  display: block;
+
+  aspect-ratio: 1;
+
+  border: 1px solid rgba(237, 201, 120, 0.18);
+  background: linear-gradient(135deg, rgba(123, 82, 180, 0.1), rgba(29, 36, 48, 0.46));
+}
+
+@media (max-width: 1000px) {
+  .sanakaverse-grid {
+    grid-template-columns: repeat(3, minmax(0, 1fr));
+  }
+}
+
+@media (max-width: 700px) {
+  .sanakaverse-collection {
+    padding-bottom: 5rem;
+  }
+
+  .sanakaverse-grid {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 3rem 1.25rem;
+    margin-top: 3.5rem;
+  }
+
+  .sanakaverse-book__caption strong {
+    font-size: 1.3rem;
+  }
+
+  .sanakaverse-loading-books {
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .sanakaverse-book__volume,
+  .sanakaverse-book__volume > img {
+    transition: none;
+  }
+}

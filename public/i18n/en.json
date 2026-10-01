@@ -8,7 +8,8 @@
       "matrixComponents": "Components in conversation",
       "matrixRestApi": "REST API portal",
       "maya": "Māyā",
-      "about": "About"
+      "about": "About",
+      "sanakaverse": "Sanakaverse library"
     },
     "navigation": {
       "ariaLabel": "Main navigation",
@@ -24,7 +25,8 @@
     "footer": {
       "navigation": "Footer navigation",
       "about": "About & contact",
-      "signature": "Between code, symbols, and presence."
+      "signature": "Between code, symbols, and presence.",
+      "sanakaverse": "Sanakaverse"
     }
   },
   "common": {
@@ -74,17 +76,43 @@
     },
     "destinationsLabel": "About and Sanakaverse",
     "contact": {
-      "eyebrow": "Present presence",
+      "eyebrow": "Presence in the now",
       "title": "Where to find me",
       "intro": "This space will gather my networks and ways to connect. For now, the conversation begins by email.",
       "emailLabel": "Write by email",
       "email": "sanaka@sanaka.com.br"
     },
     "universe": {
-      "eyebrow": "Another portal",
+      "eyebrow": "Creative presence",
       "title": "Sanakaverse",
-      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe will have a cartography of their own.",
-      "status": "Portal under construction"
+      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe.",
+      "status": "Travel to Sanakaverse"
+    }
+  },
+  "sanakaverse": {
+    "hero": {
+      "eyebrow": "Sanakaverse",
+      "title": {
+        "line1": "A library",
+        "line2": "between worlds"
+      },
+      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe."
+    },
+    "collection": {
+      "eyebrow": "Volumes in orbit",
+      "title": "Choose a book",
+      "intro": "When a story is ready to cross the portal, its cover will appear here. Approach the covers and immerse yourself in the volume that calls to you.",
+      "ariaLabel": "Sanakaverse books"
+    },
+    "book": {
+      "open": "Open volume",
+      "untitled": "Untitled volume",
+      "unrevealed": "Cover not yet revealed"
+    },
+    "loading": "Aligning the books with the stars…",
+    "error": {
+      "title": "The books' orbit came apart for a moment.",
+      "retry": "Gather the volumes again"
     }
   },
   "home": {

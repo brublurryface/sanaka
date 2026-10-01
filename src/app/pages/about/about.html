@@ -167,6 +167,9 @@
     <p class="about-eyebrow sanaka-editorial-label">{{ 'about.universe.eyebrow' | transloco }}</p>
     <h2>{{ 'about.universe.title' | transloco }}</h2>
     <p>{{ 'about.universe.intro' | transloco }}</p>
-    <span class="about-destination__status">{{ 'about.universe.status' | transloco }}</span>
+    <a class="about-destination__status" routerLink="/sanakaverse" target="_blank" rel="noopener">
+      {{ 'about.universe.status' | transloco }}
+      <span aria-hidden="true">↗</span>
+    </a>
   </article>
 </section>

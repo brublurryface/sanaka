@@ -28,6 +28,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Navegação do rodapé',
             about: 'Sobre & contato',
+            sanakaverse: 'Sanakaverse',
             signature: 'Entre código, símbolos e presença.',
           },
         },
@@ -49,6 +50,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           footer: {
             navigation: 'Footer navigation',
             about: 'About & contact',
+            sanakaverse: 'Sanakaverse',
             signature: 'Between code, symbols, and presence.',
           },
         },
@@ -137,7 +139,7 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
   });
 
-  it('should link the footer to the About and contact page', () => {
+  it('should link the footer to About and Sanakaverse', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
@@ -148,8 +150,16 @@ describe('App', () => {
 
     expect(footer).toBeTruthy();
     expect(footerNavigation?.getAttribute('aria-label')).toBe('Navegação do rodapé');
+    const destinationLinks = Array.from(
+      futureDestination?.querySelectorAll<HTMLAnchorElement>('a') ?? [],
+    );
+
     expect(futureDestination?.textContent).toContain('Sobre & contato');
-    expect(futureDestination?.querySelector('a')?.getAttribute('href')).toBe('/sobre');
+    expect(futureDestination?.textContent).toContain('Sanakaverse');
+    expect(destinationLinks.map((link) => link.getAttribute('href'))).toEqual([
+      '/sobre',
+      '/sanakaverse',
+    ]);
   });
 
   it('should switch the interface language at runtime using the PT | EN selector', () => {

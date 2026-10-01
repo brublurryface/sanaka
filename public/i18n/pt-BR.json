@@ -8,7 +8,8 @@
       "matrixComponents": "Componentes em conversa",
       "matrixRestApi": "Portal da API REST",
       "maya": "Māyā",
-      "about": "Sobre"
+      "about": "Sobre",
+      "sanakaverse": "Biblioteca do Sanakaverse"
     },
     "navigation": {
       "ariaLabel": "Navegação principal",
@@ -24,7 +25,8 @@
     "footer": {
       "navigation": "Navegação do rodapé",
       "about": "Sobre & contato",
-      "signature": "Entre código, símbolos e presença."
+      "signature": "Entre código, símbolos e presença.",
+      "sanakaverse": "Sanakaverse"
     }
   },
   "common": {
@@ -74,17 +76,43 @@
     },
     "destinationsLabel": "Sobre e Sanakaverse",
     "contact": {
-      "eyebrow": "Presença atual",
+      "eyebrow": "Presença do agora",
       "title": "Onde me encontrar",
       "intro": "Este espaço reunirá minhas redes e formas de contato. Por enquanto, a conversa começa pelo e-mail.",
       "emailLabel": "Escrever por e-mail",
       "email": "sanaka@sanaka.com.br"
     },
     "universe": {
-      "eyebrow": "Outro portal",
+      "eyebrow": "Presença criativa",
       "title": "Sanakaverse",
-      "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka terão uma cartografia própria.",
-      "status": "Portal em construção"
+      "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka.",
+      "status": "Viajar para Sanakaverse"
+    }
+  },
+  "sanakaverse": {
+    "hero": {
+      "eyebrow": "Sanakaverse",
+      "title": {
+        "line1": "Biblioteca",
+        "line2": "entre mundos"
+      },
+      "intro": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo."
+    },
+    "collection": {
+      "eyebrow": "Volumes em órbita",
+      "title": "Escolha um livro",
+      "intro": "Quando uma história estiver pronta para atravessar o portal, sua capa surgirá aqui. Aproxime-se das capas e mergulhe no volume que chamar por você.",
+      "ariaLabel": "Livros do Sanakaverse"
+    },
+    "book": {
+      "open": "Abrir volume",
+      "untitled": "Volume sem título",
+      "unrevealed": "Capa ainda não revelada"
+    },
+    "loading": "Alinhando os livros às estrelas…",
+    "error": {
+      "title": "A órbita dos livros se desfez por um instante.",
+      "retry": "Tentar reunir os volumes"
     }
   },
   "home": {

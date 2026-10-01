@@ -1,0 +1,89 @@
+<section class="sanakaverse">
+  <div class="sanakaverse__cosmos" aria-hidden="true"></div>
+
+  <div class="sanakaverse__content">
+    <header
+      class="sanakaverse-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--compact"
+      aria-labelledby="sanakaverse-title"
+    >
+      <div class="sanakaverse-hero__content sanaka-atmosphere-shell">
+        <p class="sanaka-editorial-label">{{ 'sanakaverse.hero.eyebrow' | transloco }}</p>
+        <h1 id="sanakaverse-title">
+          <span>{{ 'sanakaverse.hero.title.line1' | transloco }}</span>
+          <span>{{ 'sanakaverse.hero.title.line2' | transloco }}</span>
+        </h1>
+        <p class="sanakaverse-hero__intro">{{ 'sanakaverse.hero.intro' | transloco }}</p>
+      </div>
+    </header>
+
+    <section class="sanakaverse-collection">
+      <div class="sanakaverse-heading sanaka-section-heading">
+        <div>
+          <p class="sanaka-editorial-label">{{ 'sanakaverse.collection.eyebrow' | transloco }}</p>
+          <h2>{{ 'sanakaverse.collection.title' | transloco }}</h2>
+        </div>
+        <p>{{ 'sanakaverse.collection.intro' | transloco }}</p>
+      </div>
+
+      @if (isLoading()) {
+        <div class="sanakaverse-feedback sanakaverse-feedback--loading" role="status">
+          <div class="sanakaverse-loading-books" aria-hidden="true">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <p>{{ 'sanakaverse.loading' | transloco }}</p>
+        </div>
+      } @else if (hasError()) {
+        <div class="sanakaverse-feedback sanakaverse-feedback--error" role="alert">
+          <p>{{ 'sanakaverse.error.title' | transloco }}</p>
+          <button type="button" (click)="retry()">
+            {{ 'sanakaverse.error.retry' | transloco }}
+          </button>
+        </div>
+      } @else if (books().length > 0) {
+        <ol
+          class="sanakaverse-grid"
+          [attr.aria-label]="'sanakaverse.collection.ariaLabel' | transloco"
+        >
+          @for (book of books(); track book.id) {
+            <li class="sanakaverse-book">
+              <a
+                class="sanakaverse-book__link"
+                [routerLink]="['/posts', book.slug]"
+                target="_blank"
+                rel="noopener"
+              >
+                <span class="sanakaverse-book__volume">
+                  @if (book.coverImageUrl) {
+                    <img
+                      [src]="book.coverImageUrl"
+                      [alt]="book.coverImageAlt || book.title"
+                      width="1200"
+                      height="1200"
+                      loading="lazy"
+                    />
+                  } @else {
+                    <span class="sanakaverse-book__placeholder">
+                      <img src="/images/posts/temple/hamsa.svg" alt="" aria-hidden="true" />
+                      <span>{{ book.title || ('sanakaverse.book.untitled' | transloco) }}</span>
+                      <small>{{ 'sanakaverse.book.unrevealed' | transloco }}</small>
+                    </span>
+                  }
+                </span>
+
+                <span class="sanakaverse-book__caption">
+                  <span class="sanaka-editorial-label">{{
+                    'sanakaverse.book.open' | transloco
+                  }}</span>
+                  <strong>{{ book.title || ('sanakaverse.book.untitled' | transloco) }}</strong>
+                </span>
+              </a>
+            </li>
+          }
+        </ol>
+      }
+    </section>
+  </div>
+</section>

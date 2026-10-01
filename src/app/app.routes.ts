@@ -25,4 +25,9 @@ export const routes: Routes = [
     data: { titleKey: 'app.pageTitles.about' },
     loadComponent: () => import('./pages/about/about').then((m) => m.About),
   },
+  {
+    path: 'sanakaverse',
+    data: { titleKey: 'app.pageTitles.sanakaverse' },
+    loadComponent: () => import('./pages/sanakaverse/sanakaverse').then((m) => m.Sanakaverse),
+  },
 ];
