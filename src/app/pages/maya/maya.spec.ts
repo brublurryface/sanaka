@@ -108,9 +108,9 @@ describe('Maya', () => {
     expect(compiled.querySelector('.maya-page__header')).toBeNull();
     expect(compiled.querySelector('.maya-dialogue__threshold')).toBeNull();
     expect(compiled.querySelectorAll('.maya-presence__image')).toHaveLength(1);
-    expect(compiled.querySelector('.maya-presence__sleep-motion')?.getAttribute('aria-hidden')).toBe(
-      'true',
-    );
+    expect(
+      compiled.querySelector('.maya-presence__sleep-motion')?.getAttribute('aria-hidden'),
+    ).toBe('true');
     expect(compiled.querySelectorAll('.maya-presence__gem')).toHaveLength(5);
     expect(compiled.querySelectorAll('.maya-presence__breath')).toHaveLength(2);
     expect(image?.getAttribute('src')).toBe(
