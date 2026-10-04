@@ -6,15 +6,24 @@
       <figure class="maya-presence" [class.maya-presence--sesha]="presence.id === 'sesha'">
         <div class="maya-presence__aura" aria-hidden="true"></div>
 
-        <img
-          class="maya-presence__image"
-          [src]="presence.imageSrc"
-          [width]="presence.imageWidth"
-          [height]="presence.imageHeight"
-          [alt]="presence.altKey | transloco"
-          decoding="async"
-          fetchpriority="high"
-        />
+        <picture class="maya-presence__visual">
+          <source
+            media="(prefers-reduced-motion: reduce)"
+            [srcset]="presence.stillImageSrc"
+            type="image/webp"
+          />
+
+          <img
+            class="maya-presence__image"
+            [src]="presence.motionImageSrc"
+            [width]="presence.imageWidth"
+            [height]="presence.imageHeight"
+            [alt]="presence.altKey | transloco"
+            decoding="async"
+            fetchpriority="high"
+            (error)="useStaticPresence($event)"
+          />
+        </picture>
 
         <figcaption>
           <span class="maya-presence__line" aria-hidden="true"></span>

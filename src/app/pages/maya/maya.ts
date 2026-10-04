@@ -13,4 +13,14 @@ import { chooseMayaMessageKey, chooseMayaPresence } from './maya-presence';
 export class Maya {
   protected readonly presence = chooseMayaPresence(Math.random());
   protected readonly messageKey = chooseMayaMessageKey(this.presence, Math.random());
+
+  protected useStaticPresence(event: Event): void {
+    const image = event.currentTarget as HTMLImageElement;
+
+    if (image.src.endsWith(this.presence.stillImageSrc)) {
+      return;
+    }
+
+    image.src = this.presence.stillImageSrc;
+  }
 }

@@ -101,6 +101,9 @@ describe('Maya', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
     const image = compiled.querySelector<HTMLImageElement>('.maya-presence__image');
+    const reducedMotionSource = compiled.querySelector<HTMLSourceElement>(
+      '.maya-presence__visual source',
+    );
     const textarea = compiled.querySelector<HTMLTextAreaElement>('#maya-message');
     const sendButton = compiled.querySelector<HTMLButtonElement>('.maya-composer button');
 
@@ -109,10 +112,13 @@ describe('Maya', () => {
     expect(compiled.querySelector('.maya-dialogue__threshold')).toBeNull();
     expect(compiled.querySelectorAll('.maya-presence__image')).toHaveLength(1);
     expect(image?.getAttribute('src')).toBe(
+      '/images/maya/presences/maya-sesha-sleeping-motion.webp',
+    );
+    expect(reducedMotionSource?.getAttribute('srcset')).toBe(
       '/images/maya/presences/maya-sesha-sleeping-still.webp',
     );
-    expect(image?.getAttribute('width')).toBe('1448');
-    expect(image?.getAttribute('height')).toBe('1086');
+    expect(image?.getAttribute('width')).toBe('1456');
+    expect(image?.getAttribute('height')).toBe('1094');
     expect(image?.getAttribute('alt')).toBe('Māyā dorme sobre Śeṣa.');
     expect(compiled.querySelector('.maya-presence figcaption')?.textContent).toContain(
       'Māyā dormindo sobre Śeṣa',
@@ -127,6 +133,22 @@ describe('Maya', () => {
     expect(textarea?.disabled).toBe(true);
     expect(sendButton?.disabled).toBe(true);
     expect(compiled.querySelector('audio')).toBeNull();
+  });
+
+  it('should fall back to the still presence when the animated asset cannot load', async () => {
+    vi.spyOn(Math, 'random').mockReturnValueOnce(0.7).mockReturnValueOnce(0);
+    fixture = TestBed.createComponent(Maya);
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const image = compiled.querySelector<HTMLImageElement>('.maya-presence__image');
+
+    expect(image?.getAttribute('src')).toBe('/images/maya/presences/maya-suspicious-motion.webp');
+
+    image?.dispatchEvent(new Event('error'));
+
+    expect(image?.src).toMatch(/\/images\/maya\/presences\/maya-suspicious-still\.webp$/);
   });
 
   it.each([
