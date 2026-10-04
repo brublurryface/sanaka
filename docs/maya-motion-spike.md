@@ -4,21 +4,15 @@ Data: 04/10/2026
 
 Issue relacionada: [#50 — establish Māyā presence and motion foundation](https://github.com/brublurryface/sanaka/issues/50)
 
-## Decisão
+## Resultado
 
-A primeira presença animada de Māyā usa WebP animado. A solução não adiciona engine nem runtime de animação à aplicação e mantém um WebP estático correspondente para movimento reduzido e falha de carregamento.
+O protótipo de WebP animado produzido a partir das artes achatadas foi rejeitado.
 
-Os cinco microloops foram produzidos em resolução nativa, com transparência e compressão sem perda. Cada asset possui dois quadros, em uma cadência deliberadamente curta e simples, semelhante à presença de um bichinho virtual. A arte aprovada não foi redesenhada nem recomprimida com perda.
+O experimento deslocava a composição inteira entre dois quadros. Isso não produziu movimento expressivo da personagem e, no navegador, a composição dos quadros transparentes introduziu pontilhado escuro sobre pele, cabelo e roupa. A tentativa reduziu a qualidade da arte sem entregar presença.
 
-## Integração
+Os cinco protótipos animados foram removidos e a página voltou a carregar exclusivamente os WebPs estáticos aprovados.
 
-- somente a presença sorteada é solicitada pela página;
-- `prefers-reduced-motion: reduce` seleciona o asset estático pelo elemento `picture`;
-- se o WebP animado falhar, a imagem troca para o asset estático da mesma presença;
-- largura e altura declaradas reservam o espaço antes do carregamento;
-- a escolha de presença e frase permanece fixa durante a permanência na rota.
-
-## Medição dos assets
+## Medição do protótipo rejeitado
 
 | Presença            |        Estático |         Animado | Variação |
 | ------------------- | --------------: | --------------: | -------: |
@@ -28,10 +22,21 @@ Os cinco microloops foram produzidos em resolução nativa, com transparência e
 | Desconfiada         | 1.206.930 bytes | 2.297.828 bytes |    1,90× |
 | Dot-eye             | 1.038.850 bytes | 1.973.100 bytes |    1,90× |
 
-O custo transferido por visita fica entre 1,97 MB e 3,62 MB, porque a aplicação não baixa as cinco presenças. Esse valor é aceitável para o primeiro experimento, mas estabelece um teto a ser acompanhado antes de aumentar a quantidade de quadros.
+Além do defeito visual, o custo transferido praticamente dobrava sem criar uma animação significativa.
 
-## Limite desta fase
+## Critério para uma nova tentativa
 
-As artes entregues são imagens achatadas. Por isso, o microloop movimenta a composição como uma unidade e não articula separadamente olhos, orelhas, cabelos, roupa, cauda ou Śeṣa. Piscar, respirar ou reagir com partes independentes exige masters preparados em camadas.
+Não voltar a fabricar movimento deslocando a imagem achatada inteira.
 
-WebP animado permanece adequado aos movimentos de espera. Rive ou Live2D só devem ser reavaliados quando a conversa precisar controlar estados e transições em tempo real; nesse momento, fidelidade ao mangá, preparação da arte, peso, licença e manutenção devem ser medidos novamente.
+Uma animação publicável precisa partir de um master preparado em camadas independentes para, conforme a presença, movimentar olhos, orelhas, cabelos, roupa, cauda, respiração e Śeṣa sem redesenhar ou recomprimir o restante da arte.
+
+Antes da implementação, produzir e aprovar um único estado piloto. Somente depois medir:
+
+- fidelidade ao mangá em zoom de 100%;
+- estabilidade da transparência no navegador;
+- tamanho transferido e tempo de carregamento;
+- comportamento em desktop e mobile;
+- fallback estático e `prefers-reduced-motion`;
+- manutenção das camadas e possibilidade de reação futura à conversa.
+
+WebP animado pode ser reavaliado se receber quadros autorados corretamente. Rive ou Live2D só devem entrar na comparação quando a conversa precisar controlar movimentos e transições em tempo real.

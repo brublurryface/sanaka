@@ -2,8 +2,7 @@ export type MayaPresenceId = 'sesha' | 'curious' | 'contemplative' | 'suspicious
 
 export interface MayaPresence {
   readonly id: MayaPresenceId;
-  readonly motionImageSrc: string;
-  readonly stillImageSrc: string;
+  readonly imageSrc: string;
   readonly imageWidth: number;
   readonly imageHeight: number;
   readonly labelKey: string;
@@ -14,50 +13,45 @@ export interface MayaPresence {
 const MAYA_PRESENCES: Readonly<Record<MayaPresenceId, MayaPresence>> = {
   sesha: {
     id: 'sesha',
-    motionImageSrc: '/images/maya/presences/maya-sesha-sleeping-motion.webp',
-    stillImageSrc: '/images/maya/presences/maya-sesha-sleeping-still.webp',
-    imageWidth: 1456,
-    imageHeight: 1094,
+    imageSrc: '/images/maya/presences/maya-sesha-sleeping-still.webp',
+    imageWidth: 1448,
+    imageHeight: 1086,
     labelKey: 'maya.presences.sesha.label',
     altKey: 'maya.presences.sesha.alt',
     messageKeys: createMessageKeys('sesha'),
   },
   curious: {
     id: 'curious',
-    motionImageSrc: '/images/maya/presences/maya-curious-motion.webp',
-    stillImageSrc: '/images/maya/presences/maya-curious-still.webp',
-    imageWidth: 1130,
-    imageHeight: 1410,
+    imageSrc: '/images/maya/presences/maya-curious-still.webp',
+    imageWidth: 1122,
+    imageHeight: 1402,
     labelKey: 'maya.presences.curious.label',
     altKey: 'maya.presences.curious.alt',
     messageKeys: createMessageKeys('curious'),
   },
   contemplative: {
     id: 'contemplative',
-    motionImageSrc: '/images/maya/presences/maya-contemplative-motion.webp',
-    stillImageSrc: '/images/maya/presences/maya-contemplative-still.webp',
-    imageWidth: 1130,
-    imageHeight: 1410,
+    imageSrc: '/images/maya/presences/maya-contemplative-still.webp',
+    imageWidth: 1122,
+    imageHeight: 1402,
     labelKey: 'maya.presences.contemplative.label',
     altKey: 'maya.presences.contemplative.alt',
     messageKeys: createMessageKeys('contemplative'),
   },
   suspicious: {
     id: 'suspicious',
-    motionImageSrc: '/images/maya/presences/maya-suspicious-motion.webp',
-    stillImageSrc: '/images/maya/presences/maya-suspicious-still.webp',
-    imageWidth: 1130,
-    imageHeight: 1410,
+    imageSrc: '/images/maya/presences/maya-suspicious-still.webp',
+    imageWidth: 1122,
+    imageHeight: 1402,
     labelKey: 'maya.presences.suspicious.label',
     altKey: 'maya.presences.suspicious.alt',
     messageKeys: createMessageKeys('suspicious'),
   },
   dotEye: {
     id: 'dotEye',
-    motionImageSrc: '/images/maya/presences/maya-dot-eye-motion.webp',
-    stillImageSrc: '/images/maya/presences/maya-dot-eye-still.webp',
-    imageWidth: 1167,
-    imageHeight: 1364,
+    imageSrc: '/images/maya/presences/maya-dot-eye-still.webp',
+    imageWidth: 1159,
+    imageHeight: 1356,
     labelKey: 'maya.presences.dotEye.label',
     altKey: 'maya.presences.dotEye.alt',
     messageKeys: createMessageKeys('dotEye'),
