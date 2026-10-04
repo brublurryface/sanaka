@@ -159,20 +159,10 @@
   width: 100%;
 }
 
-.maya-presence__artwork {
-  position: relative;
-
-  width: min(100%, 32rem);
-}
-
-.maya-presence--sesha .maya-presence__artwork {
-  width: min(100%, 48rem);
-}
-
 .maya-presence__image {
   display: block;
 
-  width: 100%;
+  width: min(100%, 32rem);
   height: auto;
   max-height: 42rem;
 
@@ -182,101 +172,8 @@
   filter: drop-shadow(0 1.5rem 1.7rem rgba(0, 0, 0, 0.52));
 }
 
-/*
- * Mantém a ilustração canônica imóvel. Somente os sinais gráficos independentes
- * recebem animação, evitando deformação e perda de nitidez no lineart.
- */
-.maya-presence__sleep-motion {
-  position: absolute;
-  inset: 0;
-
-  pointer-events: none;
-}
-
-.maya-presence__gem {
-  position: absolute;
-
-  width: 4.4%;
-  aspect-ratio: 1;
-  border-radius: 50%;
-
-  background: radial-gradient(
-    circle,
-    rgba(190, 221, 255, 0.72) 0 8%,
-    rgba(57, 126, 255, 0.38) 28%,
-    rgba(31, 75, 181, 0.12) 52%,
-    transparent 72%
-  );
-
-  opacity: 0.16;
-
-  transform: translate(-50%, -50%) scale(0.82);
-
-  animation: sesha-gem-pulse 6.8s ease-in-out infinite;
-}
-
-.maya-presence__gem--one {
-  top: 32.5%;
-  left: 12.8%;
-
-  animation-delay: 0s;
-}
-
-.maya-presence__gem--two {
-  top: 16.5%;
-  left: 31.8%;
-
-  animation-delay: -1.35s;
-}
-
-.maya-presence__gem--three {
-  top: 8.5%;
-  left: 51.5%;
-
-  animation-delay: -2.7s;
-}
-
-.maya-presence__gem--four {
-  top: 17%;
-  left: 70.8%;
-
-  animation-delay: -4.05s;
-}
-
-.maya-presence__gem--five {
-  top: 34%;
-  left: 89.4%;
-
-  animation-delay: -5.4s;
-}
-
-.maya-presence__breath {
-  position: absolute;
-  top: 50%;
-  left: 27.1%;
-
-  width: 8%;
-  height: auto;
-  overflow: visible;
-
-  color: rgba(245, 236, 221, 0.64);
-
-  opacity: 0;
-
-  transform-origin: right center;
-
-  animation: maya-sleep-breath 5.2s ease-out infinite;
-}
-
-.maya-presence__breath path {
-  fill: none;
-  stroke: currentColor;
-  stroke-linecap: round;
-  stroke-width: 1.15;
-}
-
-.maya-presence__breath--two {
-  animation-delay: 2.6s;
+.maya-presence--sesha .maya-presence__image {
+  width: min(100%, 48rem);
 }
 
 .maya-presence figcaption {
@@ -448,50 +345,6 @@
   font-size: 1.15rem;
 }
 
-@keyframes sesha-gem-pulse {
-  0%,
-  100% {
-    opacity: 0.12;
-
-    transform: translate(-50%, -50%) scale(0.82);
-  }
-
-  48% {
-    opacity: 0.5;
-
-    transform: translate(-50%, -50%) scale(1.12);
-  }
-
-  68% {
-    opacity: 0.25;
-
-    transform: translate(-50%, -50%) scale(0.94);
-  }
-}
-
-@keyframes maya-sleep-breath {
-  0%,
-  18% {
-    opacity: 0;
-
-    transform: translate(0, 0) scale(0.72);
-  }
-
-  38% {
-    opacity: 0.58;
-  }
-
-  72% {
-    opacity: 0.22;
-  }
-
-  100% {
-    opacity: 0;
-
-    transform: translate(-0.75rem, -0.45rem) scale(1.18);
-  }
-}
-
 @media (max-width: 800px) {
   .maya-page__shell {
     padding-block: 2.5rem 5rem;
@@ -559,11 +412,5 @@
     display: inline;
 
     margin: 0 0 0 0.35rem;
-  }
-}
-
-@media (prefers-reduced-motion: reduce) {
-  .maya-presence__sleep-motion {
-    display: none;
   }
 }
