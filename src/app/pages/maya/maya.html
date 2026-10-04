@@ -1,1 +1,51 @@
-<p>maya works!</p>
+<section class="maya-page" [attr.aria-label]="'app.pageTitles.maya' | transloco">
+  <div class="maya-page__stars" aria-hidden="true"></div>
+
+  <div class="maya-page__shell">
+    <div class="maya-page__encounter">
+      <figure class="maya-presence" [class.maya-presence--sesha]="presence.id === 'sesha'">
+        <div class="maya-presence__aura" aria-hidden="true"></div>
+
+        <div class="maya-presence__visual">
+          <img
+            class="maya-presence__image"
+            [src]="presence.imageSrc"
+            [width]="presence.imageWidth"
+            [height]="presence.imageHeight"
+            [alt]="presence.altKey | transloco"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+
+        <figcaption>
+          <span class="maya-presence__line" aria-hidden="true"></span>
+          <span class="maya-presence__label">{{ presence.labelKey | transloco }}</span>
+          <span class="maya-presence__line" aria-hidden="true"></span>
+        </figcaption>
+      </figure>
+
+      <p class="maya-page__message" aria-live="polite">{{ messageKey | transloco }}</p>
+
+      <div class="maya-composer" role="group" aria-labelledby="maya-message-label">
+        <label id="maya-message-label" for="maya-message">
+          {{ 'maya.dialogue.inputLabel' | transloco }}
+        </label>
+
+        <div class="maya-composer__controls">
+          <textarea
+            id="maya-message"
+            rows="3"
+            disabled
+            [placeholder]="'maya.dialogue.placeholder' | transloco"
+          ></textarea>
+
+          <button type="button" disabled>
+            {{ 'maya.dialogue.send' | transloco }}
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>

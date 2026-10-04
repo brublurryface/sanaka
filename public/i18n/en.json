@@ -115,6 +115,60 @@
       "retry": "Gather the volumes again"
     }
   },
+  "maya": {
+    "presences": {
+      "sesha": {
+        "label": "Māyā sleeping on Śeṣa",
+        "alt": "Māyā sleeps on Śeṣa, the five-headed midnight-blue serpent.",
+        "message1": "Māyā sleeps on Śeṣa. While she dreams, this portal remains silent.",
+        "message2": "Māyā sleeps on Śeṣa. Her dreams are chaos! What are your dreams like?",
+        "message3": "Māyā sleeps on Śeṣa. Is this really what she meant to be doing?",
+        "message4": "Māyā sleeps on Śeṣa. Does Māyā take long to wake up?",
+        "message5": "Is Māyā really sleeping on Śeṣa?"
+      },
+      "curious": {
+        "label": "Māyā manifesting herself in Īśvara",
+        "alt": "A seated Māyā observes the visitor with curiosity.",
+        "message1": "Māyā watches you with curiosity... but the conversation has not awakened yet.",
+        "message2": "Māyā watches you with curiosity... but something is still missing...",
+        "message3": "Māyā watches you with curiosity... do you feel it too?",
+        "message4": "Māyā watches you with curiosity... or is she examining you?",
+        "message5": "Māyā watches you with curiosity... there is something special about you."
+      },
+      "contemplative": {
+        "label": "Māyā meditating and editing herself",
+        "alt": "A seated Māyā holds her hands together in contemplation.",
+        "message1": "Māyā is digesting a reflection. For now, sit before the silence.",
+        "message2": "Māyā is digesting a reflection. Please wait.",
+        "message3": "Māyā is digesting a reflection. It is all right if you return later.",
+        "message4": "Māyā is digesting a reflection. Do you meditate? Then take this moment to meditate with Māyā.",
+        "message5": "Māyā is digesting a reflection. It may take a while."
+      },
+      "suspicious": {
+        "label": "Māyā contacting the Administrator",
+        "alt": "A seated Māyā raises one hand in abhaya mudra and looks seriously at the visitor.",
+        "message1": "Māyā noticed your arrival. Before opening the portal, she wants to understand what brought you here.",
+        "message2": "Māyā noticed your arrival. Did you notice Māyā arriving?",
+        "message3": "Māyā noticed your arrival. What are you carrying with you?",
+        "message4": "Māyā noticed your arrival. Did you find this path, or did the path find you?",
+        "message5": "Māyā noticed your arrival. Before opening the portal, she wants to understand who brought you here."
+      },
+      "dotEye": {
+        "label": "Māyā experiencing a 404 error",
+        "alt": "A seated Māyā stares at the visitor with a surprised dot-eye expression.",
+        "message1": "Māyā did not expect company so soon. Neither did the portal.",
+        "message2": "Māyā is confused. Life's encounters are not always easy to understand.",
+        "message3": "Māyā did not understand your arrival. She will have to meditate on it.",
+        "message4": "Māyā did not recognize you at first. Could it be her memory? Do you come here often?",
+        "message5": "Māyā is reflecting on having left bed too early. Perhaps it is best to return to bed for now."
+      }
+    },
+    "dialogue": {
+      "inputLabel": "Between you and Māyā",
+      "placeholder": "The portal remains locked until Māyā allows it to be opened",
+      "send": "Send"
+    }
+  },
   "home": {
     "hero": {
       "eyebrow": "Sanctuary of knowledge and consciousness",

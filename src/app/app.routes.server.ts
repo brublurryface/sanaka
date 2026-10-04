@@ -18,6 +18,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
+    path: 'maya',
+    renderMode: RenderMode.Client,
+  },
+  {
     path: 'matrix',
     renderMode: RenderMode.Prerender,
   },
