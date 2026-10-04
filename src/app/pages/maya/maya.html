@@ -7,15 +7,42 @@
         <div class="maya-presence__aura" aria-hidden="true"></div>
 
         <div class="maya-presence__visual">
-          <img
-            class="maya-presence__image"
-            [src]="presence.imageSrc"
-            [width]="presence.imageWidth"
-            [height]="presence.imageHeight"
-            [alt]="presence.altKey | transloco"
-            decoding="async"
-            fetchpriority="high"
-          />
+          <div class="maya-presence__artwork">
+            <img
+              class="maya-presence__image"
+              [src]="presence.imageSrc"
+              [width]="presence.imageWidth"
+              [height]="presence.imageHeight"
+              [alt]="presence.altKey | transloco"
+              decoding="async"
+              fetchpriority="high"
+            />
+
+            @if (presence.id === 'sesha') {
+              <div class="maya-presence__sleep-motion" aria-hidden="true">
+                <span class="maya-presence__gem maya-presence__gem--one"></span>
+                <span class="maya-presence__gem maya-presence__gem--two"></span>
+                <span class="maya-presence__gem maya-presence__gem--three"></span>
+                <span class="maya-presence__gem maya-presence__gem--four"></span>
+                <span class="maya-presence__gem maya-presence__gem--five"></span>
+
+                <svg
+                  class="maya-presence__breath maya-presence__breath--one"
+                  viewBox="0 0 28 18"
+                  focusable="false"
+                >
+                  <path d="M26 14 C18 5 9 5 2 12" />
+                </svg>
+                <svg
+                  class="maya-presence__breath maya-presence__breath--two"
+                  viewBox="0 0 28 18"
+                  focusable="false"
+                >
+                  <path d="M26 14 C18 5 9 5 2 12" />
+                </svg>
+              </div>
+            }
+          </div>
         </div>
 
         <figcaption>
