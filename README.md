@@ -1,8 +1,8 @@
 <div align="center">
   <img
-    src="./public/images/maya/sanaka-bhu.png"
+    src="./docs/assets/maya-bhu-readme.webp"
     width="300"
-    alt="Māyā, personagem do projeto Sanaka"
+    alt="Māyā acolhendo Bhu, personagens do projeto Sanaka"
   />
 
 # Sanaka
