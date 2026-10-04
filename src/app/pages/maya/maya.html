@@ -1,1 +1,77 @@
-<p>maya works!</p>
+<section class="maya-page" aria-labelledby="maya-title">
+  <div class="maya-page__stars" aria-hidden="true"></div>
+
+  <div class="maya-page__shell">
+    <header class="maya-page__header">
+      <p class="sanaka-editorial-label">{{ 'maya.hero.eyebrow' | transloco }}</p>
+
+      <h1 id="maya-title">
+        <span>{{ 'maya.hero.title.line1' | transloco }}</span>
+        <span>{{ 'maya.hero.title.line2' | transloco }}</span>
+      </h1>
+
+      <p class="maya-page__intro">{{ 'maya.hero.intro' | transloco }}</p>
+    </header>
+
+    <div class="maya-page__encounter">
+      <figure class="maya-presence" [class.maya-presence--sesha]="presence.id === 'sesha'">
+        <div class="maya-presence__aura" aria-hidden="true"></div>
+
+        <img
+          class="maya-presence__image"
+          [src]="presence.imageSrc"
+          [width]="presence.imageWidth"
+          [height]="presence.imageHeight"
+          [alt]="presence.altKey | transloco"
+          decoding="async"
+          fetchpriority="high"
+        />
+
+        <figcaption>
+          <span aria-hidden="true"></span>
+          {{ presence.labelKey | transloco }}
+          <span aria-hidden="true"></span>
+        </figcaption>
+      </figure>
+
+      <section class="maya-dialogue" aria-labelledby="maya-dialogue-title">
+        <div class="maya-dialogue__message" aria-live="polite">
+          <span class="maya-dialogue__quote" aria-hidden="true">“</span>
+          <p>{{ messageKey | transloco }}</p>
+        </div>
+
+        <div class="maya-dialogue__threshold">
+          <p class="sanaka-editorial-label">{{ 'maya.dialogue.eyebrow' | transloco }}</p>
+          <h2 id="maya-dialogue-title">{{ 'maya.dialogue.title' | transloco }}</h2>
+          <p>{{ 'maya.dialogue.intro' | transloco }}</p>
+        </div>
+
+        <div class="maya-dialogue__composer" role="group" aria-labelledby="maya-message-label">
+          <label id="maya-message-label" for="maya-message">
+            {{ 'maya.dialogue.inputLabel' | transloco }}
+          </label>
+
+          <div class="maya-dialogue__controls">
+            <textarea
+              id="maya-message"
+              rows="3"
+              disabled
+              [placeholder]="'maya.dialogue.placeholder' | transloco"
+              aria-describedby="maya-dialogue-status"
+            ></textarea>
+
+            <button type="button" disabled>
+              {{ 'maya.dialogue.send' | transloco }}
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          <p id="maya-dialogue-status" class="maya-dialogue__status">
+            <span aria-hidden="true"></span>
+            {{ 'maya.dialogue.status' | transloco }}
+          </p>
+        </div>
+      </section>
+    </div>
+  </div>
+</section>

@@ -115,6 +115,72 @@
       "retry": "Tentar reunir os volumes"
     }
   },
+  "maya": {
+    "hero": {
+      "eyebrow": "Portal em repouso",
+      "title": {
+        "line1": "Māyā ainda",
+        "line2": "não despertou."
+      },
+      "intro": "Uma presença já habita este espaço. A conversa virá quando ela estiver pronta para despertar."
+    },
+    "presences": {
+      "sesha": {
+        "label": "Dormindo sobre Śeṣa",
+        "alt": "Māyā dorme sobre Śeṣa, a serpente azul-noturno de cinco cabeças.",
+        "message1": "Māyā dorme sobre Śeṣa. Enquanto ela sonha, este portal permanece em silêncio.",
+        "message2": "Māyā dorme sobre Śeṣa. Seus sonhos estão um caos! Como são os seus sonhos?",
+        "message3": "Māyā dorme sobre Śeṣa. Será que era isso que ela pretendia estar fazendo?",
+        "message4": "Māyā dorme sobre Śeṣa. Será que Māyā demora para acordar?",
+        "message5": "Māyā está mesmo dormindo sobre Śeṣa?"
+      },
+      "curious": {
+        "label": "Curiosa",
+        "alt": "Māyā sentada observa o visitante com curiosidade.",
+        "message1": "Māyā observa você com curiosidade... mas a conversa ainda não despertou.",
+        "message2": "Māyā observa você com curiosidade... mas falta algo ainda...",
+        "message3": "Māyā observa você com curiosidade... você também sente essa curiosidade?",
+        "message4": "Māyā observa você com curiosidade... ou está te examinando?",
+        "message5": "Māyā observa você com curiosidade... você tem algo de especial."
+      },
+      "contemplative": {
+        "label": "Contemplativa",
+        "alt": "Māyā sentada mantém as mãos unidas em contemplação.",
+        "message1": "Māyā está digerindo uma reflexão. Por enquanto, sente-se diante do silêncio.",
+        "message2": "Māyā está digerindo uma reflexão. Por favor, aguarde.",
+        "message3": "Māyā está digerindo uma reflexão. Tudo bem se você retornar depois.",
+        "message4": "Māyā está digerindo uma reflexão. Você medita? Pois aproveite para meditar com a Māyā.",
+        "message5": "Māyā está digerindo uma reflexão. Pode ser que demore um pouco."
+      },
+      "suspicious": {
+        "label": "Desconfiada",
+        "alt": "Māyā sentada ergue uma das mãos em abhaya mudra e olha seriamente para o visitante.",
+        "message1": "Māyā percebeu a sua chegada. Antes de abrir o portal, ela quer entender o que te trouxe até aqui.",
+        "message2": "Māyā percebeu a sua chegada. Você percebeu a chegada de Māyā?",
+        "message3": "Māyā percebeu a sua chegada. O que você está trazendo consigo?",
+        "message4": "Māyā percebeu a sua chegada. Você encontrou este caminho ou o caminho te encontrou?",
+        "message5": "Māyā percebeu a sua chegada. Antes de abrir o portal, ela quer entender quem te trouxe até aqui."
+      },
+      "dotEye": {
+        "label": "Dot-eye",
+        "alt": "Māyā sentada encara o visitante com uma expressão dot-eye de surpresa.",
+        "message1": "Māyā não esperava companhia tão cedo. O portal também não.",
+        "message2": "Māyā está confusa. Nem sempre os encontros da vida são fáceis de entender.",
+        "message3": "Māyā não entendeu a sua chegada. Ela terá que meditar sobre isso.",
+        "message4": "Māyā não te reconheceu de pronto. Será que é um caso de memória? Você vem sempre aqui?",
+        "message5": "Māyā está refletindo sobre ter saído da cama muito cedo. Talvez seja melhor retornar para a cama por enquanto."
+      }
+    },
+    "dialogue": {
+      "eyebrow": "Entre você e Māyā",
+      "title": "A conversa ainda não está aberta",
+      "intro": "Por enquanto, o portal preserva o silêncio. A cada nova entrada, Māyā pode receber você de outra forma.",
+      "inputLabel": "Mensagem para Māyā",
+      "placeholder": "O portal ainda não recebe mensagens.",
+      "send": "Enviar",
+      "status": "Este campo permanece em silêncio enquanto Māyā não desperta."
+    }
+  },
   "home": {
     "hero": {
       "eyebrow": "Santuário de conhecimento e consciência",
