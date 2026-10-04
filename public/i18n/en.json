@@ -116,17 +116,9 @@
     }
   },
   "maya": {
-    "hero": {
-      "eyebrow": "Portal at rest",
-      "title": {
-        "line1": "Māyā has not",
-        "line2": "awakened yet."
-      },
-      "intro": "A presence already inhabits this space. Conversation will come when she is ready to awaken."
-    },
     "presences": {
       "sesha": {
-        "label": "Sleeping on Śeṣa",
+        "label": "Māyā sleeping on Śeṣa",
         "alt": "Māyā sleeps on Śeṣa, the five-headed midnight-blue serpent.",
         "message1": "Māyā sleeps on Śeṣa. While she dreams, this portal remains silent.",
         "message2": "Māyā sleeps on Śeṣa. Her dreams are chaos! What are your dreams like?",
@@ -135,7 +127,7 @@
         "message5": "Is Māyā really sleeping on Śeṣa?"
       },
       "curious": {
-        "label": "Curious",
+        "label": "Māyā manifesting herself in Īśvara",
         "alt": "A seated Māyā observes the visitor with curiosity.",
         "message1": "Māyā watches you with curiosity... but the conversation has not awakened yet.",
         "message2": "Māyā watches you with curiosity... but something is still missing...",
@@ -144,7 +136,7 @@
         "message5": "Māyā watches you with curiosity... there is something special about you."
       },
       "contemplative": {
-        "label": "Contemplative",
+        "label": "Māyā meditating and editing herself",
         "alt": "A seated Māyā holds her hands together in contemplation.",
         "message1": "Māyā is digesting a reflection. For now, sit before the silence.",
         "message2": "Māyā is digesting a reflection. Please wait.",
@@ -153,7 +145,7 @@
         "message5": "Māyā is digesting a reflection. It may take a while."
       },
       "suspicious": {
-        "label": "Suspicious",
+        "label": "Māyā contacting the Administrator",
         "alt": "A seated Māyā raises one hand in abhaya mudra and looks seriously at the visitor.",
         "message1": "Māyā noticed your arrival. Before opening the portal, she wants to understand what brought you here.",
         "message2": "Māyā noticed your arrival. Did you notice Māyā arriving?",
@@ -162,7 +154,7 @@
         "message5": "Māyā noticed your arrival. Before opening the portal, she wants to understand who brought you here."
       },
       "dotEye": {
-        "label": "Dot-eye",
+        "label": "Māyā experiencing a 404 error",
         "alt": "A seated Māyā stares at the visitor with a surprised dot-eye expression.",
         "message1": "Māyā did not expect company so soon. Neither did the portal.",
         "message2": "Māyā is confused. Life's encounters are not always easy to understand.",
@@ -172,13 +164,9 @@
       }
     },
     "dialogue": {
-      "eyebrow": "Between you and Māyā",
-      "title": "The conversation is not open yet",
-      "intro": "For now, the portal preserves the silence. With each new visit, Māyā may receive you in a different way.",
-      "inputLabel": "Message for Māyā",
-      "placeholder": "The portal is not receiving messages yet.",
-      "send": "Send",
-      "status": "This field remains silent until Māyā awakens."
+      "inputLabel": "Between you and Māyā",
+      "placeholder": "The portal remains locked until Māyā allows it to be opened",
+      "send": "Send"
     }
   },
   "home": {

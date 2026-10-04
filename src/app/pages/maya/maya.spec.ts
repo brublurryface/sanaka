@@ -8,15 +8,13 @@ import { chooseMayaMessageKey, chooseMayaPresence } from './maya-presence';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
+      app: {
+        pageTitles: { maya: 'Māyā' },
+      },
       maya: {
-        hero: {
-          eyebrow: 'Portal em repouso',
-          title: { line1: 'Māyā ainda', line2: 'não despertou.' },
-          intro: 'Uma presença já habita este espaço.',
-        },
         presences: {
           sesha: {
-            label: 'Dormindo sobre Śeṣa',
+            label: 'Māyā dormindo sobre Śeṣa',
             alt: 'Māyā dorme sobre Śeṣa.',
             message1: 'Sesha 1',
             message2: 'Sesha 2',
@@ -25,7 +23,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Sesha 5',
           },
           curious: {
-            label: 'Curiosa',
+            label: 'Māyā se manifestando-se em Īśvara',
             alt: 'Māyā observa com curiosidade.',
             message1: 'Curiosa 1',
             message2: 'Curiosa 2',
@@ -34,7 +32,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Curiosa 5',
           },
           contemplative: {
-            label: 'Contemplativa',
+            label: 'Māyā meditando e se editando',
             alt: 'Māyā contempla.',
             message1: 'Contemplativa 1',
             message2: 'Contemplativa 2',
@@ -43,7 +41,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Contemplativa 5',
           },
           suspicious: {
-            label: 'Desconfiada',
+            label: 'Māyā entrando em contato com o Administrador',
             alt: 'Māyā observa seriamente.',
             message1: 'Desconfiada 1',
             message2: 'Desconfiada 2',
@@ -52,7 +50,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Desconfiada 5',
           },
           dotEye: {
-            label: 'Dot-eye',
+            label: 'Māyā vivendo um erro 404',
             alt: 'Māyā está surpresa.',
             message1: 'Dot-eye 1',
             message2: 'Dot-eye 2',
@@ -62,13 +60,9 @@ class MockTranslocoLoader implements TranslocoLoader {
           },
         },
         dialogue: {
-          eyebrow: 'Entre você e Māyā',
-          title: 'A conversa ainda não está aberta',
-          intro: 'O portal preserva o silêncio.',
-          inputLabel: 'Mensagem para Māyā',
-          placeholder: 'O portal ainda não recebe mensagens.',
+          inputLabel: 'Entre você e Māyā',
+          placeholder: 'O portal permanece bloqueado enquanto Māyā não permitir liberá-lo',
           send: 'Enviar',
-          status: 'Este campo permanece em silêncio.',
         },
       },
     });
@@ -108,10 +102,11 @@ describe('Maya', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const image = compiled.querySelector<HTMLImageElement>('.maya-presence__image');
     const textarea = compiled.querySelector<HTMLTextAreaElement>('#maya-message');
-    const sendButton = compiled.querySelector<HTMLButtonElement>('.maya-dialogue button');
+    const sendButton = compiled.querySelector<HTMLButtonElement>('.maya-composer button');
 
     expect(fixture.componentInstance).toBeTruthy();
-    expect(compiled.querySelectorAll('.maya-page__header h1 span')).toHaveLength(2);
+    expect(compiled.querySelector('.maya-page__header')).toBeNull();
+    expect(compiled.querySelector('.maya-dialogue__threshold')).toBeNull();
     expect(compiled.querySelectorAll('.maya-presence__image')).toHaveLength(1);
     expect(image?.getAttribute('src')).toBe(
       '/images/maya/presences/maya-sesha-sleeping-still.webp',
@@ -120,9 +115,15 @@ describe('Maya', () => {
     expect(image?.getAttribute('height')).toBe('1086');
     expect(image?.getAttribute('alt')).toBe('Māyā dorme sobre Śeṣa.');
     expect(compiled.querySelector('.maya-presence figcaption')?.textContent).toContain(
-      'Dormindo sobre Śeṣa',
+      'Māyā dormindo sobre Śeṣa',
     );
-    expect(compiled.querySelector('.maya-dialogue__message')?.textContent).toContain('Sesha 1');
+    expect(compiled.querySelector('.maya-page__message')?.textContent).toContain('Sesha 1');
+    expect(compiled.querySelector('.maya-composer label')?.textContent).toContain(
+      'Entre você e Māyā',
+    );
+    expect(textarea?.placeholder).toBe(
+      'O portal permanece bloqueado enquanto Māyā não permitir liberá-lo',
+    );
     expect(textarea?.disabled).toBe(true);
     expect(sendButton?.disabled).toBe(true);
     expect(compiled.querySelector('audio')).toBeNull();
@@ -149,13 +150,13 @@ describe('Maya', () => {
     await fixture.whenStable();
 
     const compiled = fixture.nativeElement as HTMLElement;
-    const message = compiled.querySelector('.maya-dialogue__message')?.textContent;
+    const message = compiled.querySelector('.maya-page__message')?.textContent;
 
     expect(message).toContain('Dot-eye 5');
 
     fixture.detectChanges();
 
-    expect(compiled.querySelector('.maya-dialogue__message')?.textContent).toContain('Dot-eye 5');
+    expect(compiled.querySelector('.maya-page__message')?.textContent).toContain('Dot-eye 5');
   });
 
   it('should use the first message as the fallback for an invalid roll', () => {

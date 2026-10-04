@@ -334,7 +334,7 @@ mat-toolbar {
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(1.25rem, 2vw, 1.6rem);
+  font-size: var(--sanaka-type-signature-size);
   font-weight: 500;
   line-height: 1.2;
 }
