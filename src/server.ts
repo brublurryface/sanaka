@@ -7,47 +7,56 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 
+import { getStaticCacheControl, HTML_CACHE_CONTROL } from './server-cache';
+
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const angularApp = new AngularNodeAppEngine();
 
+app.disable('x-powered-by');
+
 /**
- * Example Express Rest API endpoints can be defined here.
- * Uncomment and define endpoints as necessary.
+ * Endpoints REST do Express podem ser definidos aqui quando houver uma responsabilidade concreta
+ * para o servidor. O runtime SSR atual não deve ser tratado antecipadamente como BFF.
  *
- * Example:
+ * Exemplo:
  * ```ts
  * app.get('/api/{*splat}', (req, res) => {
- *   // Handle API request
+ *   // Processa a requisição da API.
  * });
  * ```
  */
 
-/**
- * Serve static files from /browser
- */
+/** Entrega os arquivos estáticos gerados em `/browser` com cache adequado ao versionamento. */
 app.use(
   express.static(browserDistFolder, {
-    maxAge: '1y',
     index: false,
     redirect: false,
+    setHeaders: (res, filePath) => {
+      res.setHeader('Cache-Control', getStaticCacheControl(filePath));
+    },
   }),
 );
 
-/**
- * Handle all other requests by rendering the Angular application.
- */
+/** Renderiza pelo Angular todas as requisições que não correspondem a um arquivo estático. */
 app.use((req, res, next) => {
   angularApp
     .handle(req)
-    .then((response) => (response ? writeResponseToNodeResponse(response, res) : next()))
+    .then((response) => {
+      if (!response) {
+        return next();
+      }
+
+      res.setHeader('Cache-Control', HTML_CACHE_CONTROL);
+      return writeResponseToNodeResponse(response, res);
+    })
     .catch(next);
 });
 
 /**
- * Start the server if this module is the main entry point, or it is ran via PM2.
- * The server listens on the port defined by the `PORT` environment variable, or defaults to 4000.
+ * Inicia o servidor quando este módulo é o ponto de entrada ou quando a execução ocorre via PM2.
+ * A porta vem da variável `PORT`; na ausência dela, o servidor usa a porta 4000.
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = process.env['PORT'] || 4000;
@@ -60,7 +69,5 @@ if (isMainModule(import.meta.url) || process.env['pm_id']) {
   });
 }
 
-/**
- * Request handler used by the Angular CLI (for dev-server and during build) or Firebase Cloud Functions.
- */
+/** Handler utilizado pelo Angular CLI e por ambientes compatíveis com funções HTTP. */
 export const reqHandler = createNodeRequestHandler(app);
