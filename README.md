@@ -153,6 +153,16 @@ npm run build
 
 Os artefatos de produção são gerados em `dist/sanaka/`.
 
+Para conferir localmente o servidor SSR gerado, autorize somente os hosts usados no teste:
+
+```powershell
+$env:NG_ALLOWED_HOSTS = 'localhost,127.0.0.1'
+npm run serve:ssr:sanaka
+```
+
+Os hosts públicos de Sanaka permanecem definidos explicitamente em `angular.json`. Não use `*`
+em produção, pois isso desativa a proteção do Angular contra cabeçalhos de host não reconhecidos.
+
 ### Mapa do acervo
 
 O repositório inclui uma auditoria reproduzível do conteúdo público do WordPress. Ela documenta categorias, destinos editoriais e uso de imagens destacadas sem modificar o CMS.
@@ -300,6 +310,16 @@ npm run build
 ```
 
 Production artifacts are generated in `dist/sanaka/`.
+
+To inspect the generated SSR server locally, authorize only the hosts used by the test:
+
+```powershell
+$env:NG_ALLOWED_HOSTS = 'localhost,127.0.0.1'
+npm run serve:ssr:sanaka
+```
+
+Sanaka's public hosts remain explicitly defined in `angular.json`. Do not use `*` in production,
+because it disables Angular's protection against unrecognized host headers.
 
 ### Archive map
 

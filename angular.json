@@ -34,7 +34,7 @@
             "server": "src/main.server.ts",
             "outputMode": "server",
             "security": {
-              "allowedHosts": []
+              "allowedHosts": ["sanaka.com.br", "www.sanaka.com.br"]
             },
             "ssr": {
               "entry": "src/server.ts"
