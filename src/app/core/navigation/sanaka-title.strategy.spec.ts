@@ -1,29 +1,43 @@
+import { PendingTasks } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRouteSnapshot, RouterStateSnapshot } from '@angular/router';
 import { TranslocoService } from '@jsverse/transloco';
-import { Subject } from 'rxjs';
+import { BehaviorSubject } from 'rxjs';
 import { vi } from 'vitest';
 
+import { SanakaSeoService } from './sanaka-seo.service';
 import { SanakaTitleStrategy } from './sanaka-title.strategy';
 
 describe('SanakaTitleStrategy', () => {
-  const languageChanges = new Subject<string>();
-  const title = { setTitle: vi.fn() };
+  const descriptions = new BehaviorSubject('Escrituras reunidas em Sanaka.');
+  const titles = new BehaviorSubject('Publicações do santuário');
+  let activeLanguage = 'pt-BR';
+
+  const seo = { applyPage: vi.fn() };
+  const releasePendingTranslation = vi.fn();
+  const pendingTasks = { add: vi.fn(() => releasePendingTranslation) };
   const transloco = {
-    langChanges$: languageChanges,
-    translate: vi.fn((key: string) =>
-      key === 'app.pageTitles.posts' ? 'Publicações do santuário' : key,
+    getActiveLang: vi.fn(() => activeLanguage),
+    selectTranslate: vi.fn((key: string) =>
+      key === 'app.pageTitles.posts' ? titles : descriptions,
     ),
   };
+
   beforeEach(() => {
-    title.setTitle.mockReset();
-    transloco.translate.mockClear();
+    activeLanguage = 'pt-BR';
+    descriptions.next('Escrituras reunidas em Sanaka.');
+    titles.next('Publicações do santuário');
+    seo.applyPage.mockReset();
+    pendingTasks.add.mockClear();
+    releasePendingTranslation.mockClear();
+    transloco.getActiveLang.mockClear();
+    transloco.selectTranslate.mockClear();
 
     TestBed.configureTestingModule({
       providers: [
         SanakaTitleStrategy,
-        { provide: Title, useValue: title },
+        { provide: PendingTasks, useValue: pendingTasks },
+        { provide: SanakaSeoService, useValue: seo },
         { provide: TranslocoService, useValue: transloco },
       ],
     });
@@ -32,32 +46,102 @@ describe('SanakaTitleStrategy', () => {
   it('should translate the deepest route title and append the site name', () => {
     const strategy = TestBed.inject(SanakaTitleStrategy);
 
-    strategy.updateTitle(routeSnapshot({ titleKey: 'app.pageTitles.posts' }));
+    strategy.updateTitle(
+      routeSnapshot(
+        {
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+        },
+        '/posts',
+      ),
+    );
 
-    expect(title.setTitle).toHaveBeenCalledWith('Publicações do santuário | Sanaka');
+    expect(seo.applyPage).toHaveBeenLastCalledWith({
+      pageTitle: 'Publicações do santuário',
+      description: 'Escrituras reunidas em Sanaka.',
+      path: '/posts',
+      language: 'pt-BR',
+      indexable: true,
+    });
+    expect(pendingTasks.add).toHaveBeenCalledOnce();
+    expect(releasePendingTranslation).toHaveBeenCalledOnce();
   });
 
-  it('should keep dynamic publication titles under component control', () => {
+  it('should cancel static metadata while a dynamic publication controls the page', () => {
     const strategy = TestBed.inject(SanakaTitleStrategy);
+    strategy.updateTitle(
+      routeSnapshot({
+        titleKey: 'app.pageTitles.posts',
+        descriptionKey: 'app.pageDescriptions.posts',
+      }),
+    );
+    seo.applyPage.mockClear();
 
     strategy.updateTitle(routeSnapshot({ dynamicTitle: true }));
+    titles.next('Sanctuary publications');
 
-    expect(title.setTitle).not.toHaveBeenCalled();
+    expect(seo.applyPage).not.toHaveBeenCalled();
+    expect(releasePendingTranslation).toHaveBeenCalledOnce();
   });
 
-  it('should refresh a static route title when the language changes', () => {
+  it('should refresh metadata when translated values change', () => {
     const strategy = TestBed.inject(SanakaTitleStrategy);
+    strategy.updateTitle(
+      routeSnapshot({
+        titleKey: 'app.pageTitles.posts',
+        descriptionKey: 'app.pageDescriptions.posts',
+      }),
+    );
+    seo.applyPage.mockClear();
+
+    activeLanguage = 'en';
+    titles.next('Sanctuary publications');
+    descriptions.next('Writings gathered in Sanaka.');
+
+    expect(seo.applyPage).toHaveBeenLastCalledWith({
+      pageTitle: 'Sanctuary publications',
+      description: 'Writings gathered in Sanaka.',
+      path: '/',
+      language: 'en',
+      indexable: true,
+    });
+  });
+
+  it('should mark the not-found route as non-indexable', () => {
+    const strategy = TestBed.inject(SanakaTitleStrategy);
+
+    strategy.updateTitle(
+      routeSnapshot(
+        {
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+          indexable: false,
+        },
+        '/caminho-inexistente',
+      ),
+    );
+
+    expect(seo.applyPage).toHaveBeenLastCalledWith({
+      pageTitle: 'Publicações do santuário',
+      description: 'Escrituras reunidas em Sanaka.',
+      path: '/caminho-inexistente',
+      language: 'pt-BR',
+      indexable: false,
+    });
+  });
+
+  it('should ignore routes without complete metadata keys', () => {
+    const strategy = TestBed.inject(SanakaTitleStrategy);
+
     strategy.updateTitle(routeSnapshot({ titleKey: 'app.pageTitles.posts' }));
-    title.setTitle.mockClear();
 
-    languageChanges.next('en');
-
-    expect(title.setTitle).toHaveBeenCalledWith('Publicações do santuário | Sanaka');
+    expect(seo.applyPage).not.toHaveBeenCalled();
   });
 });
 
-function routeSnapshot(data: Record<string, unknown>): RouterStateSnapshot {
+function routeSnapshot(data: Record<string, unknown>, url = '/'): RouterStateSnapshot {
   return {
+    url,
     root: {
       data: {},
       firstChild: { data, firstChild: null } as unknown as ActivatedRouteSnapshot,

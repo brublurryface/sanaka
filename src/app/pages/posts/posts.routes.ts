@@ -10,18 +10,30 @@ export const POSTS_ROUTES: Routes = [
       {
         path: '',
         pathMatch: 'full',
-        data: { view: 'continuous', titleKey: 'app.pageTitles.posts' },
+        data: {
+          view: 'continuous',
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+        },
         loadComponent: () => import('./posts').then((m) => m.Posts),
       },
       {
         path: 'paged',
         pathMatch: 'full',
-        data: { view: 'paged', titleKey: 'app.pageTitles.posts' },
+        data: {
+          view: 'paged',
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+        },
         loadComponent: () => import('./posts').then((m) => m.Posts),
       },
       {
         path: 'paged/:page',
-        data: { view: 'paged', titleKey: 'app.pageTitles.posts' },
+        data: {
+          view: 'paged',
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+        },
         loadComponent: () => import('./posts').then((m) => m.Posts),
       },
       {

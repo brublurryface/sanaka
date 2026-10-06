@@ -6,6 +6,10 @@ export const routes: Routes = [
   {
     path: '',
     component: Home,
+    data: {
+      titleKey: 'app.title',
+      descriptionKey: 'app.pageDescriptions.home',
+    },
   },
   {
     path: 'posts',
@@ -17,17 +21,35 @@ export const routes: Routes = [
   },
   {
     path: 'maya',
-    data: { titleKey: 'app.pageTitles.maya' },
+    data: {
+      titleKey: 'app.pageTitles.maya',
+      descriptionKey: 'app.pageDescriptions.maya',
+    },
     loadComponent: () => import('./pages/maya/maya').then((m) => m.Maya),
   },
   {
     path: 'sobre',
-    data: { titleKey: 'app.pageTitles.about' },
+    data: {
+      titleKey: 'app.pageTitles.about',
+      descriptionKey: 'app.pageDescriptions.about',
+    },
     loadComponent: () => import('./pages/about/about').then((m) => m.About),
   },
   {
     path: 'sanakaverse',
-    data: { titleKey: 'app.pageTitles.sanakaverse' },
+    data: {
+      titleKey: 'app.pageTitles.sanakaverse',
+      descriptionKey: 'app.pageDescriptions.sanakaverse',
+    },
     loadComponent: () => import('./pages/sanakaverse/sanakaverse').then((m) => m.Sanakaverse),
+  },
+  {
+    path: '**',
+    data: {
+      titleKey: 'app.pageTitles.notFound',
+      descriptionKey: 'app.pageDescriptions.notFound',
+      indexable: false,
+    },
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
   },
 ];

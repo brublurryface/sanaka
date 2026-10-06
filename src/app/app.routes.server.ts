@@ -2,6 +2,10 @@ import { RenderMode, ServerRoute } from '@angular/ssr';
 
 export const serverRoutes: ServerRoute[] = [
   {
+    path: '',
+    renderMode: RenderMode.Prerender,
+  },
+  {
     path: 'posts',
     renderMode: RenderMode.Client,
   },
@@ -19,7 +23,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'maya',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Prerender,
   },
   {
     path: 'matrix',
@@ -31,10 +35,11 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'matrix/rest-api',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Prerender,
   },
   {
     path: '**',
-    renderMode: RenderMode.Prerender,
+    renderMode: RenderMode.Server,
+    status: 404,
   },
 ];

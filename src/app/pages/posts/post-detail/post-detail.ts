@@ -9,12 +9,12 @@ import {
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { catchError, distinctUntilChanged, map, of, startWith, Subject, switchMap } from 'rxjs';
 
 import { PostDetail } from '../post';
+import { SanakaSeoService } from '../../../core/navigation/sanaka-seo.service';
 import { WordPressPostsService } from '../data-access/wordpress-posts.service';
 
 type PostDetailState =
@@ -33,14 +33,21 @@ type PostDetailState =
 export class PostDetailPage {
   private readonly route = inject(ActivatedRoute);
   private readonly postsService = inject(WordPressPostsService);
+  private readonly seo = inject(SanakaSeoService);
   private readonly transloco = inject(TranslocoService);
-  private readonly pageTitle = inject(Title);
   private readonly document = inject(DOCUMENT);
   private readonly requests = new Subject<string>();
-  private currentSlug = '';
+  private readonly currentSlug = signal('');
 
   private readonly activeLanguage = toSignal(this.transloco.langChanges$, {
     initialValue: this.transloco.getActiveLang(),
+  });
+  private readonly defaultDescription = toSignal(
+    this.transloco.selectTranslate('app.pageDescriptions.post'),
+    { initialValue: '' },
+  );
+  private readonly defaultTitle = toSignal(this.transloco.selectTranslate('app.pageTitles.post'), {
+    initialValue: 'Sanaka',
   });
 
   readonly readingProgress = signal(0);
@@ -84,11 +91,21 @@ export class PostDetailPage {
 
   constructor() {
     effect(() => {
-      this.activeLanguage();
-      const post = this.post();
-      const title = post?.title ?? this.transloco.translate('app.pageTitles.post');
+      const state = this.state();
+      const post = state.status === 'success' ? state.post : null;
+      const slug = post?.slug ?? this.currentSlug();
 
-      this.pageTitle.setTitle(`${title} | Sanaka`);
+      this.seo.applyPage({
+        pageTitle: post?.title ?? this.defaultTitle(),
+        description: post?.excerpt ?? this.defaultDescription(),
+        path: slug ? `/posts/${encodeURIComponent(slug)}` : '/posts',
+        language: this.activeLanguage(),
+        type: post ? 'article' : 'website',
+        imageUrl: post?.coverImageUrl,
+        imageAlt: post?.coverImageAlt,
+        publishedAt: post?.publishedAt,
+        indexable: state.status !== 'not-found' && state.status !== 'error',
+      });
     });
 
     this.route.paramMap
@@ -98,7 +115,7 @@ export class PostDetailPage {
         takeUntilDestroyed(),
       )
       .subscribe((slug) => {
-        this.currentSlug = slug;
+        this.currentSlug.set(slug);
         this.readingProgress.set(0);
         this.requests.next(slug);
       });
@@ -124,6 +141,6 @@ export class PostDetailPage {
   }
 
   retry(): void {
-    this.requests.next(this.currentSlug);
+    this.requests.next(this.currentSlug());
   }
 }
