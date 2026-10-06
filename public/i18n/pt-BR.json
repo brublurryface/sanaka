@@ -183,7 +183,6 @@
     }
   },
   "notFound": {
-    "eyebrow": "Erro 404 · rota indefinida",
     "title": {
       "line1": "A rota se desfez",
       "line2": "em confusão."
@@ -194,8 +193,7 @@
       "home": "Voltar ao santuário",
       "matrix": "Explorar a Matrix"
     },
-    "imageAlt": "Nemi, criatura equina com esqueleto visível e corpo formado por palavras de confusão.",
-    "figureCaption": "Nemi · confusão"
+    "imageAlt": "Nemi, criatura equina com esqueleto visível e corpo formado por palavras de confusão."
   },
   "home": {
     "hero": {

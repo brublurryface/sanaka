@@ -9,13 +9,11 @@ class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
       notFound: {
-        eyebrow: 'Erro 404 · rota indefinida',
         title: { line1: 'A rota se desfez', line2: 'em confusão.' },
         description: 'Nemi encontrou muitas palavras, mas nenhum caminho para esta página.',
         navigationLabel: 'Caminhos para continuar',
         actions: { home: 'Voltar ao santuário', matrix: 'Explorar a Matrix' },
         imageAlt: 'Nemi formada por palavras de confusão.',
-        figureCaption: 'Nemi · confusão',
       },
     });
   }
@@ -55,6 +53,8 @@ describe('NotFound', () => {
     expect(image?.getAttribute('width')).toBe('1448');
     expect(image?.getAttribute('height')).toBe('1086');
     expect(image?.getAttribute('alt')).toBe('Nemi formada por palavras de confusão.');
+    expect(compiled.querySelector('.sanaka-editorial-label')).toBeNull();
+    expect(compiled.querySelector('figcaption')).toBeNull();
   });
 
   it('should offer internal paths back to Sanaka', () => {

@@ -183,7 +183,6 @@
     }
   },
   "notFound": {
-    "eyebrow": "Error 404 · undefined route",
     "title": {
       "line1": "The route dissolved",
       "line2": "into confusion."
@@ -194,8 +193,7 @@
       "home": "Return to the sanctuary",
       "matrix": "Explore the Matrix"
     },
-    "imageAlt": "Nemi, an equine creature with a visible skeleton and a body formed by words of confusion.",
-    "figureCaption": "Nemi · confusion"
+    "imageAlt": "Nemi, an equine creature with a visible skeleton and a body formed by words of confusion."
   },
   "home": {
     "hero": {

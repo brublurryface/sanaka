@@ -98,13 +98,15 @@
 .not-found__code {
   margin: clamp(1.25rem, 3vw, 2.25rem) 0 -1.2rem;
 
-  color: rgba(237, 201, 120, 0.11);
+  color: rgba(237, 201, 120, 0.26);
 
   font-family: var(--sanaka-font-display);
   font-size: clamp(7rem, 12vw, 11rem);
   font-weight: 500;
   line-height: 0.65;
   letter-spacing: -0.08em;
+
+  text-shadow: 0 0 2.8rem rgba(237, 201, 120, 0.09);
 
   user-select: none;
 }
@@ -243,39 +245,6 @@
   object-fit: contain;
 
   filter: drop-shadow(0 1.5rem 1.6rem rgba(0, 0, 0, 0.58));
-}
-
-.not-found__figure figcaption {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0.8rem;
-
-  width: min(100%, 28rem);
-  margin-top: 0.75rem;
-
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  line-height: 1.5;
-  letter-spacing: 0.13em;
-
-  text-align: center;
-  text-transform: uppercase;
-}
-
-.not-found__figure figcaption span {
-  flex: 1 1 3rem;
-
-  max-width: 3rem;
-  height: 1px;
-
-  background: linear-gradient(90deg, transparent, rgba(237, 201, 120, 0.58));
-}
-
-.not-found__figure figcaption span:last-child {
-  transform: scaleX(-1);
 }
 
 @media (max-width: 900px) {
