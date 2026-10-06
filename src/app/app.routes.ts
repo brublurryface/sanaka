@@ -43,4 +43,13 @@ export const routes: Routes = [
     },
     loadComponent: () => import('./pages/sanakaverse/sanakaverse').then((m) => m.Sanakaverse),
   },
+  {
+    path: '**',
+    data: {
+      titleKey: 'app.pageTitles.notFound',
+      descriptionKey: 'app.pageDescriptions.notFound',
+      indexable: false,
+    },
+    loadComponent: () => import('./pages/not-found/not-found').then((m) => m.NotFound),
+  },
 ];

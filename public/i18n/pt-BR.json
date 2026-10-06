@@ -9,7 +9,8 @@
       "matrixRestApi": "Portal da API REST",
       "maya": "Māyā",
       "about": "Sobre",
-      "sanakaverse": "Biblioteca do Sanakaverse"
+      "sanakaverse": "Biblioteca do Sanakaverse",
+      "notFound": "Caminho não encontrado"
     },
     "pageDescriptions": {
       "home": "Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
@@ -20,7 +21,8 @@
       "matrixRestApi": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no portal.",
       "maya": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa.",
       "about": "Fragmentos atravessam morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
-      "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo."
+      "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
+      "notFound": "A rota solicitada não existe, mudou de lugar ou ainda não encontrou forma em Sanaka."
     },
     "navigation": {
       "ariaLabel": "Navegação principal",
@@ -179,6 +181,19 @@
       "placeholder": "O portal permanece bloqueado enquanto Māyā não permitir liberá-lo",
       "send": "Enviar"
     }
+  },
+  "notFound": {
+    "title": {
+      "line1": "A rota se desfez",
+      "line2": "em confusão."
+    },
+    "description": "Nemi encontrou muitas palavras, mas nenhum caminho para esta página.",
+    "navigationLabel": "Caminhos para continuar",
+    "actions": {
+      "home": "Voltar ao santuário",
+      "matrix": "Explorar a Matrix"
+    },
+    "imageAlt": "Nemi, criatura equina com esqueleto visível e corpo formado por palavras de confusão."
   },
   "home": {
     "hero": {
