@@ -8,6 +8,7 @@ import { SanakaSeoService } from './sanaka-seo.service';
 
 interface RouteMetadataRequest {
   readonly descriptionKey: string;
+  readonly indexable: boolean;
   readonly path: string;
   readonly titleKey: string;
 }
@@ -45,6 +46,7 @@ export class SanakaTitleStrategy extends TitleStrategy {
           description,
           path: request.path,
           language: this.transloco.getActiveLang(),
+          indexable: request.indexable,
         });
         this.finishInitialTranslation();
       });
@@ -72,7 +74,12 @@ export class SanakaTitleStrategy extends TitleStrategy {
 
     // O prerender só serializa a página depois que a primeira tradução dos metadados chega.
     this.releaseInitialTranslation = this.pendingTasks.add();
-    this.metadataRequests.next({ descriptionKey, path: snapshot.url, titleKey });
+    this.metadataRequests.next({
+      descriptionKey,
+      indexable: route.data['indexable'] !== false,
+      path: snapshot.url,
+      titleKey,
+    });
   }
 
   private finishInitialTranslation(): void {

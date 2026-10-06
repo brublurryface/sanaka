@@ -61,6 +61,7 @@ describe('SanakaTitleStrategy', () => {
       description: 'Escrituras reunidas em Sanaka.',
       path: '/posts',
       language: 'pt-BR',
+      indexable: true,
     });
     expect(pendingTasks.add).toHaveBeenCalledOnce();
     expect(releasePendingTranslation).toHaveBeenCalledOnce();
@@ -102,6 +103,30 @@ describe('SanakaTitleStrategy', () => {
       description: 'Writings gathered in Sanaka.',
       path: '/',
       language: 'en',
+      indexable: true,
+    });
+  });
+
+  it('should mark the not-found route as non-indexable', () => {
+    const strategy = TestBed.inject(SanakaTitleStrategy);
+
+    strategy.updateTitle(
+      routeSnapshot(
+        {
+          titleKey: 'app.pageTitles.posts',
+          descriptionKey: 'app.pageDescriptions.posts',
+          indexable: false,
+        },
+        '/caminho-inexistente',
+      ),
+    );
+
+    expect(seo.applyPage).toHaveBeenLastCalledWith({
+      pageTitle: 'Publicações do santuário',
+      description: 'Escrituras reunidas em Sanaka.',
+      path: '/caminho-inexistente',
+      language: 'pt-BR',
+      indexable: false,
     });
   });
 

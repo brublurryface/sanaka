@@ -9,7 +9,8 @@
       "matrixRestApi": "REST API portal",
       "maya": "Māyā",
       "about": "About",
-      "sanakaverse": "Sanakaverse library"
+      "sanakaverse": "Sanakaverse library",
+      "notFound": "Path not found"
     },
     "pageDescriptions": {
       "home": "A space to cross ideas, symbols, and stories with presence. Enter slowly: some knowledge is only revealed when silence also participates.",
@@ -20,7 +21,8 @@
       "matrixRestApi": "Open a real request, follow its journey through the network, and watch an image of the universe emerge in the portal.",
       "maya": "Meet Sanaka's companion and cross knowledge through conversation as well.",
       "about": "Fragments cross death, code, spirituality, and a name that has not finished revealing itself.",
-      "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe."
+      "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe.",
+      "notFound": "The requested route does not exist, moved elsewhere, or has not yet taken form in Sanaka."
     },
     "navigation": {
       "ariaLabel": "Main navigation",
@@ -179,6 +181,21 @@
       "placeholder": "The portal remains locked until Māyā allows it to be opened",
       "send": "Send"
     }
+  },
+  "notFound": {
+    "eyebrow": "Error 404 · undefined route",
+    "title": {
+      "line1": "The route dissolved",
+      "line2": "into confusion."
+    },
+    "description": "Nemi found many words, but no path to this page.",
+    "navigationLabel": "Paths to continue",
+    "actions": {
+      "home": "Return to the sanctuary",
+      "matrix": "Explore the Matrix"
+    },
+    "imageAlt": "Nemi, an equine creature with a visible skeleton and a body formed by words of confusion.",
+    "figureCaption": "Nemi · confusion"
   },
   "home": {
     "hero": {
