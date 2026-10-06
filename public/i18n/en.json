@@ -11,6 +11,17 @@
       "about": "About",
       "sanakaverse": "Sanakaverse library"
     },
+    "pageDescriptions": {
+      "home": "A space to cross ideas, symbols, and stories with presence. Enter slowly: some knowledge is only revealed when silence also participates.",
+      "posts": "Writings, studies, and reflections gathered in Sanaka. Take them in with mind, senses, and heart.",
+      "post": "Read this publication inside the Sanaka sanctuary.",
+      "matrix": "A collection of experiences for touching, observing, and understanding Angular in motion.",
+      "matrixComponents": "Send a value across the boundary between parent and child and follow the response returning through an event.",
+      "matrixRestApi": "Open a real request, follow its journey through the network, and watch an image of the universe emerge in the portal.",
+      "maya": "Meet Sanaka's companion and cross knowledge through conversation as well.",
+      "about": "Fragments cross death, code, spirituality, and a name that has not finished revealing itself.",
+      "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe."
+    },
     "navigation": {
       "ariaLabel": "Main navigation",
       "home": "Home",

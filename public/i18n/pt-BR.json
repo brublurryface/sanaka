@@ -11,6 +11,17 @@
       "about": "Sobre",
       "sanakaverse": "Biblioteca do Sanakaverse"
     },
+    "pageDescriptions": {
+      "home": "Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "posts": "Escrituras, estudos e reflexões reunidos em Sanaka. Deguste com a mente, os sentidos e o coração.",
+      "post": "Leia esta publicação no santuário de Sanaka.",
+      "matrix": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento.",
+      "matrixComponents": "Faça um valor atravessar a fronteira entre pai e filho e acompanhe a resposta voltando por um evento.",
+      "matrixRestApi": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no portal.",
+      "maya": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa.",
+      "about": "Fragmentos atravessam morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
+      "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo."
+    },
     "navigation": {
       "ariaLabel": "Navegação principal",
       "home": "Home",

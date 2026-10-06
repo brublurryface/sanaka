@@ -19,7 +19,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'maya',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Prerender,
   },
   {
     path: 'matrix',
@@ -31,7 +31,7 @@ export const serverRoutes: ServerRoute[] = [
   },
   {
     path: 'matrix/rest-api',
-    renderMode: RenderMode.Client,
+    renderMode: RenderMode.Prerender,
   },
   {
     path: '**',

@@ -33,7 +33,10 @@ class MockTranslocoLoader implements TranslocoLoader {
           next: 'Próxima publicação',
         },
       },
-      app: { pageTitles: { post: 'Publicação' } },
+      app: {
+        pageTitles: { post: 'Publicação' },
+        pageDescriptions: { post: 'Leia esta publicação no santuário de Sanaka.' },
+      },
     });
   }
 }
