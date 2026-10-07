@@ -18,6 +18,10 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
+    path: 'contato',
+    renderMode: RenderMode.Prerender,
+  },
+  {
     path: 'sanakaverse',
     renderMode: RenderMode.Client,
   },

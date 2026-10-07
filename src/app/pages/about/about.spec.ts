@@ -58,10 +58,9 @@ class MockTranslocoLoader implements TranslocoLoader {
         destinationsLabel: 'Sobre e Sanakaverse',
         contact: {
           eyebrow: 'Presença do agora',
-          title: 'Onde me encontrar',
-          intro: 'A conversa começa pelo e-mail.',
-          emailLabel: 'Escrever por e-mail',
-          email: 'sanaka@sanaka.com.br',
+          title: 'Contato',
+          intro: 'Redes e uma passagem direta.',
+          status: 'Abrir o portal de contato',
         },
         universe: {
           eyebrow: 'Presença criativa',
@@ -134,7 +133,7 @@ describe('About', () => {
       '/sobre#about-story',
     );
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
-      'mailto:sanaka@sanaka.com.br',
+      '/contato',
     );
     const sanakaverseLink = compiled.querySelector<HTMLAnchorElement>(
       '.about-destination--universe a',

@@ -1,0 +1,151 @@
+<section class="contact-hero" aria-labelledby="contact-title">
+  <img
+    class="contact-hero__image"
+    src="/images/contact/contact-atmosphere-desktop.webp"
+    width="1942"
+    height="809"
+    fetchpriority="high"
+    decoding="async"
+    [alt]="'contact.hero.imageAlt' | transloco"
+  />
+  <div class="contact-hero__veil" aria-hidden="true"></div>
+  <div class="contact-hero__content sanaka-atmosphere-shell">
+    <p class="sanaka-editorial-label">{{ 'contact.hero.eyebrow' | transloco }}</p>
+    <h1 id="contact-title">
+      <span>{{ 'contact.hero.title.line1' | transloco }}</span>
+      <span>{{ 'contact.hero.title.line2' | transloco }}</span>
+    </h1>
+    <p>{{ 'contact.hero.intro' | transloco }}</p>
+  </div>
+</section>
+
+<section class="contact-content" [attr.aria-label]="'contact.contentLabel' | transloco">
+  <article class="contact-socials" aria-labelledby="contact-socials-title">
+    <p class="sanaka-editorial-label">{{ 'contact.social.eyebrow' | transloco }}</p>
+    <h2 id="contact-socials-title">{{ 'contact.social.title' | transloco }}</h2>
+    <p class="contact-socials__intro">{{ 'contact.social.intro' | transloco }}</p>
+
+    <div class="contact-socials__list">
+      @for (social of socialLinks; track social.id) {
+        <a class="contact-social" [href]="social.href" target="_blank" rel="noopener noreferrer">
+          <span class="contact-social__mark" aria-hidden="true">
+            {{ social.id === 'instagram' ? '◎' : 'in' }}
+          </span>
+          <span class="contact-social__copy">
+            <span class="contact-social__platform">{{ social.name }}</span>
+            <strong>{{ social.presenceKey | transloco }}</strong>
+            <span>{{ social.descriptionKey | transloco }}</span>
+            <small>{{ social.handle }}</small>
+          </span>
+          <span class="contact-social__arrow" aria-hidden="true">↗</span>
+        </a>
+      }
+    </div>
+
+    <a class="contact-email" href="mailto:sanaka@sanaka.com.br">
+      <span>{{ 'contact.email.label' | transloco }}</span>
+      <strong>{{ 'contact.email.address' | transloco }}</strong>
+    </a>
+  </article>
+
+  <article class="contact-message" aria-labelledby="contact-message-title">
+    <p class="sanaka-editorial-label">{{ 'contact.form.eyebrow' | transloco }}</p>
+    <h2 id="contact-message-title">{{ 'contact.form.title' | transloco }}</h2>
+    <p class="contact-message__intro">{{ 'contact.form.intro' | transloco }}</p>
+
+    <form [formGroup]="form" (ngSubmit)="sendMessage()" novalidate>
+      <div class="contact-message__row">
+        <label>
+          <span>{{ 'contact.form.name' | transloco }}</span>
+          <input
+            type="text"
+            formControlName="name"
+            autocomplete="name"
+            maxlength="80"
+            [attr.aria-invalid]="form.controls.name.invalid && form.controls.name.touched"
+            [attr.aria-describedby]="
+              form.controls.name.invalid && form.controls.name.touched ? 'contact-name-error' : null
+            "
+          />
+          @if (form.controls.name.invalid && form.controls.name.touched) {
+            <small id="contact-name-error" class="contact-message__error">
+              {{ 'contact.form.errors.name' | transloco }}
+            </small>
+          }
+        </label>
+
+        <label>
+          <span>{{ 'contact.form.email' | transloco }}</span>
+          <input
+            type="email"
+            formControlName="email"
+            autocomplete="email"
+            inputmode="email"
+            maxlength="254"
+            [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+            [attr.aria-describedby]="
+              form.controls.email.invalid && form.controls.email.touched
+                ? 'contact-email-error'
+                : null
+            "
+          />
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <small id="contact-email-error" class="contact-message__error">
+              {{ 'contact.form.errors.email' | transloco }}
+            </small>
+          }
+        </label>
+      </div>
+
+      <label>
+        <span>{{ 'contact.form.subject' | transloco }}</span>
+        <input type="text" formControlName="subject" maxlength="120" />
+      </label>
+
+      <label>
+        <span>{{ 'contact.form.message' | transloco }}</span>
+        <textarea
+          formControlName="message"
+          rows="7"
+          maxlength="4000"
+          [attr.aria-invalid]="form.controls.message.invalid && form.controls.message.touched"
+          [attr.aria-describedby]="
+            form.controls.message.invalid && form.controls.message.touched
+              ? 'contact-message-error'
+              : null
+          "
+        ></textarea>
+        @if (form.controls.message.invalid && form.controls.message.touched) {
+          <small id="contact-message-error" class="contact-message__error">
+            {{ 'contact.form.errors.message' | transloco }}
+          </small>
+        }
+      </label>
+
+      <label class="contact-message__honeypot" aria-hidden="true">
+        Website
+        <input type="text" formControlName="website" autocomplete="off" tabindex="-1" />
+      </label>
+
+      <div class="contact-message__footer">
+        <p>{{ 'contact.form.privacy' | transloco }}</p>
+        <button type="submit" [disabled]="status() === 'sending'">
+          {{
+            (status() === 'sending' ? 'contact.form.sending' : 'contact.form.submit') | transloco
+          }}
+          <span aria-hidden="true">→</span>
+        </button>
+      </div>
+
+      <div class="contact-message__status" aria-live="polite">
+        @if (status() === 'success') {
+          <p class="contact-message__status--success">{{ 'contact.form.success' | transloco }}</p>
+        } @else if (status() === 'rate-limited') {
+          <p class="contact-message__status--error">{{ 'contact.form.rateLimited' | transloco }}</p>
+        } @else if (status() === 'error') {
+          <p class="contact-message__status--error">{{ 'contact.form.error' | transloco }}</p>
+        }
+      </div>
+    </form>
+  </article>
+</section>

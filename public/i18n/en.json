@@ -9,6 +9,7 @@
       "matrixRestApi": "REST API portal",
       "maya": "Māyā",
       "about": "About",
+      "contact": "Contact",
       "sanakaverse": "Sanakaverse library",
       "notFound": "Path not found"
     },
@@ -21,6 +22,7 @@
       "matrixRestApi": "Open a real request, follow its journey through the network, and watch an image of the universe emerge in the portal.",
       "maya": "Meet Sanaka's companion and cross knowledge through conversation as well.",
       "about": "Fragments cross death, code, spirituality, and a name that has not finished revealing itself.",
+      "contact": "Find Sanaka across social networks or send a message through the contact portal.",
       "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe.",
       "notFound": "The requested route does not exist, moved elsewhere, or has not yet taken form in Sanaka."
     },
@@ -37,7 +39,8 @@
     },
     "footer": {
       "navigation": "Footer navigation",
-      "about": "About & contact",
+      "about": "About",
+      "contact": "Contact",
       "signature": "Between code, symbols, and presence.",
       "sanakaverse": "Sanakaverse"
     }
@@ -87,19 +90,67 @@
       "eyebrow": "Selected fragment",
       "read": "Read the whole fragment"
     },
-    "destinationsLabel": "About and Sanakaverse",
+    "destinationsLabel": "Contact and Sanakaverse",
     "contact": {
       "eyebrow": "Presence in the now",
-      "title": "Where to find me",
-      "intro": "This space will gather my networks and ways to connect. For now, the conversation begins by email.",
-      "emailLabel": "Write by email",
-      "email": "sanaka@sanaka.com.br"
+      "title": "Contact",
+      "intro": "Social networks and a direct passage for conversations that need another space.",
+      "status": "Open the contact portal"
     },
     "universe": {
       "eyebrow": "Creative presence",
       "title": "Sanakaverse",
       "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe.",
       "status": "Travel to Sanakaverse"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": {
+        "line1": "Among voices,",
+        "line2": "presences and paths"
+      },
+      "intro": "Sanaka also opens itself to dialogue. Choose a presence on social media or send a message through this portal.",
+      "imageAlt": "Māyā and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
+    },
+    "contentLabel": "Social networks and contact form",
+    "social": {
+      "eyebrow": "Other portals",
+      "title": "Where to find me",
+      "intro": "Each network reveals a different face of the same path.",
+      "instagram": {
+        "presence": "Sanaka without limits",
+        "description": "Images, characters, symbols, and fragments beyond formal boundaries."
+      },
+      "linkedin": {
+        "presence": "Formal Sanaka",
+        "description": "My professional journey, experience, and presence in the working world."
+      }
+    },
+    "email": {
+      "label": "Direct email",
+      "address": "sanaka@sanaka.com.br"
+    },
+    "form": {
+      "eyebrow": "Direct passage",
+      "title": "Write to Sanaka",
+      "intro": "The message arrives by email and will be answered through the address you provide.",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject — optional",
+      "message": "Message",
+      "submit": "Send message",
+      "sending": "Sending",
+      "privacy": "Your name, email, and message will only be used to reply to this contact.",
+      "success": "The message crossed the portal.",
+      "rateLimited": "Too many messages arrived in a short time. Wait a few minutes before trying again.",
+      "error": "The portal could not deliver the message right now. You can still write to sanaka@sanaka.com.br.",
+      "errors": {
+        "name": "Enter your name.",
+        "email": "Enter a valid email address.",
+        "message": "Write the message you want to send."
+      }
     }
   },
   "sanakaverse": {

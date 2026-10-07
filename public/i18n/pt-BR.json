@@ -9,6 +9,7 @@
       "matrixRestApi": "Portal da API REST",
       "maya": "Māyā",
       "about": "Sobre",
+      "contact": "Contato",
       "sanakaverse": "Biblioteca do Sanakaverse",
       "notFound": "Caminho não encontrado"
     },
@@ -21,6 +22,7 @@
       "matrixRestApi": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no portal.",
       "maya": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa.",
       "about": "Fragmentos atravessam morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
+      "contact": "Encontre Sanaka nas redes ou envie uma mensagem diretamente pelo portal de contato.",
       "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
       "notFound": "A rota solicitada não existe, mudou de lugar ou ainda não encontrou forma em Sanaka."
     },
@@ -37,7 +39,8 @@
     },
     "footer": {
       "navigation": "Navegação do rodapé",
-      "about": "Sobre & contato",
+      "about": "Sobre",
+      "contact": "Contato",
       "signature": "Entre código, símbolos e presença.",
       "sanakaverse": "Sanakaverse"
     }
@@ -87,19 +90,67 @@
       "eyebrow": "Fragmento selecionado",
       "read": "Ler fragmento inteiro"
     },
-    "destinationsLabel": "Sobre e Sanakaverse",
+    "destinationsLabel": "Contato e Sanakaverse",
     "contact": {
       "eyebrow": "Presença do agora",
-      "title": "Onde me encontrar",
-      "intro": "Este espaço reunirá minhas redes e formas de contato. Por enquanto, a conversa começa pelo e-mail.",
-      "emailLabel": "Escrever por e-mail",
-      "email": "sanaka@sanaka.com.br"
+      "title": "Contato",
+      "intro": "Redes e uma passagem direta para conversas que pedem outro espaço.",
+      "status": "Abrir o portal de contato"
     },
     "universe": {
       "eyebrow": "Presença criativa",
       "title": "Sanakaverse",
       "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka.",
       "status": "Viajar para Sanakaverse"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contato",
+      "title": {
+        "line1": "Entre vozes,",
+        "line2": "presenças e caminhos"
+      },
+      "intro": "Sanaka também se abre ao diálogo. Escolha uma presença nas redes ou envie uma mensagem por este portal.",
+      "imageAlt": "Māyā e Sarama observam uma nuvem de vozes em uma sala escura iluminada por lanternas e incensos."
+    },
+    "contentLabel": "Redes e formulário de contato",
+    "social": {
+      "eyebrow": "Outros portais",
+      "title": "Onde me encontrar",
+      "intro": "Cada rede mostra uma face diferente do mesmo caminho.",
+      "instagram": {
+        "presence": "Sanaka sem limites",
+        "description": "Imagens, personagens, símbolos e fragmentos fora das margens formais."
+      },
+      "linkedin": {
+        "presence": "Sanaka formal",
+        "description": "Minha trajetória profissional, experiências e presença no mundo do trabalho."
+      }
+    },
+    "email": {
+      "label": "E-mail direto",
+      "address": "sanaka@sanaka.com.br"
+    },
+    "form": {
+      "eyebrow": "Passagem direta",
+      "title": "Escreva para Sanaka",
+      "intro": "A mensagem chega por e-mail e será respondida pelo endereço informado.",
+      "name": "Nome",
+      "email": "E-mail",
+      "subject": "Assunto — opcional",
+      "message": "Mensagem",
+      "submit": "Enviar mensagem",
+      "sending": "Enviando",
+      "privacy": "Nome, e-mail e mensagem serão usados somente para responder a este contato.",
+      "success": "A mensagem atravessou o portal.",
+      "rateLimited": "Muitas mensagens chegaram em pouco tempo. Aguarde alguns minutos antes de tentar novamente.",
+      "error": "O portal não conseguiu entregar a mensagem agora. Você ainda pode escrever para sanaka@sanaka.com.br.",
+      "errors": {
+        "name": "Informe o seu nome.",
+        "email": "Informe um e-mail válido.",
+        "message": "Escreva a mensagem que deseja enviar."
+      }
     }
   },
   "sanakaverse": {

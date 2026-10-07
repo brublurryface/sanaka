@@ -453,44 +453,16 @@
   margin: 1.25rem 0 0;
 }
 
-.about-destination__link,
 .about-destination__status {
   margin-top: 2.25rem;
 }
 
-.about-destination__link {
-  width: fit-content;
-  display: flex;
-  flex-direction: column;
-  gap: 0.35rem;
-
-  color: var(--sanaka-gold-soft);
-
-  text-decoration: none;
-}
-
-.about-destination__link span,
 .about-destination__status {
   font-size: var(--sanaka-type-editorial-label-size);
   font-weight: 700;
   letter-spacing: 0.14em;
 
   text-transform: uppercase;
-}
-
-.about-destination__link strong {
-  font-size: clamp(1rem, 2vw, 1.25rem);
-  font-weight: 500;
-}
-
-.about-destination__link:hover strong {
-  text-decoration: underline;
-  text-underline-offset: 0.35rem;
-}
-
-.about-destination__link:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 8px;
 }
 
 .about-destination__status {
