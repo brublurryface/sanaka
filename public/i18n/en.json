@@ -160,7 +160,8 @@
         "line1": "A library",
         "line2": "between worlds"
       },
-      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe."
+      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe.",
+      "imageAlt": "Mors writes while Māyā watches and books cross a library in motion."
     },
     "collection": {
       "eyebrow": "Volumes in orbit",
@@ -353,7 +354,8 @@
           "line1": "Matrix",
           "line2": "on-line"
         },
-        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening."
+        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening.",
+        "imageAlt": "Māyā watches code screens while small luminous wolves cross the laboratory."
       },
       "list": {
         "eyebrow": "Open circuits",
@@ -388,7 +390,8 @@
         "line2": "in conversation"
       },
       "intro": "Send a value across the boundary between parent and child. Then follow the reply returning as an event and see the code involved in each passage.",
-      "action": "Start the circuit"
+      "action": "Start the circuit",
+      "imageAlt": "Māyā, Kalika, and Bhu talk among lanterns and luminous diagrams."
     },
     "exhibit": {
       "eyebrow": "Interactive circuit",
@@ -500,7 +503,8 @@
           "line2": "to the universe"
         },
         "intro": "Choose a subject and open a passage to a real collection. The interface turns the waiting period, the response, and even the failure of a REST request into something you can follow.",
-        "action": "Cross the request"
+        "action": "Cross the request",
+        "imageAlt": "Māyā levitates in space surrounded by rings of blue electricity."
       },
       "exhibit": {
         "eyebrow": "REST laboratory",

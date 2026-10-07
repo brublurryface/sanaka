@@ -7,45 +7,6 @@
   margin-inline: auto;
 }
 
-.rest-hero {
-  background: var(--sanaka-bg);
-}
-
-.rest-hero::before {
-  z-index: -2;
-
-  background: url('/images/matrix/rest-api/rest-api-atmosphere-desktop.webp')
-    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
-
-  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
-}
-
-.rest-hero::after {
-  z-index: -1;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.74) 8%,
-      rgba(13, 17, 23, 0.12) 22%,
-      rgba(13, 17, 23, 0.04) 52%,
-      rgba(13, 17, 23, 0.28) 68%,
-      rgba(13, 17, 23, 0.76) 81%,
-      rgba(13, 17, 23, 0.96) 92%,
-      var(--sanaka-bg) 100%
-    ),
-    linear-gradient(
-      90deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.97) 22%,
-      rgba(13, 17, 23, 0.8) 42%,
-      rgba(13, 17, 23, 0.28) 62%,
-      rgba(13, 17, 23, 0.04) 84%,
-      transparent 100%
-    );
-}
-
 .rest-hero__back {
   display: inline-flex;
   align-items: center;
@@ -366,19 +327,6 @@
 }
 
 @media (max-width: 560px) {
-  .rest-hero::after {
-    background:
-      linear-gradient(
-        180deg,
-        var(--sanaka-bg) 0%,
-        rgba(13, 17, 23, 0.62) 12%,
-        rgba(13, 17, 23, 0.3) 48%,
-        rgba(13, 17, 23, 0.88) 84%,
-        var(--sanaka-bg) 100%
-      ),
-      linear-gradient(90deg, rgba(13, 17, 23, 0.94), rgba(13, 17, 23, 0.48));
-  }
-
   .portal-controls__field {
     grid-template-columns: 1fr;
   }

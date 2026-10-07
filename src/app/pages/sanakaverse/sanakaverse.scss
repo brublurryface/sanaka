@@ -32,43 +32,6 @@
   z-index: 1;
 }
 
-.sanakaverse-hero {
-  background: var(--sanaka-bg);
-}
-
-.sanakaverse-hero::before {
-  z-index: -2;
-
-  background: url('/images/sanakaverse/sanakaverse-atmosphere-desktop.webp')
-    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
-
-  opacity: var(--sanaka-atmosphere-image-opacity, 0.9);
-}
-
-.sanakaverse-hero::after {
-  z-index: -1;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.72) 8%,
-      rgba(13, 17, 23, 0.08) 25%,
-      rgba(13, 17, 23, 0.04) 58%,
-      rgba(13, 17, 23, 0.5) 76%,
-      rgba(13, 17, 23, 0.94) 93%,
-      var(--sanaka-bg) 100%
-    ),
-    linear-gradient(
-      90deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.96) 20%,
-      rgba(13, 17, 23, 0.78) 38%,
-      rgba(13, 17, 23, 0.2) 62%,
-      transparent 100%
-    );
-}
-
 .sanakaverse-hero__content {
   width: var(--sanaka-page-shell-width);
 }

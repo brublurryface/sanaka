@@ -1,5 +1,19 @@
 <main>
-  <section class="rest-hero sanaka-atmosphere-hero" aria-labelledby="rest-title">
+  <section
+    class="rest-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
+    aria-labelledby="rest-title"
+  >
+    <img
+      class="sanaka-atmosphere-hero__image"
+      src="/images/matrix/rest-api/rest-api-atmosphere-desktop.webp"
+      width="1942"
+      height="809"
+      fetchpriority="high"
+      decoding="async"
+      [alt]="'matrix.rest.header.imageAlt' | transloco"
+    />
+    <div class="sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+
     <div class="rest-shell rest-hero__content sanaka-atmosphere-shell">
       <a class="rest-hero__back" routerLink="/matrix">
         <span aria-hidden="true">←</span>

@@ -37,6 +37,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             title: { line1: 'A portal', line2: 'to the universe' },
             intro: 'Watch a REST request cross the network.',
             action: 'Open experiment',
+            imageAlt: 'Māyā levitates among electric rings.',
           },
           exhibit: {
             eyebrow: 'REST laboratory',
@@ -186,6 +187,20 @@ describe('RestApiPortal', () => {
         { provide: NasaImagesService, useValue: api },
       ],
     }).compileComponents();
+  });
+
+  it('should present the REST atmosphere as a cinematic image', () => {
+    const fixture = TestBed.createComponent(RestApiPortal);
+    fixture.detectChanges();
+
+    const hero = fixture.nativeElement.querySelector('.rest-hero') as HTMLElement;
+    const image = hero.querySelector('.sanaka-atmosphere-hero__image') as HTMLImageElement;
+
+    expect(hero.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(image.getAttribute('src')).toBe(
+      '/images/matrix/rest-api/rest-api-atmosphere-desktop.webp',
+    );
+    expect(image.getAttribute('width')).toBe('1942');
   });
 
   it('should begin with an idle portal and a visible GET request preview', () => {

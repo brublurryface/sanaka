@@ -88,6 +88,11 @@ html {
   background: var(--sanaka-bg);
 }
 
+.sanaka-atmosphere-hero--cinematic {
+  min-height: clamp(31rem, 42vw, 46rem);
+  align-items: end;
+}
+
 .sanaka-atmosphere-hero::before,
 .sanaka-atmosphere-hero::after {
   position: absolute;
@@ -98,6 +103,46 @@ html {
   pointer-events: none;
 }
 
+.sanaka-atmosphere-hero__image,
+.sanaka-atmosphere-hero__veil {
+  position: absolute;
+  inset: 0;
+
+  pointer-events: none;
+}
+
+.sanaka-atmosphere-hero__image {
+  z-index: -2;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: cover;
+  object-position: var(--sanaka-atmosphere-image-position, center);
+}
+
+.sanaka-atmosphere-hero__veil {
+  z-index: -1;
+
+  background:
+    linear-gradient(
+      180deg,
+      var(--sanaka-bg) 0%,
+      rgba(13, 17, 23, 0.18) 13%,
+      rgba(13, 17, 23, 0.03) 43%,
+      rgba(13, 17, 23, 0.46) 70%,
+      rgba(13, 17, 23, 0.94) 92%,
+      var(--sanaka-bg) 100%
+    ),
+    linear-gradient(
+      90deg,
+      rgba(13, 17, 23, 0.98) 0%,
+      rgba(13, 17, 23, 0.8) 20%,
+      rgba(13, 17, 23, 0.2) 47%,
+      transparent 70%
+    );
+}
+
 .sanaka-atmosphere-shell {
   position: relative;
   z-index: 1;
@@ -105,6 +150,13 @@ html {
   width: var(--sanaka-page-shell-width);
   margin-inline: auto;
   padding-block: var(--sanaka-space-page-hero-block);
+}
+
+.sanaka-atmosphere-hero--cinematic .sanaka-atmosphere-shell {
+  align-self: end;
+
+  padding-top: clamp(9rem, 20vw, 16rem);
+  padding-bottom: clamp(4rem, 7vw, 6rem);
 }
 
 .sanaka-editorial-label {
@@ -166,6 +218,27 @@ html {
 
   .sanaka-atmosphere-hero--compact {
     --sanaka-atmosphere-min-height: 22rem;
+  }
+
+  .sanaka-atmosphere-hero--cinematic {
+    min-height: 31rem;
+  }
+
+  .sanaka-atmosphere-hero--cinematic .sanaka-atmosphere-hero__veil {
+    background:
+      linear-gradient(
+        180deg,
+        var(--sanaka-bg) 0%,
+        rgba(13, 17, 23, 0.16) 16%,
+        rgba(13, 17, 23, 0.2) 48%,
+        rgba(13, 17, 23, 0.92) 82%,
+        var(--sanaka-bg) 100%
+      ),
+      linear-gradient(90deg, rgba(13, 17, 23, 0.76), transparent 82%);
+  }
+
+  .sanaka-atmosphere-hero--cinematic .sanaka-atmosphere-shell {
+    padding-bottom: 3rem;
   }
 
   .sanaka-section-heading {

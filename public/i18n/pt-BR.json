@@ -160,7 +160,8 @@
         "line1": "Biblioteca",
         "line2": "entre mundos"
       },
-      "intro": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo."
+      "intro": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
+      "imageAlt": "Mors escreve enquanto Māyā observa e livros atravessam uma biblioteca em movimento."
     },
     "collection": {
       "eyebrow": "Volumes em órbita",
@@ -353,7 +354,8 @@
           "line1": "Matrix",
           "line2": "on-line"
         },
-        "intro": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento. Cada circuito transforma um conceito do código em algo que pode ser visto acontecendo."
+        "intro": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento. Cada circuito transforma um conceito do código em algo que pode ser visto acontecendo.",
+        "imageAlt": "Māyā observa telas de código enquanto pequenos lobos luminosos atravessam o laboratório."
       },
       "list": {
         "eyebrow": "Circuitos abertos",
@@ -388,7 +390,8 @@
         "line2": "em conversa"
       },
       "intro": "Faça um valor atravessar a fronteira entre pai e filho. Depois, acompanhe a resposta voltando por um evento e veja o código envolvido em cada passagem.",
-      "action": "Iniciar circuito"
+      "action": "Iniciar circuito",
+      "imageAlt": "Māyā, Kalika e Bhu conversam entre lanternas e diagramas luminosos."
     },
     "exhibit": {
       "eyebrow": "Circuito interativo",
@@ -500,7 +503,8 @@
           "line2": "para o universo"
         },
         "intro": "Escolha um tema e abra uma passagem até um acervo real. A interface transforma a espera, a resposta e até a falha de uma requisição REST em algo que pode ser acompanhado.",
-        "action": "Atravessar a requisição"
+        "action": "Atravessar a requisição",
+        "imageAlt": "Māyā levita no espaço cercada por anéis de eletricidade azul."
       },
       "exhibit": {
         "eyebrow": "Laboratório REST",
