@@ -25,6 +25,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Arquivo',
             title: 'Publicações do santuário',
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
+            sanakaverseLink: 'Viajar para Sanakaverse',
           },
           search: {
             label: 'Buscar nas publicações',
@@ -65,6 +66,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Archive',
             title: 'Sanctuary publications',
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
+            sanakaverseLink: 'Travel to Sanakaverse',
           },
           search: {
             label: 'Search publications',
@@ -214,6 +216,17 @@ describe('Posts', () => {
 
     expect(compiled.querySelectorAll('app-post-card').length).toBe(posts.length);
     expect(component.total()).toBe(21);
+  });
+
+  it('should expose the Sanakaverse from the publications header in a new tab', () => {
+    createComponent();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const link = compiled.querySelector<HTMLAnchorElement>('.posts-header__sanakaverse');
+
+    expect(link?.getAttribute('href')).toBe('/sanakaverse');
+    expect(link?.getAttribute('target')).toBe('_blank');
+    expect(link?.textContent).toContain('Viajar para Sanakaverse');
   });
 
   it('should show a loading state while WordPress is pending', () => {

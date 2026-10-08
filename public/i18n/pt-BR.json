@@ -299,7 +299,8 @@
     "header": {
       "eyebrow": "Biblioteca em Sanaka",
       "title": "Publicações do santuário",
-      "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança."
+      "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança.",
+      "sanakaverseLink": "Viajar para Sanakaverse"
     },
     "search": {
       "label": "Buscar nas publicações",

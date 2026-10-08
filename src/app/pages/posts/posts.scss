@@ -91,6 +91,42 @@
   white-space: pre-line;
 }
 
+.posts-header__sanakaverse {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.55rem;
+
+  margin-top: 1.35rem;
+  padding-bottom: 0.3rem;
+
+  border-bottom: 1px solid rgba(237, 201, 120, 0.46);
+
+  color: var(--sanaka-ivory-muted);
+
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 600;
+  letter-spacing: 0.1em;
+  text-decoration: none;
+  text-shadow: 0 0 1rem rgba(0, 0, 0, 0.96);
+  text-transform: uppercase;
+
+  transition:
+    border-color 180ms ease,
+    color 180ms ease;
+}
+
+.posts-header__sanakaverse:hover,
+.posts-header__sanakaverse:focus-visible {
+  border-color: var(--sanaka-gold-soft);
+
+  color: var(--sanaka-gold-soft);
+}
+
+.posts-header__sanakaverse:focus-visible {
+  outline: 2px solid var(--sanaka-gold-soft);
+  outline-offset: 5px;
+}
+
 /* -----------------------
    BUSCA
 ------------------------ */

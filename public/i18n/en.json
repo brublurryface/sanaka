@@ -299,7 +299,8 @@
     "header": {
       "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
-      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change."
+      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change.",
+      "sanakaverseLink": "Travel to Sanakaverse"
     },
     "search": {
       "label": "Search publications",

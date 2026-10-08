@@ -213,7 +213,7 @@
   color: var(--sanaka-gold-soft);
 }
 
-.post-reader h1 {
+.post-reader__header h1 {
   max-width: 13ch;
   margin: 0.9rem auto 0;
 
@@ -297,6 +297,7 @@
   margin: 1.35em 0 0;
 }
 
+:host ::ng-deep .post-reader__content h1,
 :host ::ng-deep .post-reader__content h2,
 :host ::ng-deep .post-reader__content h3 {
   margin: 1.8em 0 0;
@@ -308,6 +309,10 @@
   line-height: 1.08;
 }
 
+:host ::ng-deep .post-reader__content h1 {
+  font-size: clamp(2.25rem, 4vw, 3.35rem);
+}
+
 :host ::ng-deep .post-reader__content h2 {
   font-size: clamp(2rem, 4vw, 2.8rem);
 }
@@ -317,6 +322,11 @@
 }
 
 :host ::ng-deep .post-reader__content a {
+  color: var(--sanaka-gold-soft);
+}
+
+:host ::ng-deep .post-reader__content b,
+:host ::ng-deep .post-reader__content strong {
   color: var(--sanaka-gold-soft);
 }
 
@@ -336,6 +346,10 @@
   font-family: var(--sanaka-font-display);
   font-size: 1.25em;
   line-height: 1.65;
+}
+
+:host ::ng-deep .post-reader__content blockquote > :first-child {
+  margin-top: 0;
 }
 
 :host ::ng-deep .post-reader__content hr {
