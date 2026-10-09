@@ -97,13 +97,14 @@ Since 2026-09-28, every post query made by Sanaka excludes category `43` (Romanc
 - direct lookup by slug;
 - previous and next post navigation.
 
-The Posts archive additionally excludes category `72` (Sanakaverse) from archive pages, search,
+The Posts archive additionally excludes category `97` (Sanakaverse) from archive pages, search,
 filters, ordinary previous/next navigation, and exploratory category links. Direct lookup by slug
 continues to accept Sanakaverse volumes because their internal reading route is opened from the
 dedicated library. Navigation inside a volume remains constrained to that same collection.
 
-These rules are centralized in `wordpress-content-policy.ts`; a future migration that changes
-WordPress taxonomy IDs must update that policy.
+These rules are centralized in `wordpress-content-policy.ts`. The archive also checks the category
+resolved from the stable `sanakaverse` slug before rendering, preventing an obsolete numeric ID from
+silently exposing volumes in the general Posts archive.
 
 ## Risks and unresolved decisions
 

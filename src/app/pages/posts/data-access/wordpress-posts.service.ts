@@ -175,8 +175,8 @@ export class WordPressPostsService {
         return concat(
           of(detail),
           forkJoin({
-            previous: this.getAdjacentPost(post, 'previous'),
-            next: this.getAdjacentPost(post, 'next'),
+            previous: this.getAdjacentPost(post, categories, 'previous'),
+            next: this.getAdjacentPost(post, categories, 'next'),
           }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
         );
       }),
@@ -234,7 +234,7 @@ export class WordPressPostsService {
     query: NormalizedPostsQuery,
     categories: readonly WordPressCategory[],
   ): PostsPage {
-    const posts = response.body ?? [];
+    const posts = this.excludeArchiveOnlyPosts(response.body ?? [], categories);
     const fallbackTotal = (query.page - 1) * query.perPage + posts.length;
     const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
     const totalPages = this.readCountHeader(
@@ -294,7 +294,7 @@ export class WordPressPostsService {
               (category) =>
                 category.parent === rootCategory.id &&
                 !selectedCategoryIds.has(category.id) &&
-                !this.isArchiveExcludedCategory(category.id),
+                !this.isArchiveExcludedCategory(category),
             )
             .map((category) => this.toTaxonomy(category))
         : [],
@@ -303,7 +303,7 @@ export class WordPressPostsService {
           (category) =>
             category.parent === 0 &&
             category.id !== rootCategory?.id &&
-            !this.isArchiveExcludedCategory(category.id),
+            !this.isArchiveExcludedCategory(category),
         )
         .map((category) => this.toTaxonomy(category)),
       tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
@@ -396,10 +396,14 @@ export class WordPressPostsService {
 
   private getAdjacentPost(
     post: WordPressPost,
+    categories: readonly WordPressCategory[],
     direction: 'previous' | 'next',
   ): Observable<PostNavigation | undefined> {
     const isPrevious = direction === 'previous';
-    const isSanakaverseVolume = post.categories.includes(this.contentPolicy.sanakaverseCategoryId);
+    const sanakaverseCategory = this.findSanakaverseCategory(categories);
+    const isSanakaverseVolume = sanakaverseCategory
+      ? post.categories.includes(sanakaverseCategory.id)
+      : false;
     let params = new HttpParams()
       .set(isPrevious ? 'before' : 'after', post.date)
       .set('per_page', '1')
@@ -412,8 +416,8 @@ export class WordPressPostsService {
       )
       .set('_fields', 'slug,title');
 
-    if (isSanakaverseVolume) {
-      params = params.set('categories', String(this.contentPolicy.sanakaverseCategoryId));
+    if (isSanakaverseVolume && sanakaverseCategory) {
+      params = params.set('categories', String(sanakaverseCategory.id));
     }
 
     return this.http
@@ -447,10 +451,35 @@ export class WordPressPostsService {
     ].join(',');
   }
 
-  private isArchiveExcludedCategory(categoryId: number): boolean {
+  private findSanakaverseCategory(
+    categories: readonly WordPressCategory[],
+  ): WordPressCategory | undefined {
+    return categories.find(
+      (category) => category.slug === this.contentPolicy.sanakaverseCategorySlug,
+    );
+  }
+
+  private isArchiveExcludedCategory(category: WordPressCategory): boolean {
     return (
-      this.contentPolicy.excludedCategoryIds.includes(categoryId) ||
-      categoryId === this.contentPolicy.sanakaverseCategoryId
+      this.contentPolicy.excludedCategoryIds.includes(category.id) ||
+      category.slug === this.contentPolicy.sanakaverseCategorySlug
+    );
+  }
+
+  /** Impede que uma divergência futura de ID exponha volumes no arquivo antes da política ser atualizada. */
+  private excludeArchiveOnlyPosts(
+    posts: readonly WordPressPost[],
+    categories: readonly WordPressCategory[],
+  ): readonly WordPressPost[] {
+    const sanakaverseCategory = this.findSanakaverseCategory(categories);
+    const excludedIds = new Set([
+      ...this.contentPolicy.excludedCategoryIds,
+      this.contentPolicy.sanakaverseCategoryId,
+      ...(sanakaverseCategory ? [sanakaverseCategory.id] : []),
+    ]);
+
+    return posts.filter(
+      (post) => !post.categories.some((categoryId) => excludedIds.has(categoryId)),
     );
   }
 
