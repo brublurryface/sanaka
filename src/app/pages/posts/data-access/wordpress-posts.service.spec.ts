@@ -52,7 +52,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,72');
     expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
@@ -137,7 +137,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.has('search')).toBe(false);
     expect(postsRequest.request.params.has('categories')).toBe(false);
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,72');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
 
     postsRequest.flush(
@@ -214,7 +214,7 @@ describe('WordPressPostsService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('46');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,72');
     expect(postsRequest.request.params.get('tags')).toBe('12');
 
     postsRequest.flush([], {
@@ -271,6 +271,7 @@ describe('WordPressPostsService', () => {
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
         { id: 43, name: 'Romance', slug: 'romance', parent: 41 },
         { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
+        { id: 72, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
       ]);
     const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
     expect(tagsRequest.request.params.get('per_page')).toBe('100');
@@ -294,7 +295,7 @@ describe('WordPressPostsService', () => {
     expect(adjacentRequests).toHaveLength(2);
     expect(
       adjacentRequests.every(
-        (request) => request.request.params.get('categories_exclude') === '43',
+        (request) => request.request.params.get('categories_exclude') === '43,72',
       ),
     ).toBe(true);
 
@@ -324,6 +325,52 @@ describe('WordPressPostsService', () => {
       previous: { slug: 'anterior', title: 'Anterior' },
       next: { slug: 'proxima', title: 'Próxima' },
     });
+  });
+
+  it('should keep Sanakaverse volumes readable by slug and navigate only inside the collection', () => {
+    service.getPostBySlug('mors').subscribe();
+
+    const postRequest = httpTesting.expectOne(
+      (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'mors',
+    );
+
+    expect(postRequest.request.params.get('categories_exclude')).toBe('43');
+
+    postRequest.flush([
+      {
+        id: 91,
+        slug: 'mors',
+        date: '2026-09-30T12:00:00',
+        title: { rendered: 'MORS' },
+        excerpt: { rendered: '<p>Um volume do Sanakaverse.</p>' },
+        content: { rendered: '<p>Conteúdo do volume.</p>' },
+        featured_media: 0,
+        categories: [72],
+        tags: [],
+      },
+    ]);
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 72, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+
+    const adjacentRequests = httpTesting.match(
+      (request) =>
+        request.url === `${apiUrl}/posts` &&
+        (request.params.has('before') || request.params.has('after')),
+    );
+
+    expect(adjacentRequests).toHaveLength(2);
+    expect(
+      adjacentRequests.every(
+        (request) =>
+          request.request.params.get('categories') === '72' &&
+          request.request.params.get('categories_exclude') === '43',
+      ),
+    ).toBe(true);
+
+    adjacentRequests.forEach((request) => request.flush([]));
   });
 
   it('should use the Sanaka fallback image when a complete post has no featured media', () => {

@@ -37,7 +37,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             title: { line1: 'A portal', line2: 'to the universe' },
             intro: 'Watch a REST request cross the network.',
             action: 'Open experiment',
-            imageAlt: 'Māyā levitates among electric rings.',
+            imageAlt: 'Māyā contemplates her maned-wolf form among luminous orbits.',
           },
           exhibit: {
             eyebrow: 'REST laboratory',

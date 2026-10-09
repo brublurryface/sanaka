@@ -91,13 +91,19 @@ The same De Preto post should be queried by both frontends rather than duplicate
 
 ### Sanaka enforcement
 
-Since 2026-09-28, every post query made by Sanaka sends `categories_exclude=43`, including:
+Since 2026-09-28, every post query made by Sanaka excludes category `43` (Romance), including:
 
 - archive, search, pagination, category, and tag filters;
 - direct lookup by slug;
 - previous and next post navigation.
 
-The application also removes `Romance` from related and exploratory category links. The rule is centralized in `wordpress-content-policy.ts`; a future migration that changes WordPress taxonomy IDs must update that policy.
+The Posts archive additionally excludes category `72` (Sanakaverse) from archive pages, search,
+filters, ordinary previous/next navigation, and exploratory category links. Direct lookup by slug
+continues to accept Sanakaverse volumes because their internal reading route is opened from the
+dedicated library. Navigation inside a volume remains constrained to that same collection.
+
+These rules are centralized in `wordpress-content-policy.ts`; a future migration that changes
+WordPress taxonomy IDs must update that policy.
 
 ## Risks and unresolved decisions
 

@@ -220,7 +220,7 @@ export class WordPressPostsService {
     let params = new HttpParams()
       .set('page', String(query.page))
       .set('per_page', String(query.perPage))
-      .set('categories_exclude', this.excludedCategoryIds)
+      .set('categories_exclude', this.archiveExcludedCategoryIds)
       .set('_embed', 'wp:featuredmedia')
       .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories,_links,_embedded');
 
@@ -294,7 +294,7 @@ export class WordPressPostsService {
               (category) =>
                 category.parent === rootCategory.id &&
                 !selectedCategoryIds.has(category.id) &&
-                !this.isExcludedCategory(category.id),
+                !this.isArchiveExcludedCategory(category.id),
             )
             .map((category) => this.toTaxonomy(category))
         : [],
@@ -303,7 +303,7 @@ export class WordPressPostsService {
           (category) =>
             category.parent === 0 &&
             category.id !== rootCategory?.id &&
-            !this.isExcludedCategory(category.id),
+            !this.isArchiveExcludedCategory(category.id),
         )
         .map((category) => this.toTaxonomy(category)),
       tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
@@ -399,14 +399,22 @@ export class WordPressPostsService {
     direction: 'previous' | 'next',
   ): Observable<PostNavigation | undefined> {
     const isPrevious = direction === 'previous';
-    const params = new HttpParams()
+    const isSanakaverseVolume = post.categories.includes(this.contentPolicy.sanakaverseCategoryId);
+    let params = new HttpParams()
       .set(isPrevious ? 'before' : 'after', post.date)
       .set('per_page', '1')
       .set('orderby', 'date')
       .set('order', isPrevious ? 'desc' : 'asc')
       .set('exclude', String(post.id))
-      .set('categories_exclude', this.excludedCategoryIds)
+      .set(
+        'categories_exclude',
+        isSanakaverseVolume ? this.excludedCategoryIds : this.archiveExcludedCategoryIds,
+      )
       .set('_fields', 'slug,title');
+
+    if (isSanakaverseVolume) {
+      params = params.set('categories', String(this.contentPolicy.sanakaverseCategoryId));
+    }
 
     return this.http
       .get<readonly Pick<WordPressPost, 'slug' | 'title'>[]>(`${this.apiUrl}/posts`, { params })
@@ -432,8 +440,18 @@ export class WordPressPostsService {
     return this.contentPolicy.excludedCategoryIds.join(',');
   }
 
-  private isExcludedCategory(categoryId: number): boolean {
-    return this.contentPolicy.excludedCategoryIds.includes(categoryId);
+  private get archiveExcludedCategoryIds(): string {
+    return [
+      ...this.contentPolicy.excludedCategoryIds,
+      this.contentPolicy.sanakaverseCategoryId,
+    ].join(',');
+  }
+
+  private isArchiveExcludedCategory(categoryId: number): boolean {
+    return (
+      this.contentPolicy.excludedCategoryIds.includes(categoryId) ||
+      categoryId === this.contentPolicy.sanakaverseCategoryId
+    );
   }
 
   private readCountHeader(value: string | null, fallback: number): number {

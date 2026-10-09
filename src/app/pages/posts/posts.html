@@ -1,13 +1,31 @@
 <main class="posts-page">
-  <header class="posts-header sanaka-atmosphere-hero sanaka-atmosphere-hero--compact">
+  <header
+    class="posts-header sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
+    aria-labelledby="posts-title"
+  >
+    <img
+      class="posts-header__image sanaka-atmosphere-hero__image"
+      src="/images/posts/posts-atmosphere-desktop.webp"
+      width="1942"
+      height="809"
+      fetchpriority="high"
+      decoding="async"
+      [alt]="'posts.header.imageAlt' | transloco"
+    />
+    <div class="posts-header__veil sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+
     <div class="posts-header__content sanaka-atmosphere-shell">
-      <p class="posts-header__eyebrow sanaka-editorial-label">
+      <p class="posts-header__eyebrow sanaka-editorial-label sanaka-atmosphere-copy-shadow">
         {{ 'posts.header.eyebrow' | transloco }}
       </p>
 
-      <h1 class="posts-header__title">{{ 'posts.header.title' | transloco }}</h1>
+      <h1 id="posts-title" class="posts-header__title">
+        {{ 'posts.header.title' | transloco }}
+      </h1>
 
-      <p class="posts-header__intro">{{ 'posts.header.intro' | transloco }}</p>
+      <p class="posts-header__intro sanaka-atmosphere-copy-shadow">
+        {{ 'posts.header.intro' | transloco }}
+      </p>
 
       <a class="posts-header__sanakaverse" routerLink="/sanakaverse" target="_blank" rel="noopener">
         {{ 'posts.header.sanakaverseLink' | transloco }}

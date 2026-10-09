@@ -25,6 +25,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Arquivo',
             title: 'Publicações do santuário',
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
+            imageAlt: 'Māyā, Nandinī e Bhu observam livros mágicos em uma biblioteca.',
             sanakaverseLink: 'Viajar para Sanakaverse',
           },
           search: {
@@ -66,6 +67,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Archive',
             title: 'Sanctuary publications',
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
+            imageAlt: 'Māyā, Nandinī, and Bhu watch magical books in a library.',
             sanakaverseLink: 'Travel to Sanakaverse',
           },
           search: {
@@ -227,6 +229,18 @@ describe('Posts', () => {
     expect(link?.getAttribute('href')).toBe('/sanakaverse');
     expect(link?.getAttribute('target')).toBe('_blank');
     expect(link?.textContent).toContain('Viajar para Sanakaverse');
+  });
+
+  it('should present the posts atmosphere as a cinematic image', () => {
+    createComponent();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const hero = compiled.querySelector<HTMLElement>('.posts-header');
+    const image = hero?.querySelector<HTMLImageElement>('.posts-header__image');
+
+    expect(hero?.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(image?.getAttribute('src')).toBe('/images/posts/posts-atmosphere-desktop.webp');
+    expect(image?.getAttribute('alt')).toContain('Māyā, Nandinī e Bhu');
   });
 
   it('should show a loading state while WordPress is pending', () => {

@@ -300,6 +300,7 @@
       "eyebrow": "Biblioteca em Sanaka",
       "title": "Publicações do santuário",
       "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança.",
+      "imageAlt": "Māyā, Nandinī e Bhu observam livros mágicos atravessando uma biblioteca celestial.",
       "sanakaverseLink": "Viajar para Sanakaverse"
     },
     "search": {
@@ -392,7 +393,7 @@
       },
       "intro": "Faça um valor atravessar a fronteira entre pai e filho. Depois, acompanhe a resposta voltando por um evento e veja o código envolvido em cada passagem.",
       "action": "Iniciar circuito",
-      "imageAlt": "Māyā, Kalika e Bhu conversam entre lanternas e diagramas luminosos."
+      "imageAlt": "Māyā, Kalika e Bhu analisam um livro entre lanternas e diagramas luminosos de componentes Angular."
     },
     "exhibit": {
       "eyebrow": "Circuito interativo",
@@ -505,7 +506,7 @@
         },
         "intro": "Escolha um tema e abra uma passagem até um acervo real. A interface transforma a espera, a resposta e até a falha de uma requisição REST em algo que pode ser acompanhado.",
         "action": "Atravessar a requisição",
-        "imageAlt": "Māyā levita no espaço cercada por anéis de eletricidade azul."
+        "imageAlt": "Māyā contempla sua forma de lobo-guará enquanto ambas flutuam entre órbitas luminosas e um cubo cósmico."
       },
       "exhibit": {
         "eyebrow": "Laboratório REST",

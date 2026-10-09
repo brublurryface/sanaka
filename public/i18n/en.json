@@ -300,6 +300,7 @@
       "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
       "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change.",
+      "imageAlt": "Māyā, Nandinī, and Bhu watch magical books cross a celestial library.",
       "sanakaverseLink": "Travel to Sanakaverse"
     },
     "search": {
@@ -392,7 +393,7 @@
       },
       "intro": "Send a value across the boundary between parent and child. Then follow the reply returning as an event and see the code involved in each passage.",
       "action": "Start the circuit",
-      "imageAlt": "Māyā, Kalika, and Bhu talk among lanterns and luminous diagrams."
+      "imageAlt": "Māyā, Kalika, and Bhu study a book among lanterns and luminous Angular component diagrams."
     },
     "exhibit": {
       "eyebrow": "Interactive circuit",
@@ -505,7 +506,7 @@
         },
         "intro": "Choose a subject and open a passage to a real collection. The interface turns the waiting period, the response, and even the failure of a REST request into something you can follow.",
         "action": "Cross the request",
-        "imageAlt": "Māyā levitates in space surrounded by rings of blue electricity."
+        "imageAlt": "Māyā contemplates her maned-wolf form as they float among luminous orbits and a cosmic cube."
       },
       "exhibit": {
         "eyebrow": "REST laboratory",
