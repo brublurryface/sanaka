@@ -1,14 +1,29 @@
 <section
-  class="about-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--compact"
+  class="about-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
   aria-labelledby="about-title"
 >
+  <img
+    class="about-hero__image sanaka-atmosphere-hero__image"
+    src="/images/about/about-atmosphere-desktop.webp"
+    width="1942"
+    height="809"
+    fetchpriority="high"
+    decoding="async"
+    [alt]="'about.hero.imageAlt' | transloco"
+  />
+  <div class="about-hero__veil sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+
   <div class="about-hero__content sanaka-atmosphere-shell">
-    <p class="about-eyebrow sanaka-editorial-label">{{ 'about.hero.eyebrow' | transloco }}</p>
+    <p class="about-eyebrow sanaka-editorial-label sanaka-atmosphere-copy-shadow">
+      {{ 'about.hero.eyebrow' | transloco }}
+    </p>
     <h1 id="about-title">
       <span>{{ 'about.hero.title.line1' | transloco }}</span>
       <span>{{ 'about.hero.title.line2' | transloco }}</span>
     </h1>
-    <p class="about-hero__intro">{{ 'about.hero.intro' | transloco }}</p>
+    <p class="about-hero__intro sanaka-atmosphere-copy-shadow">
+      {{ 'about.hero.intro' | transloco }}
+    </p>
   </div>
 </section>
 

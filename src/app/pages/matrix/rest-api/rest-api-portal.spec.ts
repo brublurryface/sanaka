@@ -200,7 +200,8 @@ describe('RestApiPortal', () => {
     expect(image.getAttribute('src')).toBe(
       '/images/matrix/rest-api/rest-api-atmosphere-desktop.webp',
     );
-    expect(image.getAttribute('width')).toBe('1942');
+    expect(image.getAttribute('width')).toBe('1983');
+    expect(image.getAttribute('height')).toBe('793');
   });
 
   it('should begin with an idle portal and a visible GET request preview', () => {

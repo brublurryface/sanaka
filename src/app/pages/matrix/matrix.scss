@@ -61,6 +61,14 @@
   line-height: var(--sanaka-type-hero-intro-line-height);
 }
 
+.matrix-hero__intro.sanaka-atmosphere-copy-shadow,
+.matrix-hero .eyebrow.sanaka-atmosphere-copy-shadow {
+  text-shadow:
+    0 1px 2px rgba(0, 0, 0, 1),
+    0 0 0.85rem rgba(0, 0, 0, 0.96),
+    0 0 1.25rem rgba(0, 0, 0, 0.72);
+}
+
 .matrix-hero__action {
   display: inline-flex;
   align-items: center;

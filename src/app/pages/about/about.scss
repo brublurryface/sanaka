@@ -5,45 +5,6 @@
     radial-gradient(circle at 82% 10%, rgba(90, 52, 127, 0.1), transparent 25rem), var(--sanaka-bg);
 }
 
-.about-hero {
-  background: var(--sanaka-bg);
-}
-
-.about-hero::before {
-  z-index: -2;
-
-  background: url('/images/about/about-atmosphere-desktop.webp')
-    var(--sanaka-atmosphere-image-position, center right) / auto 100% no-repeat;
-
-  opacity: var(--sanaka-atmosphere-image-opacity, 0.88);
-}
-
-.about-hero::after {
-  z-index: -1;
-
-  background:
-    linear-gradient(
-      180deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.7) 8%,
-      rgba(13, 17, 23, 0.12) 22%,
-      rgba(13, 17, 23, 0.04) 52%,
-      rgba(13, 17, 23, 0.3) 68%,
-      rgba(13, 17, 23, 0.76) 80%,
-      rgba(13, 17, 23, 0.95) 92%,
-      var(--sanaka-bg) 100%
-    ),
-    linear-gradient(
-      90deg,
-      var(--sanaka-bg) 0%,
-      rgba(13, 17, 23, 0.96) 22%,
-      rgba(13, 17, 23, 0.76) 42%,
-      rgba(13, 17, 23, 0.22) 66%,
-      rgba(13, 17, 23, 0.03) 86%,
-      transparent 100%
-    );
-}
-
 .about-hero__content,
 .about-puzzle,
 .about-story,
@@ -88,7 +49,7 @@
   max-width: var(--sanaka-measure-hero-intro);
   margin: 1.25rem 0 0;
 
-  color: var(--sanaka-ivory-muted);
+  color: var(--sanaka-ivory);
 
   font-size: var(--sanaka-type-hero-intro-size);
   line-height: var(--sanaka-type-hero-intro-line-height);
