@@ -240,6 +240,10 @@
   line-height: 1.6;
 }
 
+.post-reader__obolo--mobile {
+  display: none;
+}
+
 .post-reader__title-rule {
   position: relative;
 
@@ -375,6 +379,12 @@
   box-shadow: -1rem 0 2.5rem rgba(0, 0, 0, 0.2);
 }
 
+.post-reader__obolo--desktop + .post-reader__taxonomy-group--categories {
+  padding-top: 0;
+
+  border-top: 0;
+}
+
 .post-reader__taxonomy-group {
   padding-block: 1.5rem;
 
@@ -495,6 +505,16 @@
 
     border-bottom: 1px solid rgba(237, 201, 120, 0.2);
     border-left: 0;
+  }
+
+  .post-reader__obolo--desktop {
+    display: none;
+  }
+
+  .post-reader__obolo--mobile {
+    display: block;
+
+    margin: 0.625rem 0 0.875rem;
   }
 }
 

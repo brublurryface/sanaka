@@ -71,6 +71,17 @@
                 </span>
               </div>
 
+              @if (currentPost.obolo; as obolo) {
+                <sanaka-obolo-widget
+                  class="post-reader__obolo post-reader__obolo--mobile"
+                  [character]="obolo"
+                  [status]="oboloState().status"
+                  [total]="oboloState().total"
+                  [isCompact]="true"
+                  (opened)="openOboloPanel($event)"
+                />
+              }
+
               <div class="post-reader__title-rule" aria-hidden="true">
                 <img src="/images/posts/temple/hamsa.svg" alt="" />
               </div>
@@ -80,6 +91,16 @@
           </article>
 
           <aside class="post-reader__taxonomy">
+            @if (currentPost.obolo; as obolo) {
+              <sanaka-obolo-widget
+                class="post-reader__obolo post-reader__obolo--desktop"
+                [character]="obolo"
+                [status]="oboloState().status"
+                [total]="oboloState().total"
+                (opened)="openOboloPanel($event)"
+              />
+            }
+
             @if (currentPost.categories.length > 0) {
               <div class="post-reader__taxonomy-group post-reader__taxonomy-group--categories">
                 <p>{{ 'posts.detail.categoriesGroup' | transloco }}</p>
@@ -148,6 +169,16 @@
             }
           </aside>
         </section>
+
+        @if (currentPost.obolo; as obolo) {
+          <sanaka-obolo-dialog
+            [character]="obolo"
+            [status]="oboloState().status"
+            [total]="oboloState().total"
+            (offerRequested)="offerObolo()"
+            (retryRequested)="retryObolo()"
+          />
+        }
 
         @if (currentPost.previous || currentPost.next) {
           <nav

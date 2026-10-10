@@ -3,6 +3,7 @@ import {
   ChangeDetectionStrategy,
   Component,
   HostListener,
+  ViewChild,
   computed,
   effect,
   inject,
@@ -16,6 +17,9 @@ import { catchError, distinctUntilChanged, map, of, startWith, Subject, switchMa
 import { PostDetail } from '../post';
 import { SanakaSeoService } from '../../../core/navigation/sanaka-seo.service';
 import { WordPressPostsService } from '../data-access/wordpress-posts.service';
+import { CharacterOboloStore } from './character-obolo.store';
+import { SanakaOboloDialog } from './sanaka-obolo-dialog/sanaka-obolo-dialog';
+import { SanakaOboloWidget } from './sanaka-obolo-widget/sanaka-obolo-widget';
 
 type PostDetailState =
   | { readonly status: 'loading' }
@@ -25,14 +29,18 @@ type PostDetailState =
 
 @Component({
   selector: 'app-post-detail',
-  imports: [RouterLink, TranslocoPipe],
+  imports: [RouterLink, TranslocoPipe, SanakaOboloWidget, SanakaOboloDialog],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,
+  providers: [CharacterOboloStore],
 })
 export class PostDetailPage {
+  @ViewChild(SanakaOboloDialog) private oboloDialog?: SanakaOboloDialog;
+
   private readonly route = inject(ActivatedRoute);
   private readonly postsService = inject(WordPressPostsService);
+  private readonly oboloStore = inject(CharacterOboloStore);
   private readonly seo = inject(SanakaSeoService);
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
@@ -51,6 +59,7 @@ export class PostDetailPage {
   });
 
   readonly readingProgress = signal(0);
+  readonly oboloState = this.oboloStore.state;
 
   readonly state = toSignal(
     this.requests.pipe(
@@ -108,6 +117,10 @@ export class PostDetailPage {
       });
     });
 
+    effect(() => {
+      this.oboloStore.setCharacter(this.post()?.obolo?.characterSlug);
+    });
+
     this.route.paramMap
       .pipe(
         map((params) => params.get('slug') ?? ''),
@@ -142,5 +155,17 @@ export class PostDetailPage {
 
   retry(): void {
     this.requests.next(this.currentSlug());
+  }
+
+  openOboloPanel(trigger: HTMLElement): void {
+    this.oboloDialog?.open(trigger);
+  }
+
+  retryObolo(): void {
+    this.oboloStore.retry();
+  }
+
+  offerObolo(): void {
+    this.oboloStore.offer();
   }
 }

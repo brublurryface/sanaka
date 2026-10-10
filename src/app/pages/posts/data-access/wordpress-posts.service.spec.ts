@@ -298,6 +298,8 @@ describe('WordPressPostsService', () => {
     expect(postRequest.request.params.get('categories_exclude')).toBe('43');
     expect(postRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postRequest.request.params.get('_fields')).toContain('_embedded');
+    expect(postRequest.request.params.get('_fields')).toContain('sanaka_character_slug');
+    expect(postRequest.request.params.get('_fields')).toContain('sanaka_obolo_front');
 
     postRequest.flush([
       {
@@ -310,6 +312,10 @@ describe('WordPressPostsService', () => {
         featured_media: 90,
         categories: [45],
         tags: [8, 9],
+        sanaka_character_slug: 'nandini',
+        sanaka_character_name: 'Nandinī',
+        sanaka_obolo_front: 'https://example.com/nandini-obolo-front.webp',
+        sanaka_obolo_back: 'https://example.com/nandini-obolo-back.webp',
         _embedded: {
           'wp:featuredmedia': [
             {
@@ -380,6 +386,12 @@ describe('WordPressPostsService', () => {
       relatedCategories: [],
       exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
       exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
+      obolo: {
+        characterSlug: 'nandini',
+        characterName: 'Nandinī',
+        frontImageUrl: 'https://example.com/nandini-obolo-front.webp',
+        backImageUrl: 'https://example.com/nandini-obolo-back.webp',
+      },
       previous: { slug: 'anterior', title: 'Anterior' },
       next: { slug: 'proxima', title: 'Próxima' },
     });

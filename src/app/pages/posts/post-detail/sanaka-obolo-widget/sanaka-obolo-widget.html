@@ -1,0 +1,55 @@
+<section class="obolo-widget" [class.obolo-widget--compact]="isCompact()">
+  @if (isCompact()) {
+    <button class="obolo-widget__compact-action" type="button" (click)="openPanel($event)">
+      <span>{{
+        'posts.detail.obolo.compactAction' | transloco: { name: character().characterName }
+      }}</span>
+      @if (total() !== null) {
+        <span aria-hidden="true">·</span>
+        <span>
+          @if (total() === 1) {
+            {{ 'posts.detail.obolo.receivedOne' | transloco: { total: total() } }}
+          } @else {
+            {{ 'posts.detail.obolo.receivedMany' | transloco: { total: total() } }}
+          }
+        </span>
+      }
+    </button>
+  } @else {
+    <h2>{{ 'posts.detail.obolo.moduleTitle' | transloco: { name: character().characterName } }}</h2>
+
+    <div class="obolo-widget__coin" aria-hidden="true">
+      <img [src]="character().frontImageUrl" alt="" />
+    </div>
+
+    <div class="obolo-widget__copy">
+      @if (total() === null) {
+        <p class="obolo-widget__counter">
+          @if (status() === 'load-error') {
+            {{ 'posts.detail.obolo.unavailable' | transloco }}
+          } @else {
+            {{ 'posts.detail.obolo.loading' | transloco }}
+          }
+        </p>
+      } @else {
+        <p class="obolo-widget__counter">
+          <strong>{{ total() }}</strong>
+          @if (total() === 1) {
+            <span>{{ 'posts.detail.obolo.receivedLabelOne' | transloco }}</span>
+          } @else {
+            <span>{{ 'posts.detail.obolo.receivedLabelMany' | transloco }}</span>
+          }
+        </p>
+      }
+
+      <button class="obolo-widget__action" type="button" (click)="openPanel($event)">
+        @if (status() === 'success') {
+          {{ 'posts.detail.obolo.offered' | transloco }}
+        } @else {
+          {{ 'posts.detail.obolo.offerAction' | transloco }}
+        }
+        <span aria-hidden="true">↗</span>
+      </button>
+    </div>
+  }
+</section>

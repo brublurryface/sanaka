@@ -6,6 +6,7 @@ import { Observable, of, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { PostDetail } from '../post';
+import { CharacterOboloService } from '../data-access/character-obolo.service';
 import { WordPressPostsService } from '../data-access/wordpress-posts.service';
 import { PostDetailPage } from './post-detail';
 
@@ -31,6 +32,28 @@ class MockTranslocoLoader implements TranslocoLoader {
           adjacent: 'Publicações próximas',
           previous: 'Publicação anterior',
           next: 'Próxima publicação',
+          obolo: {
+            moduleTitle: 'Óbolo de {{ name }}',
+            compactAction: 'Óbolo para {{ name }}',
+            offerAction: 'Ofertar óbolo',
+            confirmOffer: 'Ofertar um óbolo',
+            offered: 'Óbolo ofertado',
+            receivedOne: '{{ total }} recebido',
+            receivedMany: '{{ total }} recebidos',
+            receivedLabelOne: 'óbolo recebido',
+            receivedLabelMany: 'óbolos recebidos',
+            loading: 'Reunindo óbolos...',
+            unavailable: 'Contador temporariamente indisponível',
+            dialogEyebrow: 'Oferta à personagem',
+            invitation: 'Este gesto pertence a {{ name }}, não à publicação.',
+            submitting: 'Depositando o óbolo...',
+            success: 'Seu óbolo foi recebido por {{ name }}.',
+            loadError: 'Não foi possível consultar os óbolos agora.',
+            offerError: 'O óbolo não pôde ser depositado. Você pode tentar novamente.',
+            close: 'Fechar oferta de óbolo',
+            frontImageAlt: 'Frente do óbolo de {{ name }}',
+            backImageAlt: 'Verso do óbolo de {{ name }}',
+          },
         },
       },
       app: {
@@ -65,14 +88,29 @@ describe('PostDetailPage', () => {
     readingMinutes: 4,
     previous: { slug: 'anterior', title: 'Anterior' },
     next: { slug: 'proxima', title: 'Próxima' },
+    obolo: {
+      characterSlug: 'nandini',
+      characterName: 'Nandinī',
+      frontImageUrl: 'https://example.com/nandini-obolo-front.webp',
+      backImageUrl: 'https://example.com/nandini-obolo-back.webp',
+    },
   };
 
   const postsService = {
     getPostBySlug: vi.fn<(slug: string) => Observable<PostDetail | null>>(),
   };
 
+  const oboloService = {
+    getTotal: vi.fn<(slug: string) => Observable<number>>(),
+    offer: vi.fn<(slug: string) => Observable<number>>(),
+  };
+
   beforeEach(async () => {
     postsService.getPostBySlug.mockReset();
+    oboloService.getTotal.mockReset();
+    oboloService.offer.mockReset();
+    oboloService.getTotal.mockReturnValue(of(128));
+    oboloService.offer.mockReturnValue(of(129));
 
     await TestBed.configureTestingModule({
       imports: [PostDetailPage],
@@ -83,6 +121,7 @@ describe('PostDetailPage', () => {
           useValue: { paramMap: of(convertToParamMap({ slug: 'voce' })) },
         },
         { provide: WordPressPostsService, useValue: postsService },
+        { provide: CharacterOboloService, useValue: oboloService },
         provideTransloco({
           config: {
             availableLangs: ['pt-BR', 'en'],
@@ -135,6 +174,13 @@ describe('PostDetailPage', () => {
       'https://example.com/voce.jpg',
     );
     expect(compiled.querySelectorAll('.post-detail__adjacent a')).toHaveLength(2);
+    expect(oboloService.getTotal).toHaveBeenCalledWith('nandini');
+    expect(compiled.querySelector('.post-reader__obolo--desktop')?.textContent).toContain(
+      'Óbolo de Nandinī',
+    );
+    expect(compiled.querySelector('.post-reader__obolo--mobile')?.textContent).toContain(
+      '128 recebidos',
+    );
     expect(TestBed.inject(Title).getTitle()).toBe('VOCÊ | Sanaka');
     expect(compiled.querySelector<HTMLAnchorElement>('.post-detail__adjacent a')?.target).toBe(
       '_blank',
@@ -142,6 +188,43 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector<HTMLAnchorElement>('.post-detail__adjacent a')?.rel).toBe(
       'noopener',
     );
+  });
+
+  it('should share one obolo state and block another offer until the page reloads', () => {
+    const compiled = createComponent();
+    fixture.detectChanges();
+
+    compiled.querySelector<HTMLButtonElement>('.obolo-widget__action')?.click();
+    fixture.detectChanges();
+
+    const dialog = compiled.querySelector<HTMLDialogElement>('.obolo-dialog');
+    const offer = compiled.querySelector<HTMLButtonElement>('.obolo-dialog__primary');
+
+    expect(dialog?.hasAttribute('open')).toBe(true);
+    offer?.click();
+    fixture.detectChanges();
+
+    expect(oboloService.offer).toHaveBeenCalledTimes(1);
+    expect(oboloService.offer).toHaveBeenCalledWith('nandini');
+    expect(compiled.querySelector('.post-reader__obolo--mobile')?.textContent).toContain(
+      '129 recebidos',
+    );
+    expect(compiled.querySelector('.obolo-dialog__coin--revealed')).not.toBeNull();
+    expect(compiled.querySelector<HTMLButtonElement>('.obolo-dialog__primary')?.disabled).toBe(
+      true,
+    );
+
+    compiled.querySelector<HTMLButtonElement>('.obolo-dialog__primary')?.click();
+    expect(oboloService.offer).toHaveBeenCalledTimes(1);
+  });
+
+  it('should keep a post without character metadata free from obolo controls', () => {
+    const postWithoutObolo: PostDetail = { ...post, obolo: undefined };
+    const compiled = createComponent(of(postWithoutObolo));
+
+    expect(compiled.querySelector('sanaka-obolo-widget')).toBeNull();
+    expect(compiled.querySelector('.obolo-dialog')).toBeNull();
+    expect(oboloService.getTotal).not.toHaveBeenCalled();
   });
 
   it('should calculate reading progress from the article position in the document', () => {

@@ -6,7 +6,7 @@ import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
-import { Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
+import { CharacterObolo, Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
 
 export { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 
@@ -44,6 +44,10 @@ interface WordPressPost {
   readonly featured_media: number;
   readonly categories: readonly number[];
   readonly tags?: readonly number[];
+  readonly sanaka_character_slug?: string;
+  readonly sanaka_character_name?: string;
+  readonly sanaka_obolo_front?: string;
+  readonly sanaka_obolo_back?: string;
   readonly _embedded?: WordPressEmbeddedResources;
 }
 
@@ -155,7 +159,7 @@ export class WordPressPostsService {
       .set('_embed', 'wp:featuredmedia')
       .set(
         '_fields',
-        'id,slug,date,title,excerpt,content,featured_media,categories,tags,_links,_embedded',
+        'id,slug,date,title,excerpt,content,featured_media,categories,tags,sanaka_character_slug,sanaka_character_name,sanaka_obolo_front,sanaka_obolo_back,_links,_embedded',
       );
 
     return forkJoin({
@@ -312,6 +316,26 @@ export class WordPressPostsService {
         1,
         Math.ceil(plainContent.split(/\s+/).filter(Boolean).length / 200),
       ),
+      obolo: this.mapCharacterObolo(post),
+    };
+  }
+
+  /** Só expõe o óbolo quando o conjunto mínimo de metadados está completo no WordPress. */
+  private mapCharacterObolo(post: WordPressPost): CharacterObolo | undefined {
+    const characterSlug = post.sanaka_character_slug?.trim();
+    const characterName = post.sanaka_character_name?.trim();
+    const frontImageUrl = post.sanaka_obolo_front?.trim();
+    const backImageUrl = post.sanaka_obolo_back?.trim();
+
+    if (!characterSlug || !characterName || !frontImageUrl) {
+      return undefined;
+    }
+
+    return {
+      characterSlug,
+      characterName,
+      frontImageUrl,
+      backImageUrl: backImageUrl || undefined,
     };
   }
 
