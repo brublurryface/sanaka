@@ -1,0 +1,165 @@
+<app-matrix-study-frame
+  [study]="study"
+  [sources]="sources"
+  [checks]="checks()"
+  (runChecks)="runChecks()"
+>
+  <article class="matrix-experiment-node" aria-labelledby="delivery-title">
+    <h3 id="delivery-title">{{ 'matrix.studies.entregas.queueTitle' | transloco }}</h3>
+    <div class="study-controls">
+      <button
+        type="button"
+        class="study-button"
+        (click)="changeMode('structure')"
+        [attr.aria-pressed]="mode() === 'structure'"
+      >
+        {{ 'matrix.studies.entregas.modes.structure' | transloco }}
+      </button>
+      <button
+        type="button"
+        class="study-button"
+        (click)="changeMode('messaging')"
+        [attr.aria-pressed]="mode() === 'messaging'"
+      >
+        {{ 'matrix.studies.entregas.modes.messaging' | transloco }}
+      </button>
+      <button type="button" class="study-button" (click)="restart()">
+        {{ 'matrix.studies.common.restart' | transloco }}
+      </button>
+    </div>
+    <p>{{ 'matrix.studies.entregas.modeNotes.' + mode() | transloco }}</p>
+    <div class="study-controls">
+      <button
+        type="button"
+        class="study-button"
+        (click)="restart('queue')"
+        [attr.aria-pressed]="history.state().discipline === 'queue'"
+      >
+        Queue · FIFO
+      </button>
+      <button
+        type="button"
+        class="study-button"
+        (click)="restart('stack')"
+        [attr.aria-pressed]="history.state().discipline === 'stack'"
+      >
+        Stack · LIFO
+      </button>
+    </div>
+    <p>{{ 'matrix.studies.entregas.disciplineNote' | transloco }}</p>
+    <form (submit)="$event.preventDefault(); enqueue()">
+      <div class="study-field">
+        <label for="delivery-label">{{ 'matrix.studies.entregas.addLabel' | transloco }}</label>
+        <input
+          #parcelField
+          id="delivery-label"
+          type="text"
+          maxlength="40"
+          [value]="draft()"
+          (input)="draft.set(parcelField.value)"
+        />
+      </div>
+      <div class="study-controls">
+        <button type="submit" class="study-button">
+          {{ 'matrix.studies.entregas.enqueue' | transloco }}
+        </button>
+        <button
+          type="button"
+          class="study-button"
+          (click)="process()"
+          [disabled]="history.state().processing !== null"
+        >
+          {{ 'matrix.studies.entregas.process' | transloco }}
+        </button>
+        @if (mode() === 'messaging') {
+          <button
+            type="button"
+            class="study-button"
+            (click)="confirm()"
+            [disabled]="history.state().processing === null"
+          >
+            {{ 'matrix.studies.entregas.confirm' | transloco }}
+          </button>
+          <button
+            type="button"
+            class="study-button"
+            (click)="fail()"
+            [disabled]="history.state().processing === null"
+          >
+            {{ 'matrix.studies.entregas.fail' | transloco }}
+          </button>
+        }
+      </div>
+    </form>
+    <p class="sanaka-editorial-label">{{ 'matrix.studies.entregas.waiting' | transloco }}</p>
+    <ol class="study-array">
+      @for (parcel of waiting(); track $index) {
+        <li>
+          <span>{{ 'matrix.studies.entregas.position' | transloco }} {{ $index + 1 }}</span
+          ><strong>{{ parcel.label }}</strong
+          ><span>{{ 'matrix.studies.entregas.attempts' | transloco }} {{ parcel.attempts }}</span>
+        </li>
+      } @empty {
+        <li>{{ 'matrix.studies.entregas.emptyQueue' | transloco }}</li>
+      }
+    </ol>
+    <p class="study-result">
+      {{ 'matrix.studies.entregas.processing' | transloco }}
+      <strong>{{ history.state().processing?.label ?? '∅' }}</strong>
+    </p>
+    <p>{{ 'matrix.studies.entregas.attemptLimit' | transloco: { max: maxAttempts } }}</p>
+    <h3>{{ 'matrix.studies.entregas.delivered' | transloco }}</h3>
+    <ul>
+      @for (parcel of history.state().delivered; track $index) {
+        <li>{{ parcel.label }} · ACK</li>
+      } @empty {
+        <li>∅</li>
+      }
+    </ul>
+    <h3>{{ 'matrix.studies.entregas.deadLetters' | transloco }}</h3>
+    <ul>
+      @for (parcel of history.state().deadLetters; track $index) {
+        <li>{{ parcel.label }} · {{ parcel.attempts }}</li>
+      } @empty {
+        <li>∅</li>
+      }
+    </ul>
+    <app-study-step-viewer [history]="history" />
+  </article>
+  <h3>{{ 'matrix.studies.entregas.compareTitle' | transloco }}</h3>
+  <p>{{ 'matrix.studies.entregas.compareNote' | transloco }}</p>
+  <div
+    class="study-table-scroll"
+    tabindex="0"
+    [attr.aria-label]="'matrix.studies.entregas.compareTitle' | transloco"
+  >
+    <table>
+      <thead>
+        <tr>
+          <th scope="col">{{ 'matrix.studies.entregas.strategy' | transloco }}</th>
+          <th scope="col">{{ 'matrix.studies.entregas.order' | transloco }}</th>
+          <th scope="col">{{ 'matrix.studies.entregas.cost' | transloco }}</th>
+        </tr>
+      </thead>
+      <tbody>
+        <tr>
+          <th scope="row">Queue · shift()</th>
+          <td>{{ comparison().fifo.join(' → ') || '∅' }}</td>
+          <td>
+            {{ comparison().conceptualShifts }} {{ 'matrix.studies.entregas.shifts' | transloco }}
+          </td>
+        </tr>
+        <tr>
+          <th scope="row">Queue · head</th>
+          <td>{{ comparison().indexed.join(' → ') || '∅' }}</td>
+          <td>{{ comparison().headReads }} {{ 'matrix.studies.entregas.reads' | transloco }}</td>
+        </tr>
+        <tr>
+          <th scope="row">Stack · pop()</th>
+          <td>{{ comparison().lifo.join(' → ') || '∅' }}</td>
+          <td>{{ 'matrix.studies.entregas.lifoCost' | transloco }}</td>
+        </tr>
+      </tbody>
+    </table>
+  </div>
+</app-matrix-study-frame>

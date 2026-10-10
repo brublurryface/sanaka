@@ -42,6 +42,16 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender,
   },
   {
+    path: 'matrix/obolos',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'matrix/entregas',
+    renderMode: RenderMode.Prerender,
+  },
+  { path: 'matrix/jogo', renderMode: RenderMode.Prerender },
+  { path: 'matrix/padaria', renderMode: RenderMode.Prerender },
+  {
     path: '**',
     renderMode: RenderMode.Server,
     status: 404,

@@ -1,0 +1,248 @@
+<div class="matrix-study">
+  <section
+    class="sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic study-hero"
+    [class.study-hero--neutral]="!study().desktopImage"
+    aria-labelledby="study-title"
+  >
+    @if (study().desktopImage; as image) {
+      <picture>
+        @if (study().mobileImage; as mobileImage) {
+          <source media="(max-width: 700px)" [srcset]="mobileImage" />
+        }
+        <img
+          class="sanaka-atmosphere-hero__image"
+          [src]="image"
+          width="2400"
+          height="1000"
+          fetchpriority="high"
+          decoding="async"
+          [alt]="translationKey() + '.imageAlt' | transloco"
+        />
+      </picture>
+    }
+    <div class="sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+    <div class="sanaka-atmosphere-shell">
+      <a class="study-back" routerLink="/matrix"
+        >← {{ 'common.matrix.backToCatalog' | transloco }}</a
+      >
+      <p class="sanaka-editorial-label">
+        {{ 'matrix.studies.common.eyebrow' | transloco: { number: number() } }}
+      </p>
+      <h1 id="study-title">{{ translationKey() + '.title' | transloco }}</h1>
+      <p class="study-intro">{{ translationKey() + '.description' | transloco }}</p>
+    </div>
+  </section>
+
+  <div class="study-shell">
+    <nav
+      class="study-navigation"
+      [attr.aria-label]="'matrix.studies.common.navigation' | transloco"
+    >
+      @for (
+        section of ['story', 'explanation', 'experiment', 'code', 'tests', 'investigate'];
+        track section
+      ) {
+        <a [routerLink]="['/matrix', study().id]" [fragment]="'study-' + section">
+          {{ 'matrix.studies.common.sections.' + section | transloco }}
+        </a>
+      }
+    </nav>
+
+    <section id="study-story" class="study-section" aria-labelledby="story-title">
+      <header class="sanaka-section-heading">
+        <div>
+          <p class="sanaka-editorial-label">
+            {{ 'matrix.studies.common.sections.story' | transloco }}
+          </p>
+          <h2 id="story-title">{{ translationKey() + '.story.title' | transloco }}</h2>
+        </div>
+        <p class="study-character-note">{{ translationKey() + '.story.characters' | transloco }}</p>
+      </header>
+      <p>{{ translationKey() + '.story.beginning' | transloco }}</p>
+      <p>{{ translationKey() + '.story.problem' | transloco }}</p>
+      <p>{{ translationKey() + '.story.resolution' | transloco }}</p>
+    </section>
+
+    <section id="study-explanation" class="study-section" aria-labelledby="explanation-title">
+      <p class="sanaka-editorial-label">
+        {{ 'matrix.studies.common.sections.explanation' | transloco }}
+      </p>
+      <h2 id="explanation-title">{{ 'matrix.studies.common.threeLevels' | transloco }}</h2>
+      @for (topic of study().topics; track topic) {
+        <article class="study-topic">
+          <h3>{{ translationKey() + '.topics.' + topic + '.title' | transloco }}</h3>
+          @for (level of ['everyday', 'technical', 'implementation']; track level) {
+            <p class="sanaka-editorial-label">
+              {{ 'matrix.studies.common.levels.' + level | transloco }}
+            </p>
+            <p>{{ translationKey() + '.topics.' + topic + '.' + level | transloco }}</p>
+          }
+          <dl class="study-questions">
+            @for (question of ['one', 'two', 'three']; track question) {
+              <dt>
+                {{
+                  translationKey() + '.topics.' + topic + '.questions.' + question + '.question'
+                    | transloco
+                }}
+              </dt>
+              <dd>
+                <p>
+                  {{
+                    translationKey() + '.topics.' + topic + '.questions.' + question + '.answer'
+                      | transloco
+                  }}
+                </p>
+                <code>{{
+                  translationKey() + '.topics.' + topic + '.questions.' + question + '.example'
+                    | transloco
+                }}</code>
+              </dd>
+            }
+          </dl>
+        </article>
+      }
+    </section>
+
+    <section id="study-experiment" class="study-section" aria-labelledby="experiment-title">
+      <header class="sanaka-section-heading">
+        <div>
+          <p class="sanaka-editorial-label">
+            {{ 'matrix.studies.common.sections.experiment' | transloco }}
+          </p>
+          <h2 id="experiment-title">{{ translationKey() + '.experimentTitle' | transloco }}</h2>
+        </div>
+        <p class="study-simulation-note">{{ translationKey() + '.simulationNote' | transloco }}</p>
+      </header>
+      <ng-content />
+    </section>
+
+    <section
+      id="study-code"
+      class="study-section matrix-code-explorer"
+      aria-labelledby="code-title"
+    >
+      <header class="code-explorer__header">
+        <div>
+          <p>{{ 'common.matrix.code.eyebrow' | transloco }}</p>
+          <h2 id="code-title">{{ 'matrix.studies.common.realCode' | transloco }}</h2>
+        </div>
+        <span>{{
+          'common.matrix.code.status'
+            | transloco: { current: activeIndex() + 1, total: slides.length }
+        }}</span>
+      </header>
+      <p>{{ 'matrix.studies.common.sourceNote' | transloco }}</p>
+      <div class="code-window">
+        <div class="code-window__bar">
+          <span>TypeScript</span><strong>{{ activeSlide.fileName }}</strong>
+        </div>
+        <div class="code-window__title">{{ activeSlide.titleKey | transloco }}</div>
+        <div class="code-window__viewport">
+          <pre
+            class="code-window__snippet"
+            tabindex="0"
+            [attr.aria-label]="activeSlide.titleKey | transloco"
+          ><code>{{ activeSlide.text }}</code></pre>
+        </div>
+        <footer class="code-window__navigation">
+          <button
+            type="button"
+            (click)="previous()"
+            [attr.aria-label]="'common.matrix.code.previous' | transloco"
+          >
+            ←
+          </button>
+          <span>{{ activeSlide.titleKey | transloco }}</span>
+          <button
+            type="button"
+            (click)="next()"
+            [attr.aria-label]="'common.matrix.code.next' | transloco"
+          >
+            →
+          </button>
+        </footer>
+      </div>
+      <p>{{ activeSlide.descriptionKey | transloco }}</p>
+      <details class="study-files">
+        <summary>{{ 'matrix.studies.common.files' | transloco }}</summary>
+        <ul>
+          @for (file of files(); track file.path) {
+            <li>
+              {{ 'matrix.studies.common.fileKinds.' + file.kind | transloco }}:
+              @if (file.url; as url) {
+                <a [href]="url" target="_blank" rel="noopener noreferrer"
+                  ><code>{{ file.path }}</code></a
+                >
+              } @else {
+                <code>{{ file.path }}</code>
+              }
+            </li>
+          }
+        </ul>
+        @if (!files()[0].url) {
+          <p>{{ 'matrix.studies.common.unpublishedSources' | transloco }}</p>
+        }
+      </details>
+    </section>
+
+    <section id="study-tests" class="study-section" aria-labelledby="tests-title">
+      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.sections.tests' | transloco }}</p>
+      <h2 id="tests-title">{{ 'matrix.studies.common.reproducibleChecks' | transloco }}</h2>
+      <p>{{ 'matrix.studies.common.checksNote' | transloco }}</p>
+      <button type="button" class="study-button" (click)="runChecks.emit()">
+        {{ 'matrix.studies.common.runChecks' | transloco }}
+      </button>
+      <ul class="study-checks" aria-live="polite">
+        @for (check of checks(); track check.key) {
+          <li>
+            <strong>{{
+              (check.passed ? 'matrix.studies.common.passed' : 'matrix.studies.common.failed')
+                | transloco
+            }}</strong>
+            {{ check.key | transloco }}
+            <span
+              >{{ 'matrix.studies.common.expected' | transloco }}
+              <code>{{ check.expected }}</code></span
+            >
+            <span
+              >{{ 'matrix.studies.common.actual' | transloco }}
+              <code>{{ check.actual }}</code></span
+            >
+          </li>
+        }
+      </ul>
+    </section>
+
+    <section id="study-investigate" class="study-section" aria-labelledby="investigate-title">
+      <p class="sanaka-editorial-label">
+        {{ 'matrix.studies.common.sections.investigate' | transloco }}
+      </p>
+      <h2 id="investigate-title">{{ 'matrix.studies.common.investigateFreely' | transloco }}</h2>
+      @for (question of study().investigations; track question) {
+        <details class="study-investigation">
+          <summary>
+            {{ translationKey() + '.investigations.' + question + '.question' | transloco }}
+          </summary>
+          <p>{{ translationKey() + '.investigations.' + question + '.answer' | transloco }}</p>
+        </details>
+      }
+      @if (study().relatedRoute; as relatedRoute) {
+        <a class="study-back" [routerLink]="relatedRoute"
+          >{{ translationKey() + '.related' | transloco }} →</a
+        >
+      }
+    </section>
+    <nav
+      class="study-navigation"
+      [attr.aria-label]="'matrix.studies.common.otherStudies' | transloco"
+    >
+      @for (experiment of studyLinks; track experiment.id) {
+        @if (experiment.id !== study().id) {
+          <a [routerLink]="experiment.route">{{
+            experiment.translationKey + '.title' | transloco
+          }}</a>
+        }
+      }
+    </nav>
+  </div>
+</div>

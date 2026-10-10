@@ -246,7 +246,7 @@
   z-index: 1;
   color: var(--sanaka-gold-soft);
   font-family: Consolas, 'Courier New', monospace;
-  font-size: 0.72rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   letter-spacing: 0.08em;
 }
 
@@ -275,9 +275,15 @@
 .upcoming-list li > span,
 .upcoming-list small {
   color: var(--sanaka-gold-soft);
-  font-size: 0.65rem;
+  font-size: var(--sanaka-type-editorial-label-size);
   letter-spacing: 0.12em;
   text-transform: uppercase;
+}
+
+.featured-experiment__concepts {
+  max-width: 14rem;
+  color: var(--sanaka-gold-soft);
+  font-size: var(--sanaka-type-interface-meta-size);
 }
 
 .upcoming-list strong {

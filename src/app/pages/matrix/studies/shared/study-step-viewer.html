@@ -1,0 +1,39 @@
+<section class="study-step-viewer" aria-labelledby="step-viewer-title">
+  <h3 id="step-viewer-title">{{ 'matrix.studies.common.stepByStep' | transloco }}</h3>
+  <div class="study-controls">
+    <button
+      type="button"
+      class="study-button"
+      (click)="history().previous()"
+      [disabled]="!history().canGoBack()"
+    >
+      ← {{ 'matrix.studies.common.previousStep' | transloco }}
+    </button>
+    <span>{{
+      'matrix.studies.common.stepCount'
+        | transloco: { current: history().index() + 1, total: history().length() }
+    }}</span>
+    <button
+      type="button"
+      class="study-button"
+      (click)="history().next()"
+      [disabled]="!history().canGoForward()"
+    >
+      {{ 'matrix.studies.common.nextStep' | transloco }} →
+    </button>
+  </div>
+  <p role="status" aria-atomic="true">
+    {{ history().current().explanationKey | transloco: history().current().parameters }}
+  </p>
+  <p>{{ 'matrix.studies.common.historyNote' | transloco }}</p>
+  <div class="study-state-comparison">
+    <div>
+      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.before' | transloco }}</p>
+      <pre tabindex="0">{{ history().before() | json }}</pre>
+    </div>
+    <div>
+      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.after' | transloco }}</p>
+      <pre tabindex="0">{{ history().current().state | json }}</pre>
+    </div>
+  </div>
+</section>

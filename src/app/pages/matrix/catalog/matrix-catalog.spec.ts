@@ -5,12 +5,15 @@ import { of } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
 
 import { MatrixCatalog } from './matrix-catalog';
+import { MATRIX_EXPERIMENTS } from '../matrix-experiments';
 
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation() {
     return of({
       matrix: {
         catalog: {
+          parent: 'Parent',
+          child: 'Child',
           header: {
             eyebrow: 'Interactive laboratory',
             title: { line1: 'Matrix', line2: 'on-line' },
@@ -34,10 +37,24 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Next experiments',
             title: 'The Matrix keeps opening',
             status: 'Coming soon',
-            signals: 'Signals',
-            observables: 'Observables',
-            lifecycle: 'Lifecycle',
+            signals: { title: 'Signals' },
+            observables: { title: 'Observables' },
+            lifecycle: { title: 'Lifecycle' },
           },
+        },
+        studies: {
+          common: {
+            concepts: Object.fromEntries(
+              MATRIX_EXPERIMENTS.flatMap((item) => item.concepts).map((concept) => [
+                concept,
+                concept,
+              ]),
+            ),
+          },
+          obolos: { title: 'Mors’s obols', description: 'An inventory.' },
+          entregas: { title: 'Ākāśa’s deliveries', description: 'A queue.' },
+          jogo: { title: 'Kālikā’s game', description: 'Rules.' },
+          padaria: { title: 'Māyā’s bakery', description: 'Requests.' },
         },
       },
     });
@@ -84,10 +101,14 @@ describe('MatrixCatalog', () => {
       fixture.nativeElement.querySelectorAll('.featured-experiment'),
     ) as HTMLAnchorElement[];
 
-    expect(links).toHaveLength(2);
+    expect(links).toHaveLength(6);
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/matrix/components',
       '/matrix/rest-api',
+      '/matrix/obolos',
+      '/matrix/entregas',
+      '/matrix/jogo',
+      '/matrix/padaria',
     ]);
     expect(links[0].textContent).toContain('Components in conversation');
     expect(links[1].textContent).toContain('REST API portal');
@@ -99,5 +120,16 @@ describe('MatrixCatalog', () => {
 
     expect(fixture.nativeElement.querySelectorAll('.upcoming-list li')).toHaveLength(3);
     expect(fixture.nativeElement.querySelectorAll('.upcoming-list a')).toHaveLength(0);
+  });
+
+  it('has one numbered entry per experiment and no nested main landmark', () => {
+    const fixture = TestBed.createComponent(MatrixCatalog);
+    fixture.detectChanges();
+    const entries = [
+      ...fixture.componentInstance.availableExperiments,
+      ...fixture.componentInstance.upcomingExperiments,
+    ];
+    expect(new Set(entries.map((entry) => entry.number)).size).toBe(9);
+    expect(fixture.nativeElement.querySelector('main')).toBeNull();
   });
 });

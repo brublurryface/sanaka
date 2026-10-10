@@ -13,7 +13,9 @@
     "duplication:report": "jscpd src/app --min-lines 5 --min-tokens 50 --ignore **/*.spec.ts --reporters console",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
-    "check": "npm run format:check && npm run test:coverage && npm run duplication:check && npm run build",
+    "matrix:source:sync": "node scripts/matrix-study-source.mjs",
+    "matrix:source:check": "node scripts/matrix-study-source.mjs --check",
+    "check": "npm run matrix:source:check && npm run format:check && npm run test:coverage && npm run duplication:check && npm run build",
     "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs"
   },
   "private": true,

@@ -372,7 +372,783 @@
     }
   },
   "matrix": {
+    "studies": {
+      "common": {
+        "unpublishedSources": "These paths are local. GitHub links will be enabled after authorized branch publication.",
+        "concepts": {
+          "@Input": "@Input",
+          "@Output": "@Output",
+          "HTTP": "HTTP",
+          "API": "API",
+          "RxJS": "RxJS",
+          "Array": "Array",
+          "Set": "Set",
+          "Map": "Map",
+          "Big-O": "Big-O",
+          "Queue": "Queue",
+          "Stack": "Stack",
+          "FIFO": "FIFO",
+          "retry": "Retry",
+          "OOP": "Object orientation",
+          "composition": "Composition",
+          "SOLID": "SOLID",
+          "BFF": "BFF",
+          "idempotency": "Idempotency",
+          "Signals": "Signals",
+          "Observables": "Observables",
+          "Lifecycle": "Lifecycle"
+        },
+        "fileKinds": {
+          "component": "TypeScript component",
+          "template": "HTML template",
+          "styles": "Shared styles",
+          "domain": "Domain and algorithm",
+          "tests": "Domain tests"
+        },
+        "eyebrow": "Matrix on-line · Laboratory {{ number }}",
+        "navigation": "Laboratory sections",
+        "otherStudies": "Other Matrix experiences",
+        "sections": {
+          "story": "Story",
+          "explanation": "Explanation",
+          "experiment": "Experiment",
+          "code": "Code",
+          "tests": "Tests",
+          "investigate": "Investigate"
+        },
+        "threeLevels": "From an everyday situation to the program",
+        "levels": {
+          "everyday": "01 · For beginners",
+          "technical": "02 · The technical concept",
+          "implementation": "03 · Where it appears in the code"
+        },
+        "realCode": "The code that actually runs",
+        "sourceNote": "Excerpts generated from the real TypeScript files, with comments in Portuguese. The quality check detects outdated excerpts. This is not an IDE: no visitor-supplied code is executed.",
+        "files": "Where to study these files",
+        "sharedStyles": "Styles for all four laboratories live in",
+        "reproducibleChecks": "Scenarios you can repeat",
+        "checksNote": "These scenarios run the real functions in memory. They do not run Vitest in the browser; complete automated tests live in the .spec.ts files.",
+        "runChecks": "Run scenarios",
+        "passed": "Passed",
+        "failed": "Failed",
+        "expected": "Expected:",
+        "actual": "Received:",
+        "investigateFreely": "Change the question. Observe the consequence.",
+        "stepByStep": "Inside each transition",
+        "previousStep": "Previous step",
+        "nextStep": "Next step",
+        "stepCount": "Step {{ current }} of {{ total }}",
+        "historyNote": "Going back inspects a local snapshot. An action from it creates a new path and discards future steps. We retain up to 100 actions; algorithm traces are bounded by input size. None of this undoes real service operations.",
+        "before": "Previous state",
+        "after": "Observed state",
+        "showResult": "Show final result",
+        "restart": "Restart"
+      },
+      "obolos": {
+        "title": "Mors’s obols",
+        "description": "One box, repeated names and different ways to search. Help Mors organize an inventory and discover the differences between Array, Set and Map.",
+        "imageAlt": "Mors examines an inventory of obols in Sanaka’s laboratory.",
+        "story": {
+          "title": "Two identical coins. Two different positions.",
+          "characters": "Mors organizes obols. Inventory names identify characters; they are not real offerings to them.",
+          "beginning": "Mors opens a box and spreads the obols across a bench. Rather than relying on appearance, she labels each position: 0, 1, 2… Now she can point to exactly the one she is examining.",
+          "problem": "She finds two “mors” labels. Deleting one seemed reasonable, until she realizes the inventory must record both occurrences. The problem is choosing how to search and how to represent quantity.",
+          "resolution": "Take over the bench. Visit positions, compare pairs, then keep previously seen names in a Set. When Mors asks how many coins belong to each character, try a Map. Each structure answers a different question."
+        },
+        "experimentTitle": "Open the box and run your own search",
+        "simulationNote": "Local laboratory. Nothing queries WordPress or changes a character’s symbolic counter. Coins are abstract representations, without new canonical artwork.",
+        "topics": {
+          "collections": {
+            "title": "Array, Set and Map are not the same box",
+            "everyday": "A numbered shelf can hold identical coins. A unique-name list does not repeat names. A register associates each name with a count.",
+            "technical": "Array is an indexed sequence allowing repetition. Set stores distinct values. Map associates unique keys with values. Equality here compares identifier strings; separate objects are not equal just because their properties match.",
+            "implementation": "readObolo reads items[index]. setDuplicateSteps uses Set.has/add. countObolos uses Map.get/set. Page Signals derive the interface from these functions.",
+            "questions": {
+              "one": {
+                "question": "Why start at zero?",
+                "answer": "It is the first indexed position of a JavaScript array. The second position has index 1; there is not one fewer coin.",
+                "example": "['mors', 'maya'][0] → 'mors'"
+              },
+              "two": {
+                "question": "Does a Set count repetitions?",
+                "answer": "No. It records distinct values. To count occurrences, associate each name with a quantity in a Map.",
+                "example": "Set: {'mors'} · Map: {'mors' → 2}"
+              },
+              "three": {
+                "question": "What if the position is missing?",
+                "answer": "The lookup returns undefined. That is neither an empty coin nor necessarily an exception. The caller must handle it.",
+                "example": "readObolo([], 0) → undefined"
+              }
+            }
+          },
+          "search": {
+            "title": "Finding repetition means choosing a strategy",
+            "everyday": "Compare each coin with every following coin, or ask a checklist whether its name has been seen. The answers match, but the paths differ.",
+            "technical": "Nested loops compare all distinct pairs. The Set strategy makes one existence query per element. Both return duplicated identifiers, not unique coins or total occurrences.",
+            "implementation": "nestedDuplicateSteps highlights left/right; setDuplicateSteps highlights index and records seen. inventoryReport reads the final snapshot, not a separate illustrative algorithm.",
+            "questions": {
+              "one": {
+                "question": "Should a coin be compared with itself?",
+                "answer": "Not when finding another occurrence. right starts at left + 1 so each pair is examined once.",
+                "example": "0 and 1; then 0 and 2; then 1 and 2"
+              },
+              "two": {
+                "question": "Do three equal coins become three duplicates?",
+                "answer": "The result lists that identifier once. The Map answers a different question and records quantity three.",
+                "example": "['mors', 'mors', 'mors'] → ['mors']"
+              },
+              "three": {
+                "question": "What changes on removal?",
+                "answer": "Following positions are reindexed in the new array. The original remains in history.",
+                "example": "remove index 0 from ['maya', 'mors'] → ['mors']"
+              }
+            }
+          },
+          "complexity": {
+            "title": "Big-O describes growth, not a stopwatch",
+            "everyday": "A larger box means more work. Checking each coin once grows linearly; checking every pair grows much faster.",
+            "technical": "Visiting n positions is O(n). Comparing every pair makes n(n−1)/2 comparisons, O(n²). Hash-based Set/Map implementations commonly have expected average O(1) access; ECMAScript requires sublinear average access, not guaranteed constant time or a mandatory hash implementation.",
+            "implementation": "comparisons/lookups count model operations. Snapshots, copying seen and sorting duplicates add time and memory overhead. Core complexity does not describe the entire teaching interface.",
+            "questions": {
+              "one": {
+                "question": "If four coins need six comparisons, do eight need twelve?",
+                "answer": "No. Every pair of eight elements requires 28 comparisons. O(n²) describes that growth.",
+                "example": "4×3÷2 = 6 · 8×7÷2 = 28"
+              },
+              "two": {
+                "question": "Are six lookups faster than six comparisons?",
+                "answer": "The count alone cannot tell us. Operations have different costs alongside memory, engine and visualization overhead.",
+                "example": "6 Set.has calls ≠ 6 milliseconds"
+              },
+              "three": {
+                "question": "Is storing steps free?",
+                "answer": "No. History copies data. Inventory is limited to 16 positions and action history to 100 states; this is not a benchmark.",
+                "example": "search core ≠ snapshots ≠ rendering"
+              }
+            }
+          }
+        },
+        "inventory": "Inventory on the bench",
+        "abstractCoins": "Names are laboratory data. We are not redesigning coins or inventing reverse sides.",
+        "scenarios": {
+          "initial": "Reset box",
+          "empty": "Empty box",
+          "equal": "All identical",
+          "unique": "No repetition"
+        },
+        "index": "Index",
+        "comparing": "under inspection",
+        "emptyInventory": "The box is empty.",
+        "lookupLabel": "Which index do you want to look up?",
+        "lookupResult": "Element found:",
+        "addLabel": "Identifier of the next obol",
+        "add": "Add obol",
+        "remove": "Remove requested index",
+        "messages": {
+          "limit": "This teaching bench holds up to {{ limit }} identifiers.",
+          "emptyInput": "An identifier needs text; whitespace alone does not enter the box.",
+          "invalidIndex": "The index must be an integer corresponding to an existing position."
+        },
+        "algorithms": "Choose how to investigate",
+        "traverse": "Visit positions",
+        "nested": "Compare every pair",
+        "set": "Query with Set",
+        "comparisonTitle": "Same box, different paths",
+        "comparisonNote": "Real counts of explicitly instrumented operations. These are not timing measurements and exclude history copies. Final results remain visible while you inspect an intermediate step.",
+        "strategy": "Strategy",
+        "operations": "Counted operations",
+        "duplicates": "Duplicated identifiers",
+        "comparisons": "comparisons",
+        "lookups": "lookups",
+        "mapTitle": "A quantity register: Map",
+        "mapNote": "Each key appears once with its number of occurrences in the current array. Compare with seen: presence is not quantity.",
+        "events": {
+          "initial": "Mors opened the box. No position has been visited yet.",
+          "visit": "Mors reads items[{{ index }}]: {{ identifier }}. The next position is independent.",
+          "nestedStart": "Compare each position with those that follow. The counter starts at zero.",
+          "equal": "Indices {{ left }} and {{ right }} contain the same identifier. Comparisons: {{ comparisons }}.",
+          "different": "Indices {{ left }} and {{ right }} differ. Comparisons: {{ comparisons }}.",
+          "setStart": "seen is empty. Query each name before adding it.",
+          "repeated": "{{ identifier }} was already seen. Another occurrence at {{ index }}; lookups: {{ lookups }}.",
+          "new": "{{ identifier }} was not seen. Now it is; lookups: {{ lookups }}.",
+          "add": "{{ identifier }} was appended to a new array. The previous input was unchanged.",
+          "remove": "Position {{ index }} was removed. Following positions now have different indices."
+        },
+        "sources": {
+          "read-index": {
+            "title": "Look up a position",
+            "description": "The guard rejects invalid indices. Zero stays valid; the caller handles undefined."
+          },
+          "nested-loops": {
+            "title": "Two loops, every pair",
+            "description": "Traversal records comparisons and both indices. Sorting and snapshots add costs beyond the comparison count."
+          },
+          "set-search": {
+            "title": "Ask the seen set",
+            "description": "has runs once per element. seen stores earlier names; duplicates records repeated names."
+          },
+          "map-count": {
+            "title": "Associate names with quantities",
+            "description": "get reads the old count; ?? supplies zero for a missing key; set writes the next count."
+          }
+        },
+        "checks": {
+          "zero": "Index zero is valid",
+          "missing": "Missing index returns undefined",
+          "duplicates": "Set detects repetition",
+          "agreement": "Algorithms agree",
+          "operations": "Four elements make six comparisons",
+          "empty": "Whitespace is not an identifier",
+          "map": "Map counts two occurrences"
+        },
+        "investigations": {
+          "empty": {
+            "question": "What if there are no coins?",
+            "answer": "Select Empty box. Traversals contain only their initial state, counters are zero and lookups return undefined. An empty collection is valid."
+          },
+          "repeated": {
+            "question": "What if all coins have one name?",
+            "answer": "Select All identical. The result contains mors once; Map records four occurrences. Loops still compare every pair; Set still queries every element."
+          },
+          "failure": {
+            "question": "What if I look up −1, 1.5 or a distant position?",
+            "answer": "Try those indices. readObolo returns undefined. Removal preserves the original array and explains the error."
+          },
+          "newRule": {
+            "question": "Which file changes if “Mors” and “mors” must match?",
+            "answer": "Normalize input in addObolo in obolo-inventory.ts and normalize initial scenarios too. Add a test before changing comparison: identifiers are case-sensitive today."
+          }
+        }
+      },
+      "entregas": {
+        "title": "Ākāśa’s deliveries",
+        "description": "Parcels arrive, a delivery fails and the queue continues. Follow Ākāśa through FIFO, stacks, acknowledgement and retries.",
+        "imageAlt": "Ākāśa organizes parcels in Sanaka’s laboratory.",
+        "story": {
+          "title": "The first arrival should not disappear",
+          "characters": "Ākāśa (आकाश, “space”) is Sanaka’s canonical dragon. She organizes deliveries here; the name’s gloss does not define messaging technology.",
+          "beginning": "Ākāśa receives three volumes and promises to start with the first. While carrying volume-01, another parcel arrives. Removing a parcel from the queue does not prove it has arrived: someone must confirm delivery.",
+          "problem": "The first destination is closed. Ākāśa returns the parcel to the end, retaining its identifier and counting the attempt. When it fails again, should she insist or set it aside to investigate?",
+          "resolution": "Choose a policy and observe the consequences. Compare an in-memory queue and stack, then enable simulated messaging: take, confirm or fail a parcel. It is not a real distributed service, but responsibilities become visible."
+        },
+        "experimentTitle": "Follow the next volume",
+        "simulationNote": "Local simulation without RabbitMQ, Kafka or SQS. No network, persistence, exactly-once delivery or global ordering guarantee. Processing is separate from acknowledgement and controlled by your clicks.",
+        "topics": {
+          "discipline": {
+            "title": "Queue and stack: same input, different order",
+            "everyday": "A service queue handles the first arrival first. A stack of books normally removes the last book placed.",
+            "technical": "Queue uses FIFO, First In, First Out. Stack uses LIFO, Last In, First Out. These are removal disciplines, not synonyms for Array; an array can store either structure.",
+            "implementation": "startDelivery selects entries[head] for FIFO and the last position for LIFO. compareQueues executes shift/pop on the same input and compares FIFO to indexed traversal.",
+            "questions": {
+              "one": {
+                "question": "Does appending define a queue?",
+                "answer": "Not alone. Removal matters: queues remove from the start, stacks from the end.",
+                "example": "a,b,c → FIFO a,b,c · LIFO c,b,a"
+              },
+              "two": {
+                "question": "Is an empty queue a server error?",
+                "answer": "No. It is a normal state. Report no item available instead of inventing a parcel.",
+                "example": "entries.length === head → no waiting parcel"
+              },
+              "three": {
+                "question": "Does switching Queue to Stack change the past?",
+                "answer": "No. It restarts this scenario explicitly rather than silently reinterpreting past actions.",
+                "example": "Restart Stack → volume-03 is removed first"
+              }
+            }
+          },
+          "performance": {
+            "title": "Front removal need not shift everything",
+            "everyday": "Push every book to fill a gap, or move a marker indicating where the queue starts.",
+            "technical": "In a simple dense-array model, shift may require linear work; draining this way costs O(n²). A head index drains with n reads, O(n). Push/pop commonly have amortized constant cost in dynamic arrays, but engines use different strategies. A head index also needs memory reclamation planning.",
+            "implementation": "FIFO uses head + 1 and retains the consumed prefix until restart. Form/snapshot copies add O(n). conceptualShifts counts conceptual positions, not JavaScript engine internals.",
+            "questions": {
+              "one": {
+                "question": "How many shifts for three items in that model?",
+                "answer": "Two, then one, then zero: three. A head-index traversal needs three reads without those shifts.",
+                "example": "shift: 2+1+0 · head: 3 reads"
+              },
+              "two": {
+                "question": "Does advancing head reclaim earlier memory?",
+                "answer": "No. Earlier items remain referenced. Production queues may use compaction, ring buffers or another structure; snapshots expose the limitation.",
+                "example": "head = 2 does not delete entries[0] and entries[1]"
+              },
+              "three": {
+                "question": "Is this a production-optimized queue?",
+                "answer": "No. It prioritizes snapshots and reproducibility. Copies and history cost more than the removal mechanism itself.",
+                "example": "core + state copies + rendering"
+              }
+            }
+          },
+          "messaging": {
+            "title": "An in-memory queue is not messaging infrastructure",
+            "everyday": "Receiving, attempting delivery and confirming arrival are distinct. A parcel can leave the queue while staying the carrier’s responsibility.",
+            "technical": "Producers create messages; brokers organize availability; consumers process; acknowledgement confirms. Retry schedules another attempt; dead-letter isolates exhausted messages. Persistence, redelivery and deduplication need separate implementations and vary by platform.",
+            "implementation": "processing retains a parcel. acknowledgeDelivery moves it to delivered. failDelivery requeues the same id or moves it to deadLetters after two attempts. New parcels can arrive during processing.",
+            "questions": {
+              "one": {
+                "question": "Does removing mean delivering?",
+                "answer": "Not in messaging mode. The parcel stays in processing until ACK or failure. Structure mode removes and completes immediately.",
+                "example": "queue → processing → ACK → delivered"
+              },
+              "two": {
+                "question": "Does failure create a new parcel?",
+                "answer": "No. It preserves the id and increments attempts at the next processing. Requeueing may change completion order.",
+                "example": "id 1, attempt 1 → retry → id 1, attempt 2"
+              },
+              "three": {
+                "question": "What happens on refresh?",
+                "answer": "Everything is recreated. No persistent broker or delivery storage exists. Automatic label deduplication is not implemented.",
+                "example": "refresh → three initial volumes, no ACK"
+              }
+            }
+          }
+        },
+        "queueTitle": "The delivery bench",
+        "modes": { "structure": "Data structure", "messaging": "Simulated messaging" },
+        "modeNotes": {
+          "structure": "Removal completes a structure operation. Use the other mode to separate processing, acknowledgement and failure.",
+          "messaging": "Producer: add. Consumer: process. Choose ACK or failure. You control every stage without waiting for animation."
+        },
+        "disciplineNote": "Changing mode or discipline restarts three volumes. This session permits 16 pending parcels and 64 total arrivals. History inspects states; an action from them starts another path.",
+        "addLabel": "Parcel identifier",
+        "enqueue": "Add at the end",
+        "process": "Process next",
+        "confirm": "Confirm · ACK",
+        "fail": "Simulate failure",
+        "waiting": "Waiting",
+        "position": "Position",
+        "attempts": "Attempts",
+        "emptyQueue": "No parcels are waiting.",
+        "processing": "Processing:",
+        "attemptLimit": "Simulated policy: at most {{ max }} attempts. Failure at the limit moves the parcel to the investigation queue.",
+        "delivered": "Confirmed deliveries",
+        "deadLetters": "Failure queue · dead-letter",
+        "compareTitle": "Same parcels, three traversals",
+        "compareNote": "The comparison uses waiting parcels. Shifts estimate a dense-array model; reads are explicitly counted operations. Neither measures milliseconds.",
+        "strategy": "Strategy",
+        "order": "Removal order",
+        "cost": "Observed operation",
+        "shifts": "conceptual shifts",
+        "reads": "indexed reads",
+        "lifoCost": "Removes from the end without shifting the prefix",
+        "events": {
+          "initial": "Ākāśa prepared three volumes. The consumer is free.",
+          "enqueue": "{{ label }} was appended without interrupting processing.",
+          "emptyInput": "An empty identifier creates no parcel.",
+          "limit": "This simulation allows {{ limit }} pending parcels, including the in-flight one.",
+          "sessionLimit": "This session reached {{ limit }} arrivals. Restart to clear teaching records and begin another trace.",
+          "busy": "The consumer is busy. Confirm or fail its parcel before taking another.",
+          "empty": "No parcel is available.",
+          "startFifo": "{{ label }} left the front and entered processing. Attempt {{ attempt }}; no ACK yet.",
+          "startLifo": "{{ label }} left the top and entered processing. Attempt {{ attempt }}; no ACK yet.",
+          "nothingToConfirm": "No processing is available to confirm.",
+          "nothingToFail": "No processing is available to fail.",
+          "ack": "ACK received: {{ label }} is confirmed. The consumer is free.",
+          "retry": "{{ label }} failed on attempt {{ attempt }}. Its id was preserved and it returned to the end.",
+          "deadLetter": "{{ label }} failed on attempt {{ attempt }} and exhausted its policy. It is now in the investigation queue."
+        },
+        "sources": {
+          "start-delivery": {
+            "title": "Choose FIFO or LIFO",
+            "description": "Discipline selects a position. processing retains the parcel; head advances only for queues."
+          },
+          "confirm-delivery": {
+            "title": "Confirm actual processing",
+            "description": "A guard rejects processing=null. ACK moves the item to delivered and frees the consumer."
+          },
+          "retry-delivery": {
+            "title": "Fail, retry or investigate",
+            "description": "A retry retains id and attempts. Exhausting the limit redirects to deadLetters instead of looping forever."
+          },
+          "compare-structures": {
+            "title": "Execute shift, pop and head",
+            "description": "The same labels feed all traversals. conceptualShifts describes a model, not engine instructions."
+          }
+        },
+        "checks": {
+          "fifo": "FIFO removes volume-01",
+          "lifo": "LIFO removes volume-03",
+          "ack": "ACK confirms one delivery",
+          "retry": "Retry retains the last attempt",
+          "deadLetter": "Two failures exhaust the policy",
+          "strategies": "shift and head agree on order"
+        },
+        "investigations": {
+          "empty": {
+            "question": "What happens after the last delivery?",
+            "answer": "Process all volumes. A further removal reports an empty queue. Confirm each operation in messaging mode before taking the next."
+          },
+          "repeated": {
+            "question": "Are two matching labels one message?",
+            "answer": "No. Each new arrival gets its own id. Retries retain ids, arrivals create them. Business deduplication is not implemented."
+          },
+          "failure": {
+            "question": "How do I create a dead-letter?",
+            "answer": "Enable messaging, process and fail. The parcel returns to the end. Process the others until it returns to the front, then fail its second attempt. It appears in deadLetters with the same id."
+          },
+          "newRule": {
+            "question": "How do I allow three attempts?",
+            "answer": "Change MAX_DELIVERY_ATTEMPTS in delivery-queue.ts and update retry/dead-letter tests. The interface reads that constant. Synchronize excerpts afterwards."
+          }
+        }
+      },
+      "jogo": {
+        "title": "Kālikā’s impossible game",
+        "description": "Kālikā creates three gestures. Mors asks for two more. Explore when a function is enough and when composed rules clarify change.",
+        "imageAlt": "Kālikā and Mors study rules in a manga composition.",
+        "story": {
+          "title": "One more rule, a design reconsidered",
+          "characters": "Kālikā (कालिका): a name with lexical senses related to darkness, among others; this gloss does not exhaust its associations. Mors joins her game.",
+          "beginning": "Kālikā writes rock, paper and scissors on a sheet. Choose two gestures and check the winner. Three conditions fit inside a small function.",
+          "problem": "Mors adds lizard and Spock. Adding conditions without organizing relationships starts to hide which gestures defeat which others.",
+          "resolution": "Kālikā separates ties and dominance into explicit rules. The engine receives and visits them. Observe decisions, test extensions and compare costs with the initial function. This is not an official test from any company."
+        },
+        "experimentTitle": "Play, extend, inspect",
+        "simulationNote": "Local deterministic choices: no remote opponent or hidden randomness. Changing the design restarts the trace.",
+        "topics": {
+          "conditions": {
+            "title": "Before classes, a function",
+            "everyday": "With three gestures, a short list of winners solves the game. A simple tool can be the clearest choice.",
+            "technical": "A pure function depends on inputs, returns a result and does not modify external data. Conditions express a fixed policy without classes.",
+            "implementation": "playClassic validates inputs, handles ties and evaluates three wins. The trace calls this exact function, not another decision in HTML.",
+            "questions": {
+              "one": {
+                "question": "Why handle ties first?",
+                "answer": "After ruling them out, every valid round ends in a win or loss.",
+                "example": "rock === rock → tie"
+              },
+              "two": {
+                "question": "Is a simple function less professional?",
+                "answer": "No. Clarity and requirements justify design, not the number of classes.",
+                "example": "playClassic('paper', 'rock') → win"
+              },
+              "three": {
+                "question": "What happens with an unknown word?",
+                "answer": "Explicit rejection. Having no rule does not mean losing.",
+                "example": "playClassic('banana', 'rock') → invalid"
+              }
+            }
+          },
+          "composition": {
+            "title": "Rules sharing a contract",
+            "everyday": "One collaborator checks ties; another knows the wins. The game asks both without knowing how they work internally.",
+            "technical": "Composition brings collaborators together. Encapsulation controls access to details. Polymorphism calls the same contract on different implementations. A TypeScript interface describes that contract at compile time.",
+            "implementation": "RoundRule requires id and evaluate. TieRule and DominanceRule implement it. RuleGame receives their list; its loop does not check class names.",
+            "questions": {
+              "one": {
+                "question": "Does the game inherit from its rules?",
+                "answer": "No. It has rules, supplied to its constructor: composition.",
+                "example": "new RuleGame(moves, [new TieRule(), dominance])"
+              },
+              "two": {
+                "question": "What does null mean in a rule?",
+                "answer": "The rule did not decide. The engine continues; null is not a loss.",
+                "example": "TieRule.evaluate('rock', 'paper') → null"
+              },
+              "three": {
+                "question": "Does readonly freeze everything?",
+                "answer": "No. It is a static assignment restriction. The engine copies configuration and exposes no mutation methods.",
+                "example": "this.rules = [...rules]"
+              }
+            }
+          },
+          "extension": {
+            "title": "Extending without scattered conditions",
+            "everyday": "Mors does not rewrite the whole table. She declares new possibilities and verifies that old relationships still work.",
+            "technical": "Open/Closed encourages extension points that avoid editing the engine for every new policy. It does not forbid all code changes. Here, extension uses configuration and composition, not a large hierarchy.",
+            "implementation": "createRuleGame(true) provides five gestures and ten winning relationships. The same RuleGame visits TieRule and DominanceRule. Tests cover all 25 pairs and compatibility with nine classic pairs.",
+            "questions": {
+              "one": {
+                "question": "Where do you add a relationship?",
+                "answer": "In the pair configuration, preserving the engine and previous rule tests.",
+                "example": "lizard → paper, spock"
+              },
+              "two": {
+                "question": "Is the interface mandatory?",
+                "answer": "Not for the initial function. It becomes useful when different policies need the same engine contract.",
+                "example": "rule.evaluate(player, opponent)"
+              },
+              "three": {
+                "question": "What does this design cost?",
+                "answer": "More types, objects and indirection. A function may be simpler for three stable gestures. Change and testability guide the choice.",
+                "example": "fixed function ↔ configurable engine"
+              }
+            }
+          }
+        },
+        "controls": {
+          "design": "Program design",
+          "currentDesign": "Selected design:",
+          "player": "Kālikā’s gesture",
+          "opponent": "Mors’s gesture",
+          "play": "Evaluate round",
+          "rule": "Inspected rule:",
+          "scenarios": "Reproducible scenarios"
+        },
+        "variants": {
+          "conditions": "Function · three gestures",
+          "rulesClassic": "Rules · three gestures",
+          "rulesExtended": "Rules · five gestures"
+        },
+        "moves": {
+          "rock": "Rock",
+          "paper": "Paper",
+          "scissors": "Scissors",
+          "lizard": "Lizard",
+          "spock": "Spock"
+        },
+        "results": {
+          "pending": "Advance the steps to reveal the decision.",
+          "tie": "Tie",
+          "win": "Kālikā wins",
+          "lose": "Mors wins",
+          "invalid": "Invalid input or configuration"
+        },
+        "comparison": {
+          "title": "The same domain, two designs",
+          "note": "This comparison uses only classic rules. Both classic engines reject lizard and Spock. The extended engine handles them in the trace above."
+        },
+        "events": {
+          "initial": "Choices recorded; no rule has decided yet.",
+          "validated": "Both choices belong to the allowed set.",
+          "invalid": "A choice is not allowed. The round was rejected.",
+          "continue": "Rule {{rule}} did not decide. The engine will continue.",
+          "decided": "Rule {{rule}} decided. The engine stopped.",
+          "conditions": "The pure function checked ties and winning conditions and returned the observed result.",
+          "unhandled": "No rule resolved the round. The configuration was rejected, not turned into a loss."
+        },
+        "sources": {
+          "classic-function": {
+            "title": "Function and conditions",
+            "description": "The actual initial implementation used for three gestures."
+          },
+          "rule-contract": {
+            "title": "Contract and ties",
+            "description": "The interface only requires what the engine needs; the first rule decides or passes on."
+          },
+          "dominance-rule": {
+            "title": "Encapsulated relationships",
+            "description": "A map of wins supplied as data and copied by the rule."
+          },
+          "composed-game": {
+            "title": "Composed engine",
+            "description": "The loop executes compatible rules, records each step and rejects incomplete configurations."
+          }
+        },
+        "checks": {
+          "tie": "Tie recognized",
+          "win": "Classic win",
+          "lose": "Classic loss",
+          "invalid": "Unknown input rejected",
+          "extension": "Lizard defeats Spock",
+          "compatible": "Rock still defeats scissors"
+        },
+        "investigations": {
+          "invalid": {
+            "question": "What if input is empty?",
+            "answer": "It is not an allowed gesture and produces invalid. Add that test before changing validation."
+          },
+          "tie": {
+            "question": "What if both repeat the same gesture?",
+            "answer": "TieRule decides before dominance. Equality handles the same responsibility in the function."
+          },
+          "newRule": {
+            "question": "What if Mors brings another rule?",
+            "answer": "Implement RoundRule or configure pairs. Choose order carefully: the first deciding rule wins. Test conflicts and old combinations."
+          },
+          "cost": {
+            "question": "When would you keep only the function?",
+            "answer": "When three gestures are stable and the function stays clear. Extensibility does not automatically outweigh more files and indirection."
+          }
+        }
+      },
+      "padaria": {
+        "title": "Māyā’s bakery",
+        "description": "Buying bread meets contracts, responses and failures. Observe fictional orders and payments without moving money or leaving this page.",
+        "imageAlt": "Māyā, Nandinī, Mors and Ākāśa investigate a bakery in a manga composition.",
+        "story": {
+          "title": "From counter to contract",
+          "characters": "Māyā (माया): a contextual gloss of power of appearance/illusion, not a single etymology. Nandinī (नन्दिनी): a form associated with joy and delight. Ākāśa (आकाश): space. Mors handles fictional payments. Nandinī retains her canonical Bull Terrier form, not a human clerk.",
+          "beginning": "Māyā asks for two loaves at the counter. Nandinī checks stock, Mors records imaginary credits and Ākāśa joins if delivery is needed. Both sides must understand quantity, availability and confirmation.",
+          "problem": "Digitally, one program communicates these details to another. An API is an interface between programs; Nandinī, the shop and the counter are analogies, not API definitions. Repeating an order or payment after a failed response can create extra effects.",
+          "resolution": "Query the menu, send JSON, observe the simulated server and compare HTTP responses. Repeat a payment: the same key and intent recover the previous record; a different intent with that key creates a conflict."
+        },
+        "experimentTitle": "A request counter",
+        "simulationNote": "Everything runs in memory and resets on reload. No HTTP connection, charge, bank information or persisted data. Credits are imaginary. Resolve each request manually and inspect its trace.",
+        "related": "Compare with NASA’s real HTTP request",
+        "topics": {
+          "contract": {
+            "title": "An order must say what it wants",
+            "everyday": "“I want bread” does not specify quantity or delivery. Clear agreements help check whether an order can be fulfilled.",
+            "technical": "A contract defines method, path, body and response. GET queries resources; POST requests processing or creation. JSON is a data format, not a synonym for REST. TypeScript types do not replace server validation.",
+            "implementation": "BakeryRequest records the request. createBakeryOrder checks product, integer quantity from 1 to 20, delivery and stock. 201 includes Location for the created resource; querying it returns 200.",
+            "questions": {
+              "one": {
+                "question": "Does querying create an order?",
+                "answer": "No. GET returns data without creating orders or reducing stock.",
+                "example": "GET /api/produtos → 200"
+              },
+              "two": {
+                "question": "Why validate twice?",
+                "answer": "Local validation helps the person; server validation protects the contract even if the interface is bypassed. Use the 400 scenario to observe this.",
+                "example": "quantity: 0 → local error or server 400"
+              },
+              "three": {
+                "question": "Is every error a 500?",
+                "answer": "No. 400 rejects input; 404 means a missing resource; 409 a stock/key conflict; 500 a simulated internal failure. Network failure may have no HTTP response.",
+                "example": "400 ≠ 404 ≠ 409 ≠ 500 ≠ no response"
+              }
+            }
+          },
+          "layers": {
+            "title": "Each layer owns a responsibility",
+            "everyday": "Māyā chooses, Nandinī checks and Mors confirms. If one person owns everything, locating an error becomes harder.",
+            "technical": "The UI gathers inputs; data access prepares communication; the server validates and processes; the response updates the view. A BFF can adapt contracts or aggregate services for a frontend, but is not mandatory.",
+            "implementation": "PadariaLab coordinates events. beginBakeryRequest creates pending; completeBakeryRequest distinguishes network and HTTP and routes to the domain. GET /bff/padaria demonstrates an adapted contract combining menu and recent orders from local collections. It is not a deployed BFF.",
+            "questions": {
+              "one": {
+                "question": "Why does the request wait?",
+                "answer": "To inspect pending. You choose when to resolve; no hidden timeout, timer or slow network.",
+                "example": "idle → pending → success / error"
+              },
+              "two": {
+                "question": "When should a BFF be added?",
+                "answer": "When adapting or aggregating data benefits the screen and justifies a layer. This compact contract is a demonstration, not a universal requirement.",
+                "example": "{ menu, recentOrders }"
+              },
+              "three": {
+                "question": "Where can I observe real HTTP?",
+                "answer": "In the existing NASA study: HttpClient, RxJS and external responses. This bakery does not duplicate that service.",
+                "example": "/matrix/rest-api"
+              }
+            }
+          },
+          "idempotency": {
+            "title": "Repeat intent, not effects",
+            "everyday": "If Māyā missed confirmation, repeating “pay for this order” should not become two charges. Identifying the same intent helps recognize repetition.",
+            "technical": "Idempotency concerns the effect of repeating an operation. POST is not inherently idempotent; a contract may add this property through keys and consistent storage. Disabling a button is not equivalent.",
+            "implementation": "payBakeryOrder binds a key to an order and demo-token. The same key/content returns 200 and the previous payment; another order using that key returns 409. Without a key, duplicate records deliberately demonstrate an unsafe flow.",
+            "questions": {
+              "one": {
+                "question": "What happens without a key?",
+                "answer": "In this intentionally unsafe mode, repeating POST creates another fictional record. Never use this flow for real payments.",
+                "example": "payment-1 + payment-2 for order-1"
+              },
+              "two": {
+                "question": "Can I change the key every attempt?",
+                "answer": "That identifies different intents. Preserve key and content to repeat the same operation.",
+                "example": "demo-key-1 + order-1 → one effect"
+              },
+              "three": {
+                "question": "Is this production ready?",
+                "answer": "No. Production requires security, durable storage, business validation, transactions, concurrency, expiration and proper integration. This example has no money at all.",
+                "example": "local memory ≠ financial service"
+              }
+            }
+          }
+        },
+        "controls": {
+          "menu": "Simulated server menu",
+          "product": "Product",
+          "credits": "Fictional credits",
+          "stock": "Stock",
+          "order": "Māyā’s order",
+          "quantity": "Quantity · integer from 1 to 20",
+          "delivery": "Request delivery with Ākāśa",
+          "orderId": "Order identifier",
+          "query": "Query order · GET",
+          "invalid": "Send invalid example · 400",
+          "payment": "Fictional payment with Mors",
+          "paymentWarning": "Only demo-token and imaginary credits. Without a key, the unsafe mode permits duplicates for study.",
+          "idempotent": "Use an idempotency key",
+          "key": "Intent key",
+          "pay": "Simulate payment",
+          "repeat": "Repeat the last POST",
+          "paymentCount": "{{count}} fictional payment records in this session.",
+          "transport": "Controlled response",
+          "complete": "Resolve request",
+          "selectedFailure": "Selected scenario:",
+          "request": "Request · method, path and JSON",
+          "response": "Response · status and JSON",
+          "unavailable": "Restart with unavailable bread"
+        },
+        "products": { "bread": "Bread", "cake": "Cake" },
+        "failures": {
+          "none": "Normal flow",
+          "server": "Internal failure · 500",
+          "network": "Network failure · no HTTP"
+        },
+        "phases": {
+          "idle": "Choose an operation to begin.",
+          "pending": "Request pending. Choose Resolve request to observe the outcome.",
+          "success": "Successful HTTP response. Check status and body below.",
+          "httpError": "The server returned an HTTP error. Check the status below.",
+          "networkError": "Network failure. No response or HTTP status.",
+          "localError": "Local validation: use an integer quantity from 1 to 20. No request was sent."
+        },
+        "events": {
+          "initial": "Session started with local stock and records.",
+          "localValidation": "The UI rejected quantity before producing a request.",
+          "busy": "A request is pending. Resolve it before sending another.",
+          "pending": "The UI prepared the contract and entered pending. The server has not processed anything yet.",
+          "dataAccess": "Data access received the contract’s method, path and body.",
+          "networkFailure": "Simulated transport failed before receiving an HTTP response. The fictional database did not change.",
+          "server": "The simulated server checks path, contract and domain state.",
+          "bff": "The simulated BFF adapts menu and recent orders into a screen-oriented response.",
+          "httpFailure": "An HTTP error response arrived. Status and body record the cause; this is not a network failure.",
+          "response": "Processing finished. Response and local state show the actual effects of this simulation.",
+          "noPending": "No pending request. State preserved."
+        },
+        "sources": {
+          "request-contract": {
+            "title": "Typed contracts",
+            "description": "Types describe requests and responses; server validation remains necessary."
+          },
+          "create-order": {
+            "title": "Create order",
+            "description": "Validates contract and stock, creates a resource and returns 201 with Location."
+          },
+          "idempotent-payment": {
+            "title": "Repetition and intent",
+            "description": "A strictly fictional payment demonstrates replay, conflict and simulation limits."
+          },
+          "bff-view": {
+            "title": "Screen-adapted contract",
+            "description": "Two local collections become a summary. No BFF or external services are deployed."
+          }
+        },
+        "checks": {
+          "created": "Valid order · 201",
+          "invalid": "Invalid quantity · 400",
+          "stock": "Insufficient stock · 409",
+          "server": "Simulated failure · 500",
+          "payment": "Fictional record created",
+          "idempotency": "Repetition without another effect"
+        },
+        "investigations": {
+          "invalid": {
+            "question": "What if the order is empty?",
+            "answer": "The server returns 400 without changing stock. Test createBakeryOrder without a body; real APIs must not trust client forms."
+          },
+          "repeated": {
+            "question": "What if a payment repeats?",
+            "answer": "Create an order, pay and repeat the last POST. With the same key one record remains; without a key the intentionally unsafe mode duplicates it. Repeating order creation also creates another order if stock permits."
+          },
+          "failure": {
+            "question": "What if a response fails?",
+            "answer": "Choose 500 or network before requesting. The first has an HTTP response; the second does not. Going back only inspects local memory, never undoes a real service."
+          },
+          "newRule": {
+            "question": "Where should another purchase rule go?",
+            "answer": "In domain validation, with success and rejection tests. Contract changes require reviewing types, UI, responses and translations. Do not hide rules only in HTML."
+          }
+        }
+      }
+    },
     "catalog": {
+      "parent": "Parent",
+      "child": "Child",
       "header": {
         "eyebrow": "Interactive laboratory",
         "title": {
@@ -403,9 +1179,9 @@
         "eyebrow": "Next experiments",
         "title": "The Matrix will keep opening",
         "status": "Coming soon",
-        "signals": "Signals and reactive state",
-        "observables": "Observables and data flow",
-        "lifecycle": "Component lifecycle"
+        "signals": { "title": "Signals and reactive state" },
+        "observables": { "title": "Observables and data flow" },
+        "lifecycle": { "title": "Component lifecycle" }
       }
     },
     "header": {

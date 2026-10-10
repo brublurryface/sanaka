@@ -1,0 +1,298 @@
+/*
+ * Única folha da família didática. O escopo evita alterar os experimentos antigos.
+ * Headers, rótulos, nós e explorador continuam usando os estilos existentes.
+ */
+.matrix-study-host {
+  display: block;
+  min-width: 0;
+}
+
+.matrix-study {
+  --matrix-node-border: rgba(237, 201, 120, 0.32);
+  --matrix-node-glow-position: 100% 0%;
+  --matrix-node-glow: rgba(47, 77, 168, 0.12);
+
+  .study-hero--neutral {
+    background:
+      radial-gradient(ellipse at 80% 35%, rgba(47, 77, 168, 0.16), transparent 55%),
+      var(--sanaka-bg);
+  }
+
+  h1 {
+    max-width: 42rem;
+    margin: 1.2rem 0 0;
+    font-family: var(--sanaka-font-display);
+    font-size: var(--sanaka-type-page-title-size);
+    font-weight: var(--sanaka-type-page-title-weight);
+    line-height: var(--sanaka-type-page-title-line-height);
+    letter-spacing: var(--sanaka-type-page-title-spacing);
+    text-wrap: balance;
+  }
+
+  h2,
+  h3 {
+    font-family: var(--sanaka-font-display);
+    font-weight: 500;
+    line-height: 1.12;
+    text-wrap: balance;
+  }
+
+  h2 {
+    font-size: clamp(2.1rem, 4vw, 3rem);
+  }
+  h3 {
+    font-size: clamp(1.65rem, 3vw, 2.3rem);
+  }
+
+  p {
+    line-height: 1.8;
+  }
+
+  .study-intro {
+    max-width: var(--sanaka-measure-hero-intro);
+    font-size: var(--sanaka-type-hero-intro-size);
+    line-height: var(--sanaka-type-hero-intro-line-height);
+  }
+
+  .study-shell {
+    width: var(--sanaka-page-shell-width);
+    margin-inline: auto;
+    padding-bottom: clamp(4rem, 8vw, 7rem);
+    min-width: 0;
+  }
+
+  .study-back,
+  .study-navigation a {
+    color: var(--sanaka-gold-soft);
+    font-size: var(--sanaka-type-interface-meta-size);
+    text-underline-offset: 0.25em;
+  }
+
+  .study-back {
+    display: inline-block;
+    margin-bottom: 1.5rem;
+  }
+
+  .study-navigation,
+  .study-controls {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 1rem;
+  }
+
+  .study-navigation {
+    padding-block: var(--sanaka-space-page-content-start);
+    border-bottom: 1px solid rgba(237, 201, 120, 0.24);
+  }
+
+  .study-section {
+    padding-top: clamp(2.5rem, 5vw, 4rem);
+    scroll-margin-top: 8rem;
+  }
+  .study-section > p,
+  .study-topic {
+    max-width: 62rem;
+  }
+
+  .study-character-note,
+  .study-simulation-note {
+    color: var(--sanaka-gold-soft);
+    border-inline-start: 2px solid var(--sanaka-gold);
+    padding-inline-start: 1rem;
+  }
+
+  .study-topic {
+    border-bottom: 1px solid rgba(237, 201, 120, 0.2);
+    padding-bottom: 1.5rem;
+  }
+  .study-questions dt {
+    color: var(--sanaka-gold-soft);
+    font-weight: 600;
+  }
+  .study-questions dd {
+    margin: 0 0 1.5rem;
+  }
+  .study-questions dd p {
+    margin-bottom: 0.5rem;
+  }
+
+  .study-button {
+    min-height: 2.75rem;
+    padding: 0.6rem 1rem;
+    border: 1px solid rgba(237, 201, 120, 0.45);
+    color: var(--sanaka-gold-soft);
+    background: var(--sanaka-surface);
+    font: inherit;
+    cursor: pointer;
+  }
+
+  .study-button:hover:not(:disabled) {
+    border-color: var(--sanaka-gold-soft);
+  }
+  .study-button[aria-pressed='true'] {
+    border-width: 2px;
+    text-decoration: underline;
+    text-underline-offset: 0.3em;
+  }
+  .study-button:disabled {
+    opacity: 0.5;
+    cursor: not-allowed;
+  }
+  a:focus-visible,
+  button:focus-visible,
+  input:focus-visible,
+  select:focus-visible,
+  summary:focus-visible,
+  [tabindex='0']:focus-visible {
+    outline: 2px solid var(--sanaka-gold-soft);
+    outline-offset: 4px;
+  }
+
+  .study-field {
+    display: grid;
+    gap: 0.6rem;
+    min-width: 0;
+    max-width: 30rem;
+    margin-block: 1rem;
+  }
+  .study-fields {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1.5rem;
+  }
+  .study-fields .study-field {
+    flex: 1 1 15rem;
+  }
+  .study-checkbox {
+    display: flex;
+    align-items: center;
+    gap: 0.8rem;
+    margin-block: 1rem;
+    min-height: 2.75rem;
+  }
+  .study-checkbox input {
+    width: 1.25rem;
+    min-height: 1.25rem;
+    accent-color: var(--sanaka-gold);
+  }
+  label {
+    font-size: var(--sanaka-type-interface-meta-size);
+    color: var(--sanaka-gold-soft);
+  }
+  input,
+  select {
+    min-width: 0;
+    width: 100%;
+    min-height: 2.75rem;
+    padding: 0.65rem;
+    border: 1px solid rgba(237, 201, 120, 0.4);
+    font: inherit;
+    color: var(--sanaka-ivory);
+    background: var(--sanaka-surface);
+  }
+
+  .study-array {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.75rem;
+    padding: 0;
+    list-style: none;
+  }
+  .study-array li {
+    display: grid;
+    gap: 0.45rem;
+  }
+  .study-array span {
+    font-size: var(--sanaka-type-editorial-label-size);
+    color: var(--sanaka-ivory-muted);
+  }
+  .study-array .study-item--active {
+    border: 2px solid var(--sanaka-gold-soft);
+    background: var(--sanaka-surface-soft);
+  }
+  .study-array .study-item--consumed {
+    opacity: 0.55;
+    text-decoration: line-through;
+  }
+  .study-result {
+    padding: 1rem;
+    border-inline-start: 2px solid var(--sanaka-gold);
+    background: var(--sanaka-surface);
+  }
+  .study-step-viewer {
+    margin-top: 2rem;
+  }
+
+  .study-state-comparison {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 1rem;
+  }
+  pre {
+    min-width: 0;
+    max-width: 100%;
+    padding: 1rem;
+    overflow-x: auto;
+    font-size: var(--sanaka-type-code-size);
+    background: #090c11;
+  }
+  code {
+    overflow-wrap: anywhere;
+  }
+  .code-window code {
+    overflow-wrap: normal;
+  }
+  .study-files,
+  .study-investigation {
+    margin-block: 1rem;
+    padding: 1rem;
+    border: 1px solid rgba(237, 201, 120, 0.22);
+  }
+  summary {
+    color: var(--sanaka-gold-soft);
+    cursor: pointer;
+  }
+  .study-checks {
+    padding: 0;
+    list-style: none;
+  }
+  .study-checks li {
+    display: grid;
+    gap: 0.5rem;
+    padding-block: 1rem;
+    border-bottom: 1px solid rgba(237, 201, 120, 0.2);
+  }
+  .study-checks strong {
+    color: var(--sanaka-gold-soft);
+  }
+  .study-table-scroll {
+    max-width: 100%;
+    overflow-x: auto;
+  }
+  table {
+    border-collapse: collapse;
+    min-width: 28rem;
+    width: 100%;
+    margin-block: 1rem;
+  }
+  th,
+  td {
+    padding: 0.8rem;
+    border-bottom: 1px solid rgba(237, 201, 120, 0.22);
+    text-align: start;
+  }
+  th {
+    color: var(--sanaka-gold-soft);
+    font-size: var(--sanaka-type-editorial-label-size);
+  }
+
+  @media (max-width: 700px) {
+    .study-state-comparison {
+      grid-template-columns: 1fr;
+    }
+    .study-controls {
+      gap: 0.75rem;
+    }
+  }
+}

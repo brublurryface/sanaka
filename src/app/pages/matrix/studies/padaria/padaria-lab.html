@@ -1,0 +1,206 @@
+<app-matrix-study-frame
+  [study]="study"
+  [sources]="sources"
+  [checks]="checks()"
+  (runChecks)="runChecks()"
+>
+  <div class="matrix-experiment-node">
+    <h3>{{ 'matrix.studies.padaria.controls.menu' | transloco }}</h3>
+    <div
+      class="study-table-scroll"
+      tabindex="0"
+      [attr.aria-label]="'matrix.studies.padaria.controls.menu' | transloco"
+    >
+      <table>
+        <thead>
+          <tr>
+            <th scope="col">{{ 'matrix.studies.padaria.controls.product' | transloco }}</th>
+            <th scope="col">{{ 'matrix.studies.padaria.controls.credits' | transloco }}</th>
+            <th scope="col">{{ 'matrix.studies.padaria.controls.stock' | transloco }}</th>
+          </tr>
+        </thead>
+        <tbody>
+          @for (product of history.state().products; track product.id) {
+            <tr>
+              <td>{{ 'matrix.studies.padaria.products.' + product.id | transloco }}</td>
+              <td>{{ product.priceCredits }}</td>
+              <td>{{ product.stock }}</td>
+            </tr>
+          }
+        </tbody>
+      </table>
+    </div>
+    <div class="study-controls">
+      <button
+        type="button"
+        class="study-button"
+        [disabled]="pending()"
+        (click)="request({ method: 'GET', path: '/api/produtos' })"
+      >
+        GET /api/produtos
+      </button>
+      <button
+        type="button"
+        class="study-button"
+        [disabled]="pending()"
+        (click)="request({ method: 'GET', path: '/bff/padaria' })"
+      >
+        GET /bff/padaria
+      </button>
+    </div>
+    <h3>{{ 'matrix.studies.padaria.controls.order' | transloco }}</h3>
+    <form (submit)="$event.preventDefault(); createOrder()">
+      <div class="study-fields">
+        <div class="study-field">
+          <label for="bakery-product">{{
+            'matrix.studies.padaria.controls.product' | transloco
+          }}</label>
+          <select
+            id="bakery-product"
+            #product
+            [value]="productId()"
+            (change)="productId.set(product.value)"
+          >
+            @for (item of history.state().products; track item.id) {
+              <option [value]="item.id">
+                {{ 'matrix.studies.padaria.products.' + item.id | transloco }}
+              </option>
+            }
+          </select>
+        </div>
+        <div class="study-field">
+          <label for="bakery-quantity">{{
+            'matrix.studies.padaria.controls.quantity' | transloco
+          }}</label>
+          <input
+            id="bakery-quantity"
+            type="number"
+            #quantityInput
+            [value]="quantity()"
+            (input)="quantity.set(quantityInput.valueAsNumber)"
+          />
+        </div>
+      </div>
+      <label class="study-checkbox"
+        ><input
+          type="checkbox"
+          #deliveryInput
+          [checked]="delivery()"
+          (change)="delivery.set(deliveryInput.checked)"
+        />
+        {{ 'matrix.studies.padaria.controls.delivery' | transloco }}</label
+      >
+      <button type="submit" class="study-button" [disabled]="pending()">POST /api/pedidos</button>
+    </form>
+    <div class="study-field">
+      <label for="bakery-order-id">{{
+        'matrix.studies.padaria.controls.orderId' | transloco
+      }}</label>
+      <input
+        id="bakery-order-id"
+        #order
+        [value]="orderId()"
+        maxlength="40"
+        (input)="orderId.set(order.value)"
+      />
+    </div>
+    <div class="study-controls">
+      <button type="button" class="study-button" [disabled]="pending()" (click)="queryOrder()">
+        {{ 'matrix.studies.padaria.controls.query' | transloco }}
+      </button>
+      <button
+        type="button"
+        class="study-button"
+        [disabled]="pending()"
+        (click)="sendInvalidOrder()"
+      >
+        {{ 'matrix.studies.padaria.controls.invalid' | transloco }}
+      </button>
+    </div>
+    <h3>{{ 'matrix.studies.padaria.controls.payment' | transloco }}</h3>
+    <p>{{ 'matrix.studies.padaria.controls.paymentWarning' | transloco }}</p>
+    <label class="study-checkbox"
+      ><input
+        type="checkbox"
+        #keyEnabled
+        [checked]="idempotent()"
+        (change)="idempotent.set(keyEnabled.checked)"
+      />
+      {{ 'matrix.studies.padaria.controls.idempotent' | transloco }}</label
+    >
+    <div class="study-field">
+      <label for="bakery-key">{{ 'matrix.studies.padaria.controls.key' | transloco }}</label>
+      <input
+        id="bakery-key"
+        #keyInput
+        [value]="key()"
+        maxlength="80"
+        [disabled]="!idempotent()"
+        (input)="key.set(keyInput.value)"
+      />
+    </div>
+    <div class="study-controls">
+      <button type="button" class="study-button" [disabled]="pending()" (click)="pay()">
+        {{ 'matrix.studies.padaria.controls.pay' | transloco }}
+      </button>
+      <button type="button" class="study-button" [disabled]="!repeatable()" (click)="repeat()">
+        {{ 'matrix.studies.padaria.controls.repeat' | transloco }}
+      </button>
+    </div>
+    <p>
+      {{
+        'matrix.studies.padaria.controls.paymentCount'
+          | transloco: { count: history.state().payments.length }
+      }}
+    </p>
+    <h3>{{ 'matrix.studies.padaria.controls.transport' | transloco }}</h3>
+    <div class="study-controls">
+      @for (mode of failures; track mode) {
+        <button
+          type="button"
+          class="study-button"
+          [disabled]="pending()"
+          [attr.aria-pressed]="failure() === mode"
+          (click)="failure.set(mode)"
+        >
+          {{ 'matrix.studies.padaria.failures.' + mode | transloco }}
+        </button>
+      }
+      <button type="button" class="study-button" [disabled]="!pending()" (click)="complete()">
+        {{ 'matrix.studies.padaria.controls.complete' | transloco }}
+      </button>
+    </div>
+    <p>
+      {{ 'matrix.studies.padaria.controls.selectedFailure' | transloco }}
+      {{ 'matrix.studies.padaria.failures.' + failure() | transloco }}
+    </p>
+    <p class="study-result" aria-live="polite">
+      {{ 'matrix.studies.padaria.phases.' + history.state().phase | transloco }}
+    </p>
+    <div class="study-state-comparison">
+      <div>
+        <h3>{{ 'matrix.studies.padaria.controls.request' | transloco }}</h3>
+        <pre
+          tabindex="0"
+          [attr.aria-label]="'matrix.studies.padaria.controls.request' | transloco"
+        ><code>{{ history.state().request | json }}</code></pre>
+      </div>
+      <div>
+        <h3>{{ 'matrix.studies.padaria.controls.response' | transloco }}</h3>
+        <pre
+          tabindex="0"
+          [attr.aria-label]="'matrix.studies.padaria.controls.response' | transloco"
+        ><code>{{ history.state().response | json }}</code></pre>
+      </div>
+    </div>
+    <div class="study-controls">
+      <button type="button" class="study-button" (click)="restart()">
+        {{ 'matrix.studies.common.restart' | transloco }}
+      </button>
+      <button type="button" class="study-button" (click)="restart(true)">
+        {{ 'matrix.studies.padaria.controls.unavailable' | transloco }}
+      </button>
+    </div>
+    <app-study-step-viewer [history]="history" />
+  </div>
+</app-matrix-study-frame>

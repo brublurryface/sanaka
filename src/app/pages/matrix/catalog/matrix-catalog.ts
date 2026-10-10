@@ -1,11 +1,7 @@
 import { Component } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-
-interface UpcomingExperiment {
-  readonly number: string;
-  readonly translationKey: string;
-}
+import { MATRIX_EXPERIMENTS } from '../matrix-experiments';
 
 @Component({
   selector: 'app-matrix-catalog',
@@ -14,9 +10,7 @@ interface UpcomingExperiment {
   styleUrl: './matrix-catalog.scss',
 })
 export class MatrixCatalog {
-  readonly upcomingExperiments: readonly UpcomingExperiment[] = [
-    { number: '03', translationKey: 'matrix.catalog.upcoming.signals' },
-    { number: '04', translationKey: 'matrix.catalog.upcoming.observables' },
-    { number: '05', translationKey: 'matrix.catalog.upcoming.lifecycle' },
-  ];
+  // filter() cria listas derivadas do mesmo catálogo. Não mantém configurações duplicadas.
+  readonly availableExperiments = MATRIX_EXPERIMENTS.filter((item) => item.status === 'available');
+  readonly upcomingExperiments = MATRIX_EXPERIMENTS.filter((item) => item.status === 'planned');
 }
