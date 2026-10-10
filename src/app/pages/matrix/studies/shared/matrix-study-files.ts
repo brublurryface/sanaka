@@ -1,11 +1,12 @@
 /**
  * Endereços dos arquivos reais. O caminho do algoritmo é informado uma única vez.
- * Quando a branch for publicada com autorização, defina SOURCE_REF para habilitar links.
- * Antes disso, mostramos caminhos honestos, não URLs para arquivos inexistentes no GitHub.
+ * Os links apontam ao commit que contém o código desta entrega, em vez de depender
+ * do nome de uma branch. Assim, continuam úteis quando a branch de trabalho for removida.
  */
 import { MatrixStudyId } from './matrix-study-definition';
 
-export const MATRIX_STUDY_SOURCE_REF: string | undefined = undefined;
+export const MATRIX_STUDY_SOURCE_REF: string | undefined =
+  'edf1ceb0b9a92e9b0f024620d0f98e75f991b6ff';
 
 export interface StudyFile {
   readonly kind: string;
