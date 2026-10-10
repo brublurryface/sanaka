@@ -15,6 +15,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Interactive laboratory',
             title: { line1: 'Matrix', line2: 'on-line' },
             intro: 'Choose an experiment.',
+            imageAlt: 'Māyā in the Matrix laboratory.',
           },
           list: { eyebrow: 'Open circuits', title: 'Experiments', intro: 'Choose one.' },
           available: {
@@ -67,8 +68,12 @@ describe('MatrixCatalog', () => {
     fixture.detectChanges();
 
     const title = fixture.nativeElement.querySelector('#matrix-catalog-title') as HTMLElement;
+    const hero = fixture.nativeElement.querySelector('.catalog-hero') as HTMLElement;
+    const image = hero.querySelector('.sanaka-atmosphere-hero__image') as HTMLImageElement;
 
     expect(title.textContent?.replace(/\s+/g, ' ').trim()).toBe('Matrix on-line');
+    expect(hero.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(image.getAttribute('src')).toBe('/images/matrix/matrix-atmosphere-desktop.webp');
   });
 
   it('should link each available experiment to its own route', () => {

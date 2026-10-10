@@ -20,6 +20,14 @@ export interface PostNavigation {
   readonly title: string;
 }
 
+/** Identidade e artes do óbolo associado a uma personagem do Sanakaverse. */
+export interface CharacterObolo {
+  readonly characterSlug: string;
+  readonly characterName: string;
+  readonly frontImageUrl: string;
+  readonly backImageUrl?: string;
+}
+
 export interface PostDetail extends Post {
   readonly contentHtml: string;
   readonly categories: readonly PostTaxonomy[];
@@ -28,6 +36,7 @@ export interface PostDetail extends Post {
   readonly tags: readonly PostTaxonomy[];
   readonly exploreTags: readonly PostTaxonomy[];
   readonly readingMinutes: number;
+  readonly obolo?: CharacterObolo;
   readonly previous?: PostNavigation;
   readonly next?: PostNavigation;
 }

@@ -1,0 +1,265 @@
+:host {
+  display: contents;
+}
+
+.obolo-dialog {
+  width: min(31rem, calc(100% - 2rem));
+  max-height: min(46rem, calc(100dvh - 2rem));
+  margin: auto;
+  padding: 0;
+  overflow: auto;
+
+  border: 1px solid rgba(237, 201, 120, 0.5);
+  background: #10151d;
+  box-shadow:
+    0 1.75rem 5rem rgba(0, 0, 0, 0.72),
+    0 0 2.4rem rgba(211, 166, 79, 0.1);
+
+  color: var(--sanaka-ivory);
+}
+
+.obolo-dialog::backdrop {
+  background: rgba(4, 6, 9, 0.82);
+  backdrop-filter: blur(0.22rem);
+}
+
+.obolo-dialog__surface {
+  position: relative;
+  isolation: isolate;
+
+  display: grid;
+  justify-items: center;
+
+  padding: clamp(2rem, 6vw, 3.25rem);
+
+  background:
+    radial-gradient(circle at 50% 34%, rgba(211, 166, 79, 0.12), transparent 13rem),
+    linear-gradient(145deg, rgba(90, 52, 127, 0.08), transparent 62%);
+}
+
+.obolo-dialog__surface::before {
+  position: absolute;
+  inset: 0.7rem;
+  z-index: -1;
+
+  border: 1px solid rgba(237, 201, 120, 0.12);
+
+  content: '';
+  pointer-events: none;
+}
+
+.obolo-dialog__close {
+  position: absolute;
+  top: 1rem;
+  right: 1rem;
+
+  width: 2.25rem;
+  height: 2.25rem;
+  display: grid;
+  place-items: center;
+
+  padding: 0;
+
+  border: 0;
+  background: transparent;
+
+  color: var(--sanaka-ivory-muted);
+
+  font-family: var(--sanaka-font-body);
+  font-size: 1.4rem;
+
+  cursor: pointer;
+}
+
+.obolo-dialog__close:hover,
+.obolo-dialog__close:focus-visible {
+  color: var(--sanaka-gold-soft);
+}
+
+.obolo-dialog__close:focus-visible,
+.obolo-dialog__primary:focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 0.25rem;
+}
+
+.obolo-dialog__header {
+  text-align: center;
+}
+
+.obolo-dialog__header p {
+  margin: 0;
+
+  color: var(--sanaka-gold-soft);
+
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 700;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+}
+
+.obolo-dialog__header h2 {
+  margin: 0.5rem 0 0;
+
+  color: var(--sanaka-ivory);
+
+  font-family: var(--sanaka-font-display);
+  font-size: clamp(2.2rem, 8vw, 3.3rem);
+  font-weight: 500;
+  line-height: 1;
+}
+
+.obolo-dialog__coin {
+  width: clamp(9rem, 36vw, 12rem);
+  aspect-ratio: 1;
+
+  margin-top: 1.7rem;
+
+  perspective: 60rem;
+  filter: drop-shadow(0 0 1rem rgba(211, 166, 79, 0.2));
+}
+
+.obolo-dialog__coin-inner {
+  position: relative;
+
+  width: 100%;
+  height: 100%;
+
+  transition: transform 720ms cubic-bezier(0.2, 0.72, 0.2, 1);
+  transform-style: preserve-3d;
+}
+
+.obolo-dialog__coin img {
+  position: absolute;
+  inset: 0;
+
+  width: 100%;
+  height: 100%;
+
+  object-fit: contain;
+  backface-visibility: hidden;
+}
+
+.obolo-dialog__coin-back {
+  transform: rotateY(180deg);
+}
+
+.obolo-dialog__coin--revealed:not(.obolo-dialog__coin--single) .obolo-dialog__coin-inner {
+  transform: rotateY(180deg);
+}
+
+.obolo-dialog__coin--revealed.obolo-dialog__coin--single {
+  animation: obolo-offered 720ms ease-out;
+}
+
+.obolo-dialog__interaction {
+  width: 100%;
+  display: grid;
+  justify-items: center;
+
+  margin-top: 1.6rem;
+
+  text-align: center;
+}
+
+.obolo-dialog__total {
+  display: inline-flex;
+  align-items: baseline;
+  gap: 0.45rem;
+
+  margin: 0;
+
+  color: var(--sanaka-ivory-muted);
+
+  font-size: 0.9rem;
+}
+
+.obolo-dialog__total strong {
+  color: var(--sanaka-ivory);
+
+  font-family: var(--sanaka-font-display);
+  font-size: 1.8rem;
+  font-weight: 500;
+}
+
+.obolo-dialog__status {
+  max-width: 28rem;
+  min-height: 3.2rem;
+  margin: 0.8rem 0 0;
+
+  color: var(--sanaka-ivory-muted);
+
+  font-size: 0.95rem;
+  line-height: 1.7;
+}
+
+.obolo-dialog__primary {
+  margin-top: 1rem;
+  padding: 0.72rem 1.1rem;
+
+  border: 1px solid rgba(237, 201, 120, 0.55);
+  background: transparent;
+
+  color: var(--sanaka-gold-soft);
+
+  font: 700 var(--sanaka-type-editorial-label-size) / 1.5 var(--sanaka-font-body);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+
+  cursor: pointer;
+}
+
+.obolo-dialog__primary:hover:not(:disabled),
+.obolo-dialog__primary:focus-visible:not(:disabled) {
+  border-color: var(--sanaka-gold-soft);
+  background: rgba(237, 201, 120, 0.08);
+
+  color: var(--sanaka-ivory);
+}
+
+.obolo-dialog__primary:disabled {
+  opacity: 0.62;
+
+  cursor: default;
+}
+
+@keyframes obolo-offered {
+  0% {
+    transform: scale(1) rotate(0deg);
+  }
+
+  52% {
+    transform: scale(1.08) rotate(7deg);
+    filter: drop-shadow(0 0 1.25rem rgba(237, 201, 120, 0.48));
+  }
+
+  100% {
+    transform: scale(1) rotate(0deg);
+  }
+}
+
+@media (max-width: 700px) {
+  .obolo-dialog {
+    width: 100%;
+    max-width: none;
+    max-height: min(42rem, calc(100dvh - 1.5rem));
+    margin: auto 0 0;
+
+    border-right: 0;
+    border-bottom: 0;
+    border-left: 0;
+  }
+
+  .obolo-dialog__surface {
+    padding: 2.4rem 1.35rem 2rem;
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .obolo-dialog__coin-inner {
+    transition-duration: 1ms;
+  }
+
+  .obolo-dialog__coin--revealed.obolo-dialog__coin--single {
+    animation: none;
+  }
+}

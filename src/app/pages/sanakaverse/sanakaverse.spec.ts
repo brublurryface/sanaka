@@ -46,6 +46,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Sanakaverse',
           title: { line1: 'Biblioteca', line2: 'entre mundos' },
           intro: 'Livros flutuam onde histórias encontram passagem.',
+          imageAlt: 'Mors writes while Māyā watches.',
         },
         collection: {
           eyebrow: 'Volumes em órbita',
@@ -105,7 +106,12 @@ describe('Sanakaverse', () => {
     const heroClasses = compiled.querySelector('.sanakaverse-hero')?.classList;
 
     expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
-    expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
+    expect(heroClasses?.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(
+      compiled
+        .querySelector<HTMLImageElement>('.sanakaverse-hero .sanaka-atmosphere-hero__image')
+        ?.getAttribute('src'),
+    ).toBe('/images/sanakaverse/sanakaverse-atmosphere-desktop.webp');
     expect(compiled.querySelector('.sanakaverse-hero__content')).not.toBeNull();
     expect(compiled.querySelectorAll('.sanakaverse-hero h1 span')).toHaveLength(2);
     expect(renderedBooks).toHaveLength(4);

@@ -52,7 +52,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
     expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
@@ -100,8 +100,9 @@ describe('WordPressPostsService', () => {
     );
 
     categoriesRequest.flush([
-      { id: 41, name: 'Bruna' },
-      { id: 45, name: 'Pensamentos &amp; Ensaios' },
+      { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
+      { id: 45, name: 'Pensamentos &amp; Ensaios', slug: 'pensamentos', parent: 41 },
+      { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
     ]);
 
     expect(result).toEqual({
@@ -137,7 +138,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.has('search')).toBe(false);
     expect(postsRequest.request.params.has('categories')).toBe(false);
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
 
     postsRequest.flush(
@@ -160,7 +161,9 @@ describe('WordPressPostsService', () => {
       },
     );
 
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
 
     expect(result).toEqual({
@@ -183,6 +186,56 @@ describe('WordPressPostsService', () => {
     });
   });
 
+  it('should not render Sanakaverse volumes if WordPress recreates the category with another ID', () => {
+    let result: PostsPage | undefined;
+
+    service.getPosts().subscribe((postsPage) => {
+      result = postsPage;
+    });
+
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
+
+    postsRequest.flush(
+      [
+        {
+          id: 1,
+          slug: 'publicacao-sanaka',
+          date: '2026-10-09T12:00:00',
+          title: { rendered: 'Publicação Sanaka' },
+          excerpt: { rendered: '<p>Permanece no arquivo.</p>' },
+          featured_media: 0,
+          categories: [45],
+        },
+        {
+          id: 2,
+          slug: 'volume-sanakaverse',
+          date: '2026-10-09T13:00:00',
+          title: { rendered: 'Volume do Sanakaverse' },
+          excerpt: { rendered: '<p>Deve ficar somente na biblioteca.</p>' },
+          featured_media: 0,
+          categories: [108],
+        },
+      ],
+      {
+        headers: {
+          'X-WP-Total': '2',
+          'X-WP-TotalPages': '1',
+        },
+      },
+    );
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([
+        { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 },
+        { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+      ]);
+
+    expect(result?.posts.map((post) => post.slug)).toEqual(['publicacao-sanaka']);
+  });
+
   it('should limit perPage to the WordPress maximum of 100', () => {
     service.getPosts({ perPage: 500 }).subscribe();
 
@@ -197,7 +250,9 @@ describe('WordPressPostsService', () => {
       },
     });
 
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
   });
 
@@ -206,7 +261,10 @@ describe('WordPressPostsService', () => {
 
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
-      .flush([{ id: 46, name: 'De Preto', slug: 'de-preto', parent: 41 }]);
+      .flush([
+        { id: 46, name: 'De Preto', slug: 'de-preto', parent: 41 },
+        { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+      ]);
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/tags`)
       .flush([{ id: 12, name: 'Despertar', slug: 'despertar' }]);
@@ -214,7 +272,7 @@ describe('WordPressPostsService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('46');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
     expect(postsRequest.request.params.get('tags')).toBe('12');
 
     postsRequest.flush([], {
@@ -240,6 +298,8 @@ describe('WordPressPostsService', () => {
     expect(postRequest.request.params.get('categories_exclude')).toBe('43');
     expect(postRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postRequest.request.params.get('_fields')).toContain('_embedded');
+    expect(postRequest.request.params.get('_fields')).toContain('sanaka_character_slug');
+    expect(postRequest.request.params.get('_fields')).toContain('sanaka_obolo_front');
 
     postRequest.flush([
       {
@@ -252,6 +312,10 @@ describe('WordPressPostsService', () => {
         featured_media: 90,
         categories: [45],
         tags: [8, 9],
+        sanaka_character_slug: 'nandini',
+        sanaka_character_name: 'Nandinī',
+        sanaka_obolo_front: 'https://example.com/nandini-obolo-front.webp',
+        sanaka_obolo_back: 'https://example.com/nandini-obolo-back.webp',
         _embedded: {
           'wp:featuredmedia': [
             {
@@ -271,6 +335,7 @@ describe('WordPressPostsService', () => {
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
         { id: 43, name: 'Romance', slug: 'romance', parent: 41 },
         { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
+        { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
       ]);
     const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
     expect(tagsRequest.request.params.get('per_page')).toBe('100');
@@ -294,7 +359,7 @@ describe('WordPressPostsService', () => {
     expect(adjacentRequests).toHaveLength(2);
     expect(
       adjacentRequests.every(
-        (request) => request.request.params.get('categories_exclude') === '43',
+        (request) => request.request.params.get('categories_exclude') === '43,97',
       ),
     ).toBe(true);
 
@@ -321,9 +386,61 @@ describe('WordPressPostsService', () => {
       relatedCategories: [],
       exploreCategories: [{ id: 62, name: 'Sobre', slug: 'sobre' }],
       exploreTags: [{ id: 10, name: 'Consciência', slug: 'consciencia' }],
+      obolo: {
+        characterSlug: 'nandini',
+        characterName: 'Nandinī',
+        frontImageUrl: 'https://example.com/nandini-obolo-front.webp',
+        backImageUrl: 'https://example.com/nandini-obolo-back.webp',
+      },
       previous: { slug: 'anterior', title: 'Anterior' },
       next: { slug: 'proxima', title: 'Próxima' },
     });
+  });
+
+  it('should keep Sanakaverse volumes readable by slug and navigate only inside the collection', () => {
+    service.getPostBySlug('mors').subscribe();
+
+    const postRequest = httpTesting.expectOne(
+      (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'mors',
+    );
+
+    expect(postRequest.request.params.get('categories_exclude')).toBe('43');
+
+    postRequest.flush([
+      {
+        id: 91,
+        slug: 'mors',
+        date: '2026-09-30T12:00:00',
+        title: { rendered: 'MORS' },
+        excerpt: { rendered: '<p>Um volume do Sanakaverse.</p>' },
+        content: { rendered: '<p>Conteúdo do volume.</p>' },
+        featured_media: 0,
+        categories: [97],
+        tags: [],
+      },
+    ]);
+
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+
+    const adjacentRequests = httpTesting.match(
+      (request) =>
+        request.url === `${apiUrl}/posts` &&
+        (request.params.has('before') || request.params.has('after')),
+    );
+
+    expect(adjacentRequests).toHaveLength(2);
+    expect(
+      adjacentRequests.every(
+        (request) =>
+          request.request.params.get('categories') === '97' &&
+          request.request.params.get('categories_exclude') === '43',
+      ),
+    ).toBe(true);
+
+    adjacentRequests.forEach((request) => request.flush([]));
   });
 
   it('should use the Sanaka fallback image when a complete post has no featured media', () => {

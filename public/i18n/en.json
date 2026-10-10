@@ -9,6 +9,7 @@
       "matrixRestApi": "REST API portal",
       "maya": "Māyā",
       "about": "About",
+      "contact": "Contact",
       "sanakaverse": "Sanakaverse library",
       "notFound": "Path not found"
     },
@@ -21,6 +22,7 @@
       "matrixRestApi": "Open a real request, follow its journey through the network, and watch an image of the universe emerge in the portal.",
       "maya": "Meet Sanaka's companion and cross knowledge through conversation as well.",
       "about": "Fragments cross death, code, spirituality, and a name that has not finished revealing itself.",
+      "contact": "Find Sanaka across social networks or send a message through the contact portal.",
       "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe.",
       "notFound": "The requested route does not exist, moved elsewhere, or has not yet taken form in Sanaka."
     },
@@ -37,7 +39,8 @@
     },
     "footer": {
       "navigation": "Footer navigation",
-      "about": "About & contact",
+      "about": "About",
+      "contact": "Contact",
       "signature": "Between code, symbols, and presence.",
       "sanakaverse": "Sanakaverse"
     }
@@ -65,7 +68,8 @@
         "line1": "Who transcends",
         "line2": "Sanaka?"
       },
-      "intro": "Bruna Lourenço da Silva warns: these are areas that change and transmute. Be attentive, because what is here may change without prior notice! Fragments move through death, code, spirituality, and a name that has not finished revealing itself."
+      "intro": "Bruna Lourenço da Silva warns: these are areas that change and transmute. Be attentive, because what is here may change without prior notice! Fragments move through death, code, spirituality, and a name that has not finished revealing itself.",
+      "imageAlt": "Māyā looks over her shoulder as shadow dragons stretch across the floor before a luminous passage."
     },
     "puzzle": {
       "eyebrow": "Identity in fragments",
@@ -87,19 +91,67 @@
       "eyebrow": "Selected fragment",
       "read": "Read the whole fragment"
     },
-    "destinationsLabel": "About and Sanakaverse",
+    "destinationsLabel": "Contact and Sanakaverse",
     "contact": {
       "eyebrow": "Presence in the now",
-      "title": "Where to find me",
-      "intro": "This space will gather my networks and ways to connect. For now, the conversation begins by email.",
-      "emailLabel": "Write by email",
-      "email": "sanaka@sanaka.com.br"
+      "title": "Contact",
+      "intro": "Social networks and a direct passage for conversations that need another space.",
+      "status": "Open the contact portal"
     },
     "universe": {
       "eyebrow": "Creative presence",
       "title": "Sanakaverse",
       "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe.",
       "status": "Travel to Sanakaverse"
+    }
+  },
+  "contact": {
+    "hero": {
+      "eyebrow": "Contact",
+      "title": {
+        "line1": "Among voices,",
+        "line2": "presences and paths"
+      },
+      "intro": "Sanaka also opens itself to dialogue. Choose a presence on social media or send a message through this portal.",
+      "imageAlt": "Māyā and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
+    },
+    "contentLabel": "Social networks and contact form",
+    "social": {
+      "eyebrow": "Other portals",
+      "title": "Where to find me",
+      "intro": "Each network reveals a different face of the same path.",
+      "instagram": {
+        "presence": "Sanaka without limits",
+        "description": "Images, characters, symbols, and fragments beyond formal boundaries."
+      },
+      "linkedin": {
+        "presence": "Formal Sanaka",
+        "description": "My professional journey, experience, and presence in the working world."
+      }
+    },
+    "email": {
+      "label": "Direct email",
+      "address": "sanaka@sanaka.com.br"
+    },
+    "form": {
+      "eyebrow": "Direct passage",
+      "title": "Write to Sanaka",
+      "intro": "The message arrives by email and will be answered through the address you provide.",
+      "name": "Name",
+      "email": "Email",
+      "subject": "Subject — optional",
+      "message": "Message",
+      "submit": "Send message",
+      "sending": "Sending",
+      "privacy": "Your name, email, and message will only be used to reply to this contact.",
+      "success": "The message crossed the portal.",
+      "rateLimited": "Too many messages arrived in a short time. Wait a few minutes before trying again.",
+      "error": "The portal could not deliver the message right now. You can still write to sanaka@sanaka.com.br.",
+      "errors": {
+        "name": "Enter your name.",
+        "email": "Enter a valid email address.",
+        "message": "Write the message you want to send."
+      }
     }
   },
   "sanakaverse": {
@@ -109,7 +161,8 @@
         "line1": "A library",
         "line2": "between worlds"
       },
-      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe."
+      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe.",
+      "imageAlt": "Mors writes while Māyā watches and books cross a library in motion."
     },
     "collection": {
       "eyebrow": "Volumes in orbit",
@@ -247,7 +300,9 @@
     "header": {
       "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
-      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change."
+      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change.",
+      "imageAlt": "Māyā, Nandinī, and Bhu watch magical books cross a celestial library.",
+      "sanakaverseLink": "Travel to Sanakaverse"
     },
     "search": {
       "label": "Search publications",
@@ -289,6 +344,28 @@
       "exploreCategories": "Explore categories",
       "exploreTags": "Explore tags",
       "readingTime": "{{ minutes }} min read",
+      "obolo": {
+        "moduleTitle": "Obol for {{ name }}",
+        "compactAction": "Obol for {{ name }}",
+        "offerAction": "Offer an obol",
+        "confirmOffer": "Offer one obol",
+        "offered": "Obol offered",
+        "receivedOne": "{{ total }} received",
+        "receivedMany": "{{ total }} received",
+        "receivedLabelOne": "obol received",
+        "receivedLabelMany": "obols received",
+        "loading": "Gathering obols...",
+        "unavailable": "Counter temporarily unavailable",
+        "dialogEyebrow": "Offering to the character",
+        "invitation": "This gesture belongs to {{ name }}, not to the publication.",
+        "submitting": "Depositing the obol...",
+        "success": "Your obol was received by {{ name }}.",
+        "loadError": "The obol count could not be retrieved right now.",
+        "offerError": "The obol could not be deposited. You can try again.",
+        "close": "Close obol offering",
+        "frontImageAlt": "Front of {{ name }}'s obol",
+        "backImageAlt": "Back of {{ name }}'s obol"
+      },
       "adjacent": "Nearby publications",
       "previous": "Previous publication",
       "next": "Next publication"
@@ -302,7 +379,8 @@
           "line1": "Matrix",
           "line2": "on-line"
         },
-        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening."
+        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening.",
+        "imageAlt": "Māyā watches code screens while small luminous wolves cross the laboratory."
       },
       "list": {
         "eyebrow": "Open circuits",
@@ -337,7 +415,8 @@
         "line2": "in conversation"
       },
       "intro": "Send a value across the boundary between parent and child. Then follow the reply returning as an event and see the code involved in each passage.",
-      "action": "Start the circuit"
+      "action": "Start the circuit",
+      "imageAlt": "Māyā, Kalika, and Bhu study a book among lanterns and luminous Angular component diagrams."
     },
     "exhibit": {
       "eyebrow": "Interactive circuit",
@@ -449,7 +528,8 @@
           "line2": "to the universe"
         },
         "intro": "Choose a subject and open a passage to a real collection. The interface turns the waiting period, the response, and even the failure of a REST request into something you can follow.",
-        "action": "Cross the request"
+        "action": "Cross the request",
+        "imageAlt": "Māyā contemplates her maned-wolf form as they float among luminous orbits and a cosmic cube."
       },
       "exhibit": {
         "eyebrow": "REST laboratory",

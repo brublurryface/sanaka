@@ -27,7 +27,8 @@ class MockTranslocoLoader implements TranslocoLoader {
           },
           footer: {
             navigation: 'Navegação do rodapé',
-            about: 'Sobre & contato',
+            about: 'Sobre',
+            contact: 'Contato',
             sanakaverse: 'Sanakaverse',
             signature: 'Entre código, símbolos e presença.',
           },
@@ -49,7 +50,8 @@ class MockTranslocoLoader implements TranslocoLoader {
           },
           footer: {
             navigation: 'Footer navigation',
-            about: 'About & contact',
+            about: 'About',
+            contact: 'Contact',
             sanakaverse: 'Sanakaverse',
             signature: 'Between code, symbols, and presence.',
           },
@@ -139,7 +141,7 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
   });
 
-  it('should link the footer to About and Sanakaverse', () => {
+  it('should link the footer to About, Contact and Sanakaverse', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
@@ -154,10 +156,12 @@ describe('App', () => {
       futureDestination?.querySelectorAll<HTMLAnchorElement>('a') ?? [],
     );
 
-    expect(futureDestination?.textContent).toContain('Sobre & contato');
+    expect(futureDestination?.textContent).toContain('Sobre');
+    expect(futureDestination?.textContent).toContain('Contato');
     expect(futureDestination?.textContent).toContain('Sanakaverse');
     expect(destinationLinks.map((link) => link.getAttribute('href'))).toEqual([
       '/sobre',
+      '/contato',
       '/sanakaverse',
     ]);
   });

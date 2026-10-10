@@ -33,6 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             line2: 'Sanaka?',
           },
           intro: 'Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam.',
+          imageAlt: 'Māyā observa dragões de sombra diante de uma passagem luminosa.',
         },
         puzzle: {
           eyebrow: 'Identidade em fragmentos',
@@ -58,10 +59,9 @@ class MockTranslocoLoader implements TranslocoLoader {
         destinationsLabel: 'Sobre e Sanakaverse',
         contact: {
           eyebrow: 'Presença do agora',
-          title: 'Onde me encontrar',
-          intro: 'A conversa começa pelo e-mail.',
-          emailLabel: 'Escrever por e-mail',
-          email: 'sanaka@sanaka.com.br',
+          title: 'Contato',
+          intro: 'Redes e uma passagem direta.',
+          status: 'Abrir o portal de contato',
         },
         universe: {
           eyebrow: 'Presença criativa',
@@ -107,10 +107,17 @@ describe('About', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
     const heroClasses = compiled.querySelector('.about-hero')?.classList;
+    const heroImage = compiled.querySelector<HTMLImageElement>('.about-hero__image');
     const puzzleImage = compiled.querySelector('.about-puzzle__art image');
 
     expect(heroClasses?.contains('sanaka-atmosphere-hero')).toBe(true);
-    expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(true);
+    expect(heroClasses?.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(heroClasses?.contains('sanaka-atmosphere-hero--compact')).toBe(false);
+    expect(heroImage?.getAttribute('src')).toBe('/images/about/about-atmosphere-desktop.webp');
+    expect(heroImage?.getAttribute('width')).toBe('1942');
+    expect(heroImage?.getAttribute('height')).toBe('809');
+    expect(heroImage?.getAttribute('alt')).toContain('dragões de sombra');
+    expect(compiled.querySelector('.about-hero__veil')).not.toBeNull();
     expect(compiled.querySelectorAll('.about-hero h1 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-section-heading h2 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
@@ -134,7 +141,7 @@ describe('About', () => {
       '/sobre#about-story',
     );
     expect(compiled.querySelector('.about-destination--contact a')?.getAttribute('href')).toBe(
-      'mailto:sanaka@sanaka.com.br',
+      '/contato',
     );
     const sanakaverseLink = compiled.querySelector<HTMLAnchorElement>(
       '.about-destination--universe a',

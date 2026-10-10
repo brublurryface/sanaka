@@ -16,6 +16,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           title: { line1: 'Matrix', line2: 'Online' },
           intro: 'Watch Angular respond.',
           action: 'Enter the experiment',
+          imageAlt: 'Māyā, Kalika, and Bhu in conversation.',
         },
         exhibit: {
           eyebrow: 'Experiment 01',
@@ -120,6 +121,20 @@ describe('Matrix', () => {
 
   it('should create the Matrix page', () => {
     expect(TestBed.createComponent(Matrix).componentInstance).toBeTruthy();
+  });
+
+  it('should present the components atmosphere as a cinematic image', () => {
+    const fixture = TestBed.createComponent(Matrix);
+    fixture.detectChanges();
+
+    const hero = fixture.nativeElement.querySelector('.matrix-hero') as HTMLElement;
+    const image = hero.querySelector('.sanaka-atmosphere-hero__image') as HTMLImageElement;
+
+    expect(hero.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
+    expect(image.getAttribute('src')).toBe(
+      '/images/matrix/components/components-atmosphere-desktop.webp',
+    );
+    expect(image.getAttribute('width')).toBe('1942');
   });
 
   it('should keep the experiment anchor inside the components route', () => {

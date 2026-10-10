@@ -1,12 +1,23 @@
 <main>
   <section
-    class="catalog-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--compact"
+    class="catalog-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
     aria-labelledby="matrix-catalog-title"
   >
+    <img
+      class="sanaka-atmosphere-hero__image"
+      src="/images/matrix/matrix-atmosphere-desktop.webp"
+      width="2400"
+      height="1000"
+      fetchpriority="high"
+      decoding="async"
+      [alt]="'matrix.catalog.header.imageAlt' | transloco"
+    />
+    <div class="sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+
     <div class="catalog-glow" aria-hidden="true"></div>
 
     <div class="catalog-shell catalog-hero__content sanaka-atmosphere-shell">
-      <p class="eyebrow sanaka-editorial-label">
+      <p class="eyebrow sanaka-editorial-label sanaka-atmosphere-copy-shadow">
         {{ 'matrix.catalog.header.eyebrow' | transloco }}
       </p>
 
@@ -19,7 +30,9 @@
         </span>
       </h1>
 
-      <p class="catalog-hero__intro">{{ 'matrix.catalog.header.intro' | transloco }}</p>
+      <p class="catalog-hero__intro sanaka-atmosphere-copy-shadow">
+        {{ 'matrix.catalog.header.intro' | transloco }}
+      </p>
     </div>
   </section>
 

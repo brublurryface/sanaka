@@ -1,12 +1,26 @@
 <main>
-  <section class="rest-hero sanaka-atmosphere-hero" aria-labelledby="rest-title">
+  <section
+    class="rest-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
+    aria-labelledby="rest-title"
+  >
+    <img
+      class="sanaka-atmosphere-hero__image"
+      src="/images/matrix/rest-api/rest-api-atmosphere-desktop.webp"
+      width="1983"
+      height="793"
+      fetchpriority="high"
+      decoding="async"
+      [alt]="'matrix.rest.header.imageAlt' | transloco"
+    />
+    <div class="sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+
     <div class="rest-shell rest-hero__content sanaka-atmosphere-shell">
       <a class="rest-hero__back" routerLink="/matrix">
         <span aria-hidden="true">←</span>
         {{ 'common.matrix.backToCatalog' | transloco }}
       </a>
 
-      <p class="eyebrow sanaka-editorial-label">
+      <p class="eyebrow sanaka-editorial-label sanaka-atmosphere-copy-shadow">
         {{ 'matrix.rest.header.eyebrow' | transloco }}
       </p>
 
@@ -15,7 +29,9 @@
         {{ 'matrix.rest.header.title.line2' | transloco }}
       </h1>
 
-      <p class="rest-hero__intro">{{ 'matrix.rest.header.intro' | transloco }}</p>
+      <p class="rest-hero__intro sanaka-atmosphere-copy-shadow">
+        {{ 'matrix.rest.header.intro' | transloco }}
+      </p>
 
       <a class="rest-hero__action" routerLink="/matrix/rest-api" fragment="rest-exhibit">
         {{ 'matrix.rest.header.action' | transloco }}

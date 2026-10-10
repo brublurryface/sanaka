@@ -1,7 +1,7 @@
 import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute } from '@angular/router';
+import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
@@ -9,7 +9,7 @@ import { PostCard } from './post-card/post-card';
 import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
-  imports: [ReactiveFormsModule, PostCard, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, PostCard, TranslocoPipe],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',

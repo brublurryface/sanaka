@@ -13,6 +13,9 @@ volume com a imagem destacada da publicação.
 Quando a publicação estiver pública, a aplicação a transforma automaticamente em um livro e o
 link interno abre `/posts/:slug` em uma nova aba.
 
+O volume não aparece no catálogo, nas buscas nem nos filtros de `/posts`. A rota direta permanece
+disponível para que a leitura seja aberta exclusivamente a partir do Sanakaverse.
+
 ## Campo da capa
 
 Nome técnico: `sanakaverse_cover`.
@@ -52,6 +55,8 @@ representado dentro da arte uma anatomia única.
 
 - Publicações da categoria Romance/WoD continuam excluídas mesmo que recebam outra categoria por
   engano.
+- Publicações da categoria Sanakaverse pertencem somente à coleção de livros e não ao catálogo
+  editorial de Posts.
 - A ausência da categoria `sanakaverse` representa uma biblioteca ainda vazia, não uma falha.
 - A ausência da capa representa um volume ainda não revelado, não autoriza usar a imagem destacada
   como substituta.

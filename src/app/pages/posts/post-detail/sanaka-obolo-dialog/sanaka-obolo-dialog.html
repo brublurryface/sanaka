@@ -1,0 +1,109 @@
+<dialog
+  #dialog
+  class="obolo-dialog"
+  aria-modal="true"
+  aria-labelledby="obolo-dialog-title"
+  aria-describedby="obolo-dialog-status"
+  (click)="closeFromBackdrop($event)"
+  (cancel)="restoreTrigger()"
+>
+  <div class="obolo-dialog__surface">
+    <button
+      class="obolo-dialog__close"
+      type="button"
+      [attr.aria-label]="'posts.detail.obolo.close' | transloco"
+      (click)="close()"
+    >
+      <span aria-hidden="true">×</span>
+    </button>
+
+    <header class="obolo-dialog__header">
+      <p>{{ 'posts.detail.obolo.dialogEyebrow' | transloco }}</p>
+      <h2 id="obolo-dialog-title">{{ character().characterName }}</h2>
+    </header>
+
+    <div
+      class="obolo-dialog__coin"
+      [class.obolo-dialog__coin--revealed]="status() === 'success'"
+      [class.obolo-dialog__coin--single]="!character().backImageUrl"
+    >
+      <div class="obolo-dialog__coin-inner">
+        <img
+          class="obolo-dialog__coin-front"
+          [src]="character().frontImageUrl"
+          [alt]="
+            'posts.detail.obolo.frontImageAlt' | transloco: { name: character().characterName }
+          "
+          [attr.aria-hidden]="status() === 'success' && character().backImageUrl ? 'true' : null"
+        />
+        @if (character().backImageUrl; as backImageUrl) {
+          <img
+            class="obolo-dialog__coin-back"
+            [src]="backImageUrl"
+            [alt]="
+              'posts.detail.obolo.backImageAlt' | transloco: { name: character().characterName }
+            "
+            [attr.aria-hidden]="status() === 'success' ? null : 'true'"
+          />
+        }
+      </div>
+    </div>
+
+    <div class="obolo-dialog__interaction">
+      @if (total() !== null) {
+        <p class="obolo-dialog__total">
+          <strong>{{ total() }}</strong>
+          @if (total() === 1) {
+            <span>{{ 'posts.detail.obolo.receivedLabelOne' | transloco }}</span>
+          } @else {
+            <span>{{ 'posts.detail.obolo.receivedLabelMany' | transloco }}</span>
+          }
+        </p>
+      }
+
+      <p id="obolo-dialog-status" class="obolo-dialog__status" aria-live="polite">
+        @switch (status()) {
+          @case ('loading') {
+            {{ 'posts.detail.obolo.loading' | transloco }}
+          }
+          @case ('ready') {
+            {{ 'posts.detail.obolo.invitation' | transloco: { name: character().characterName } }}
+          }
+          @case ('submitting') {
+            {{ 'posts.detail.obolo.submitting' | transloco }}
+          }
+          @case ('success') {
+            {{ 'posts.detail.obolo.success' | transloco: { name: character().characterName } }}
+          }
+          @case ('load-error') {
+            {{ 'posts.detail.obolo.loadError' | transloco }}
+          }
+          @case ('offer-error') {
+            {{ 'posts.detail.obolo.offerError' | transloco }}
+          }
+        }
+      </p>
+
+      @if (status() === 'load-error') {
+        <button class="obolo-dialog__primary" type="button" (click)="retryRequested.emit()">
+          {{ 'common.actions.retry' | transloco }}
+        </button>
+      } @else {
+        <button
+          class="obolo-dialog__primary"
+          type="button"
+          [disabled]="status() === 'loading' || status() === 'submitting' || status() === 'success'"
+          (click)="offerRequested.emit()"
+        >
+          @if (status() === 'submitting') {
+            {{ 'posts.detail.obolo.submitting' | transloco }}
+          } @else if (status() === 'success') {
+            {{ 'posts.detail.obolo.offered' | transloco }}
+          } @else {
+            {{ 'posts.detail.obolo.confirmOffer' | transloco }}
+          }
+        </button>
+      }
+    </div>
+  </div>
+</dialog>

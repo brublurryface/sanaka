@@ -36,6 +36,14 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/about/about').then((m) => m.About),
   },
   {
+    path: 'contato',
+    data: {
+      titleKey: 'app.pageTitles.contact',
+      descriptionKey: 'app.pageDescriptions.contact',
+    },
+    loadComponent: () => import('./pages/contact/contact').then((m) => m.Contact),
+  },
+  {
     path: 'sanakaverse',
     data: {
       titleKey: 'app.pageTitles.sanakaverse',

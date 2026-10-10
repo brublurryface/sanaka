@@ -6,7 +6,7 @@ import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
-import { Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
+import { CharacterObolo, Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
 
 export { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 
@@ -44,6 +44,10 @@ interface WordPressPost {
   readonly featured_media: number;
   readonly categories: readonly number[];
   readonly tags?: readonly number[];
+  readonly sanaka_character_slug?: string;
+  readonly sanaka_character_name?: string;
+  readonly sanaka_obolo_front?: string;
+  readonly sanaka_obolo_back?: string;
   readonly _embedded?: WordPressEmbeddedResources;
 }
 
@@ -155,7 +159,7 @@ export class WordPressPostsService {
       .set('_embed', 'wp:featuredmedia')
       .set(
         '_fields',
-        'id,slug,date,title,excerpt,content,featured_media,categories,tags,_links,_embedded',
+        'id,slug,date,title,excerpt,content,featured_media,categories,tags,sanaka_character_slug,sanaka_character_name,sanaka_obolo_front,sanaka_obolo_back,_links,_embedded',
       );
 
     return forkJoin({
@@ -175,8 +179,8 @@ export class WordPressPostsService {
         return concat(
           of(detail),
           forkJoin({
-            previous: this.getAdjacentPost(post, 'previous'),
-            next: this.getAdjacentPost(post, 'next'),
+            previous: this.getAdjacentPost(post, categories, 'previous'),
+            next: this.getAdjacentPost(post, categories, 'next'),
           }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
         );
       }),
@@ -220,7 +224,7 @@ export class WordPressPostsService {
     let params = new HttpParams()
       .set('page', String(query.page))
       .set('per_page', String(query.perPage))
-      .set('categories_exclude', this.excludedCategoryIds)
+      .set('categories_exclude', this.archiveExcludedCategoryIds)
       .set('_embed', 'wp:featuredmedia')
       .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories,_links,_embedded');
 
@@ -234,7 +238,7 @@ export class WordPressPostsService {
     query: NormalizedPostsQuery,
     categories: readonly WordPressCategory[],
   ): PostsPage {
-    const posts = response.body ?? [];
+    const posts = this.excludeArchiveOnlyPosts(response.body ?? [], categories);
     const fallbackTotal = (query.page - 1) * query.perPage + posts.length;
     const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
     const totalPages = this.readCountHeader(
@@ -294,7 +298,7 @@ export class WordPressPostsService {
               (category) =>
                 category.parent === rootCategory.id &&
                 !selectedCategoryIds.has(category.id) &&
-                !this.isExcludedCategory(category.id),
+                !this.isArchiveExcludedCategory(category),
             )
             .map((category) => this.toTaxonomy(category))
         : [],
@@ -303,7 +307,7 @@ export class WordPressPostsService {
           (category) =>
             category.parent === 0 &&
             category.id !== rootCategory?.id &&
-            !this.isExcludedCategory(category.id),
+            !this.isArchiveExcludedCategory(category),
         )
         .map((category) => this.toTaxonomy(category)),
       tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
@@ -312,6 +316,26 @@ export class WordPressPostsService {
         1,
         Math.ceil(plainContent.split(/\s+/).filter(Boolean).length / 200),
       ),
+      obolo: this.mapCharacterObolo(post),
+    };
+  }
+
+  /** Só expõe o óbolo quando o conjunto mínimo de metadados está completo no WordPress. */
+  private mapCharacterObolo(post: WordPressPost): CharacterObolo | undefined {
+    const characterSlug = post.sanaka_character_slug?.trim();
+    const characterName = post.sanaka_character_name?.trim();
+    const frontImageUrl = post.sanaka_obolo_front?.trim();
+    const backImageUrl = post.sanaka_obolo_back?.trim();
+
+    if (!characterSlug || !characterName || !frontImageUrl) {
+      return undefined;
+    }
+
+    return {
+      characterSlug,
+      characterName,
+      frontImageUrl,
+      backImageUrl: backImageUrl || undefined,
     };
   }
 
@@ -396,17 +420,29 @@ export class WordPressPostsService {
 
   private getAdjacentPost(
     post: WordPressPost,
+    categories: readonly WordPressCategory[],
     direction: 'previous' | 'next',
   ): Observable<PostNavigation | undefined> {
     const isPrevious = direction === 'previous';
-    const params = new HttpParams()
+    const sanakaverseCategory = this.findSanakaverseCategory(categories);
+    const isSanakaverseVolume = sanakaverseCategory
+      ? post.categories.includes(sanakaverseCategory.id)
+      : false;
+    let params = new HttpParams()
       .set(isPrevious ? 'before' : 'after', post.date)
       .set('per_page', '1')
       .set('orderby', 'date')
       .set('order', isPrevious ? 'desc' : 'asc')
       .set('exclude', String(post.id))
-      .set('categories_exclude', this.excludedCategoryIds)
+      .set(
+        'categories_exclude',
+        isSanakaverseVolume ? this.excludedCategoryIds : this.archiveExcludedCategoryIds,
+      )
       .set('_fields', 'slug,title');
+
+    if (isSanakaverseVolume && sanakaverseCategory) {
+      params = params.set('categories', String(sanakaverseCategory.id));
+    }
 
     return this.http
       .get<readonly Pick<WordPressPost, 'slug' | 'title'>[]>(`${this.apiUrl}/posts`, { params })
@@ -432,8 +468,43 @@ export class WordPressPostsService {
     return this.contentPolicy.excludedCategoryIds.join(',');
   }
 
-  private isExcludedCategory(categoryId: number): boolean {
-    return this.contentPolicy.excludedCategoryIds.includes(categoryId);
+  private get archiveExcludedCategoryIds(): string {
+    return [
+      ...this.contentPolicy.excludedCategoryIds,
+      this.contentPolicy.sanakaverseCategoryId,
+    ].join(',');
+  }
+
+  private findSanakaverseCategory(
+    categories: readonly WordPressCategory[],
+  ): WordPressCategory | undefined {
+    return categories.find(
+      (category) => category.slug === this.contentPolicy.sanakaverseCategorySlug,
+    );
+  }
+
+  private isArchiveExcludedCategory(category: WordPressCategory): boolean {
+    return (
+      this.contentPolicy.excludedCategoryIds.includes(category.id) ||
+      category.slug === this.contentPolicy.sanakaverseCategorySlug
+    );
+  }
+
+  /** Impede que uma divergência futura de ID exponha volumes no arquivo antes da política ser atualizada. */
+  private excludeArchiveOnlyPosts(
+    posts: readonly WordPressPost[],
+    categories: readonly WordPressCategory[],
+  ): readonly WordPressPost[] {
+    const sanakaverseCategory = this.findSanakaverseCategory(categories);
+    const excludedIds = new Set([
+      ...this.contentPolicy.excludedCategoryIds,
+      this.contentPolicy.sanakaverseCategoryId,
+      ...(sanakaverseCategory ? [sanakaverseCategory.id] : []),
+    ]);
+
+    return posts.filter(
+      (post) => !post.categories.some((categoryId) => excludedIds.has(categoryId)),
+    );
   }
 
   private readCountHeader(value: string | null, fallback: number): number {
