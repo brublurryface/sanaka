@@ -106,10 +106,10 @@ fast-forward: o conteúdo da base original, `48eeb5e`, já estava integrado, e n
 arquivo local precisou de resolução de conflitos.
 
 O commit `edf1ceb` reúne a implementação inicial dos quatro laboratórios. A documentação
-e a ativação dos links de estudo formam o commit seguinte. A revisão guiada de 11/10
-ainda está local, sem commit ou push. `MATRIX_STUDY_SOURCE_REF` fica temporariamente
-sem valor para não apontar componentes novos a arquivos antigos; após publicar, deve
-receber o commit correspondente. Os recortes locais continuam disponíveis normalmente.
+e a ativação dos links de estudo formam o commit seguinte. O commit `b039823` reúne
+a revisão guiada de 11/10 e o Header de Mors. O commit seguinte fixa
+`MATRIX_STUDY_SOURCE_REF` nessa revisão e atualiza a documentação da entrega.
+Assim, os links do GitHub apontam aos arquivos correspondentes aos recortes exibidos.
 
 Para testar, obtenha a branch indicada no [guia](./guia-de-estudos.md). Um `git pull`
 feito em `main` só recebe os laboratórios após o merge da PR da Matrix. A autora

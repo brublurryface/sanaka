@@ -5,9 +5,10 @@
  */
 import { MatrixStudyId } from './matrix-study-definition';
 
-// Esta revisão ainda não foi publicada. Fixar o novo commit após o push evita
-// oferecer links para componentes antigos ao lado dos recortes atuais.
-export const MATRIX_STUDY_SOURCE_REF: string | undefined = undefined;
+// A referência fixa liga os recortes desta revisão aos arquivos correspondentes,
+// inclusive depois que a branch de trabalho for removida.
+export const MATRIX_STUDY_SOURCE_REF: string | undefined =
+  'b039823ff7c6491852aabb7b27b4e6f08854c0c3';
 
 export interface StudyFile {
   readonly kind: string;

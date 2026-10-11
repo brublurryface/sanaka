@@ -193,11 +193,12 @@ neutro e não cria um `<img>` quebrado. Com os arquivos aprovados, informe `desk
 e `mobileImage` no `study` da página. O mesmo Frame escolhe o `<source>` mobile e mantém
 Header, degradês e tipografia comuns. Atualize o texto `imageAlt` nos dois idiomas.
 
-`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, fica sem valor enquanto
-a revisão guiada aguarda publicação. Os recortes exibidos continuam vindo dos arquivos
-locais reais; os links externos ficam suspensos para não mostrar a implementação antiga.
-Depois de publicar, atualize essa referência para um commit
-publicado que contenha as novas fontes; não use o nome de uma branch temporária.
+`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, aponta ao commit
+`b039823` da revisão guiada. Os links por componente, template, Sass, domínio e
+testes correspondem ao código desta experiência e continuam úteis depois de remover
+a branch. Os recortes exibidos são gerados dos arquivos reais.
+Depois de alterar os estudos, atualize essa referência para um commit publicado
+que contenha as novas fontes; não use o nome de uma branch temporária.
 
 ## 8. Referências para conferir conceitos
 
