@@ -4,8 +4,10 @@
 
 O catálogo tipado guarda número, rota, tradução, conceitos, dificuldade, personagem e
 pré-requisitos. A página coordena entradas. O domínio decide e produz snapshots. O
-Frame apresenta história, três níveis de explicação, experimento, código, cenários e
-investigação. O History só armazena e percorre passos; não conhece as regras dos jogos.
+Frame apresenta objetivo e experimento antes das referências opcionais. Walkthrough
+organiza etapas com propósito, ação e continuação. StepViewer explica a passagem atual
+em palavras simples e oferece seu detalhe técnico com código real. O History só
+armazena e percorre passos; não conhece as regras dos jogos.
 
 Foram reutilizados `CodeExplorerController`, os estilos `.matrix-code-explorer`,
 `.matrix-experiment-node`, Header cinematográfico, shell, degradês, títulos/rótulos e
@@ -65,11 +67,26 @@ ECMAScript exige média sublinear, não hash específico nem pior caso constante
 Na fila, deslocamentos do modelo denso são uma estimativa conceitual: não afirmam como
 o motor JavaScript implementa `shift` internamente.
 
-## História e personagens
+## Orientação no momento da ação
 
-Apresente problema, escolha, consequência e solução. A história conduz ao mecanismo,
-não o substitui. Nomes sânscritos recebem IAST, devanágari e glosa contextual na primeira
-apresentação; não invente etimologias. Preserve anatomia, idade aparente, proporções,
+Apresente somente a etapa atual: uma meta curta, controles com verbos claros e ajuda
+próxima. O clique deve provocar um efeito visível; iniciar uma busca revela sua primeira
+inspeção. Avançar percorre os dados/regras reais, sem timers ou ações ocultas.
+
+Cada evento tem duas explicações: `events` para o retorno cotidiano e `technicalEvents`
+para o mecanismo, disponível junto dele. O recorte muda conforme a ação/regra observada.
+Não há terceiro nível, nove perguntas abertas nem resultados antecipados como requisito
+para começar. JSON, snapshots, comparações e funções completas são consultas opcionais.
+
+A continuação se habilita depois da atividade; a navegação permite visitar outras etapas.
+Trocar etapa leva o foco à nova orientação. Na padaria, a navegação fica bloqueada enquanto
+uma requisição aguarda resposta. Reiniciar cancela a sessão local explicitamente.
+
+## Personagens
+
+Use os personagens para conduzir problema, escolha e consequência. A experiência não
+depende de apresentação religiosa ou etimológica dos nomes. Preserve IAST nos nomes
+exibidos, anatomia, idade aparente, proporções,
 roupas e identidade mangá das referências. Ausência de arte não autoriza inventar cânone.
 
 ## Histórico e limites

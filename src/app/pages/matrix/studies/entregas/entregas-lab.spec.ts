@@ -50,4 +50,25 @@ describe('EntregasLab actions', () => {
     expect(lab.waiting()).toEqual([]);
     expect(lab.history.state().delivered).toHaveLength(3);
   });
+
+  it('connects each guided step to its discipline and the action being explained', () => {
+    const lab = new EntregasLab();
+    lab.changeLesson(1);
+    expect(lab.nextParcel()?.label).toBe('volume-03');
+    expect(lab.lessonComplete()).toBe(false);
+    lab.process();
+    expect(lab.lessonComplete()).toBe(true);
+    lab.changeLesson(2);
+    expect(lab.mode()).toBe('messaging');
+    expect(lab.nextParcel()?.label).toBe('volume-01');
+    expect(lab.lessonComplete()).toBe(false);
+    lab.process();
+    expect(lab.lessonComplete()).toBe(false);
+    lab.fail();
+    expect(lab.stepSource()?.titleKey).toContain('sources.retry-delivery.title');
+    expect(lab.lessonComplete()).toBe(true);
+    lab.process();
+    lab.confirm();
+    expect(lab.stepSource()?.titleKey).toContain('sources.confirm-delivery.title');
+  });
 });

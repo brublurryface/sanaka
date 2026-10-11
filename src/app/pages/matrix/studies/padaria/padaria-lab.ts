@@ -6,10 +6,11 @@ import { JsonPipe } from '@angular/common';
 import { Component, computed, signal } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { MatrixStudyFrame } from '../shared/matrix-study-frame';
-import { MatrixStudyDefinition } from '../shared/matrix-study-definition';
+import { MatrixStudyDefinition, studySource } from '../shared/matrix-study-definition';
 import { StudyCheck } from '../shared/study-checks';
 import { StudyHistory } from '../shared/study-history';
 import { StudyStepViewer } from '../shared/study-step-viewer';
+import { StudyWalkthrough } from '../shared/study-walkthrough';
 import {
   BakeryFailure,
   BakeryRequest,
@@ -27,7 +28,7 @@ import { BAKERY_SOURCES } from './padaria-source.generated';
 @Component({
   selector: 'app-padaria-lab',
   host: { class: 'matrix-study-host' },
-  imports: [JsonPipe, MatrixStudyFrame, StudyStepViewer, TranslocoPipe],
+  imports: [JsonPipe, MatrixStudyFrame, StudyStepViewer, StudyWalkthrough, TranslocoPipe],
   templateUrl: './padaria-lab.html',
 })
 export class PadariaLab {
@@ -38,6 +39,9 @@ export class PadariaLab {
     relatedRoute: '/matrix/rest-api',
   };
   readonly sources = BAKERY_SOURCES;
+  readonly lessons = ['menu', 'order', 'query', 'payment'] as const;
+  readonly lessonIndex = signal(0);
+  readonly lastAction = signal<'request' | 'repeat'>('request');
   readonly failures: readonly BakeryFailure[] = ['none', 'server', 'network'];
   readonly history = new StudyHistory({
     state: bakeryState(),
@@ -55,13 +59,67 @@ export class PadariaLab {
   readonly checks = signal<readonly StudyCheck[]>([]);
   readonly pending = computed(() => this.history.state().phase === 'pending');
   readonly repeatable = computed(
-    () => !this.pending() && this.history.state().request?.method === 'POST',
+    () => !this.pending() && this.history.state().request?.path === '/api/pagamentos',
   );
+  readonly latestOrder = computed(() => this.history.state().orders.at(-1));
+  // A consulta pode pedir um registro anterior; não mostramos sempre o último criado.
+  readonly responseOrder = computed(() => {
+    const state = this.history.state();
+    if (state.response?.status !== 200 && state.response?.status !== 201) return undefined;
+    return state.orders.find((order) =>
+      state.request?.path === '/api/pedidos'
+        ? order.id === this.latestOrder()?.id
+        : state.request?.path === `/api/pedidos/${order.id}`,
+    );
+  });
+  readonly hasOrder = computed(() =>
+    this.history.state().orders.some((order) => order.id === this.orderId()),
+  );
+  readonly lessonComplete = computed(() => {
+    const state = this.history.state();
+    if (state.phase !== 'success') return false;
+    switch (this.lessonIndex()) {
+      case 0:
+        return state.request?.path === '/api/produtos' || state.request?.path === '/bff/padaria';
+      case 1:
+        return state.request?.path === '/api/pedidos' && state.response?.status === 201;
+      case 2:
+        return state.request?.method === 'GET' && state.request.path.startsWith('/api/pedidos/');
+      default:
+        return state.request?.path === '/api/pagamentos' && this.lastAction() === 'repeat';
+    }
+  });
+  readonly stepSource = computed(() => {
+    const path = this.history.state().request?.path;
+    return studySource(
+      this.sources,
+      path === '/api/pagamentos'
+        ? 'idempotent-payment'
+        : path === '/api/pedidos'
+          ? 'create-order'
+          : path === '/bff/padaria'
+            ? 'bff-view'
+            : 'request-contract',
+    );
+  });
+
+  /** A navegação preserva pedidos/estoque, mas não abandona uma requisição pendente. */
+  changeLesson(index: number): void {
+    if (!Number.isInteger(index) || !this.lessons[index] || this.pending()) return;
+    this.lessonIndex.set(index);
+    this.history.record({
+      state: { ...this.history.state(), request: null, response: null, phase: 'idle' },
+      explanationKey: 'matrix.studies.padaria.events.initial',
+      parameters: {},
+    });
+    this.lastAction.set('request');
+  }
 
   /** void significa que a transição foi guardada, não que uma resposta HTTP já chegou. */
   request(request: BakeryRequest): void {
     // this é a página desta aba. record acrescenta uma transição, não chama um servidor.
     this.history.record(beginBakeryRequest(this.history.state(), request, this.failure()));
+    this.lastAction.set('request');
   }
 
   createOrder(): void {
@@ -108,6 +166,7 @@ export class PadariaLab {
     const request = this.history.state().request;
     if (request?.method === 'POST' && !this.pending()) {
       this.request(request);
+      this.lastAction.set('repeat');
     }
   }
 
@@ -115,6 +174,13 @@ export class PadariaLab {
   complete(): void {
     for (const transition of completeBakeryRequest(this.history.state())) {
       this.history.record(transition);
+    }
+    // O próximo campo recebe o ID realmente criado, inclusive depois do segundo pedido.
+    if (
+      this.history.state().request?.path === '/api/pedidos' &&
+      this.history.state().response?.status === 201
+    ) {
+      this.orderId.set(this.latestOrder()!.id);
     }
   }
 
@@ -127,6 +193,9 @@ export class PadariaLab {
       },
     ]);
     this.failure.set('none');
+    this.lessonIndex.set(0);
+    this.lastAction.set('request');
+    this.orderId.set('order-1');
   }
 
   runChecks(): void {

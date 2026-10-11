@@ -5,8 +5,9 @@
  */
 import { MatrixStudyId } from './matrix-study-definition';
 
-export const MATRIX_STUDY_SOURCE_REF: string | undefined =
-  'edf1ceb0b9a92e9b0f024620d0f98e75f991b6ff';
+// Esta revisão ainda não foi publicada. Fixar o novo commit após o push evita
+// oferecer links para componentes antigos ao lado dos recortes atuais.
+export const MATRIX_STUDY_SOURCE_REF: string | undefined = undefined;
 
 export interface StudyFile {
   readonly kind: string;

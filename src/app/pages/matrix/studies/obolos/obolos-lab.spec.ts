@@ -46,9 +46,8 @@ describe('ObolosLab actions', () => {
     (kind) => {
       const lab = new ObolosLab();
       lab.execute(kind);
-      expect(lab.history.index()).toBe(0);
+      expect(lab.history.index()).toBe(1);
       expect(lab.history.canGoForward()).toBe(true);
-      lab.history.next();
       expect(lab.history.state().activeIndex).toBe(0);
       lab.history.finish();
       if (kind !== 'traverse') {
@@ -59,4 +58,38 @@ describe('ObolosLab actions', () => {
       expect(lab.checks().every((check) => check.passed)).toBe(true);
     },
   );
+  it('completes each guided activity from its actual action', () => {
+    const lab = new ObolosLab();
+    expect(lab.lessonComplete()).toBe(false);
+    lab.lookup();
+    expect(lab.lessonComplete()).toBe(true);
+    lab.changeLesson(1);
+    expect(lab.lessonComplete()).toBe(false);
+    lab.add();
+    expect(lab.lessonComplete()).toBe(true);
+    const inventory = lab.items();
+    lab.changeLesson(2);
+    expect(lab.items()).toEqual(inventory);
+    lab.execute('set');
+    expect(lab.lessonComplete()).toBe(false);
+    lab.history.finish();
+    expect(lab.lessonComplete()).toBe(true);
+    lab.changeLesson(3);
+    lab.count();
+    expect(lab.lessonComplete()).toBe(true);
+    expect(lab.stepSource()!.text).toContain('countObolos');
+  });
+  it('handles a missing lookup and an empty search without trapping the next step', () => {
+    const lab = new ObolosLab();
+    lab.requestedIndex.set(100);
+    lab.lookup();
+    expect(lab.history.current().explanationKey).toContain('missing');
+    expect(lab.lessonComplete()).toBe(true);
+    lab.changeLesson(2);
+    lab.scenario('empty');
+    lab.execute('set');
+    expect(lab.lessonComplete()).toBe(true);
+    lab.changeLesson(-1);
+    expect(lab.lessonIndex()).toBe(2);
+  });
 });

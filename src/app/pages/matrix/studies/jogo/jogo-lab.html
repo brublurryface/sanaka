@@ -4,91 +4,108 @@
   [checks]="checks()"
   (runChecks)="runChecks()"
 >
-  <div class="matrix-experiment-node">
-    <p class="sanaka-editorial-label">{{ 'matrix.studies.jogo.controls.design' | transloco }}</p>
-    <div class="study-controls">
-      @for (option of variants; track option) {
-        <button
-          type="button"
-          class="study-button"
-          [attr.aria-pressed]="variant() === option"
-          (click)="changeVariant(option)"
-        >
-          {{ 'matrix.studies.jogo.variants.' + option | transloco }}
-        </button>
-      }
-    </div>
-    <p>
-      {{ 'matrix.studies.jogo.controls.currentDesign' | transloco }}
-      {{ 'matrix.studies.jogo.variants.' + variant() | transloco }}
-    </p>
-    <div class="study-fields">
-      <div class="study-field">
-        <label for="game-player">{{ 'matrix.studies.jogo.controls.player' | transloco }}</label>
-        <select
-          id="game-player"
-          #playerChoice
-          [value]="player()"
-          (change)="player.set(playerChoice.value)"
-        >
-          @for (move of moves(); track move) {
-            <option [value]="move">{{ 'matrix.studies.jogo.moves.' + move | transloco }}</option>
-          }
-        </select>
+  <app-study-walkthrough
+    [steps]="lessons"
+    [activeIndex]="lessonIndex()"
+    translationKey="matrix.studies.jogo.journey"
+    [complete]="lessonComplete()"
+    (stepChange)="changeLesson($event)"
+    (restart)="restart()"
+  >
+    <article class="matrix-experiment-node">
+      <div class="study-fields">
+        <div class="study-field">
+          <label for="game-player">{{ 'matrix.studies.jogo.controls.player' | transloco }}</label>
+          <select
+            id="game-player"
+            #playerChoice
+            [value]="player()"
+            (change)="choosePlayer(playerChoice.value)"
+          >
+            @if (!validPlayer()) {
+              <option [value]="player()">
+                {{ 'matrix.studies.jogo.controls.invalidMove' | transloco }}
+              </option>
+            }
+            @for (move of moves(); track move) {
+              <option [value]="move">{{ 'matrix.studies.jogo.moves.' + move | transloco }}</option>
+            }
+          </select>
+        </div>
+        <div class="study-field">
+          <label for="game-opponent">{{
+            'matrix.studies.jogo.controls.opponent' | transloco
+          }}</label>
+          <select
+            id="game-opponent"
+            #opponentChoice
+            [value]="opponent()"
+            (change)="chooseOpponent(opponentChoice.value)"
+          >
+            @for (move of moves(); track move) {
+              <option [value]="move">{{ 'matrix.studies.jogo.moves.' + move | transloco }}</option>
+            }
+          </select>
+        </div>
       </div>
-      <div class="study-field">
-        <label for="game-opponent">{{ 'matrix.studies.jogo.controls.opponent' | transloco }}</label>
-        <select
-          id="game-opponent"
-          #opponentChoice
-          [value]="opponent()"
-          (change)="opponent.set(opponentChoice.value)"
-        >
-          @for (move of moves(); track move) {
-            <option [value]="move">{{ 'matrix.studies.jogo.moves.' + move | transloco }}</option>
-          }
-        </select>
-      </div>
-    </div>
-    <div class="study-controls">
-      <button type="button" class="study-button" (click)="play()">
+      <button type="button" class="study-button" (click)="play()" aria-describedby="game-play-help">
         {{ 'matrix.studies.jogo.controls.play' | transloco }}
       </button>
-      <button
-        type="button"
-        class="study-button"
-        (click)="history.finish()"
-        [disabled]="!history.canGoForward()"
-      >
-        {{ 'matrix.studies.common.showResult' | transloco }}
-      </button>
-      <button type="button" class="study-button" (click)="restart()">
-        {{ 'matrix.studies.common.restart' | transloco }}
-      </button>
-    </div>
-    <p class="study-result" aria-live="polite">
-      {{ 'matrix.studies.jogo.results.' + (history.state().result ?? 'pending') | transloco }}
-    </p>
-    <p>
-      {{ 'matrix.studies.jogo.controls.rule' | transloco }}
-      <code>{{ history.state().inspectedRule ?? '—' }}</code>
-    </p>
-    <p>{{ 'matrix.studies.jogo.controls.scenarios' | transloco }}</p>
-    <div class="study-controls">
-      @for (kind of scenarios; track kind) {
-        <button type="button" class="study-button" (click)="scenario(kind)">
-          {{ 'matrix.studies.jogo.results.' + kind | transloco }}
-        </button>
+      <p id="game-play-help" class="study-control-help">
+        {{ 'matrix.studies.jogo.help.' + lessons[lessonIndex()] | transloco }}
+      </p>
+      @if (history.state().result; as result) {
+        <p class="study-result">{{ 'matrix.studies.jogo.results.' + result | transloco }}</p>
       }
-    </div>
-    <app-study-step-viewer [history]="history" />
-  </div>
-  <h3>{{ 'matrix.studies.jogo.comparison.title' | transloco }}</h3>
-  <p>{{ 'matrix.studies.jogo.comparison.note' | transloco }}</p>
-  <dl class="study-questions">
-    <dt>{{ 'matrix.studies.jogo.variants.conditions' | transloco }}</dt>
-    <dd>{{ 'matrix.studies.jogo.results.' + comparison().conditions | transloco }}</dd>
-    <dt>{{ 'matrix.studies.jogo.variants.rulesClassic' | transloco }}</dt>
-    <dd>{{ 'matrix.studies.jogo.results.' + comparison().rules | transloco }}</dd>
-  </dl>
+      @if (lessonIndex() > 0 && history.state().inspectedRule; as rule) {
+        <p>
+          {{ 'matrix.studies.jogo.controls.rule' | transloco }}
+          <strong>{{ 'matrix.studies.jogo.ruleNames.' + rule | transloco }}</strong>
+        </p>
+      }
+      <app-study-step-viewer
+        [history]="history"
+        [source]="stepSource()"
+        [playback]="lessonIndex() > 0"
+        [parameters]="{
+          rule:
+            ('matrix.studies.jogo.ruleNames.' + (history.state().inspectedRule ?? 'tie')
+            | transloco),
+        }"
+        nextStepKey="matrix.studies.jogo.nextRule"
+      />
+      @if (lessonIndex() > 0 && lessonComplete()) {
+        <details class="study-options">
+          <summary>{{ 'matrix.studies.jogo.comparison.title' | transloco }}</summary>
+          <p>{{ 'matrix.studies.jogo.comparison.note' | transloco }}</p>
+          <dl class="study-questions">
+            <dt>{{ 'matrix.studies.jogo.variants.conditions' | transloco }}</dt>
+            <dd>{{ 'matrix.studies.jogo.results.' + comparison().conditions | transloco }}</dd>
+            <dt>{{ 'matrix.studies.jogo.variants.rulesClassic' | transloco }}</dt>
+            <dd>{{ 'matrix.studies.jogo.results.' + comparison().rules | transloco }}</dd>
+          </dl>
+        </details>
+      }
+      <details class="study-options">
+        <summary>{{ 'matrix.studies.jogo.controls.scenarios' | transloco }}</summary>
+        <p>{{ 'matrix.studies.jogo.help.scenarios' | transloco }}</p>
+        <div class="study-controls">
+          @for (kind of scenarios; track kind) {
+            <button type="button" class="study-button" (click)="scenario(kind)">
+              {{ 'matrix.studies.jogo.scenarioLabels.' + kind | transloco }}
+            </button>
+          }
+          <button
+            type="button"
+            class="study-button"
+            (click)="history.finish()"
+            [disabled]="!history.canGoForward()"
+          >
+            {{ 'matrix.studies.common.showResult' | transloco }}
+          </button>
+        </div>
+        <p class="study-control-help">{{ 'matrix.studies.common.skipStepsHelp' | transloco }}</p>
+      </details>
+    </article>
+  </app-study-walkthrough>
 </app-matrix-study-frame>

@@ -56,6 +56,7 @@ export function readObolo(items: readonly string[], index: number): string | und
 }
 // @study-end read-index
 
+// @study-start edit-array
 /** Adicionar custa O(n) aqui: espalhamos n referências para preservar a entrada. */
 export function addObolo(items: readonly string[], identifier: string): readonly string[] {
   const normalized = identifier.trim();
@@ -72,11 +73,13 @@ export function removeObolo(items: readonly string[], index: number): readonly s
   }
   return items.filter((_, position) => position !== index);
 }
+// @study-end edit-array
 
 /**
  * Percurso linear. Produz exatamente um passo por elemento, sem animação obrigatória.
  * Guardar um snapshot não reexecuta a operação; voltar apenas inspeciona seu resultado.
  */
+// @study-start traversal
 export function traversalSteps(items: readonly string[]): readonly StudyStep<InventoryState>[] {
   const initial = inventoryState(items);
   return [
@@ -88,6 +91,7 @@ export function traversalSteps(items: readonly string[]): readonly StudyStep<Inv
     })),
   ];
 }
+// @study-end traversal
 
 /**
  * Compara todas as duplas distintas; não para na primeira duplicata.

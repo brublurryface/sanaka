@@ -1,8 +1,13 @@
 # Matrix — manifesto de artes exclusivas
 
-Nenhuma nova imagem foi gerada nesta entrega. As referências anexadas orientam o cânone;
-não foram copiadas para preencher os Headers. Os quatro laboratórios usam fallback neutro.
-Os nomes abaixo são **arquivos futuros**, não caminhos ativos para assets inexistentes.
+A arte enviada pela autora, **Busca no Sótão das Relíquias(1).png**, foi aplicada aos
+Óbolos de Mors, em WebP (1942 × 809 px). Personagens, cores e iluminação foram preservados.
+Está em `public/images/matrix/obolos/obolos-atmosphere-desktop.webp` e usa o Header,
+degradês e sombra de texto compartilhados. Ainda não há composição mobile exclusiva.
+
+Os outros três laboratórios usam fallback neutro até receberem artes aprovadas.
+Os nomes da tabela abaixo descrevem as demais variantes futuras; não crie URLs para
+arquivos que ainda não existem.
 
 ## Contrato comum
 

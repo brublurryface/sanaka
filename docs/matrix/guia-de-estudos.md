@@ -42,31 +42,37 @@ NASA. Não copie o serviço NASA para o simulador.
 
 ## 2. Uma sessão de estudo
 
-Leia História e as explicações Cotidiano → Técnico → Implementação. Cada conceito
-tem três perguntas com respostas visíveis e mini exemplos; não precisa acertar um quiz.
-Use a navegação da página para chegar diretamente ao experimento ou código.
+Comece pela primeira ação. Cada etapa mostra o objetivo e a função de seus controles.
+Depois do clique, leia **O que aconteceu?** junto da experiência. Se quiser estudar o
+mecanismo, abra **Ver explicação técnica e código desta passagem** no mesmo local.
+
+Use **Continuar** depois de experimentar a etapa, ou escolha outra pela navegação.
+O foco acompanha a nova orientação. Conceitos, funções completas, JSON, comparações e
+verificações prontas ficam como consultas opcionais; não são pré-requisitos de leitura.
 
 ### Óbolos de Mors
 
-1. Consulte o índice `0`, depois `−1` e uma posição além da caixa.
-2. Adicione um nome repetido e compare sua quantidade no Map com presença no Set.
-3. Execute **Comparar todos os pares** e avance os passos. Compare os dois índices.
-4. Execute **Consultar com Set**. Observe `seen`, duplicatas e consultas.
-5. Compare os relatórios finais, que permanecem identificados como resultados finais
-   enquanto você inspeciona passos intermediários.
-6. Experimente caixa vazia, todos iguais e sem repetição.
+1. **Encontrar uma moeda:** clique em uma posição ou use **Consultar posição**.
+2. **Organizar a caixa:** adicione ao final ou retire a posição escolhida.
+3. **Encontrar repetições:** use **Procurar nomes repetidos** e depois
+   **Examinar próximo óbolo**. A primeira inspeção já acontece no clique inicial.
+4. **Contar por nome:** veja quantidades em vez de apenas presença/repetição.
+
+Os outros percursos e cenários são opcionais. Os relatórios comparativos só aparecem
+depois da conclusão de uma busca; não antecipam seu resultado durante a inspeção.
 
 O inventário tem no máximo 16 posições. As contagens representam operações do núcleo,
 não milissegundos. Cópias, ordenação e armazenamento dos snapshots têm custos adicionais.
 
 ### Entregas de Ākāśa
 
-1. Compare Queue/FIFO e Stack/LIFO com os três volumes iniciais.
-2. Passe para **Mensageria simulada**. Trocar modo ou disciplina reinicia o cenário.
-3. Processe uma encomenda e adicione outra enquanto o consumidor está ocupado.
-4. Confirme com ACK; retirar da fila não significa confirmar uma entrega.
-5. Simule uma falha. A mesma identidade volta ao fim com a tentativa preservada.
-6. Falhe novamente após a segunda tentativa e confira a dead-letter.
+1. **Quem chegou primeiro:** retire a próxima encomenda e observe a ordem.
+2. **Quem chegou por último:** a mesma cena recomeça; compare a retirada da pilha.
+3. **Entregar ou tentar de novo:** leve uma encomenda, depois confirme a chegada ou
+   simule uma falha. ACK, retry e dead-letter são explicados nessa passagem, não antes.
+
+Adicionar uma encomenda e comparar estratégias ficam em áreas opcionais. A falha preserva
+a identidade, devolve ao final e, após duas tentativas, separa a encomenda para investigar.
 
 Há até 16 encomendas pendentes, incluindo processamento, e 64 chegadas por sessão.
 Os prefixos consumidos ficam disponíveis até reiniciar. Nomes iguais podem ter IDs
@@ -74,11 +80,13 @@ diferentes: não existe deduplicação distribuída neste exemplo.
 
 ### Jogo impossível de Kālikā
 
-1. Compare a função de três gestos com regras para os mesmos três gestos.
-2. Avalie uma rodada e avance: a decisão só aparece no passo em que ela ocorreu.
-3. Ative cinco gestos e experimente lagarto contra Spock.
-4. Use os cenários de empate, vitória, derrota e entrada inválida.
-5. Leia `RoundRule`, `TieRule`, `DominanceRule` e o construtor de `RuleGame`.
+1. **Jogar uma rodada:** escolha os gestos e jogue; a função simples mostra a decisão.
+2. **Acompanhar a decisão:** jogue e use **Examinar próxima regra**. O código acompanha
+   validação, empate e dominância. O resultado só aparece quando uma regra decide.
+3. **Acrescentar dois gestos:** experimente lagarto e Spock com o mesmo motor de regras.
+
+Situações prontas e comparação de estratégias são opcionais. Mudar um gesto limpa o
+resultado anterior para não atribuir uma decisão antiga à entrada nova.
 
 Uma função pura não é inferior a classes. A composição se justifica pela possibilidade
 de trocar políticas. A primeira regra que decide encerra a rodada: a ordem é parte do
@@ -86,17 +94,15 @@ contrato. As regras clássicas precisam continuar passando nos testes após a ex
 
 ### Padaria de Māyā
 
-1. Consulte `GET /api/produtos`, depois escolha **Resolver requisição**.
-2. Crie um pedido válido. Observe corpo, resposta `201` e `Location`.
-3. Consulte `order-1` e compare com um identificador inexistente (`404`).
-4. Use quantidade inválida para erro local; o exemplo inválido enviado ao servidor
-   demonstra `400`. Reinicie sem pão para observar `409`.
-5. Escolha falha interna (`500`) ou rede (sem resposta HTTP) **antes** da requisição.
-6. Crie outro cenário válido, simule pagamento e repita o último POST com a mesma chave.
-   O número de registros não aumenta.
-7. Desative a chave e repita. O modo propositalmente inseguro cria registros duplicados.
-8. Use a mesma chave para outro pedido e observe `409`. Compare a resposta BFF com o GET
-   de produtos: ela agrega duas coleções locais para a tela.
+1. **Consultar cardápio:** consulte e use **Receber resposta**. A espera é manual e explicada.
+2. **Criar um pedido:** envie produto/quantidade e receba a resposta `201`.
+3. **Encontrar o pedido:** o campo recebe o ID realmente criado; consulte e receba `200`.
+4. **Repetir com cuidado:** simule o pagamento, receba, repita o mesmo envio e receba
+   novamente. Com a mesma chave, o número de pagamentos permanece um.
+
+Requisição e resposta JSON ficam no detalhe técnico da passagem. Erros de entrada,
+estoque, servidor e rede, resumo BFF e mudança da chave ficam em exploração opcional.
+Cada controle explica seu efeito. **Recomeçar do cardápio** limpa pedidos e pagamentos.
 
 Só há créditos imaginários e `demo-token`. Nenhum campo pede informações bancárias.
 Limites da demonstração: 20 pedidos e 40 pagamentos em memória por sessão. POST de pedido
@@ -149,7 +155,7 @@ Não edite os arquivos `.generated.ts` manualmente. Os marcadores `@study-start`
 `@study-end` no domínio delimitam trechos realmente executados. O verificador reprova
 marcadores repetidos/ausentes e recortes desatualizados. Não usa `eval` nem `new Function`.
 
-**Executar cenários**, na página, roda funções locais predefinidas com resultados
+**Testar exemplos prontos**, na página, roda funções locais predefinidas com resultados
 esperados. Não executa Vitest, não mede cobertura e não interpreta código digitado.
 
 ## 5. Modificar uma regra com segurança
@@ -187,10 +193,10 @@ neutro e não cria um `<img>` quebrado. Com os arquivos aprovados, informe `desk
 e `mobileImage` no `study` da página. O mesmo Frame escolhe o `<source>` mobile e mantém
 Header, degradês e tipografia comuns. Atualize o texto `imageAlt` nos dois idiomas.
 
-`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, aponta ao commit
-`edf1ceb` que contém os arquivos da entrega. Os links por componente, template, Sass,
-domínio e testes permanecem disponíveis mesmo após excluir a branch de trabalho.
-Depois de uma revisão futura dos estudos, atualize essa referência para um commit
+`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, fica sem valor enquanto
+a revisão guiada aguarda publicação. Os recortes exibidos continuam vindo dos arquivos
+locais reais; os links externos ficam suspensos para não mostrar a implementação antiga.
+Depois de publicar, atualize essa referência para um commit
 publicado que contenha as novas fontes; não use o nome de uma branch temporária.
 
 ## 8. Referências para conferir conceitos
@@ -199,4 +205,3 @@ publicado que contenha as novas fontes; não use o nome de uma branch temporári
 - [Handbook de classes TypeScript](https://www.typescriptlang.org/docs/handbook/2/classes.html).
 - [ECMAScript — Map e Set](https://tc39.es/ecma262/multipage/keyed-collections.html): a exigência é acesso sublinear médio, não hash ou O(1) obrigatório.
 - [HTTP — RFC 9110](https://www.rfc-editor.org/rfc/rfc9110.html): métodos, status e idempotência.
-- [Monier-Williams, edição digital de Colônia](https://www.sanskrit-lexicon.uni-koeln.de/scans/MWScan/2020/web/webtc/indexcaller.php): apoio lexical às glosas, não uma equivalência entre os personagens e definições religiosas.

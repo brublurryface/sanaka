@@ -63,6 +63,7 @@ function step(
 }
 
 /** O produtor pode adicionar enquanto o consumidor ainda trabalha em outra encomenda. */
+// @study-start enqueue
 export function enqueueDelivery(state: DeliveryState, label: string): StudyStep<DeliveryState> {
   const normalized = label.trim();
   if (!normalized) {
@@ -83,6 +84,8 @@ export function enqueueDelivery(state: DeliveryState, label: string): StudyStep<
     { label: normalized },
   );
 }
+
+// @study-end enqueue
 
 /**
  * FIFO escolhe entries[head]; LIFO escolhe o final e usa slice para criar o snapshot.

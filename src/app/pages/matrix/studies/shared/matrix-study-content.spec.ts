@@ -51,21 +51,24 @@ describe('Matrix study translations and content', () => {
     }
   });
   it.each(resources)(
-    'has complete three-level explanations, Q&A and source captions in $language',
+    'has guided actions, both explanation levels and source captions in $language',
     ({ tree }) => {
       for (const page of [new ObolosLab(), new EntregasLab(), new JogoLab(), new PadariaLab()]) {
         const prefix = `matrix.studies.${page.study.id}`;
         for (const topic of page.study.topics) {
-          for (const level of ['title', 'everyday', 'technical', 'implementation']) {
+          for (const level of ['title', 'everyday', 'technical']) {
             expect(lookup(tree, `${prefix}.topics.${topic}.${level}`)).toBeTypeOf('string');
           }
-          for (const question of ['one', 'two', 'three']) {
-            for (const part of ['question', 'answer', 'example']) {
-              expect(
-                lookup(tree, `${prefix}.topics.${topic}.questions.${question}.${part}`),
-              ).toBeTypeOf('string');
-            }
+          expect(lookup(tree, `${prefix}.topics.${topic}.implementation`)).toBeUndefined();
+        }
+        for (const lesson of page.lessons) {
+          for (const part of ['title', 'goal', 'next']) {
+            expect(lookup(tree, `${prefix}.journey.${lesson}.${part}`)).toBeTypeOf('string');
           }
+        }
+        const events = lookup(tree, `${prefix}.events`) as TextTree;
+        for (const event of Object.keys(events)) {
+          expect(lookup(tree, `${prefix}.technicalEvents.${event}`), event).toBeTypeOf('string');
         }
         for (const source of page.sources) {
           expect(lookup(tree, source.titleKey)).toBeTypeOf('string');

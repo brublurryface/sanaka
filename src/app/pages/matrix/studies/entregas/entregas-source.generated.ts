@@ -29,4 +29,11 @@ export const DELIVERY_SOURCES: readonly StudySource[] = [
     descriptionKey: 'matrix.studies.entregas.sources.compare-structures.description',
     text: 'export function compareQueues(labels: readonly string[]): QueueComparison {\n  const queue: string[] = [];\n  const stack: string[] = [];\n  for (const label of labels) {\n    queue.push(label);\n    stack.push(label);\n  }\n  const fifo: string[] = [];\n  const lifo: string[] = [];\n  const indexed: string[] = [];\n  let conceptualShifts = 0;\n  while (queue.length > 0) {\n    conceptualShifts += queue.length - 1;\n    // O guarda acima assegura que shift retorna string, não undefined.\n    fifo.push(queue.shift()!);\n    lifo.push(stack.pop()!);\n  }\n  // A consulta de cada posição não exige deslocar as posições seguintes.\n  for (let head = 0; head < labels.length; head += 1) {\n    indexed.push(labels[head]);\n  }\n  return { fifo, lifo, indexed, conceptualShifts, headReads: labels.length };\n}',
   },
+  {
+    index: 4,
+    fileName: 'delivery-queue.ts',
+    titleKey: 'matrix.studies.entregas.sources.enqueue.title',
+    descriptionKey: 'matrix.studies.entregas.sources.enqueue.description',
+    text: "export function enqueueDelivery(state: DeliveryState, label: string): StudyStep<DeliveryState> {\n  const normalized = label.trim();\n  if (!normalized) {\n    return step(state, 'emptyInput');\n  }\n  const outstanding = state.entries.length - state.head + (state.processing === null ? 0 : 1);\n  if (outstanding >= DELIVERY_LIMIT) {\n    return step(state, 'limit', { limit: DELIVERY_LIMIT });\n  }\n  if (state.nextId > DELIVERY_SESSION_LIMIT) {\n    return step(state, 'sessionLimit', { limit: DELIVERY_SESSION_LIMIT });\n  }\n  const parcel: Delivery = { id: state.nextId, label: normalized, attempts: 0 };\n  // Os três pontos copiam referências. Esta atualização imutável custa O(n), não O(1).\n  return step(\n    { ...state, entries: [...state.entries, parcel], nextId: state.nextId + 1 },\n    'enqueue',\n    { label: normalized },\n  );\n}",
+  },
 ];

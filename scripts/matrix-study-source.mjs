@@ -13,13 +13,19 @@ const studies = [
     directory: 'obolos',
     symbol: 'OBOLO_SOURCES',
     source: 'obolo-inventory.ts',
-    sections: ['read-index', 'nested-loops', 'set-search', 'map-count'],
+    sections: ['read-index', 'nested-loops', 'set-search', 'map-count', 'edit-array', 'traversal'],
   },
   {
     directory: 'entregas',
     symbol: 'DELIVERY_SOURCES',
     source: 'delivery-queue.ts',
-    sections: ['start-delivery', 'confirm-delivery', 'retry-delivery', 'compare-structures'],
+    sections: [
+      'start-delivery',
+      'confirm-delivery',
+      'retry-delivery',
+      'compare-structures',
+      'enqueue',
+    ],
   },
   {
     directory: 'jogo',

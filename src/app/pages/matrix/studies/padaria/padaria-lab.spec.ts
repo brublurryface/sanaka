@@ -63,4 +63,57 @@ describe('PadariaLab', () => {
     page.complete();
     expect(page.history.state().phase).toBe('networkError');
   });
+
+  it('keeps a pending request when a visitor tries to change steps', () => {
+    const page = new PadariaLab();
+    page.request({ method: 'GET', path: '/api/produtos' });
+    const request = page.history.state().request;
+    page.changeLesson(1);
+    expect(page.lessonIndex()).toBe(0);
+    expect(page.history.state().request).toBe(request);
+    expect(page.lessonComplete()).toBe(false);
+    page.complete();
+    expect(page.lessonComplete()).toBe(true);
+    page.changeLesson(1);
+    expect(page.lessonIndex()).toBe(1);
+    expect(page.history.state().request).toBeNull();
+  });
+
+  it('prefills the real new order and shows the specific queried record', () => {
+    const page = new PadariaLab();
+    page.createOrder();
+    page.complete();
+    const firstId = page.orderId();
+    page.createOrder();
+    page.complete();
+    const secondId = page.orderId();
+    expect(secondId).not.toBe(firstId);
+    expect(page.responseOrder()?.id).toBe(secondId);
+    page.changeLesson(2);
+    page.orderId.set(firstId);
+    page.queryOrder();
+    page.complete();
+    expect(page.responseOrder()?.id).toBe(firstId);
+    page.orderId.set('missing-order');
+    page.queryOrder();
+    page.complete();
+    expect(page.history.state().response?.status).toBe(404);
+    expect(page.responseOrder()).toBeUndefined();
+  });
+
+  it('finishes the payment lesson only after receiving the repeated response', () => {
+    const page = new PadariaLab();
+    page.createOrder();
+    page.complete();
+    page.changeLesson(3);
+    page.pay();
+    page.complete();
+    expect(page.lessonComplete()).toBe(false);
+    page.repeat();
+    expect(page.pending()).toBe(true);
+    expect(page.lessonComplete()).toBe(false);
+    page.complete();
+    expect(page.lessonComplete()).toBe(true);
+    expect(page.history.state().payments).toHaveLength(1);
+  });
 });

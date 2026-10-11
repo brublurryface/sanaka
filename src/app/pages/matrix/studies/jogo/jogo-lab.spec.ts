@@ -6,7 +6,7 @@ describe('JogoLab', () => {
   it('evaluates then supports inspection and restart', () => {
     const page = new JogoLab();
     page.play();
-    expect(page.history.state().result).toBeNull();
+    expect(page.history.state().result).toBe('win');
     page.history.finish();
     expect(page.history.state().result).toBe('win');
     page.restart();
@@ -33,5 +33,27 @@ describe('JogoLab', () => {
     page.scenario(kind);
     page.history.finish();
     expect(page.history.state().result).toBe(kind);
+  });
+  it('walks the rules and clears stale outcomes when a gesture changes', () => {
+    const page = new JogoLab();
+    page.changeLesson(1);
+    page.play();
+    expect(page.lessonComplete()).toBe(false);
+    expect(page.history.current().explanationKey).toContain('validated');
+    page.history.next();
+    expect(page.stepSource()!.text).toContain('TieRule');
+    page.history.next();
+    expect(page.lessonComplete()).toBe(true);
+    expect(page.stepSource()!.text).toContain('DominanceRule');
+    page.choosePlayer('paper');
+    expect(page.lessonComplete()).toBe(false);
+    page.chooseOpponent('paper');
+    page.play();
+    page.history.next();
+    expect(page.history.state().result).toBe('tie');
+    page.changeLesson(2);
+    expect(page.moves()).toHaveLength(5);
+    page.changeLesson(12);
+    expect(page.lessonIndex()).toBe(2);
   });
 });

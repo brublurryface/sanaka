@@ -1,6 +1,6 @@
 /**
- * Estrutura editorial real comum aos laboratórios: Header, história, três níveis
- * de explicação, experimento projetado, código, cenários e investigação.
+ * Estrutura comum: objetivo, experiência guiada e referências opcionais depois da prática.
+ * A explicação da ação fica no laboratório, próxima do controle que a provocou.
  * A lógica de cada laboratório continua em sua funcionalidade.
  */
 // Component registra o template. input/output definem a conversa com o componente pai.

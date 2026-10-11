@@ -1,39 +1,73 @@
 <section class="study-step-viewer" aria-labelledby="step-viewer-title">
-  <h3 id="step-viewer-title">{{ 'matrix.studies.common.stepByStep' | transloco }}</h3>
-  <div class="study-controls">
-    <button
-      type="button"
-      class="study-button"
-      (click)="history().previous()"
-      [disabled]="!history().canGoBack()"
-    >
-      ← {{ 'matrix.studies.common.previousStep' | transloco }}
-    </button>
-    <span>{{
-      'matrix.studies.common.stepCount'
-        | transloco: { current: history().index() + 1, total: history().length() }
-    }}</span>
-    <button
-      type="button"
-      class="study-button"
-      (click)="history().next()"
-      [disabled]="!history().canGoForward()"
-    >
-      {{ 'matrix.studies.common.nextStep' | transloco }} →
-    </button>
-  </div>
-  <p role="status" aria-atomic="true">
-    {{ history().current().explanationKey | transloco: history().current().parameters }}
+  <p id="step-viewer-title" class="sanaka-editorial-label">
+    {{ 'matrix.studies.common.stepByStep' | transloco }}
   </p>
-  <p>{{ 'matrix.studies.common.historyNote' | transloco }}</p>
-  <div class="study-state-comparison">
-    <div>
-      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.before' | transloco }}</p>
-      <pre tabindex="0">{{ history().before() | json }}</pre>
+  <p class="study-feedback" role="status" aria-atomic="true">
+    {{ history().current().explanationKey | transloco: explanationParameters() }}
+  </p>
+  @if (playback() && history().canGoForward()) {
+    <div class="study-controls study-playback">
+      <button type="button" class="study-button" (click)="history().next()">
+        {{ nextStepKey() | transloco }} →
+      </button>
+      <span>{{
+        'matrix.studies.common.inspectionCount'
+          | transloco: { current: history().index(), total: history().length() - 1 }
+      }}</span>
     </div>
-    <div>
-      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.after' | transloco }}</p>
-      <pre tabindex="0">{{ history().current().state | json }}</pre>
-    </div>
-  </div>
+  }
+  <details class="study-technical">
+    <summary>{{ 'matrix.studies.common.technicalAtThisStep' | transloco }}</summary>
+    <p>{{ technicalKey() | transloco: explanationParameters() }}</p>
+    @if (source(); as snippet) {
+      <div class="matrix-code-explorer">
+        <div class="code-window">
+          <div class="code-window__bar">
+            <span>TypeScript</span><strong>{{ snippet.fileName }}</strong>
+          </div>
+          <div class="code-window__title">{{ snippet.titleKey | transloco }}</div>
+          <div class="code-window__viewport">
+            <pre
+              class="code-window__snippet"
+              tabindex="0"
+              [attr.aria-label]="snippet.titleKey | transloco"
+            ><code>{{ snippet.text }}</code></pre>
+          </div>
+        </div>
+      </div>
+    }
+    <ng-content />
+    <details class="study-snapshots">
+      <summary>{{ 'matrix.studies.common.inspectHistory' | transloco }}</summary>
+      <p>{{ 'matrix.studies.common.historyNote' | transloco }}</p>
+      <div class="study-controls">
+        <button
+          type="button"
+          class="study-button"
+          (click)="history().previous()"
+          [disabled]="!history().canGoBack()"
+        >
+          ← {{ 'matrix.studies.common.previousStep' | transloco }}
+        </button>
+        <button
+          type="button"
+          class="study-button"
+          (click)="history().next()"
+          [disabled]="!history().canGoForward()"
+        >
+          {{ 'matrix.studies.common.nextStep' | transloco }} →
+        </button>
+      </div>
+      <div class="study-state-comparison">
+        <div>
+          <p class="sanaka-editorial-label">{{ 'matrix.studies.common.before' | transloco }}</p>
+          <pre tabindex="0">{{ history().before() | json }}</pre>
+        </div>
+        <div>
+          <p class="sanaka-editorial-label">{{ 'matrix.studies.common.after' | transloco }}</p>
+          <pre tabindex="0">{{ history().current().state | json }}</pre>
+        </div>
+      </div>
+    </details>
+  </details>
 </section>

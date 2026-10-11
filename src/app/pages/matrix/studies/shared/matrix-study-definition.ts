@@ -20,3 +20,11 @@ export interface StudySource {
   readonly descriptionKey: string;
   readonly text: string;
 }
+
+/** Localiza um recorte pelo marcador do gerador, sem depender da ordem do catálogo. */
+export function studySource(
+  sources: readonly StudySource[],
+  section: string,
+): StudySource | undefined {
+  return sources.find((source) => source.titleKey.endsWith(`.sources.${section}.title`));
+}

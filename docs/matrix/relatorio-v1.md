@@ -17,9 +17,11 @@ novas nem deploy nesta entrega.
 | `/matrix/jogo`     | Três/cinco gestos, função pura versus regras compostas, resultados determinísticos, cenários e inspeção de políticas                    |
 | `/matrix/padaria`  | GET/POST simulados, JSON, 200/201/400/404/409/500, validação local/rede/HTTP, contrato BFF opcional e pagamentos fictícios idempotentes |
 
-Cada estudo contém história, três conceitos com três níveis e nove perguntas visíveis,
-experimento, código real sincronizado, inspeção antes/depois, cenários fixos e investigação.
-Os 25 pares do jogo estendido e os nove clássicos são testados.
+Na implementação inicial, cada estudo apresentava história, três níveis e nove perguntas
+antes da prática. A revisão de 11/10 substitui essa organização por etapas guiadas,
+retorno leigo após cada ação e explicação técnica/código no mesmo ponto da experiência.
+Conceitos, snapshots e comparações ficam opcionais. Os algoritmos continuam reais e
+testados; os 25 pares do jogo estendido e os nove clássicos permanecem cobertos.
 
 O catálogo tem seis experiências disponíveis, incluindo as duas anteriores. Signals,
 Observables e Lifecycle continuam planejados, numerados 07, 08 e 09, sem links vazios.
@@ -39,7 +41,7 @@ Components e NASA mantiveram os arquivos de implementação intactos. Nenhum arq
 Posts, Home, Sobre, WordPress ou contador real de óbolos foi modificado por esta entrega.
 Os dois JSON compartilhados receberam apenas conteúdo da família Matrix.
 
-## Validações realizadas
+## Validações da implementação inicial (10/10)
 
 Linha de base antes de alterar: 208 testes, 38 arquivos de teste, build de 407,08 KB e
 zero clones TypeScript detectados pelo gate existente.
@@ -86,11 +88,12 @@ encontradas durante a implementação foram corrigidas e as suítes repetidas.
    ambiente. Nenhum screenshot foi produzido; DOM/SSR não provam responsividade visual.
    Conferir desktop 1440px e mobile 360/390px, toque, teclado, zoom, contraste e leitor
    de tela. O código prepara esses contratos, mas essa conferência não foi realizada.
-2. **Artes exclusivas:** oito variantes futuras descritas no [manifesto](./manifesto-de-artes.md).
-   Nenhuma arte foi inventada ou referência de outro Header instalada como definitiva.
+2. **Artes exclusivas:** Mors já recebeu a arte fornecida pela autora. As três outras
+   experiências e uma variante mobile própria de Mors continuam pendentes, conforme
+   o [manifesto](./manifesto-de-artes.md). O recorte mobile atual usa a mesma arte.
 3. **PR da Matrix:** abrir após o teste da autora, incluir os ajustes necessários e
    aguardar sua aprovação antes de integrar os laboratórios a `main`.
-4. **Aceite da autora:** revisar textos/glosas e os quatro experimentos na aplicação.
+4. **Aceite da autora:** revisar clareza dos controles e os percursos dos quatro experimentos.
 5. **Produção não está neste escopo:** broker, BFF implantado, persistência, pagamentos,
    autenticação e operação financeira continuam explicitamente fora da simulação.
 
@@ -102,9 +105,11 @@ Base alinhada com `origin/main`, revisão `d8a18b3`, após o merge da
 fast-forward: o conteúdo da base original, `48eeb5e`, já estava integrado, e nenhum
 arquivo local precisou de resolução de conflitos.
 
-O commit `edf1ceb` reúne o código dos quatro laboratórios. A documentação e a ativação
-dos links de estudo formam o commit seguinte. `MATRIX_STUDY_SOURCE_REF` fixa as fontes
-em `edf1ceb`, mantendo os links úteis após remover a branch de trabalho.
+O commit `edf1ceb` reúne a implementação inicial dos quatro laboratórios. A documentação
+e a ativação dos links de estudo formam o commit seguinte. A revisão guiada de 11/10
+ainda está local, sem commit ou push. `MATRIX_STUDY_SOURCE_REF` fica temporariamente
+sem valor para não apontar componentes novos a arquivos antigos; após publicar, deve
+receber o commit correspondente. Os recortes locais continuam disponíveis normalmente.
 
 Para testar, obtenha a branch indicada no [guia](./guia-de-estudos.md). Um `git pull`
 feito em `main` só recebe os laboratórios após o merge da PR da Matrix. A autora
@@ -118,69 +123,64 @@ alterações seguras, reversão de tentativas e adição de novos estudos. Os
 As habilidades de continuidade e Sites orientaram a retomada do checkout existente:
 nenhum novo Site, cadastro de hospedagem ou publicação foi criado.
 
-## Inventário exato da entrega
+## Revisão guiada (11/10)
 
-60 arquivos novos/alterados, incluindo este relatório. Caminhos relativos à raiz:
+- Etapas com objetivo, ação, retorno leigo e explicação técnica/código contextual.
+- Botões e campos com orientação junto à interação; referências completas opcionais.
+- Navegação entre etapas com foco no novo título; requisição pendente não é abandonada.
+- Header de Mors aplicado sem redesenhar a arte, em WebP de 1.942 × 809 px e 382.262 bytes.
+- PT-BR/en com as mesmas chaves e parâmetros; dois níveis de explicação por evento.
+
+`npm run check` passou com **378 testes em 51 arquivos**. Cobertura: statements 95,75%,
+branches 92,69%, functions 96,36% e lines 95,86%; todas acima dos 85% exigidos.
+Duplicação TypeScript: 0,54% das linhas e 0,76% dos tokens, abaixo do limite de 3%.
+Os quatro clones são três blocos de imports e um bloco curto de reinício do cenário;
+não são cópias dos algoritmos. Build aprovado com dez rotas prerenderizadas, bundle
+inicial de 417,14 KB brutos e transferência estimada de 109,45 KB.
+
+Testes de interação cobrem os quatro percursos guiados, código ligado à ação, mudança
+de idioma, retorno de falha/retry, pagamento repetido e bloqueio de troca de etapa durante
+uma requisição. A inspeção do HTML estático confirma um único `main` por página,
+títulos próprios, etapas iniciais e explicação técnica recolhida. A revisão visual
+em navegador continua pendente; nenhum screenshot ou aceite visual é alegado.
+
+## Inventário exato da revisão guiada
+
+34 arquivos novos/alterados nesta revisão de 11/10. Caminhos relativos à raiz:
 
 ```text
 docs/matrix/guia-de-estudos.md
 docs/matrix/manifesto-de-artes.md
 docs/matrix/padroes-didaticos.md
 docs/matrix/relatorio-v1.md
-package.json
 public/i18n/en.json
 public/i18n/pt-BR.json
+public/images/matrix/obolos/obolos-atmosphere-desktop.webp
 scripts/matrix-study-source.mjs
-src/app/app.routes.server.spec.ts
-src/app/app.routes.server.ts
-src/app/pages/matrix/catalog/matrix-catalog.html
-src/app/pages/matrix/catalog/matrix-catalog.scss
-src/app/pages/matrix/catalog/matrix-catalog.spec.ts
-src/app/pages/matrix/catalog/matrix-catalog.ts
-src/app/pages/matrix/matrix-experiments.ts
-src/app/pages/matrix/matrix.routes.spec.ts
-src/app/pages/matrix/matrix.routes.ts
-src/app/pages/matrix/studies/entregas/delivery-checks.ts
-src/app/pages/matrix/studies/entregas/delivery-queue.spec.ts
 src/app/pages/matrix/studies/entregas/delivery-queue.ts
 src/app/pages/matrix/studies/entregas/entregas-lab.html
 src/app/pages/matrix/studies/entregas/entregas-lab.spec.ts
 src/app/pages/matrix/studies/entregas/entregas-lab.ts
 src/app/pages/matrix/studies/entregas/entregas-source.generated.ts
-src/app/pages/matrix/studies/jogo/game-checks.ts
 src/app/pages/matrix/studies/jogo/jogo-lab.html
 src/app/pages/matrix/studies/jogo/jogo-lab.spec.ts
 src/app/pages/matrix/studies/jogo/jogo-lab.ts
-src/app/pages/matrix/studies/jogo/jogo-source.generated.ts
-src/app/pages/matrix/studies/jogo/kalika-game.spec.ts
-src/app/pages/matrix/studies/jogo/kalika-game.ts
-src/app/pages/matrix/studies/obolos/obolo-checks.ts
-src/app/pages/matrix/studies/obolos/obolo-inventory.spec.ts
 src/app/pages/matrix/studies/obolos/obolo-inventory.ts
 src/app/pages/matrix/studies/obolos/obolos-lab.html
 src/app/pages/matrix/studies/obolos/obolos-lab.spec.ts
 src/app/pages/matrix/studies/obolos/obolos-lab.ts
 src/app/pages/matrix/studies/obolos/obolos-source.generated.ts
-src/app/pages/matrix/studies/padaria/bakery-api.spec.ts
-src/app/pages/matrix/studies/padaria/bakery-api.ts
-src/app/pages/matrix/studies/padaria/bakery-checks.ts
 src/app/pages/matrix/studies/padaria/padaria-lab.html
 src/app/pages/matrix/studies/padaria/padaria-lab.spec.ts
 src/app/pages/matrix/studies/padaria/padaria-lab.ts
-src/app/pages/matrix/studies/padaria/padaria-source.generated.ts
 src/app/pages/matrix/studies/shared/matrix-study-content.spec.ts
 src/app/pages/matrix/studies/shared/matrix-study-definition.ts
-src/app/pages/matrix/studies/shared/matrix-study-files.spec.ts
 src/app/pages/matrix/studies/shared/matrix-study-files.ts
 src/app/pages/matrix/studies/shared/matrix-study-frame.html
 src/app/pages/matrix/studies/shared/matrix-study-frame.ts
 src/app/pages/matrix/studies/shared/matrix-study-ui.spec.ts
-src/app/pages/matrix/studies/shared/study-checks.spec.ts
-src/app/pages/matrix/studies/shared/study-checks.ts
-src/app/pages/matrix/studies/shared/study-history.spec.ts
-src/app/pages/matrix/studies/shared/study-history.ts
 src/app/pages/matrix/studies/shared/study-step-viewer.html
 src/app/pages/matrix/studies/shared/study-step-viewer.ts
-src/styles.scss
+src/app/pages/matrix/studies/shared/study-walkthrough.ts
 src/styles/_matrix-studies.scss
 ```
