@@ -8,7 +8,7 @@ import { MatrixStudyId } from './matrix-study-definition';
 // A referência fixa liga os recortes desta revisão aos arquivos correspondentes,
 // inclusive depois que a branch de trabalho for removida.
 export const MATRIX_STUDY_SOURCE_REF: string | undefined =
-  'b039823ff7c6491852aabb7b27b4e6f08854c0c3';
+  '690bca5fb8a2772aa3363fddc5fa9088619d7865';
 
 export interface StudyFile {
   readonly kind: string;
