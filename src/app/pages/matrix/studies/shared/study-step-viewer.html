@@ -26,13 +26,7 @@
             <span>TypeScript</span><strong>{{ snippet.fileName }}</strong>
           </div>
           <div class="code-window__title">{{ snippet.titleKey | transloco }}</div>
-          <div class="code-window__viewport">
-            <pre
-              class="code-window__snippet"
-              tabindex="0"
-              [attr.aria-label]="snippet.titleKey | transloco"
-            ><code>{{ snippet.text }}</code></pre>
-          </div>
+          <app-study-source-code [source]="snippet" />
         </div>
       </div>
     }

@@ -62,7 +62,8 @@
   }
 
   .study-back,
-  .study-navigation a {
+  .study-navigation a,
+  .study-files a {
     color: var(--sanaka-gold-soft);
     font-size: var(--sanaka-type-interface-meta-size);
     text-underline-offset: 0.25em;
@@ -383,6 +384,33 @@
     margin-block: 1rem;
     padding: 1rem;
     border: 1px solid rgba(237, 201, 120, 0.22);
+  }
+  .study-files ul {
+    display: grid;
+    gap: 1rem;
+    margin-block: 1rem 0;
+    padding: 0;
+    list-style: none;
+  }
+  .study-files li {
+    display: grid;
+    gap: 0.4rem;
+    min-width: 0;
+  }
+  .study-files a {
+    width: fit-content;
+    max-width: 100%;
+    line-height: 1.8;
+    text-decoration-line: underline;
+    text-decoration-style: dotted;
+    text-decoration-color: var(--sanaka-gold);
+    overflow-wrap: anywhere;
+  }
+  .study-files a:hover,
+  .study-files a:focus-visible {
+    color: var(--sanaka-ivory);
+    text-decoration-style: solid;
+    text-decoration-color: currentColor;
   }
   summary {
     color: var(--sanaka-gold-soft);

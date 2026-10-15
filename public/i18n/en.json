@@ -630,7 +630,7 @@
       "entregas": {
         "title": "Ākāśa’s deliveries",
         "description": "Help Ākāśa choose the next parcel. Try the removal order, then decide whether a delivery arrived or needs another attempt.",
-        "imageAlt": "Ākāśa organizes parcels in Sanaka’s laboratory.",
+        "imageAlt": "Ākāśa watches stellar displays with warnings and luminous energy threads in Sanaka’s laboratory.",
         "experimentTitle": "Follow one parcel at a time",
         "simulationNote": "Deliveries exist only on this page. You control every transition.",
         "topics": {
@@ -787,7 +787,7 @@
       "jogo": {
         "title": "Kālikā’s impossible game",
         "description": "Choose Kālikā’s and Mors’s gestures, play a round and follow how the program decides who wins.",
-        "imageAlt": "Kālikā and Mors study rules in a manga composition.",
+        "imageAlt": "Kālikā, Mors and a companion study cards in a lantern-lit tavern inhabited by spirits.",
         "experimentTitle": "Play before opening the rules",
         "simulationNote": "You choose both gestures. The same combination always produces the same result.",
         "topics": {

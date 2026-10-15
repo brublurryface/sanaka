@@ -12,7 +12,7 @@ import {
   TranslocoLoader,
   TranslocoService,
 } from '@jsverse/transloco';
-import { readFileSync } from 'node:fs';
+import { existsSync, readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it } from 'vitest';
@@ -21,6 +21,7 @@ import { JogoLab } from '../jogo/jogo-lab';
 import { ObolosLab } from '../obolos/obolos-lab';
 import { PadariaLab } from '../padaria/padaria-lab';
 import { MatrixStudyFrame } from './matrix-study-frame';
+import { StudySourceCode } from './study-source-code';
 
 class ActualTranslations implements TranslocoLoader {
   getTranslation(language: string) {
@@ -59,7 +60,7 @@ function open(root: HTMLElement, selector: string): HTMLDetailsElement {
 describe('Matrix guided journeys in the Angular DOM', () => {
   beforeEach(async () => {
     await TestBed.configureTestingModule({
-      imports: labs.map((lab) => lab.component),
+      imports: [...labs.map((lab) => lab.component), StudySourceCode],
       providers: [
         provideRouter([]),
         provideTransloco({
@@ -92,10 +93,15 @@ describe('Matrix guided journeys in the Angular DOM', () => {
       expect((root.querySelector('.study-technical') as HTMLDetailsElement).open).toBe(false);
       for (const details of root.querySelectorAll<HTMLDetailsElement>('.study-reference'))
         expect(details.open).toBe(false);
-      if (id === 'obolos') {
+      if (id !== 'padaria') {
         expect(root.querySelector('img')!.getAttribute('src')).toBe(
-          '/images/matrix/obolos/obolos-atmosphere-desktop.webp',
+          `/images/matrix/${id}/${id}-atmosphere-desktop.webp`,
         );
+        expect(
+          existsSync(
+            join(process.cwd(), `public/images/matrix/${id}/${id}-atmosphere-desktop.webp`),
+          ),
+        ).toBe(true);
       } else {
         expect(root.querySelector('.study-hero--neutral')).not.toBeNull();
         expect(root.querySelector('img')).toBeNull();
@@ -108,6 +114,14 @@ describe('Matrix guided journeys in the Angular DOM', () => {
       expect(root.querySelector('#study-code .code-window__snippet')!.textContent).toBe(
         frame.activeSlide.text,
       );
+      expect(root.querySelector('#study-code .token-keyword')).not.toBeNull();
+      open(root, '.study-technical');
+      expect(root.querySelector('.study-technical .token-keyword')).not.toBeNull();
+      for (const link of root.querySelectorAll<HTMLAnchorElement>('.study-files a')) {
+        expect(link.target).toBe('_blank');
+        expect(link.rel).toContain('noopener');
+        expect(link.href).toMatch(/^https:\/\/github\.com\/brublurryface\/sanaka\/blob\//);
+      }
       frame.next();
       fixture.detectChanges();
       expect(root.querySelector('#study-code .code-window__snippet')!.textContent).toBe(
@@ -162,6 +176,24 @@ describe('Matrix guided journeys in the Angular DOM', () => {
     fixture.detectChanges();
     expect(root.querySelector('img')).toBeNull();
     expect(root.querySelector('.study-hero--neutral')).not.toBeNull();
+  });
+
+  it('keeps source examples containing HTML as literal, selectable text', () => {
+    const fixture = TestBed.createComponent(StudySourceCode);
+    const text = 'const html = "<img src=x onerror=alert(1)>";';
+    fixture.componentRef.setInput('source', {
+      ...new ObolosLab().sources[0],
+      text,
+      tokens: [
+        { start: 0, end: 5, className: 'token-keyword' },
+        { start: 5, end: text.length, className: '' },
+      ],
+    });
+    fixture.detectChanges();
+    const root = fixture.nativeElement as HTMLElement;
+    expect(root.querySelector('code')!.textContent).toBe(text);
+    expect(root.querySelector('img')).toBeNull();
+    expect(root.querySelector('pre')!.tabIndex).toBe(0);
   });
 
   it('guides lookup, editing, searching and counting without showing results early', async () => {

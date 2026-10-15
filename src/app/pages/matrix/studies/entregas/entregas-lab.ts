@@ -34,6 +34,7 @@ import { DELIVERY_SOURCES } from './entregas-source.generated';
 export class EntregasLab {
   readonly study: MatrixStudyDefinition = {
     id: 'entregas',
+    desktopImage: '/images/matrix/entregas/entregas-atmosphere-desktop.webp',
     topics: ['discipline', 'performance', 'messaging'],
     investigations: ['empty', 'repeated', 'failure', 'newRule'],
   };

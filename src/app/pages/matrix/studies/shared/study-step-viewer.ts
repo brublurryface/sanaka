@@ -4,11 +4,12 @@ import { Component, computed, input } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { StudyHistoryView } from './study-history';
 import { StudySource } from './matrix-study-definition';
+import { StudySourceCode } from './study-source-code';
 
 @Component({
   selector: 'app-study-step-viewer',
   host: { class: 'matrix-study-host' },
-  imports: [JsonPipe, TranslocoPipe],
+  imports: [JsonPipe, TranslocoPipe, StudySourceCode],
   templateUrl: './study-step-viewer.html',
 })
 export class StudyStepViewer {

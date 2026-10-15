@@ -88,4 +88,39 @@ describe('Matrix study translations and content', () => {
       }
     },
   );
+
+  it('colors complete source ranges without losing characters, comments or whitespace', () => {
+    const allowedClasses = new Set([
+      '',
+      'token-keyword',
+      'token-call',
+      'token-string',
+      'token-type',
+      'token-boolean',
+      'token-constant',
+      'token-comment',
+    ]);
+    const sources = [new ObolosLab(), new EntregasLab(), new JogoLab(), new PadariaLab()].flatMap(
+      (page) => page.sources,
+    );
+    for (const source of sources) {
+      let cursor = 0;
+      for (const token of source.tokens) {
+        expect(token.start, source.titleKey).toBe(cursor);
+        expect(token.end).toBeGreaterThan(token.start);
+        expect(allowedClasses.has(token.className)).toBe(true);
+        cursor = token.end;
+      }
+      expect(cursor, source.titleKey).toBe(source.text.length);
+      expect(source.tokens.map((token) => source.text.slice(token.start, token.end)).join('')).toBe(
+        source.text,
+      );
+    }
+    expect(
+      sources.some((source) => source.tokens.some((token) => token.className === 'token-string')),
+    ).toBe(true);
+    expect(
+      sources.some((source) => source.tokens.some((token) => token.className === 'token-comment')),
+    ).toBe(true);
+  });
 });

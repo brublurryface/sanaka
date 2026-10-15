@@ -1,13 +1,18 @@
 # Matrix — manifesto de artes exclusivas
 
-A arte enviada pela autora, **Busca no Sótão das Relíquias(1).png**, foi aplicada aos
-Óbolos de Mors, em WebP (1942 × 809 px). Personagens, cores e iluminação foram preservados.
-Está em `public/images/matrix/obolos/obolos-atmosphere-desktop.webp` e usa o Header,
-degradês e sombra de texto compartilhados. Ainda não há composição mobile exclusiva.
+Em 15/10/2026 foram aplicadas as três artes enviadas pela autora. Cada imagem mantém
+o enquadramento e as dimensões de origem (1942 × 809 px), convertidos para WebP com
+qualidade 92. Não houve redesenho, alteração de iluminação ou ampliação artificial.
 
-Os outros três laboratórios usam fallback neutro até receberem artes aprovadas.
-Os nomes da tabela abaixo descrevem as demais variantes futuras; não crie URLs para
-arquivos que ainda não existem.
+| Estudo   | Arte aprovada                                      | Arquivo publicado                                                | Tamanho       |
+| -------- | -------------------------------------------------- | ---------------------------------------------------------------- | ------------- |
+| Óbolos   | Mors e Busca no Sótão das Relíquias.png            | `public/images/matrix/obolos/obolos-atmosphere-desktop.webp`     | 426.504 bytes |
+| Entregas | As Entregas de Akasha v2.png                       | `public/images/matrix/entregas/entregas-atmosphere-desktop.webp` | 625.834 bytes |
+| Jogo     | Kalika na Taverna Oculta de Cartas e Espíritos.png | `public/images/matrix/jogo/jogo-atmosphere-desktop.webp`         | 461.300 bytes |
+
+Os três usam o mesmo Header, degradês, sombra de texto e comportamento responsivo.
+O mobile usa o recorte compartilhado da imagem horizontal; não há arte vertical
+exclusiva. A Padaria continua com fallback neutro até receber sua arte aprovada.
 
 ## Contrato comum
 
@@ -15,7 +20,8 @@ Criação desktop: **2400 × 1000 px**. Criação mobile: **1080 × 1350 px**.
 Publicação: **WebP otimizado**, com nitidez conferida após conversão. Meta inicial de
 até 250 KB por variante, não um teto que justifique destruir linhas finas.
 
-Pasta proposta: `public/images/matrix/studies/`.
+Pasta por laboratório: `public/images/matrix/<id>/`. Os nomes mobile da tabela abaixo
+indicam arquivos futuros; não configure URLs para imagens que ainda não existem.
 
 | Estudo   | Desktop                            | Mobile                            | Personagens                                         |
 | -------- | ---------------------------------- | --------------------------------- | --------------------------------------------------- |
@@ -42,9 +48,8 @@ curiosidade e seriedade sem converter todos os personagens em crianças hiper-ch
 
 ## Óbolos de Mors
 
-Mors investiga uma bancada escura com uma caixa de óbolos e pequenos grupos repetidos.
-Uma mão organiza, outra compara. Livros e registros sugerem inventário sem competir com
-o título. Respeitar as asas negras, cabelo e roupa da referência **Mors.png** e, sobretudo,
+A arte aprovada mostra Mors e seus companheiros procurando moedas e relíquias em um
+sótão. Respeitar as asas negras, cabelo e roupa da referência **Mors.png** e, sobretudo,
 **esclera preta**, não branca.
 
 Não inventar moedas canônicas ou reversos. Se houver moedas reconhecíveis na arte,
@@ -52,17 +57,15 @@ usar referências aprovadas. Māyā, Mors e Ākāśa compartilham o reverso can�
 
 ## Entregas de Ākāśa
 
-Volumes dispostos numa sequência clara diante de Ākāśa; um está a caminho e outros
-aguardam. Uma marca discreta de retorno pode sugerir retry, sem texto falso legível.
-Atmosfera cósmica escura com acentos dourados. Ākāśa permanece **dragão quadrúpede** das
-referências **Akasha-busto(2).png** e **Akasha-canon(5).png**: azuis noturnos, peito claro,
-chifres e proporções originais. Não transformá-lo em humano/entregador genérico.
+A arte aprovada mostra Ākāśa diante de painéis estelares com alertas, personagens nas
+telas e fios de energia. Mantém sua forma quadrúpede, chifres, peito claro e escamas
+escuras estreladas. Não substituir a imagem por um entregador humano genérico.
 
 ## Jogo impossível de Kālikā
 
-Kālikā confronta três sinais sobre uma mesa; Mors aproxima mais dois, provocando uma
-investigação curiosa e séria das relações. O humor está no problema que cresce, não em
-expressões exageradamente felizes. Referência **Kalika.png**: cabelo curto, marcações,
+A arte aprovada mostra Kālikā, Mors e um companheiro estudando cartas em uma taverna,
+entre lamparinas e espíritos. O humor está na investigação, não em expressões
+exageradamente felizes. Referência **Kalika.png**: cabelo curto, marcações,
 adornos, roupa e cauda originais. Sua proporção futura ao lado de Māyā é ligeiramente
 mais baixa. Não alongar cabelo ou inventar novos braços. Mors conserva sua esclera preta.
 

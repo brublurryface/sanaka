@@ -193,10 +193,14 @@ neutro e não cria um `<img>` quebrado. Com os arquivos aprovados, informe `desk
 e `mobileImage` no `study` da página. O mesmo Frame escolhe o `<source>` mobile e mantém
 Header, degradês e tipografia comuns. Atualize o texto `imageAlt` nos dois idiomas.
 
-`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, aponta ao commit
-`b039823` da revisão guiada. Os links por componente, template, Sass, domínio e
+`MATRIX_STUDY_SOURCE_REF`, em `shared/matrix-study-files.ts`, fixa o commit da revisão
+publicada. Os links por componente, template, Sass, domínio e
 testes correspondem ao código desta experiência e continuam úteis depois de remover
 a branch. Os recortes exibidos são gerados dos arquivos reais.
+As cores usam a paleta de Components. O gerador analisa o TypeScript durante a
+preparação dos recortes; o navegador recebe apenas o texto e as faixas de cor.
+`shared/study-source-code.ts` renderiza essas faixas nos dois exploradores, sem
+injetar HTML nem carregar um compilador ou editor no navegador.
 Depois de alterar os estudos, atualize essa referência para um commit publicado
 que contenha as novas fontes; não use o nome de uma branch temporária.
 

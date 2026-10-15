@@ -29,6 +29,7 @@ import { GAME_SOURCES } from './jogo-source.generated';
 export class JogoLab {
   readonly study: MatrixStudyDefinition = {
     id: 'jogo',
+    desktopImage: '/images/matrix/jogo/jogo-atmosphere-desktop.webp',
     topics: ['conditions', 'composition', 'extension'],
     investigations: ['invalid', 'tie', 'newRule', 'cost'],
   };

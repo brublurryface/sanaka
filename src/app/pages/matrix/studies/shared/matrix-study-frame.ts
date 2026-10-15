@@ -12,11 +12,12 @@ import { MATRIX_EXPERIMENTS } from '../../matrix-experiments';
 import { StudyCheck } from './study-checks';
 import { MatrixStudyDefinition, StudySource } from './matrix-study-definition';
 import { MATRIX_STUDY_SOURCE_REF, studyFiles, studySourceUrl } from './matrix-study-files';
+import { StudySourceCode } from './study-source-code';
 
 @Component({
   selector: 'app-matrix-study-frame',
   host: { class: 'matrix-study-host' },
-  imports: [RouterLink, TranslocoPipe],
+  imports: [RouterLink, TranslocoPipe, StudySourceCode],
   templateUrl: './matrix-study-frame.html',
 })
 export class MatrixStudyFrame extends CodeExplorerController<StudySource> {

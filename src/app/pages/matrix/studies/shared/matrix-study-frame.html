@@ -81,13 +81,7 @@
             <span>TypeScript</span><strong>{{ activeSlide.fileName }}</strong>
           </div>
           <div class="code-window__title">{{ activeSlide.titleKey | transloco }}</div>
-          <div class="code-window__viewport">
-            <pre
-              class="code-window__snippet"
-              tabindex="0"
-              [attr.aria-label]="activeSlide.titleKey | transloco"
-            ><code>{{ activeSlide.text }}</code></pre>
-          </div>
+          <app-study-source-code [source]="activeSlide" />
           <footer class="code-window__navigation">
             <button
               type="button"
@@ -112,7 +106,9 @@
           <ul>
             @for (file of files(); track file.path) {
               <li>
-                {{ 'matrix.studies.common.fileKinds.' + file.kind | transloco }}:
+                <span class="sanaka-editorial-label">{{
+                  'matrix.studies.common.fileKinds.' + file.kind | transloco
+                }}</span>
                 @if (file.url; as url) {
                   <a [href]="url" target="_blank" rel="noopener noreferrer"
                     ><code>{{ file.path }}</code></a
