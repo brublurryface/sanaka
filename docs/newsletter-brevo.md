@@ -29,20 +29,23 @@ O texto de consentimento do modelo deve corresponder ao convite apresentado no f
 
 ### Configuração informada pela autora — 17/10/2026
 
-| Item                      | Valor confirmado                                                          |
-| ------------------------- | ------------------------------------------------------------------------- |
-| Domínio de envio          | `sanaka.com.br`, informado como autenticado no painel                     |
-| Subdomínio de marca       | Prefixo `news`, informado como configurado no painel                      |
-| Remetente                 | Sanaka — `sanaka@sanaka.com.br`, informado como verificado                |
-| Lista                     | Sanaka — Novidades, ID `4` informado pela autora                          |
-| Modelo                    | Sanaka — Confirmação de inscrição, ID `1`                                 |
-| Consulta do modelo        | `GET /v3/smtp/templates/1` executado pela autora com sucesso              |
-| Estado remoto do modelo   | `isActive: true` e `doiTemplate: true`                                    |
-| Teste direto do fluxo DOI | Recebimento correto do e-mail e inclusão na lista confirmados pela autora |
+| Item                      | Valor confirmado                                                                         |
+| ------------------------- | ---------------------------------------------------------------------------------------- |
+| Domínio de envio          | `sanaka.com.br`, informado como autenticado no painel                                    |
+| Subdomínio de marca       | Prefixo `news`, informado como configurado no painel                                     |
+| Remetente                 | Sanaka — `sanaka@sanaka.com.br`, informado como verificado                               |
+| Lista                     | Sanaka — Novidades, ID `4` informado pela autora                                         |
+| Modelo                    | Sanaka — Confirmação de inscrição, ID `1`                                                |
+| Consulta do modelo        | `GET /v3/smtp/templates/1` executado pela autora com sucesso                             |
+| Estado remoto do modelo   | `isActive: true` e `doiTemplate: true`                                                   |
+| Teste direto do fluxo DOI | Recebimento correto do e-mail e inclusão na lista confirmados pela autora                |
+| Teste pelo Angular        | Inscrição, e-mail de confirmação e retorno a `/posts#newsletter` confirmados pela autora |
 
 A consulta confirma que a chave usada pela autora foi aceita e que o modelo está ativo e reconhecido como DOI. A chave permanece somente no computador da autora.
 
-Em 17/10/2026, a autora executou o teste direto de `POST /v3/contacts/doubleOptinConfirmation`, com lista `4`, modelo `1` e retorno provisório para `https://sanaka.com.br/`. Informou que o e-mail de confirmação chegou corretamente e que o endereço foi incluído na lista. Esse resultado valida a etapa exercitada diretamente na Brevo; o formulário Angular, o retorno à aplicação local, o descadastro e a campanha de teste continuam pendentes.
+Em 17/10/2026, a autora executou o teste direto de `POST /v3/contacts/doubleOptinConfirmation`, com lista `4`, modelo `1` e retorno provisório para `https://sanaka.com.br/`. Informou que o e-mail de confirmação chegou corretamente e que o endereço foi incluído na lista.
+
+Na mesma data, confirmou também o percurso pelo formulário Angular: inscrição, recebimento do e-mail de confirmação e retorno a `/posts#newsletter` após clicar no link. O descadastro e a campanha de teste continuam pendentes antes do primeiro envio público.
 
 O nome do modelo apareceu com acentos corrompidos na saída do PowerShell; esse resultado deve ser distinguido do e-mail recebido, que a autora informou estar correto.
 
