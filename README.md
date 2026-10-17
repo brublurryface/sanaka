@@ -153,6 +153,10 @@ npm run build
 
 Os artefatos de produção são gerados em `dist/sanaka/`.
 
+Para executar esses artefatos com Node, use `npm run serve:ssr:sanaka`. O preparo do Render,
+as variáveis de ambiente e a conferência anterior à troca do domínio estão no
+[guia de implantação](./docs/render-deployment.md).
+
 ### Mapa do acervo
 
 O repositório inclui uma auditoria reproduzível do conteúdo público do WordPress. Ela documenta categorias, destinos editoriais e uso de imagens destacadas sem modificar o CMS.
@@ -300,6 +304,10 @@ npm run build
 ```
 
 Production artifacts are generated in `dist/sanaka/`.
+
+Run these artifacts with Node using `npm run serve:ssr:sanaka`. See the
+[Render deployment guide (Portuguese)](./docs/render-deployment.md) for configuration,
+environment variables, and the checks required before switching the public domain.
 
 ### Archive map
 

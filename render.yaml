@@ -1,0 +1,40 @@
+# Primeiro deploy em onrender.com; o domínio definitivo será configurado depois da revisão.
+services:
+  - type: web
+    name: sanaka
+    runtime: node
+    region: virginia
+    plan: 0.5c-512mb
+    branch: main
+    autoDeployTrigger: 'off'
+    buildCommand: npm ci --include=dev && npm run build
+    startCommand: npm run serve:ssr:sanaka
+    healthCheckPath: /api/health
+    envVars:
+      - key: NODE_ENV
+        value: production
+      # Hipótese para o ingresso direto do Render; conferir antes de liberar os formulários.
+      - key: TRUST_PROXY_HOPS
+        value: '1'
+      - key: SITE_NOINDEX
+        value: 'true'
+      - key: SMTP_HOST
+        value: email-ssl.com.br
+      - key: SMTP_PORT
+        value: '465'
+      - key: SMTP_SECURE
+        value: 'true'
+      - key: SMTP_USER
+        value: bruna@sanaka.com.br
+      - key: CONTACT_FROM_EMAIL
+        value: Sanaka <bruna@sanaka.com.br>
+      - key: CONTACT_TO_EMAIL
+        value: sanaka@sanaka.com.br
+      - key: SMTP_PASS
+        sync: false
+      - key: BREVO_API_KEY
+        sync: false
+      - key: BREVO_NEWSLETTER_LIST_ID
+        value: '4'
+      - key: BREVO_NEWSLETTER_TEMPLATE_ID
+        value: '1'
