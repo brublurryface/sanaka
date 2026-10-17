@@ -7,6 +7,7 @@ import { vi } from 'vitest';
 import { Post } from './post';
 import { Posts } from './posts';
 import { PostsStore } from './posts.store';
+import { NewsletterService } from './newsletter-signup/data-access/newsletter.service';
 import {
   PostsPage,
   PostsQuery,
@@ -17,6 +18,13 @@ class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations = {
       'pt-BR': {
+        newsletter: {
+          eyebrow: 'Novidades de Sanaka',
+          title: 'Sanaka também chega por e-mail.',
+          intro: 'Novidades com comentários da autora.',
+          checking: 'Consultando as inscrições…',
+          unavailable: 'As inscrições não estão disponíveis.',
+        },
         common: {
           actions: { clearSearch: 'Limpar busca', retry: 'Tentar novamente' },
         },
@@ -59,6 +67,13 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
       },
       en: {
+        newsletter: {
+          eyebrow: 'News from Sanaka',
+          title: 'Sanaka also arrives by email.',
+          intro: 'News with comments from the author.',
+          checking: 'Checking subscriptions…',
+          unavailable: 'Subscriptions are unavailable.',
+        },
         common: {
           actions: { clearSearch: 'Clear search', retry: 'Try again' },
         },
@@ -168,6 +183,10 @@ describe('Posts', () => {
         provideRouter([]),
         PostsStore,
         {
+          provide: NewsletterService,
+          useValue: { getAvailability: () => of({ available: false }), subscribe: vi.fn() },
+        },
+        {
           provide: WordPressPostsService,
           useValue: postsService,
         },
@@ -241,6 +260,11 @@ describe('Posts', () => {
     expect(hero?.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
     expect(image?.getAttribute('src')).toBe('/images/posts/posts-atmosphere-desktop.webp');
     expect(image?.getAttribute('alt')).toContain('Māyā, Nandinī e Bhu');
+  });
+
+  it('should keep the newsletter anchor available independently of the WordPress request', () => {
+    createComponent(new Subject<PostsPage>());
+    expect(fixture.nativeElement.querySelector('app-newsletter-signup#newsletter')).not.toBeNull();
   });
 
   it('should show a loading state while WordPress is pending', () => {

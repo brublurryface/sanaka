@@ -1,0 +1,206 @@
+<div class="matrix-study">
+  <section
+    class="sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic study-hero"
+    [class.study-hero--neutral]="!study().desktopImage"
+    aria-labelledby="study-title"
+  >
+    @if (study().desktopImage; as image) {
+      <picture>
+        @if (study().mobileImage; as mobileImage) {
+          <source media="(max-width: 700px)" [srcset]="mobileImage" />
+        }
+        <img
+          class="sanaka-atmosphere-hero__image"
+          [src]="image"
+          width="2400"
+          height="1000"
+          fetchpriority="high"
+          decoding="async"
+          [alt]="translationKey() + '.imageAlt' | transloco"
+        />
+      </picture>
+    }
+    <div class="sanaka-atmosphere-hero__veil" aria-hidden="true"></div>
+    <div class="sanaka-atmosphere-shell">
+      <a class="study-back" routerLink="/matrix"
+        >← {{ 'common.matrix.backToCatalog' | transloco }}</a
+      >
+      <p class="sanaka-editorial-label">
+        {{ 'matrix.studies.common.eyebrow' | transloco: { number: number() } }}
+      </p>
+      <h1 id="study-title">{{ translationKey() + '.title' | transloco }}</h1>
+      <p class="study-intro">{{ translationKey() + '.description' | transloco }}</p>
+    </div>
+  </section>
+
+  <div class="study-shell">
+    <nav
+      class="study-navigation"
+      [attr.aria-label]="'matrix.studies.common.navigation' | transloco"
+    >
+      @for (section of ['experiment', 'code', 'tests']; track section) {
+        <a [routerLink]="['/matrix', study().id]" [fragment]="'study-' + section">
+          {{ 'matrix.studies.common.sections.' + section | transloco }}
+        </a>
+      }
+    </nav>
+
+    <section id="study-experiment" class="study-section" aria-labelledby="experiment-title">
+      <header class="sanaka-section-heading">
+        <div>
+          <p class="sanaka-editorial-label">
+            {{ 'matrix.studies.common.sections.experiment' | transloco }}
+          </p>
+          <h2 id="experiment-title">{{ translationKey() + '.experimentTitle' | transloco }}</h2>
+        </div>
+        <p class="study-simulation-note">{{ translationKey() + '.simulationNote' | transloco }}</p>
+      </header>
+      <ng-content />
+    </section>
+
+    <section
+      id="study-code"
+      class="study-section matrix-code-explorer"
+      aria-labelledby="code-title"
+    >
+      <header class="code-explorer__header">
+        <div>
+          <p>{{ 'common.matrix.code.eyebrow' | transloco }}</p>
+          <h2 id="code-title">{{ 'matrix.studies.common.realCode' | transloco }}</h2>
+        </div>
+        <span>{{
+          'common.matrix.code.status'
+            | transloco: { current: activeIndex() + 1, total: slides.length }
+        }}</span>
+      </header>
+      <details class="study-reference">
+        <summary>{{ 'matrix.studies.common.sourceLibrary' | transloco }}</summary>
+        <p>{{ 'matrix.studies.common.sourceNote' | transloco }}</p>
+        <div class="code-window">
+          <div class="code-window__bar">
+            <span>TypeScript</span><strong>{{ activeSlide.fileName }}</strong>
+          </div>
+          <div class="code-window__title">{{ activeSlide.titleKey | transloco }}</div>
+          <app-study-source-code [source]="activeSlide" />
+          <footer class="code-window__navigation">
+            <button
+              type="button"
+              (click)="previous()"
+              [attr.aria-label]="'common.matrix.code.previous' | transloco"
+            >
+              ←
+            </button>
+            <span>{{ activeSlide.titleKey | transloco }}</span>
+            <button
+              type="button"
+              (click)="next()"
+              [attr.aria-label]="'common.matrix.code.next' | transloco"
+            >
+              →
+            </button>
+          </footer>
+        </div>
+        <p>{{ activeSlide.descriptionKey | transloco }}</p>
+        <details class="study-files">
+          <summary>{{ 'matrix.studies.common.files' | transloco }}</summary>
+          <ul>
+            @for (file of files(); track file.path) {
+              <li>
+                <span class="sanaka-editorial-label">{{
+                  'matrix.studies.common.fileKinds.' + file.kind | transloco
+                }}</span>
+                @if (file.url; as url) {
+                  <a [href]="url" target="_blank" rel="noopener noreferrer"
+                    ><code>{{ file.path }}</code></a
+                  >
+                } @else {
+                  <code>{{ file.path }}</code>
+                }
+              </li>
+            }
+          </ul>
+          @if (!files()[0].url) {
+            <p>{{ 'matrix.studies.common.unpublishedSources' | transloco }}</p>
+          }
+        </details>
+      </details>
+      <details class="study-reference">
+        <summary>{{ 'matrix.studies.common.conceptLibrary' | transloco }}</summary>
+        @for (topic of study().topics; track topic) {
+          <details class="study-topic">
+            <summary>{{ translationKey() + '.topics.' + topic + '.title' | transloco }}</summary>
+            @for (level of ['everyday', 'technical']; track level) {
+              <p class="sanaka-editorial-label">
+                {{ 'matrix.studies.common.levels.' + level | transloco }}
+              </p>
+              <p>{{ translationKey() + '.topics.' + topic + '.' + level | transloco }}</p>
+            }
+          </details>
+        }
+      </details>
+    </section>
+
+    <section id="study-tests" class="study-section" aria-labelledby="tests-title">
+      <p class="sanaka-editorial-label">{{ 'matrix.studies.common.sections.tests' | transloco }}</p>
+      <h2 id="tests-title">{{ 'matrix.studies.common.reproducibleChecks' | transloco }}</h2>
+      <details class="study-reference">
+        <summary>{{ 'matrix.studies.common.checkLibrary' | transloco }}</summary>
+        <p>{{ 'matrix.studies.common.checksNote' | transloco }}</p>
+        <button type="button" class="study-button" (click)="runChecks.emit()">
+          {{ 'matrix.studies.common.runChecks' | transloco }}
+        </button>
+        <ul class="study-checks" aria-live="polite">
+          @for (check of checks(); track check.key) {
+            <li>
+              <strong>{{
+                (check.passed ? 'matrix.studies.common.passed' : 'matrix.studies.common.failed')
+                  | transloco
+              }}</strong>
+              {{ check.key | transloco }}
+              <span
+                >{{ 'matrix.studies.common.expected' | transloco }}
+                <code>{{ check.expected }}</code></span
+              >
+              <span
+                >{{ 'matrix.studies.common.actual' | transloco }}
+                <code>{{ check.actual }}</code></span
+              >
+            </li>
+          }
+        </ul>
+      </details>
+    </section>
+
+    <section id="study-investigate" class="study-section" aria-labelledby="investigate-title">
+      <p class="sanaka-editorial-label">
+        {{ 'matrix.studies.common.sections.investigate' | transloco }}
+      </p>
+      <h2 id="investigate-title">{{ 'matrix.studies.common.investigateFreely' | transloco }}</h2>
+      @for (question of study().investigations; track question) {
+        <details class="study-investigation">
+          <summary>
+            {{ translationKey() + '.investigations.' + question + '.question' | transloco }}
+          </summary>
+          <p>{{ translationKey() + '.investigations.' + question + '.answer' | transloco }}</p>
+        </details>
+      }
+      @if (study().relatedRoute; as relatedRoute) {
+        <a class="study-back" [routerLink]="relatedRoute"
+          >{{ translationKey() + '.related' | transloco }} →</a
+        >
+      }
+    </section>
+    <nav
+      class="study-navigation"
+      [attr.aria-label]="'matrix.studies.common.otherStudies' | transloco"
+    >
+      @for (experiment of studyLinks; track experiment.id) {
+        @if (experiment.id !== study().id) {
+          <a [routerLink]="experiment.route">{{
+            experiment.translationKey + '.title' | transloco
+          }}</a>
+        }
+      }
+    </nav>
+  </div>
+</div>

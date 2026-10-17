@@ -1,4 +1,4 @@
-<main>
+<div>
   <section
     class="catalog-hero sanaka-atmosphere-hero sanaka-atmosphere-hero--cinematic"
     aria-labelledby="matrix-catalog-title"
@@ -50,51 +50,53 @@
       </header>
 
       <div class="available-experiments">
-        <a class="featured-experiment" routerLink="/matrix/components">
-          <div class="featured-experiment__number" aria-hidden="true">01</div>
-
-          <div class="featured-experiment__content">
-            <span class="featured-experiment__status">
-              {{ 'matrix.catalog.available.status' | transloco }}
-            </span>
-            <h3>{{ 'matrix.catalog.available.title' | transloco }}</h3>
-            <p>{{ 'matrix.catalog.available.description' | transloco }}</p>
-
-            <strong>
-              {{ 'matrix.catalog.available.action' | transloco }}
-              <span aria-hidden="true">→</span>
-            </strong>
-          </div>
-
-          <div class="featured-experiment__diagram" aria-hidden="true">
-            <span>Pai</span>
-            <i>→</i>
-            <span>Filho</span>
-            <i>↩</i>
-          </div>
-        </a>
-
-        <a class="featured-experiment featured-experiment--portal" routerLink="/matrix/rest-api">
-          <div class="featured-experiment__number" aria-hidden="true">02</div>
-
-          <div class="featured-experiment__content">
-            <span class="featured-experiment__status">
-              {{ 'matrix.catalog.rest.status' | transloco }}
-            </span>
-            <h3>{{ 'matrix.catalog.rest.title' | transloco }}</h3>
-            <p>{{ 'matrix.catalog.rest.description' | transloco }}</p>
-
-            <strong>
-              {{ 'matrix.catalog.rest.action' | transloco }}
-              <span aria-hidden="true">→</span>
-            </strong>
-          </div>
-
-          <div class="featured-experiment__portal" aria-hidden="true">
-            <i></i>
-            <span>GET</span>
-          </div>
-        </a>
+        @for (experiment of availableExperiments; track experiment.id) {
+          <a
+            class="featured-experiment"
+            [class.featured-experiment--portal]="experiment.id === 'rest-api'"
+            [routerLink]="experiment.route"
+          >
+            <div class="featured-experiment__number" aria-hidden="true">
+              {{ experiment.number }}
+            </div>
+            <div class="featured-experiment__content">
+              <span class="featured-experiment__status">{{
+                'matrix.catalog.available.status' | transloco
+              }}</span>
+              <h3>{{ experiment.translationKey + '.title' | transloco }}</h3>
+              <p>{{ experiment.translationKey + '.description' | transloco }}</p>
+              <strong>
+                {{
+                  (experiment.id === 'rest-api'
+                    ? 'matrix.catalog.rest.action'
+                    : 'matrix.catalog.available.action'
+                  ) | transloco
+                }}
+                <span aria-hidden="true">→</span>
+              </strong>
+            </div>
+            @if (experiment.id === 'components') {
+              <div class="featured-experiment__diagram" aria-hidden="true">
+                <span>{{ 'matrix.catalog.parent' | transloco }}</span
+                ><i>→</i> <span>{{ 'matrix.catalog.child' | transloco }}</span
+                ><i>↩</i>
+              </div>
+            } @else if (experiment.id === 'rest-api') {
+              <div class="featured-experiment__portal" aria-hidden="true">
+                <i></i><span>GET</span>
+              </div>
+            } @else {
+              <span class="featured-experiment__concepts">
+                @for (concept of experiment.concepts; track concept) {
+                  @if (!$first) {
+                    <span aria-hidden="true"> · </span>
+                  }
+                  {{ 'matrix.studies.common.concepts.' + concept | transloco }}
+                }
+              </span>
+            }
+          </a>
+        }
       </div>
 
       <div class="upcoming-heading">
@@ -108,11 +110,11 @@
         @for (experiment of upcomingExperiments; track experiment.number) {
           <li>
             <span>{{ experiment.number }}</span>
-            <strong>{{ experiment.translationKey | transloco }}</strong>
+            <strong>{{ experiment.translationKey + '.title' | transloco }}</strong>
             <small>{{ 'matrix.catalog.upcoming.status' | transloco }}</small>
           </li>
         }
       </ol>
     </div>
   </section>
-</main>
+</div>

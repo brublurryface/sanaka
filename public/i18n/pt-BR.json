@@ -41,7 +41,7 @@
       "navigation": "Navegação do rodapé",
       "about": "Sobre",
       "contact": "Contato",
-      "signature": "Entre código, símbolos e presença.",
+      "signature": "Estudos entre códigos e presença.",
       "sanakaverse": "Sanakaverse"
     }
   },
@@ -152,6 +152,27 @@
         "email": "Informe um e-mail válido.",
         "message": "Escreva a mensagem que deseja enviar."
       }
+    }
+  },
+  "newsletter": {
+    "footerLink": "Newsletter",
+    "eyebrow": "Novidades de Sanaka",
+    "title": "Sanaka também chega por e-mail.",
+    "intro": "Uma seleção de publicações, novidades e descobertas de Sanaka, acompanhada de pequenos comentários meus.",
+    "email": "Seu e-mail",
+    "consent": "Quero receber as novidades de Sanaka por e-mail.",
+    "website": "Seu site — deixe este campo vazio",
+    "privacy": "Seu e-mail será administrado na Brevo para esta newsletter. Você poderá cancelar a assinatura em qualquer edição.",
+    "submit": "Assinar",
+    "submitting": "Enviando",
+    "checking": "Consultando as inscrições…",
+    "unavailable": "As inscrições não estão disponíveis neste momento.",
+    "pendingConfirmation": "Pedido recebido. Confira seu e-mail para confirmar a assinatura. Só depois da confirmação você receberá as novidades.",
+    "rateLimited": "Muitas tentativas em pouco tempo. Aguarde alguns minutos antes de tentar novamente.",
+    "error": "Não foi possível solicitar a confirmação agora. Seu cadastro ainda não foi confirmado. Tente novamente mais tarde.",
+    "errors": {
+      "email": "Informe um e-mail válido, com no máximo 254 caracteres.",
+      "consent": "Marque a opção se deseja assinar a newsletter."
     }
   },
   "sanakaverse": {
@@ -372,7 +393,750 @@
     }
   },
   "matrix": {
+    "studies": {
+      "common": {
+        "unpublishedSources": "Os caminhos acima são locais. Os links do GitHub serão habilitados após a publicação autorizada da branch.",
+        "concepts": {
+          "@Input": "@Input",
+          "@Output": "@Output",
+          "HTTP": "HTTP",
+          "API": "API",
+          "RxJS": "RxJS",
+          "Array": "Array",
+          "Set": "Set",
+          "Map": "Map",
+          "Big-O": "Big-O",
+          "Queue": "Queue",
+          "Stack": "Stack",
+          "FIFO": "FIFO",
+          "retry": "Retry",
+          "OOP": "Orientação a objetos",
+          "composition": "Composição",
+          "SOLID": "SOLID",
+          "BFF": "BFF",
+          "idempotency": "Idempotência",
+          "Signals": "Signals",
+          "Observables": "Observables",
+          "Lifecycle": "Lifecycle"
+        },
+        "fileKinds": {
+          "component": "Componente TypeScript",
+          "template": "Template HTML",
+          "styles": "Estilos compartilhados",
+          "domain": "Domínio e algoritmo",
+          "tests": "Testes do domínio"
+        },
+        "eyebrow": "Matrix on-line · Laboratório {{ number }}",
+        "navigation": "Seções do laboratório",
+        "otherStudies": "Outras experiências da Matrix",
+        "sections": {
+          "experiment": "Experimentar",
+          "code": "Consultar depois",
+          "tests": "Testar exemplos",
+          "investigate": "Explorar"
+        },
+        "levels": {
+          "everyday": "Em palavras simples",
+          "technical": "O conceito técnico"
+        },
+        "realCode": "Se quiser ir além",
+        "sourceNote": "Funções completas deste laboratório, extraídas dos arquivos reais. A explicação da ação atual está junto do experimento.",
+        "files": "Onde estudar estes arquivos",
+        "reproducibleChecks": "Confira o que aprendeu",
+        "checksNote": "Este botão roda exemplos prontos e compara os resultados. Ele não altera sua experiência.",
+        "runChecks": "Testar exemplos prontos",
+        "passed": "Aprovado",
+        "failed": "Falhou",
+        "expected": "Esperado:",
+        "actual": "Recebido:",
+        "investigateFreely": "Continue explorando",
+        "stepByStep": "O que aconteceu?",
+        "previousStep": "Rever passagem anterior",
+        "nextStep": "Rever passagem seguinte",
+        "stepCount": "Etapa {{ current }} de {{ total }}",
+        "historyNote": "Estes registros mostram a simulação em cada momento. Rever uma passagem muda o estado observado; agir a partir dela substitui o caminho que vinha depois.",
+        "before": "Estado anterior",
+        "after": "Estado observado",
+        "showResult": "Ver resultado final",
+        "restart": "Reiniciar",
+        "sourceLibrary": "Consultar as funções e os arquivos",
+        "conceptLibrary": "Rever os conceitos",
+        "checkLibrary": "Abrir exemplos de verificação",
+        "inspectionCount": "Passagem {{ current }} de {{ total }}",
+        "journeyNavigation": "Etapas da experiência",
+        "lessonComplete": "Você já experimentou esta etapa. Pode repetir a ação ou seguir.",
+        "journeyComplete": "Percurso concluído. Volte a qualquer etapa para experimentar outras escolhas.",
+        "continueTo": "Continuar:",
+        "restartLesson": "Recomeçar esta etapa",
+        "restartSession": "Recomeçar do cardápio",
+        "technicalAtThisStep": "Ver explicação técnica e código desta passagem",
+        "inspectHistory": "Inspecionar os registros antes e depois",
+        "skipStepsHelp": "Mostra a conclusão do percurso atual sem passar pelas inspeções restantes."
+      },
+      "obolos": {
+        "title": "Os óbolos de Mors",
+        "description": "Ajude Mors a encontrar uma moeda, organizar a caixa e descobrir quais nomes se repetem. Uma ação de cada vez.",
+        "imageAlt": "Mors e seus companheiros procuram relíquias e moedas em um sótão, em uma ilustração mangá.",
+        "experimentTitle": "Investigue a caixa com Mors",
+        "simulationNote": "Esta caixa é uma simulação. Seus cliques não fazem ofertas reais.",
+        "topics": {
+          "collections": {
+            "title": "Array, Set e Map não são a mesma caixa",
+            "everyday": "Uma prateleira numerada pode guardar duas moedas iguais. Uma lista de nomes únicos não repete nomes. Um cadastro associa um nome à quantidade de moedas.",
+            "technical": "Array é uma sequência indexada que admite repetição. Set armazena valores distintos. Map associa chaves únicas a valores. Aqui a igualdade compara strings de identificadores; objetos diferentes não se tornam iguais só porque têm propriedades iguais."
+          },
+          "search": {
+            "title": "Procurar uma repetição é escolher uma estratégia",
+            "everyday": "Você pode comparar cada moeda com todas as seguintes ou perguntar a uma lista de controle: este nome já passou por aqui? As respostas coincidem, mas o caminho muda.",
+            "technical": "Os loops comparam todos os pares distintos. A estratégia com Set faz uma consulta de existência para cada elemento. Ambas devolvem a lista de identificadores duplicados, não as moedas únicas nem a soma das repetições."
+          },
+          "complexity": {
+            "title": "Big-O descreve crescimento, não um cronômetro",
+            "everyday": "Quanto maior a caixa, mais trabalho. Conferir cada moeda uma vez cresce com a caixa; conferir todos os pares cresce muito mais rápido.",
+            "technical": "Percorrer n posições é O(n). Comparar todos os pares faz n(n−1)/2 comparações, O(n²). Em estruturas baseadas em hash, Set/Map costumam ter acesso médio esperado O(1); ECMAScript exige acesso sublinear médio, não tempo constante garantido. O padrão não obriga uma implementação por hash."
+          }
+        },
+        "inventory": "Inventário sobre a bancada",
+        "scenarios": {
+          "initial": "Reiniciar caixa",
+          "empty": "Caixa vazia",
+          "equal": "Todos iguais",
+          "unique": "Sem repetição"
+        },
+        "index": "Índice",
+        "comparing": "em inspeção",
+        "emptyInventory": "A caixa está vazia.",
+        "lookupLabel": "Posição que você quer consultar (índice)",
+        "addLabel": "Nome da moeda a adicionar",
+        "add": "Adicionar ao final",
+        "remove": "Retirar posição escolhida",
+        "messages": {
+          "limit": "Esta bancada didática comporta até {{ limit }} identificadores.",
+          "emptyInput": "Um identificador precisa de texto; espaços sozinhos não entram na caixa.",
+          "invalidIndex": "O índice precisa ser inteiro e corresponder a uma posição existente."
+        },
+        "traverse": "Examinar todas as posições",
+        "nested": "Comparar par a par",
+        "set": "Procurar nomes repetidos",
+        "comparisonTitle": "Mesma caixa, caminhos diferentes",
+        "comparisonNote": "Estes são os resultados finais das duas buscas na caixa atual. As contagens representam comparações ou consultas, não tempo de execução.",
+        "strategy": "Estratégia",
+        "operations": "Operações contadas",
+        "duplicates": "Identificadores duplicados",
+        "comparisons": "comparações",
+        "lookups": "consultas",
+        "events": {
+          "initial": "A caixa está pronta. Escolha uma ação desta etapa para observar o que acontece.",
+          "lookup": "Na posição {{ index }} está {{ identifier }}. O número identifica o lugar da moeda na lista.",
+          "missing": "A posição {{ index }} não existe nesta caixa. Nenhuma moeda foi encontrada.",
+          "visit": "A posição {{ index }} guarda {{ identifier }}. Ela está destacada na caixa.",
+          "nestedStart": "A comparação está pronta: vamos examinar uma dupla de cada vez.",
+          "equal": "As posições {{ left }} e {{ right }} guardam o mesmo nome. Ele entra na lista de repetidos. Comparações: {{ comparisons }}.",
+          "different": "As posições {{ left }} e {{ right }} guardam nomes diferentes. Esta dupla não acrescenta um repetido. Comparações: {{ comparisons }}.",
+          "setStart": "Nenhum nome foi examinado ainda. A busca vai lembrar os que já passaram.",
+          "repeated": "{{ identifier }}, na posição {{ index }}, já tinha aparecido. É um nome repetido. Consultas feitas: {{ lookups }}.",
+          "new": "{{ identifier }}, na posição {{ index }}, aparece pela primeira vez neste percurso. A busca guarda esse nome. Consultas feitas: {{ lookups }}.",
+          "add": "{{ identifier }} entrou no final. As moedas anteriores continuam na mesma ordem.",
+          "remove": "A posição {{ index }} foi retirada. As moedas seguintes mudaram de posição.",
+          "count": "Há {{ total }} moedas distribuídas entre {{ names }} nomes. A lista mostra a quantidade de cada um."
+        },
+        "sources": {
+          "read-index": {
+            "title": "Consultar uma posição",
+            "description": "Uma guarda trata índices inválidos antes da leitura. Índice zero continua válido; undefined é um resultado que o chamador precisa tratar."
+          },
+          "nested-loops": {
+            "title": "Dois loops, todas as duplas",
+            "description": "O próprio percurso registra comparisons e os dois índices. A ordenação do resultado e os snapshots têm custos adicionais, fora da contagem de comparações."
+          },
+          "set-search": {
+            "title": "Perguntar ao conjunto seen",
+            "description": "has é chamado uma vez por elemento. seen guarda os identificadores anteriores; duplicates registra quais voltaram a aparecer."
+          },
+          "map-count": {
+            "title": "Associar nomes e quantidades",
+            "description": "get lê a contagem anterior; ?? fornece zero para uma chave ausente; set grava a contagem seguinte."
+          },
+          "edit-array": {
+            "title": "Adicionar e remover sem alterar a entrada",
+            "description": "As funções devolvem outro Array; nomes repetidos são permitidos e índices inválidos são tratados."
+          },
+          "traversal": {
+            "title": "Ler uma posição de cada vez",
+            "description": "O percurso registra um estado por posição para acompanhar a mesma lista na interface."
+          }
+        },
+        "checks": {
+          "zero": "Índice zero é válido",
+          "missing": "Índice ausente retorna undefined",
+          "duplicates": "Set identifica repetição",
+          "agreement": "Os algoritmos concordam",
+          "operations": "Quatro elementos fazem seis comparações",
+          "empty": "Espaços não viram identificador",
+          "map": "Map conta duas ocorrências"
+        },
+        "investigations": {
+          "empty": {
+            "question": "O que acontece se não houver moedas?",
+            "answer": "Use Caixa vazia. Os percursos têm somente o estado inicial, as contagens são zero e a consulta devolve undefined. A coleção vazia é um valor válido."
+          },
+          "repeated": {
+            "question": "E se todas as moedas tiverem o mesmo nome?",
+            "answer": "Use Todos iguais. O resultado contém apenas mors, mas o Map registra quatro ocorrências. O loop continua examinando todos os pares; o Set continua fazendo uma consulta por elemento."
+          },
+          "failure": {
+            "question": "E se eu consultar −1, 1.5 ou uma posição distante?",
+            "answer": "Digite um desses índices. readObolo não acessa uma posição inválida e devolve undefined. Para remover, a mesma validação mantém o array anterior e a página explica o erro."
+          },
+          "newRule": {
+            "question": "Qual arquivo mudar se “Mors” e “mors” precisarem significar a mesma coisa?",
+            "answer": "Defina a normalização na entrada, em addObolo de obolo-inventory.ts, e normalize os cenários iniciais pela mesma regra. Adicione um teste antes de mudar a comparação; hoje os identificadores são sensíveis a maiúsculas."
+          }
+        },
+        "journey": {
+          "read": {
+            "title": "Encontrar uma moeda",
+            "goal": "Cada moeda tem uma posição. Clique em uma delas ou digite o número e consulte. Veja por que a primeira posição é 0.",
+            "next": "Consulte uma posição para ver o que ela guarda."
+          },
+          "edit": {
+            "title": "Organizar a caixa",
+            "goal": "Adicione uma moeda ao final ou retire a posição escolhida. Observe o que muda na caixa e nos números.",
+            "next": "Adicione ou retire uma moeda para observar a mudança."
+          },
+          "search": {
+            "title": "Encontrar repetições",
+            "goal": "Mors precisa saber quais nomes aparecem mais de uma vez. Inicie a busca e acompanhe uma moeda por passagem.",
+            "next": "Inicie a busca e use “Examinar próximo óbolo” até chegar ao resultado."
+          },
+          "count": {
+            "title": "Contar por nome",
+            "goal": "Saber que um nome se repete não diz quantas moedas ele tem. Faça a contagem e compare nomes e quantidades.",
+            "next": "Conte as moedas para ver a quantidade de cada nome."
+          }
+        },
+        "lookup": "Consultar posição",
+        "count": "Contar moedas por nome",
+        "nextItem": "Examinar próximo óbolo",
+        "moreSearches": "Experimentar outros caminhos (opcional)",
+        "moreScenarios": "Trocar o conteúdo da caixa (opcional)",
+        "noneFound": "Nenhum até esta passagem",
+        "seen": "Nomes já vistos",
+        "help": {
+          "lookup": "A consulta mostra a moeda dessa posição. Um número fora da caixa não encontra nenhuma moeda.",
+          "add": "Coloca o nome digitado depois da última moeda. Um nome repetido também pode entrar.",
+          "remove": "Retira a moeda do número escolhido. As seguintes passam a ocupar as posições anteriores.",
+          "search": "A busca confere se cada nome já apareceu. A moeda em exame fica destacada; avance para acompanhar a próxima.",
+          "count": "Agrupa os nomes e mostra quantas vezes cada um aparece na caixa atual.",
+          "nested": "Compara cada posição com as seguintes. Duas moedas ficam destacadas a cada passagem.",
+          "traverse": "Visita cada posição sem procurar repetições. Use-o para acompanhar a leitura de uma lista.",
+          "scenarios": "Cada opção substitui a caixa inteira: vazia, só com mors, sem nomes repetidos ou com o conteúdo inicial."
+        },
+        "technicalEvents": {
+          "initial": "O inventário é um Array: uma sequência que aceita nomes repetidos e usa índices desde 0.",
+          "lookup": "readObolo valida o índice e lê items[index]. Índice 0 é válido.",
+          "missing": "readObolo retorna undefined para um índice não inteiro, negativo ou fora da lista. O resultado é tratado pela interface.",
+          "visit": "traversalSteps percorre o Array e registra a posição lida. Visitar n posições cresce em O(n).",
+          "nestedStart": "nestedDuplicateSteps compara pares distintos. O segundo índice começa depois do primeiro.",
+          "equal": "A expressão items[left] === items[right] foi true. O Set de duplicados guarda o nome uma vez.",
+          "different": "A expressão items[left] === items[right] foi false. Só o contador de comparações aumentou.",
+          "setStart": "setDuplicateSteps começa com um Set vazio para registrar os nomes já vistos.",
+          "repeated": "seen.has(identifier) foi true. duplicates.add(identifier) registra a repetição sem duplicar o nome no resultado.",
+          "new": "seen.has(identifier) foi false. seen.add(identifier) prepara a memória para as próximas consultas.",
+          "add": "addObolo retorna [...items, normalized]: um novo Array. A cópia preserva a entrada anterior.",
+          "remove": "removeObolo usa filter para produzir outro Array sem o índice escolhido. Por isso os índices posteriores mudam.",
+          "count": "countObolos usa Map: get lê a quantidade anterior e set grava mais 1. Set registra presença; Map associa nome e quantidade."
+        }
+      },
+      "entregas": {
+        "title": "As entregas de Ākāśa",
+        "description": "Ajude Ākāśa a escolher a próxima encomenda. Experimente a ordem de retirada e depois decida se uma entrega chegou ou precisa tentar de novo.",
+        "imageAlt": "Ākāśa observa painéis estelares com alertas e fios de energia luminosos no laboratório de Sanaka.",
+        "experimentTitle": "Acompanhe uma encomenda por vez",
+        "simulationNote": "As entregas existem apenas nesta página. Você controla cada passagem.",
+        "topics": {
+          "discipline": {
+            "title": "Fila e pilha: a mesma entrada, outra ordem",
+            "everyday": "Numa fila de atendimento, quem chegou primeiro sai primeiro. Numa pilha de livros, o último colocado costuma ser o primeiro retirado.",
+            "technical": "Queue usa FIFO: First In, First Out. Stack usa LIFO: Last In, First Out. São disciplinas de remoção, não sinônimos de Array. Um array pode servir de armazenamento para ambas."
+          },
+          "performance": {
+            "title": "Remover do início não exige sempre deslocar tudo",
+            "everyday": "Você pode empurrar todos os livros para ocupar o espaço vazio ou apenas mover um marcador que diz onde a fila começa.",
+            "technical": "No modelo de array denso simples, shift pode exigir trabalho linear; esvaziar a fila assim tem custo O(n²). Avançar um índice faz n leituras para esvaziar, O(n). Push/pop costumam ter custo amortizado constante em arrays dinâmicos, mas motores têm estratégias próprias. Um índice inicial também exige planejamento para recuperar memória."
+          },
+          "messaging": {
+            "title": "Uma fila em memória ainda não é mensageria",
+            "everyday": "Receber uma encomenda, tentar entregá-la e confirmar o destino são acontecimentos diferentes. O pacote pode sair da fila e continuar sob responsabilidade de quem o transporta.",
+            "technical": "Produtor cria mensagens; broker organiza sua disponibilização; consumidor processa; acknowledgement confirma. Retry define uma nova tentativa; dead-letter separa mensagens que esgotaram a política. Persistência, redelivery e deduplicação exigem implementação própria e variam por plataforma."
+          }
+        },
+        "addLabel": "Identificador da encomenda",
+        "enqueue": "Adicionar no fim",
+        "process": "Levar próxima encomenda",
+        "confirm": "Confirmar chegada",
+        "fail": "Simular falha na entrega",
+        "waiting": "Encomendas aguardando",
+        "position": "Posição",
+        "attempts": "Tentativas",
+        "emptyQueue": "Nenhuma encomenda aguarda na fila.",
+        "processing": "A caminho:",
+        "delivered": "Entregas confirmadas",
+        "deadLetters": "Separadas para investigar",
+        "compareTitle": "As mesmas encomendas, três percursos",
+        "compareNote": "A comparação usa as encomendas que ainda aguardam. Deslocamentos são estimativas do modelo de array denso; leituras são operações explicitamente contadas. Não são milissegundos.",
+        "strategy": "Estratégia",
+        "order": "Ordem de remoção",
+        "cost": "Operação observada",
+        "shifts": "deslocamentos conceituais",
+        "reads": "leituras por índice",
+        "lifoCost": "Remove do final, sem deslocar o prefixo",
+        "events": {
+          "initial": "Há três encomendas aguardando. A próxima a sair está destacada.",
+          "enqueue": "{{ label }} entrou no final. A encomenda que já estava a caminho continua sua viagem.",
+          "emptyInput": "Digite um nome para a encomenda antes de adicionar.",
+          "limit": "Há {{ limit }} encomendas pendentes. Retire ou conclua uma para abrir espaço.",
+          "sessionLimit": "Esta sessão chegou a {{ limit }} encomendas. Recomece a etapa para testar de novo.",
+          "busy": "Uma encomenda já está a caminho. Confirme a chegada ou simule uma falha.",
+          "empty": "Todas as encomendas saíram. Adicione outra ou recomece a etapa.",
+          "startFifo": "{{ label }} saiu do início e está a caminho, na tentativa {{ attempt }}. Agora escolha chegada ou falha.",
+          "startLifo": "{{ label }} saiu do final e está a caminho, na tentativa {{ attempt }}. Agora escolha chegada ou falha.",
+          "nothingToConfirm": "Nenhuma encomenda está a caminho para confirmar.",
+          "nothingToFail": "Nenhuma encomenda está a caminho para simular uma falha.",
+          "ack": "{{ label }} chegou. Ela aparece nas entregas confirmadas, e a próxima pode sair.",
+          "retry": "{{ label }} não chegou na tentativa {{ attempt }}. Ela voltou ao final, sem virar outra encomenda.",
+          "deadLetter": "{{ label }} falhou na tentativa {{ attempt }}. Foi separada para investigar, em vez de voltar à fila.",
+          "removeFifo": "{{ label }} saiu primeiro porque era a mais antiga na fila. Confira a ordem das retiradas.",
+          "removeLifo": "{{ label }} saiu primeiro porque era a última colocada na pilha. Confira a ordem das retiradas."
+        },
+        "sources": {
+          "start-delivery": {
+            "title": "Selecionar FIFO ou LIFO",
+            "description": "A disciplina escolhe qual posição será retirada. processing conserva a encomenda entre retirada e confirmação; head avança apenas no modo fila."
+          },
+          "confirm-delivery": {
+            "title": "Confirmar sem inventar um processamento",
+            "description": "A guarda impede confirmar quando processing é null. Depois do ACK o item entra em delivered e o consumidor fica livre."
+          },
+          "retry-delivery": {
+            "title": "Falhar, tentar outra vez ou investigar",
+            "description": "A mesma encomenda é reencaminhada mantendo id e attempts. Esgotar o limite altera o destino para deadLetters, não cria um loop infinito."
+          },
+          "compare-structures": {
+            "title": "Executar shift, pop e o índice inicial",
+            "description": "Os três percursos usam as mesmas etiquetas. conceptualShifts descreve um modelo, não uma medição das instruções do motor JavaScript."
+          },
+          "enqueue": {
+            "title": "Adicionar uma encomenda",
+            "description": "A guarda verifica nome e limite; uma nova chegada recebe id próprio e entra no final."
+          }
+        },
+        "checks": {
+          "fifo": "FIFO retira volume-01",
+          "lifo": "LIFO retira volume-03",
+          "ack": "ACK confirma uma entrega",
+          "retry": "Retry preserva a tentativa anterior",
+          "deadLetter": "Duas falhas esgotam a política",
+          "strategies": "shift e head preservam a mesma ordem"
+        },
+        "investigations": {
+          "empty": {
+            "question": "O que acontece depois da última entrega?",
+            "answer": "Processe todos os volumes. Uma nova retirada informa fila vazia. No modo mensageria, confirme cada processamento antes de retirar o próximo."
+          },
+          "repeated": {
+            "question": "Duas etiquetas iguais representam uma mensagem só?",
+            "answer": "Não. Adicione duas etiquetas iguais: cada nova encomenda recebe um id próprio. Uma repetição de entrega preserva o id; uma nova entrada cria outro. Deduplicação de negócio não está implementada."
+          },
+          "failure": {
+            "question": "Como provocar a fila de falhas?",
+            "answer": "Ative mensageria simulada, processe e falhe. O item volta ao final. Processe os outros até ele voltar ao início e falhe na segunda tentativa. Ele aparecerá em deadLetters com o mesmo id."
+          },
+          "newRule": {
+            "question": "Como permitir três tentativas em vez de duas?",
+            "answer": "Mude MAX_DELIVERY_ATTEMPTS em delivery-queue.ts e ajuste os testes de retry/dead-letter. A interface lê a mesma constante. Depois sincronize os recortes para manter a explicação ligada ao código real."
+          }
+        },
+        "journey": {
+          "queue": {
+            "title": "Quem chegou primeiro",
+            "goal": "As encomendas chegaram na ordem mostrada. Retire a próxima e veja qual sai primeiro.",
+            "next": "Retire uma encomenda para observar a ordem da fila."
+          },
+          "stack": {
+            "title": "Quem chegou por último",
+            "goal": "Recomeçamos com os mesmos três volumes. Agora a retirada começa pelo último colocado. Compare com a etapa anterior.",
+            "next": "Retire uma encomenda para comparar a pilha com a fila."
+          },
+          "messaging": {
+            "title": "Entregar ou tentar de novo",
+            "goal": "Tirar da fila não basta para entregar. Leve uma encomenda e escolha: confirmar que chegou ou simular uma falha.",
+            "next": "Leve uma encomenda. Depois confirme a chegada ou simule uma falha."
+          }
+        },
+        "remove": "Retirar próxima encomenda",
+        "nextParcel": "Próxima a sair",
+        "removed": "Ordem das retiradas",
+        "moreArrivals": "Adicionar uma encomenda (opcional)",
+        "help": {
+          "queue": "Retira a primeira que ainda espera. A sequência registrada abaixo mostra a ordem de saída.",
+          "stack": "Retira a última que ainda espera. Observe o volume destacado antes de clicar.",
+          "messaging": "Coloca a próxima encomenda a caminho. Ela ainda não conta como entregue.",
+          "confirm": "Registra que a encomenda chegou e libera Ākāśa para levar outra.",
+          "fail": "A encomenda volta ao final para outra tentativa. Depois de {{ max }} falhas, fica separada para investigar.",
+          "enqueue": "Coloca o volume no final sem interromper uma entrega que já está a caminho."
+        },
+        "technicalEvents": {
+          "initial": "A etapa usa Queue/FIFO ou Stack/LIFO para escolher a próxima posição. As duas armazenam volumes num Array.",
+          "enqueue": "enqueueDelivery cria outro Array com a nova encomenda no final. Cada chegada recebe um id próprio.",
+          "emptyInput": "trim remove espaços; uma string vazia preserva o estado anterior.",
+          "limit": "A guarda limita a simulação a 16 pendentes, incluindo a encomenda em processing.",
+          "sessionLimit": "A guarda limita esta demonstração a 64 chegadas por sessão para não acumular registros.",
+          "busy": "processing diferente de null impede iniciar outro processamento simultâneo.",
+          "empty": "head alcançou o fim de entries. A guarda impede ler uma posição sem encomenda.",
+          "startFifo": "FIFO significa primeiro a entrar, primeiro a sair. startDelivery lê entries[head], avança head e guarda o volume em processing.",
+          "startLifo": "LIFO significa último a entrar, primeiro a sair. startDelivery lê a última posição e a separa em processing.",
+          "nothingToConfirm": "acknowledgeDelivery preserva o estado quando processing é null.",
+          "nothingToFail": "failDelivery preserva o estado quando processing é null.",
+          "ack": "acknowledgeDelivery move processing para delivered. Essa confirmação é o ACK; retirar da fila sozinho não a produz.",
+          "retry": "failDelivery conserva id e attempts, devolvendo a mesma encomenda ao final. A próxima retirada incrementa attempts.",
+          "deadLetter": "Ao esgotar MAX_DELIVERY_ATTEMPTS, failDelivery move a encomenda para deadLetters. O retry não fica infinito.",
+          "removeFifo": "O modo estrutura termina a retirada no mesmo clique. startDelivery lê entries[head]; a página conclui a operação sem exigir ACK manual.",
+          "removeLifo": "O modo estrutura termina a retirada no mesmo clique. startDelivery escolhe a última posição; a página conclui a operação sem exigir ACK manual."
+        }
+      },
+      "jogo": {
+        "title": "O jogo impossível de Kālikā",
+        "description": "Escolha os gestos de Kālikā e Mors, jogue uma rodada e acompanhe como o programa decide quem vence.",
+        "imageAlt": "Kālikā, Mors e um companheiro investigam cartas em uma taverna iluminada por lamparinas e habitada por espíritos.",
+        "experimentTitle": "Jogue antes de abrir as regras",
+        "simulationNote": "Você escolhe os dois gestos. A mesma combinação sempre produz o mesmo resultado.",
+        "topics": {
+          "conditions": {
+            "title": "Antes das classes, uma função",
+            "everyday": "Com três gestos, combinar quem vence quem numa pequena lista resolve o jogo. Uma ferramenta simples pode ser a escolha mais clara.",
+            "technical": "Uma função pura depende das entradas, devolve um resultado e não modifica dados externos. Condicionais expressam uma política fixa sem precisar de classes."
+          },
+          "composition": {
+            "title": "Regras que conversam pelo mesmo contrato",
+            "everyday": "Uma pessoa confere empates, outra conhece a lista de vitórias. O jogo pergunta a ambas sem precisar saber como cada uma trabalha.",
+            "technical": "Composição reúne colaboradores. Encapsulamento controla o acesso aos detalhes. Polimorfismo permite chamar o mesmo contrato em implementações diferentes. Uma interface TypeScript descreve esse contrato na compilação."
+          },
+          "extension": {
+            "title": "Estender sem espalhar condicionais",
+            "everyday": "Mors não precisa reescrever a mesa inteira para trazer novas relações. Precisa declarar as novas possibilidades e conferir se as antigas continuam válidas.",
+            "technical": "Open/Closed orienta a projetar pontos de extensão que evitem modificar o motor a cada política nova. Não proíbe toda alteração de código. Aqui, a extensão é configuração e composição, não uma hierarquia grande."
+          }
+        },
+        "controls": {
+          "player": "Gesto de Kālikā",
+          "opponent": "Gesto de Mors",
+          "play": "Jogar rodada",
+          "rule": "Regra em exame:",
+          "scenarios": "Testar uma situação pronta (opcional)",
+          "invalidMove": "Entrada inválida: banana"
+        },
+        "variants": {
+          "conditions": "Função · três gestos",
+          "rulesClassic": "Regras · três gestos",
+          "rulesExtended": "Regras · cinco gestos"
+        },
+        "moves": {
+          "rock": "Pedra",
+          "paper": "Papel",
+          "scissors": "Tesoura",
+          "lizard": "Lagarto",
+          "spock": "Spock"
+        },
+        "results": {
+          "pending": "Avance os passos para revelar a decisão.",
+          "tie": "Empate",
+          "win": "Kālikā vence",
+          "lose": "Mors vence",
+          "invalid": "Entrada ou configuração inválida"
+        },
+        "comparison": {
+          "title": "O mesmo domínio, dois desenhos",
+          "note": "Com os mesmos gestos, a função e as regras clássicas chegam ao mesmo resultado. Gestos novos só são aceitos pela versão de cinco gestos."
+        },
+        "events": {
+          "initial": "Os gestos estão escolhidos. Clique em “Jogar rodada” para avaliá-los.",
+          "validated": "Os dois gestos são permitidos. A próxima passagem verifica se eles são iguais.",
+          "invalid": "Um gesto não pertence a este jogo. A rodada foi rejeitada; escolha gestos permitidos para continuar.",
+          "continue": "“{{rule}}” não decidiu esta rodada. Examine a próxima regra.",
+          "decided": "“{{rule}}” decidiu esta rodada. O resultado aparece junto dos gestos.",
+          "conditions": "Os gestos foram comparados. O resultado desta rodada aparece acima; mude uma escolha para jogar de novo.",
+          "unhandled": "As regras não cobrem esta combinação. O programa sinaliza o problema em vez de inventar um vencedor."
+        },
+        "sources": {
+          "classic-function": {
+            "title": "Função e condições",
+            "description": "A implementação inicial realmente usada no modo de três gestos."
+          },
+          "rule-contract": {
+            "title": "Contrato e empate",
+            "description": "A interface só exige o que o motor precisa; a primeira regra pode decidir ou passar adiante."
+          },
+          "dominance-rule": {
+            "title": "Relações encapsuladas",
+            "description": "O mapa de vitórias é fornecido como dados e copiado pela regra."
+          },
+          "composed-game": {
+            "title": "Motor composto",
+            "description": "O laço executa regras compatíveis, registra cada passo e rejeita configurações incompletas."
+          }
+        },
+        "checks": {
+          "tie": "Empate reconhecido",
+          "win": "Vitória clássica",
+          "lose": "Derrota clássica",
+          "invalid": "Entrada desconhecida rejeitada",
+          "extension": "Lagarto vence Spock",
+          "compatible": "Pedra ainda vence tesoura"
+        },
+        "investigations": {
+          "invalid": {
+            "question": "E se a entrada for vazia?",
+            "answer": "Ela não pertence ao conjunto de gestos e produz invalid. Acrescente esse caso ao teste antes de modificar a validação."
+          },
+          "tie": {
+            "question": "E se ambos repetirem o mesmo gesto?",
+            "answer": "TieRule decide empate antes da dominância. No modo função, o teste de igualdade cumpre a mesma responsabilidade."
+          },
+          "newRule": {
+            "question": "E se Mors trouxer uma regra nova?",
+            "answer": "Implemente RoundRule ou configure novos pares. Escolha conscientemente a ordem: a primeira regra que decide vence. Teste conflitos e combinações antigas."
+          },
+          "cost": {
+            "question": "Em que situação você manteria só a função?",
+            "answer": "Quando os três gestos forem estáveis e a função continuar clara. Extensibilidade não compensa automaticamente mais arquivos e indireção."
+          }
+        },
+        "journey": {
+          "play": {
+            "title": "Jogar uma rodada",
+            "goal": "Escolha os dois gestos e jogue. Pedra vence tesoura, tesoura vence papel e papel vence pedra. Gestos iguais empatam.",
+            "next": "Escolha os gestos e clique em “Jogar rodada”."
+          },
+          "rules": {
+            "title": "Acompanhar a decisão",
+            "goal": "Agora o programa verifica uma regra de cada vez. Jogue e avance para observar qual delas decide a rodada.",
+            "next": "Jogue e use “Examinar próxima regra” até ver o resultado."
+          },
+          "extend": {
+            "title": "Acrescentar dois gestos",
+            "goal": "Lagarto e Spock entram no jogo. Experimente uma combinação nova e acompanhe as regras que decidem o resultado.",
+            "next": "Escolha uma combinação e acompanhe a rodada até a decisão."
+          }
+        },
+        "help": {
+          "play": "Compara os gestos escolhidos e mostra o resultado desta rodada.",
+          "rules": "Primeiro confere se os gestos são permitidos. Depois, use o próximo passo para verificar empate e vitória.",
+          "extend": "Lagarto vence papel e Spock. Spock vence pedra e tesoura. As relações completas aparecem no código desta etapa.",
+          "scenarios": "Cada opção escolhe os gestos por você e inicia a avaliação. “Entrada inválida” usa banana para mostrar uma escolha rejeitada."
+        },
+        "nextRule": "Examinar próxima regra",
+        "ruleNames": {
+          "tie": "Os gestos são iguais?",
+          "dominance": "Quem vence quem?",
+          "conditions": "Comparação dos gestos"
+        },
+        "scenarioLabels": {
+          "tie": "Testar empate",
+          "win": "Testar vitória de Kālikā",
+          "lose": "Testar vitória de Mors",
+          "invalid": "Testar entrada inválida"
+        },
+        "technicalEvents": {
+          "initial": "player e opponent guardam as entradas. O resultado começa em null até a avaliação.",
+          "validated": "isMove valida as entradas contra os gestos permitidos antes de executar as regras.",
+          "invalid": "A validação retornou invalid. Uma entrada desconhecida não é tratada como derrota.",
+          "continue": "A regra evaluate retornou null: ela não resolveu esta combinação, então RuleGame continua.",
+          "decided": "evaluate retornou tie, win ou lose. RuleGame para na primeira regra que decide.",
+          "conditions": "playClassic trata entradas inválidas, empate e as condições de vitória. Uma função pura basta para estes três gestos.",
+          "unhandled": "Nenhuma regra decidiu. RuleGame devolve invalid para uma configuração incompleta."
+        }
+      },
+      "padaria": {
+        "title": "A padaria de Māyā",
+        "description": "Consulte o cardápio de Māyā, faça um pedido e veja a resposta. Depois experimente repetir um pagamento fictício.",
+        "imageAlt": "Māyā, Nandinī, Mors e Ākāśa investigam uma padaria em uma composição mangá.",
+        "experimentTitle": "Faça um pedido com Māyā",
+        "simulationNote": "Esta padaria usa produtos e créditos imaginários. Tudo acontece nesta página.",
+        "related": "Compare com a chamada HTTP real da NASA",
+        "topics": {
+          "contract": {
+            "title": "Um pedido precisa dizer o que quer",
+            "everyday": "Dizer “quero pão” não informa quantos nem se haverá entrega. Um combinado claro ajuda a conferir se o pedido pode ser atendido.",
+            "technical": "O contrato define método, caminho, corpo e resposta. GET consulta recursos; POST solicita processamento ou criação. JSON é um formato de dados, não sinônimo de REST. Tipos TypeScript não substituem validação no servidor."
+          },
+          "layers": {
+            "title": "Cada camada responde por uma parte",
+            "everyday": "Māyā escolhe, Nandinī verifica e Mors confirma. Se tudo for responsabilidade da mesma pessoa, fica difícil localizar um erro.",
+            "technical": "A interface coleta entradas; acesso a dados prepara comunicação; o servidor valida e processa; a resposta atualiza a tela. Um BFF pode adaptar contratos ou agregar serviços para um frontend específico, mas não é obrigatório."
+          },
+          "idempotency": {
+            "title": "Repetir a intenção sem repetir o efeito",
+            "everyday": "Se Māyā não ouviu a confirmação, repetir “pague este pedido” não deveria virar duas cobranças. Identificar a mesma intenção ajuda a reconhecer a repetição.",
+            "technical": "Idempotência diz respeito ao efeito de repetir uma operação. POST não é idempotente por definição; um contrato pode adicionar essa propriedade com chaves e armazenamento consistente. Não é a mesma coisa que desabilitar o botão."
+          }
+        },
+        "controls": {
+          "menu": "Cardápio",
+          "product": "Produto",
+          "credits": "Créditos fictícios",
+          "stock": "Estoque",
+          "quantity": "Quantidade · inteira de 1 a 20",
+          "delivery": "Solicitar entrega com Ākāśa",
+          "orderId": "Identificador do pedido",
+          "query": "Consultar pedido",
+          "invalid": "Testar pedido inválido",
+          "paymentWarning": "O pagamento usa apenas créditos fictícios.",
+          "idempotent": "Reconhecer o mesmo pagamento",
+          "key": "Chave da intenção",
+          "pay": "Simular pagamento",
+          "repeat": "Repetir esse pagamento",
+          "paymentCount": "{{count}} registros de pagamento fictício nesta sessão.",
+          "complete": "Receber resposta",
+          "selectedFailure": "Cenário selecionado:",
+          "request": "Requisição · método, caminho e JSON",
+          "response": "Resposta · status e JSON",
+          "unavailable": "Reiniciar com pão indisponível",
+          "readMenu": "Consultar cardápio",
+          "createOrder": "Enviar pedido",
+          "readView": "Consultar resumo para a tela",
+          "moreCases": "Experimentar outras respostas (opcional)",
+          "createdOrder": "Pedido {{ id }} · {{ quantity }} unidades · {{ total }} créditos fictícios"
+        },
+        "products": {
+          "bread": "Pão",
+          "cake": "Bolo"
+        },
+        "failures": {
+          "none": "Fluxo normal",
+          "server": "Falha interna · 500",
+          "network": "Falha de rede · sem HTTP"
+        },
+        "events": {
+          "initial": "Escolha a ação desta etapa. O resultado aparece aqui depois do seu clique.",
+          "localValidation": "A quantidade precisa ser inteira, entre 1 e 20. Corrija o campo: nenhum pedido foi enviado.",
+          "busy": "Um envio ainda espera resposta. Receba essa resposta antes de enviar outro.",
+          "pending": "O envio está preparado. Clique em “Receber resposta” para observar o que o servidor faz com ele.",
+          "dataAccess": "O envio está passando para o servidor simulado. Nenhuma resposta chegou nesta passagem.",
+          "networkFailure": "A rede simulada falhou antes da resposta. Nenhum pedido ou pagamento foi criado por este envio.",
+          "server": "O servidor simulado está verificando o que foi pedido.",
+          "bff": "O servidor está reunindo cardápio e pedidos recentes numa resposta para a tela.",
+          "httpFailure": "O servidor respondeu com um problema. O número HTTP acima indica o motivo; corrija a entrada ou troque o cenário e tente de novo.",
+          "response": "A resposta chegou. Confira o resultado acima e o que mudou nos produtos, pedidos ou pagamentos.",
+          "noPending": "Não há um envio esperando resposta. Escolha uma ação antes de receber."
+        },
+        "sources": {
+          "request-contract": {
+            "title": "Contratos tipados",
+            "description": "Os tipos descrevem pedidos e respostas; a validação do servidor continua necessária."
+          },
+          "create-order": {
+            "title": "Criar pedido",
+            "description": "Valida contrato e estoque, cria o recurso e devolve 201 com Location."
+          },
+          "idempotent-payment": {
+            "title": "Repetição e intenção",
+            "description": "Um pagamento estritamente fictício demonstra replay, conflito e os limites da simulação."
+          },
+          "bff-view": {
+            "title": "Contrato adaptado à tela",
+            "description": "Duas coleções locais viram um resumo. Não há BFF ou serviços externos implantados."
+          }
+        },
+        "checks": {
+          "created": "Pedido válido · 201",
+          "invalid": "Quantidade inválida · 400",
+          "stock": "Estoque insuficiente · 409",
+          "server": "Falha simulada · 500",
+          "payment": "Registro fictício criado",
+          "idempotency": "Repetição sem novo efeito"
+        },
+        "investigations": {
+          "invalid": {
+            "question": "E se o pedido vier vazio?",
+            "answer": "O servidor devolve 400 sem alterar estoque. Teste createBakeryOrder com body ausente; uma API real não deve confiar no formulário do cliente."
+          },
+          "repeated": {
+            "question": "E se repetir o pagamento?",
+            "answer": "Crie um pedido, pague e repita o último POST. Com a mesma chave, permanece um registro; sem chave, o modo didaticamente inseguro duplica. Repetir a criação de pedido também cria outro pedido, se houver estoque."
+          },
+          "failure": {
+            "question": "E se a resposta falhar?",
+            "answer": "Escolha 500 ou rede antes da requisição. No primeiro caso existe resposta HTTP; no segundo não. Voltar no histórico só inspeciona memória local, nunca desfaz um serviço real."
+          },
+          "newRule": {
+            "question": "Onde acrescentar uma nova regra de compra?",
+            "answer": "Na validação do domínio, com testes para sucesso e rejeição. Uma mudança de contrato exige revisar tipos, interface, resposta e traduções. Não esconda a regra apenas no HTML."
+          }
+        },
+        "journey": {
+          "menu": {
+            "title": "Consultar cardápio",
+            "goal": "Peça o cardápio. Depois receba a resposta para conhecer os produtos, preços e estoque.",
+            "next": "Consulte o cardápio e clique em “Receber resposta”."
+          },
+          "order": {
+            "title": "Criar um pedido",
+            "goal": "Escolha produto e quantidade. Envie o pedido e receba a resposta para ver o número criado e a mudança no estoque.",
+            "next": "Envie um pedido válido e receba a resposta."
+          },
+          "query": {
+            "title": "Encontrar o pedido",
+            "goal": "O campo já traz o número do pedido criado. Consulte-o para ver como uma leitura encontra um registro existente.",
+            "next": "Consulte o pedido criado e receba a resposta."
+          },
+          "payment": {
+            "title": "Repetir com cuidado",
+            "goal": "Simule o pagamento e receba a resposta. Depois repita o mesmo envio: observe se ele cria outro registro ou reconhece a repetição.",
+            "next": "Simule um pagamento, receba a resposta, repita o envio e receba a segunda resposta."
+          }
+        },
+        "help": {
+          "menu": "Pede os produtos sem mudar estoque ou criar pedidos. No código, esta leitura usa GET.",
+          "order": "Envia produto e quantidade. Se o servidor aceitar, cria um pedido e retira essa quantidade do estoque. No código, usa POST.",
+          "query": "Busca o número digitado sem criar outro pedido. Troque por um número inexistente para observar “não encontrado”.",
+          "needsOrder": "Crie um pedido na etapa 2 antes de simular seu pagamento.",
+          "idempotent": "Ativada, esta opção identifica um envio repetido para evitar outro pagamento. Desativada, repetir pode criar dois registros.",
+          "pay": "Envia um pagamento fictício para o pedido criado. Nada é cobrado de verdade.",
+          "repeat": "Reenvia exatamente o último pagamento. Após receber a resposta, compare o número de registros.",
+          "complete": "A espera é controlada por você: clique abaixo para o servidor simulado processar o envio e mostrar a resposta.",
+          "failures": "Escolha como o próximo envio será respondido: normalmente, com erro do servidor ou com falha de rede. A seleção não envia nada sozinha.",
+          "invalid": "Envia quantidade 0 de propósito para observar a rejeição pelo servidor.",
+          "bff": "Pede um resumo que junta cardápio e pedidos recentes. Veja o formato da resposta no detalhe técnico.",
+          "unavailable": "Limpa os pedidos e pagamentos e recomeça sem pão no estoque. Crie um pedido de pão para observar o conflito.",
+          "key": "O mesmo texto identifica a mesma intenção. Outra intenção precisa de outra chave; mudar só a chave permite outro pagamento."
+        },
+        "statuses": {
+          "200": "Leitura ou repetição reconhecida",
+          "201": "Novo registro criado",
+          "400": "Dados enviados inválidos",
+          "404": "Registro não encontrado",
+          "409": "Conflito com estoque ou chave",
+          "500": "Falha do servidor simulado"
+        },
+        "technicalEvents": {
+          "initial": "A simulação mantém produtos, pedidos e pagamentos em memória. GET lê; POST pode criar registros.",
+          "localValidation": "validQuantity valida o campo na interface antes de montar o contrato. A validação do servidor continua necessária.",
+          "busy": "phase === 'pending' impede iniciar outra requisição enquanto a atual espera.",
+          "pending": "beginBakeryRequest registra método, path e body e marca pending. Os dados do domínio ainda não foram alterados.",
+          "dataAccess": "completeBakeryRequest encaminha o mesmo contrato; cada registro permite inspecionar o percurso sem repetir efeitos.",
+          "networkFailure": "Falha de transporte não produz resposta HTTP nem status 500. O domínio é preservado.",
+          "server": "routeRequest escolhe a operação pelo método e pelo caminho. A operação valida o contrato e o estado.",
+          "bff": "bakeryView adapta duas coleções para a tela. É um exemplo de BFF local, sem outro servidor implantado.",
+          "httpFailure": "Uma resposta HTTP chegou com status de erro. Veja status e body abaixo para distinguir validação, recurso ausente, conflito e falha interna.",
+          "response": "O status e o body vêm da função executada. 200 indica leitura/replay; 201 indica criação. A chave do pagamento pode devolver o registro anterior sem duplicar o efeito.",
+          "noPending": "completeBakeryRequest preserva o estado quando phase não é pending ou request é null."
+        }
+      }
+    },
     "catalog": {
+      "parent": "Pai",
+      "child": "Filho",
       "header": {
         "eyebrow": "Laboratório interativo",
         "title": {
@@ -403,9 +1167,9 @@
         "eyebrow": "Próximas experiências",
         "title": "A Matrix continuará se abrindo",
         "status": "Em breve",
-        "signals": "Signals e estado reativo",
-        "observables": "Observables e fluxo de dados",
-        "lifecycle": "Ciclo de vida dos componentes"
+        "signals": { "title": "Signals e estado reativo" },
+        "observables": { "title": "Observables e fluxo de dados" },
+        "lifecycle": { "title": "Ciclo de vida dos componentes" }
       }
     },
     "header": {

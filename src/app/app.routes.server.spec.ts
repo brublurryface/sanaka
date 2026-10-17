@@ -10,14 +10,21 @@ describe('serverRoutes', () => {
     },
   );
 
-  it.each(['', 'maya', 'matrix', 'matrix/components', 'matrix/rest-api'])(
-    'should prerender static route %s',
-    (path) => {
-      expect(serverRoutes.find((route) => route.path === path)?.renderMode).toBe(
-        RenderMode.Prerender,
-      );
-    },
-  );
+  it.each([
+    '',
+    'maya',
+    'matrix',
+    'matrix/components',
+    'matrix/rest-api',
+    'matrix/obolos',
+    'matrix/entregas',
+    'matrix/jogo',
+    'matrix/padaria',
+  ])('should prerender static route %s', (path) => {
+    expect(serverRoutes.find((route) => route.path === path)?.renderMode).toBe(
+      RenderMode.Prerender,
+    );
+  });
 
   it('should render unknown routes on the server with a real 404 response', () => {
     const wildcardRoute = serverRoutes.find((route) => route.path === '**');

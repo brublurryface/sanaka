@@ -43,7 +43,8 @@
 - If the specification conflicts with the current codebase, stop and report the conflict instead of guessing.
 - Do not make speculative improvements outside the task.
 - Do not silently fix unrelated warnings.
-- Do not commit, push, merge, delete branches or create pull requests unless explicitly requested.
+- Standing authorization from the author (2026-10-17): commit and push the reviewed changes of a completed, validated delivery and open a pull request against `main` for her review. Do not ask for permission again for these steps.
+- Do not merge pull requests or delete branches unless explicitly requested. The author performs the merge.
 - Do not use destructive Git commands unless explicitly requested.
 - After making changes, report exactly which files changed and the validation results.
 

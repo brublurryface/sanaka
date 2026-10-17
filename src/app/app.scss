@@ -320,7 +320,8 @@ mat-toolbar {
 .app-footer__content {
   --app-footer-column-gap: clamp(2rem, 5vw, 5rem);
 
-  width: var(--sanaka-page-shell-width);
+  /* A largura extra acomoda os destinos sem aproximá-los da navegação central. */
+  width: min(88rem, calc(100% - 3rem));
   margin-inline: auto;
 
   display: grid;
@@ -376,7 +377,7 @@ mat-toolbar {
 
   display: flex;
   align-items: baseline;
-  gap: clamp(1rem, 2vw, 1.75rem);
+  gap: clamp(1rem, 1.5vw, 1.5rem);
 }
 
 .app-footer__future::before {
@@ -404,6 +405,7 @@ mat-toolbar {
   text-decoration: none;
 
   text-transform: uppercase;
+  white-space: nowrap;
 }
 
 .app-footer__future a:hover,
@@ -424,6 +426,29 @@ mat-toolbar {
 
   50% {
     opacity: 1;
+  }
+}
+
+/* Empilha os grupos antes de faltar espaço para os destinos, sem reduzir as fontes. */
+@media (max-width: 1200px) {
+  .app-footer__content {
+    grid-template-columns: 1fr;
+    gap: 1.5rem;
+  }
+
+  .app-footer__closing {
+    justify-self: center;
+  }
+
+  .app-footer__future {
+    justify-self: center;
+
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+
+  .app-footer__future::before {
+    content: none;
   }
 }
 
@@ -520,8 +545,7 @@ mat-toolbar {
   }
 
   .app-footer__content {
-    grid-template-columns: 1fr;
-    gap: 1.5rem;
+    width: var(--sanaka-page-shell-width);
   }
 
   .app-footer__closing {
@@ -551,10 +575,6 @@ mat-toolbar {
 
     border-top: 1px solid rgba(237, 201, 120, 0.2);
     border-left: 0;
-  }
-
-  .app-footer__future::before {
-    content: none;
   }
 }
 

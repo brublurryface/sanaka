@@ -1,0 +1,250 @@
+<app-matrix-study-frame
+  [study]="study"
+  [sources]="sources"
+  [checks]="checks()"
+  (runChecks)="runChecks()"
+>
+  <app-study-walkthrough
+    [steps]="lessons"
+    [activeIndex]="lessonIndex()"
+    translationKey="matrix.studies.obolos.journey"
+    [complete]="lessonComplete()"
+    (stepChange)="changeLesson($event)"
+    (restart)="scenario('initial')"
+  >
+    <article class="matrix-experiment-node">
+      <p class="sanaka-editorial-label">{{ 'matrix.studies.obolos.inventory' | transloco }}</p>
+      <ol class="study-array" start="0">
+        @for (identifier of items(); track $index) {
+          <li>
+            <button
+              type="button"
+              class="study-button study-coin"
+              [disabled]="lessonIndex() > 1"
+              [class.study-item--active]="
+                history.state().activeIndex === $index || history.state().comparedIndex === $index
+              "
+              [attr.aria-pressed]="lessonIndex() < 2 ? requestedIndex() === $index : null"
+              (click)="selectIndex($index)"
+            >
+              <span>{{ 'matrix.studies.obolos.index' | transloco }} {{ $index }}</span>
+              <strong>{{ identifier }}</strong>
+              @if (
+                history.state().activeIndex === $index || history.state().comparedIndex === $index
+              ) {
+                <span>{{ 'matrix.studies.obolos.comparing' | transloco }}</span>
+              }
+            </button>
+          </li>
+        } @empty {
+          <li>{{ 'matrix.studies.obolos.emptyInventory' | transloco }}</li>
+        }
+      </ol>
+      @if (lessonIndex() < 2) {
+        <div class="study-field">
+          <label for="obolo-index">{{ 'matrix.studies.obolos.lookupLabel' | transloco }}</label>
+          <input
+            #indexField
+            id="obolo-index"
+            type="number"
+            [value]="requestedIndex()"
+            (input)="requestedIndex.set(indexField.valueAsNumber)"
+          />
+        </div>
+        @if (lessonIndex() === 0) {
+          <button
+            type="button"
+            class="study-button"
+            (click)="lookup()"
+            aria-describedby="obolo-lookup-help"
+          >
+            {{ 'matrix.studies.obolos.lookup' | transloco }}
+          </button>
+          <p id="obolo-lookup-help" class="study-control-help">
+            {{ 'matrix.studies.obolos.help.lookup' | transloco }}
+          </p>
+        } @else {
+          <form (submit)="$event.preventDefault(); add()">
+            <div class="study-field">
+              <label for="obolo-name">{{ 'matrix.studies.obolos.addLabel' | transloco }}</label>
+              <input
+                #nameField
+                id="obolo-name"
+                type="text"
+                maxlength="24"
+                [value]="draft()"
+                (input)="draft.set(nameField.value)"
+              />
+            </div>
+            <div class="study-actions">
+              <div>
+                <button type="submit" class="study-button" aria-describedby="obolo-add-help">
+                  {{ 'matrix.studies.obolos.add' | transloco }}
+                </button>
+                <p id="obolo-add-help" class="study-control-help">
+                  {{ 'matrix.studies.obolos.help.add' | transloco }}
+                </p>
+              </div>
+              <div>
+                <button
+                  type="button"
+                  class="study-button"
+                  (click)="remove()"
+                  aria-describedby="obolo-remove-help"
+                >
+                  {{ 'matrix.studies.obolos.remove' | transloco }}
+                </button>
+                <p id="obolo-remove-help" class="study-control-help">
+                  {{ 'matrix.studies.obolos.help.remove' | transloco }}
+                </p>
+              </div>
+            </div>
+          </form>
+        }
+      } @else if (lessonIndex() === 2) {
+        <button
+          type="button"
+          class="study-button"
+          (click)="execute('set')"
+          aria-describedby="obolo-search-help"
+        >
+          {{ 'matrix.studies.obolos.set' | transloco }}
+        </button>
+        <p id="obolo-search-help" class="study-control-help">
+          {{ 'matrix.studies.obolos.help.search' | transloco }}
+        </p>
+        @if (algorithm()) {
+          <p class="study-result">
+            {{ 'matrix.studies.obolos.duplicates' | transloco }}:
+            <strong>{{
+              history.state().duplicates.join(', ') ||
+                ('matrix.studies.obolos.noneFound' | transloco)
+            }}</strong>
+          </p>
+          @if (algorithm() === 'set') {
+            <p>
+              {{ 'matrix.studies.obolos.seen' | transloco }}:
+              {{ history.state().seen.join(', ') || '—' }}
+            </p>
+          }
+        }
+      } @else {
+        <button
+          type="button"
+          class="study-button"
+          (click)="count()"
+          aria-describedby="obolo-count-help"
+        >
+          {{ 'matrix.studies.obolos.count' | transloco }}
+        </button>
+        <p id="obolo-count-help" class="study-control-help">
+          {{ 'matrix.studies.obolos.help.count' | transloco }}
+        </p>
+        @if (lessonComplete()) {
+          <ul class="study-counts">
+            @for (entry of quantities(); track entry[0]) {
+              <li>
+                <strong>{{ entry[0] }}</strong> · {{ entry[1] }}
+              </li>
+            } @empty {
+              <li>{{ 'matrix.studies.obolos.emptyInventory' | transloco }}</li>
+            }
+          </ul>
+        }
+      }
+      @if (messageKey()) {
+        <p role="status">
+          {{ 'matrix.studies.obolos.messages.' + messageKey() | transloco: { limit: limit } }}
+        </p>
+      }
+      <app-study-step-viewer
+        [history]="history"
+        [source]="stepSource()"
+        [playback]="lessonIndex() === 2"
+        nextStepKey="matrix.studies.obolos.nextItem"
+      />
+      @if (lessonIndex() === 2) {
+        <details class="study-options">
+          <summary>{{ 'matrix.studies.obolos.moreSearches' | transloco }}</summary>
+          <div class="study-actions">
+            <div>
+              <button type="button" class="study-button" (click)="execute('nested')">
+                {{ 'matrix.studies.obolos.nested' | transloco }}
+              </button>
+              <p class="study-control-help">
+                {{ 'matrix.studies.obolos.help.nested' | transloco }}
+              </p>
+            </div>
+            <div>
+              <button type="button" class="study-button" (click)="execute('traverse')">
+                {{ 'matrix.studies.obolos.traverse' | transloco }}
+              </button>
+              <p class="study-control-help">
+                {{ 'matrix.studies.obolos.help.traverse' | transloco }}
+              </p>
+            </div>
+            <div>
+              <button
+                type="button"
+                class="study-button"
+                (click)="history.finish()"
+                [disabled]="!history.canGoForward()"
+              >
+                {{ 'matrix.studies.common.showResult' | transloco }}
+              </button>
+              <p class="study-control-help">
+                {{ 'matrix.studies.common.skipStepsHelp' | transloco }}
+              </p>
+            </div>
+          </div>
+          @if (lessonComplete() && algorithm() !== 'traverse') {
+            <p>{{ 'matrix.studies.obolos.comparisonNote' | transloco }}</p>
+            <div
+              class="study-table-scroll"
+              tabindex="0"
+              [attr.aria-label]="'matrix.studies.obolos.comparisonTitle' | transloco"
+            >
+              <table>
+                <thead>
+                  <tr>
+                    <th scope="col">{{ 'matrix.studies.obolos.strategy' | transloco }}</th>
+                    <th scope="col">{{ 'matrix.studies.obolos.operations' | transloco }}</th>
+                    <th scope="col">{{ 'matrix.studies.obolos.duplicates' | transloco }}</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <tr>
+                    <th scope="row">{{ 'matrix.studies.obolos.nested' | transloco }}</th>
+                    <td>
+                      {{ nestedReport().comparisons }}
+                      {{ 'matrix.studies.obolos.comparisons' | transloco }}
+                    </td>
+                    <td>{{ nestedReport().duplicates.join(', ') || '—' }}</td>
+                  </tr>
+                  <tr>
+                    <th scope="row">Set</th>
+                    <td>
+                      {{ setReport().lookups }} {{ 'matrix.studies.obolos.lookups' | transloco }}
+                    </td>
+                    <td>{{ setReport().duplicates.join(', ') || '—' }}</td>
+                  </tr>
+                </tbody>
+              </table>
+            </div>
+          }
+        </details>
+      }
+      <details class="study-options">
+        <summary>{{ 'matrix.studies.obolos.moreScenarios' | transloco }}</summary>
+        <p>{{ 'matrix.studies.obolos.help.scenarios' | transloco }}</p>
+        <div class="study-controls">
+          @for (kind of scenarios; track kind) {
+            <button type="button" class="study-button" (click)="scenario(kind)">
+              {{ 'matrix.studies.obolos.scenarios.' + kind | transloco }}
+            </button>
+          }
+        </div>
+      </details>
+    </article>
+  </app-study-walkthrough>
+</app-matrix-study-frame>

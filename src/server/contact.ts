@@ -1,6 +1,8 @@
 import { RequestHandler } from 'express';
 import nodemailer from 'nodemailer';
 
+import { createRateLimiter } from './request-rate-limit';
+
 const MAX_NAME_LENGTH = 80;
 const MAX_EMAIL_LENGTH = 254;
 const MAX_SUBJECT_LENGTH = 120;
@@ -16,12 +18,10 @@ interface ContactPayload {
   readonly website: string;
 }
 
-interface RateLimitEntry {
-  count: number;
-  expiresAt: number;
-}
-
-const attemptsByIp = new Map<string, RateLimitEntry>();
+const limitAttempts = createRateLimiter({
+  maxRequests: RATE_LIMIT_MAX_REQUESTS,
+  windowMs: RATE_LIMIT_WINDOW_MS,
+});
 let transporter: ReturnType<typeof nodemailer.createTransport> | null = null;
 
 function readText(value: unknown, maxLength: number): string | null {
@@ -57,28 +57,6 @@ function parseContactPayload(body: unknown): ContactPayload | null {
   }
 
   return { name, email, subject, message, website };
-}
-
-function exceedsRateLimit(ip: string): boolean {
-  const now = Date.now();
-
-  if (attemptsByIp.size > 500) {
-    for (const [storedIp, attempt] of attemptsByIp) {
-      if (attempt.expiresAt <= now) {
-        attemptsByIp.delete(storedIp);
-      }
-    }
-  }
-
-  const current = attemptsByIp.get(ip);
-
-  if (!current || current.expiresAt <= now) {
-    attemptsByIp.set(ip, { count: 1, expiresAt: now + RATE_LIMIT_WINDOW_MS });
-    return false;
-  }
-
-  current.count += 1;
-  return current.count > RATE_LIMIT_MAX_REQUESTS;
 }
 
 function requireEnvironment(name: string): string {
@@ -140,7 +118,9 @@ export const contactHandler: RequestHandler = async (request, response) => {
   }
 
   const clientIp = request.ip || request.socket.remoteAddress || 'unknown';
-  if (exceedsRateLimit(clientIp)) {
+  const retryAfter = limitAttempts(clientIp);
+  if (retryAfter > 0) {
+    response.setHeader('Retry-After', retryAfter);
     response.status(429).json({ delivered: false });
     return;
   }

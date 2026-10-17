@@ -7,6 +7,7 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import { contactHandler } from './server/contact';
+import { createNewsletterRouter } from './server/newsletter';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -15,6 +16,7 @@ const angularApp = new AngularNodeAppEngine();
 
 app.use('/api/contact', express.json({ limit: '16kb' }));
 app.post('/api/contact', contactHandler);
+app.use('/api/newsletter', createNewsletterRouter());
 
 /**
  * Serve static files from /browser
