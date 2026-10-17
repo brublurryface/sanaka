@@ -154,6 +154,27 @@
       }
     }
   },
+  "newsletter": {
+    "footerLink": "Newsletter",
+    "eyebrow": "News from Sanaka",
+    "title": "Sanaka also arrives by email.",
+    "intro": "A selection of Sanaka publications, news, and discoveries, accompanied by short comments from me.",
+    "email": "Your email",
+    "consent": "I want to receive Sanaka news by email.",
+    "website": "Your website — leave this field empty",
+    "privacy": "Your email will be managed in Brevo for this newsletter. You can unsubscribe from any edition.",
+    "submit": "Subscribe",
+    "submitting": "Sending",
+    "checking": "Checking subscriptions…",
+    "unavailable": "Subscriptions are not available right now.",
+    "pendingConfirmation": "Request received. Check your email to confirm your subscription. You will only receive news after confirming.",
+    "rateLimited": "Too many attempts in a short time. Wait a few minutes before trying again.",
+    "error": "The confirmation could not be requested right now. Your subscription has not been confirmed. Please try again later.",
+    "errors": {
+      "email": "Enter a valid email address, up to 254 characters.",
+      "consent": "Select this option if you want to subscribe to the newsletter."
+    }
+  },
   "sanakaverse": {
     "hero": {
       "eyebrow": "Sanakaverse",

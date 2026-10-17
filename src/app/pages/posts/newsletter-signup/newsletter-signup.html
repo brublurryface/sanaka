@@ -1,0 +1,100 @@
+<section class="newsletter" aria-labelledby="newsletter-title">
+  <div class="newsletter__intro">
+    <p class="sanaka-editorial-label">{{ 'newsletter.eyebrow' | transloco }}</p>
+    <h2 id="newsletter-title">{{ 'newsletter.title' | transloco }}</h2>
+    <p>{{ 'newsletter.intro' | transloco }}</p>
+  </div>
+
+  <div class="newsletter__registration" [attr.aria-busy]="status() === 'checking'">
+    @if (status() === 'checking') {
+      <p class="newsletter__feedback" role="status">{{ 'newsletter.checking' | transloco }}</p>
+    } @else if (status() === 'unavailable') {
+      <p class="newsletter__feedback" role="status">{{ 'newsletter.unavailable' | transloco }}</p>
+      <button class="newsletter__retry" type="button" (click)="checkAvailability()">
+        {{ 'common.actions.retry' | transloco }}
+      </button>
+    } @else if (status() === 'pending-confirmation') {
+      <p class="newsletter__feedback newsletter__feedback--success" role="status">
+        {{ 'newsletter.pendingConfirmation' | transloco }}
+      </p>
+    } @else {
+      <form [formGroup]="form" (ngSubmit)="subscribe()" novalidate>
+        <fieldset
+          [disabled]="status() === 'submitting'"
+          [attr.aria-busy]="status() === 'submitting'"
+        >
+          <legend class="visually-hidden">{{ 'newsletter.title' | transloco }}</legend>
+          <div class="newsletter__fields">
+            <label class="newsletter__email">
+              <span class="sanaka-editorial-label">{{ 'newsletter.email' | transloco }}</span>
+              <input
+                type="email"
+                required
+                formControlName="email"
+                autocomplete="email"
+                inputmode="email"
+                [maxlength]="emailMaxLength"
+                [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
+                [attr.aria-describedby]="
+                  form.controls.email.invalid && form.controls.email.touched
+                    ? 'newsletter-email-error newsletter-privacy'
+                    : 'newsletter-privacy'
+                "
+              />
+            </label>
+            <button class="newsletter__submit" type="submit" [disabled]="!canSubmit()">
+              {{
+                (status() === 'submitting' ? 'newsletter.submitting' : 'newsletter.submit')
+                  | transloco
+              }}
+              <span aria-hidden="true">→</span>
+            </button>
+          </div>
+
+          @if (form.controls.email.invalid && form.controls.email.touched) {
+            <p id="newsletter-email-error" class="newsletter__error">
+              {{ 'newsletter.errors.email' | transloco }}
+            </p>
+          }
+
+          <label class="newsletter__consent">
+            <input
+              type="checkbox"
+              required
+              formControlName="consent"
+              [attr.aria-invalid]="form.controls.consent.invalid && form.controls.consent.touched"
+              [attr.aria-describedby]="
+                form.controls.consent.invalid && form.controls.consent.touched
+                  ? 'newsletter-consent-error'
+                  : null
+              "
+            />
+            <span>{{ 'newsletter.consent' | transloco }}</span>
+          </label>
+          @if (form.controls.consent.invalid && form.controls.consent.touched) {
+            <p id="newsletter-consent-error" class="newsletter__error">
+              {{ 'newsletter.errors.consent' | transloco }}
+            </p>
+          }
+
+          <label class="newsletter__honeypot" aria-hidden="true">
+            {{ 'newsletter.website' | transloco }}
+            <input type="text" formControlName="website" autocomplete="off" tabindex="-1" />
+          </label>
+
+          <p id="newsletter-privacy" class="newsletter__privacy">
+            {{ 'newsletter.privacy' | transloco }}
+          </p>
+        </fieldset>
+
+        <div class="newsletter__feedback" aria-live="polite">
+          @if (status() === 'rate-limited') {
+            <p class="newsletter__error">{{ 'newsletter.rateLimited' | transloco }}</p>
+          } @else if (status() === 'error') {
+            <p class="newsletter__error">{{ 'newsletter.error' | transloco }}</p>
+          }
+        </div>
+      </form>
+    }
+  </div>
+</section>

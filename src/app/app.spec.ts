@@ -12,6 +12,7 @@ class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations = {
       'pt-BR': {
+        newsletter: { footerLink: 'Newsletter' },
         app: {
           title: 'Sanaka',
           navigation: {
@@ -35,6 +36,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
       },
       en: {
+        newsletter: { footerLink: 'Newsletter' },
         app: {
           title: 'Sanaka',
           navigation: {
@@ -141,7 +143,7 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
   });
 
-  it('should link the footer to About, Contact and Sanakaverse', () => {
+  it('should link the footer to About, Contact, Sanakaverse and the internal newsletter anchor', () => {
     const fixture = TestBed.createComponent(App);
     fixture.detectChanges();
 
@@ -163,6 +165,7 @@ describe('App', () => {
       '/sobre',
       '/contato',
       '/sanakaverse',
+      '/posts#newsletter',
     ]);
   });
 

@@ -6,10 +6,11 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
 
 import { PostCard } from './post-card/post-card';
+import { NewsletterSignup } from './newsletter-signup/newsletter-signup';
 import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, PostCard, TranslocoPipe],
+  imports: [ReactiveFormsModule, RouterLink, PostCard, NewsletterSignup, TranslocoPipe],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',
