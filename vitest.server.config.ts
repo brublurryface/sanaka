@@ -7,7 +7,12 @@ export default defineConfig({
     clearMocks: true,
     coverage: {
       provider: 'v8',
-      include: ['src/server/newsletter.ts', 'src/server/request-rate-limit.ts'],
+      include: [
+        'src/server/newsletter.ts',
+        'src/server/request-rate-limit.ts',
+        'src/server/cache-policy.ts',
+        'src/server/runtime-options.ts',
+      ],
       reportsDirectory: 'coverage/server',
       reporter: ['text-summary', 'json-summary'],
       thresholds: { statements: 85, branches: 85, functions: 85, lines: 85 },
