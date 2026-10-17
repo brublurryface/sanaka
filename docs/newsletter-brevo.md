@@ -4,7 +4,7 @@
 
 A newsletter é uma seleção editorial de novidades com comentários breves da autora. As edições são preparadas e enviadas manualmente na Brevo; publicar ou revisar um post no WordPress **não dispara campanha**. Preservar a separação de conteúdo entre Sanaka e WoD, inclusive ao escolher os links de uma edição.
 
-- Angular apresenta o cadastro no final de `/posts`; o footer aponta para `/posts#newsletter`.
+- Angular apresenta o cadastro no final de `/posts`; o footer e o link após “Explore tags” na lateral das publicações apontam para `/posts#newsletter`.
 - O servidor Node existente recebe o pedido e chama o endpoint **double opt-in** da Brevo.
 - Brevo administra assinantes, confirmação, campanhas e descadastro.
 - WordPress continua responsável pelo conteúdo, sem plugin adicional de newsletter.

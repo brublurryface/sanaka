@@ -60,6 +60,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         pageTitles: { post: 'Publicação' },
         pageDescriptions: { post: 'Leia esta publicação no santuário de Sanaka.' },
       },
+      newsletter: { footerLink: 'Newsletter' },
     });
   }
 }
@@ -164,6 +165,13 @@ describe('PostDetailPage', () => {
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Romance');
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Sobre');
     expect(compiled.querySelector('.post-reader__taxonomy')?.textContent).toContain('Consciência');
+    const newsletterLink = compiled.querySelector<HTMLAnchorElement>(
+      '.post-reader__taxonomy a[href="/posts#newsletter"]',
+    );
+    expect(newsletterLink?.textContent).toContain('Newsletter');
+    expect(
+      compiled.querySelector('.post-reader__taxonomy')?.lastElementChild?.contains(newsletterLink),
+    ).toBe(true);
     expect(
       compiled.querySelector<HTMLAnchorElement>('.post-reader__categories a')?.getAttribute('href'),
     ).toBe('/posts?category=pensamentos');
