@@ -129,13 +129,65 @@ O cache de um ano foi reservado aos bundles com hash. Imagens e traduções pode
 o nome e ainda receber conteúdo atualizado mediante revalidação HTTP. A mudança não apaga
 cópias antigas que algum navegador já tenha guardado com a política anterior.
 
+## WordPress na Locaweb
+
+`https://cms.sanaka.com.br` é um apontamento para a instalação WordPress existente, com o mesmo
+banco, arquivos, snippets e contadores. Não criar outra instalação nem duplicar o conteúdo.
+O subdomínio já tem HTTPS e um registro A próprio para a Locaweb, independente do domínio público.
+
+| Recurso          | Endereço                                              | Situação                                                                  |
+| ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------- |
+| Site público     | `https://sanaka.com.br` e `https://www.sanaka.com.br` | Ainda servidos pela Locaweb; destino futuro: Render                       |
+| API editorial    | `https://cms.sanaka.com.br/wp-json/wp/v2`             | Consultada pelo Angular e pelo script de auditoria                        |
+| API de óbolos    | `https://cms.sanaka.com.br/wp-json/sanaka/v1`         | Mesmos contadores da instalação atual                                     |
+| Painel WordPress | `https://cms.sanaka.com.br/wp-admin/`                 | Ainda redireciona o login para o domínio antigo                           |
+| Mídias           | `https://cms.sanaka.com.br/wp-content/uploads/…`      | Arquivos acessíveis; URLs retornadas pela API ainda usam o domínio antigo |
+
+O endereço REST fica em `src/app/core/wordpress/wordpress-api.ts`. Posts, fragmentos do Sobre,
+livros do Sanakaverse e óbolos usam os tokens compartilhados desse arquivo. A troca do hostname
+não muda os IDs das categorias nem as regras editoriais de Sanaka e WoD.
+
+### Conferência em 18/10/2026
+
+Consultas públicas confirmaram HTTPS, posts com os mesmos IDs nos dois hosts, os seis ciclos
+com `hover_text`, os campos de capa e óbolo de Nandinī e a leitura de seu contador. Duas mídias
+de exemplo responderam HTTP 200 diretamente pelo CMS, sem redirecionamento ao domínio antigo.
+O CORS permitiu a origem `http://localhost:4200`, expôs os cabeçalhos de paginação e respondeu
+ao preflight de POST dos óbolos. Não foi feita oferta real para validar essa configuração.
+
+A aplicação já pode consultar a API pelo CMS enquanto o site público continua no WordPress.
+Isso não conclui a mudança: as URLs internas do WordPress e das mídias ainda precisam ser
+ajustadas antes de apontar o domínio público para o Render.
+
+### Preparação para a troca final
+
+Com a aplicação aprovada na URL de conferência do Render e um backup atualizado de arquivos e banco:
+
+1. Registrar os valores atuais de `home` e `siteurl` e verificar se `WP_HOME` ou `WP_SITEURL`
+   os sobrescrevem em `wp-config.php`. Na janela da mudança, ajustar os endereços da instalação
+   para `https://cms.sanaka.com.br` e conferir login, painel, API e uploads nesse host.
+2. Revisar as URLs de mídias no conteúdo, metadados, opções de plugins e campos personalizados,
+   incluindo `sanakaverse_cover`, `sanaka_obolo_front` e `sanaka_obolo_back`. Usar uma ferramenta
+   compatível com dados serializados, com simulação e revisão antes de aplicar. Preservar os GUIDs;
+   evitar um `REPLACE` indiscriminado em todas as tabelas. Não mover os arquivos nem recriar os IDs.
+3. Conferir o conteúdo e as imagens pelo Angular a partir do novo host. Validar também CORS e
+   paginação na origem real do Render; a conferência com `localhost` não substitui esse teste.
+4. Preparar os redirecionamentos das URLs antigas no servidor que receberá o domínio público.
+   Respeitar os destinos editoriais de Sanaka e WoD. Um `.htaccess` deixado na Locaweb não atenderá
+   requisições de um domínio cujo DNS já aponta para o Render.
+5. Alterar somente os registros web do domínio público. Manter o apontamento independente do CMS,
+   os registros de e-mail da Locaweb e os registros da Brevo. Conferir painel, uploads e API novamente.
+
+O preparo desta entrega não altera `home`, `siteurl`, conteúdo do banco, DNS ou credenciais,
+nem cria um serviço no Render. A mudança definitiva continua dependente da aprovação das artes
+e da autorização para iniciar o serviço pago.
+
 ## Antes da troca do domínio
 
 1. Concluir as artes aprovadas de Saṃvit.
-2. Definir como preservar WordPress, API, painel e mídias. Hoje o Angular consulta
-   `https://www.sanaka.com.br/wp-json`; as imagens também apontam para `wp-content/uploads`.
-   Apontar esse domínio ao Render sem essa preparação interromperia o conteúdo. Escolher e
-   validar o endereço do CMS ou um encaminhamento compatível antes de alterar DNS.
+2. Concluir a separação do WordPress descrita acima. A API do Angular já usa
+   `https://cms.sanaka.com.br/wp-json`, mas o WordPress ainda retorna URLs de mídia no domínio
+   público. Validar painel, API, mídias e redirecionamentos antes de alterar esse DNS.
 3. Preservar os registros de e-mail da Locaweb e os registros de autenticação/branding da Brevo.
 4. Configurar o domínio e HTTPS no Render, revisar os links canônicos e os redirecionamentos
    das URLs públicas antigas do WordPress para as publicações Angular.
@@ -153,7 +205,7 @@ anterior bem-sucedido; rollback não restaura dados alterados no WordPress ou na
 
 ## Referências
 
-Consultadas em 17/10/2026:
+Consultadas em 17 e 18/10/2026:
 
 - [Render — preços](https://render.com/pricing)
 - [Render — Blueprint](https://render.com/docs/blueprint-spec)
@@ -162,5 +214,6 @@ Consultadas em 17/10/2026:
 - [Render — Web Services](https://render.com/docs/web-services)
 - [Render — health checks](https://render.com/docs/health-checks)
 - [Express — configuração de proxies](https://expressjs.com/en/guide/behind-proxies/)
+- [WordPress — migração e mudança de URLs](https://developer.wordpress.org/advanced-administration/upgrade/migrating/)
 - [Contato por SMTP](contact-form-deployment.md)
 - [Newsletter Brevo](newsletter-brevo.md)
