@@ -34,6 +34,7 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   contemplative: {
     id: 'contemplative',
     imageSrc: '/images/samvit/presences/samvit-contemplative-still.png',
+    animatedImageSrc: '/images/samvit/presences/samvit-contemplative-blink.webp',
     imageWidth: 1024,
     imageHeight: 1536,
     labelKey: 'samvit.presences.contemplative.label',

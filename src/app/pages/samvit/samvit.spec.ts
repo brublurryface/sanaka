@@ -204,14 +204,14 @@ describe('Samvit', () => {
   });
 
   it.each([
-    [0.45, 'samvit-curious-still.png', 1122, 1402],
-    [0.6, 'samvit-contemplative-still.png', 1024, 1536],
-    [0.7, 'samvit-abhaya-still.png', 1233, 1634],
-    [0.8, 'samvit-dot-eye-still.png', 1024, 1536],
-    [0.95, 'samvit-with-bhu-still.png', 1122, 1402],
+    [0.45, 'samvit-curious-still.png', 1122, 1402, null],
+    [0.6, 'samvit-contemplative-still.png', 1024, 1536, 'samvit-contemplative-blink.webp'],
+    [0.7, 'samvit-abhaya-still.png', 1233, 1634, null],
+    [0.8, 'samvit-dot-eye-still.png', 1024, 1536, 'samvit-dot-eye-ear-twitch.webp'],
+    [0.95, 'samvit-with-bhu-still.png', 1122, 1402, 'samvit-with-bhu-blink.webp'],
   ])(
     'should show the approved still for roll %s at its original dimensions',
-    async (roll, file, width, height) => {
+    async (roll, file, width, height, animatedFile) => {
       vi.spyOn(Math, 'random').mockReturnValueOnce(Number(roll)).mockReturnValueOnce(0);
       fixture = TestBed.createComponent(Samvit);
       fixture.detectChanges();
@@ -226,13 +226,11 @@ describe('Samvit', () => {
       expect(root.querySelector<HTMLTextAreaElement>('textarea')?.disabled).toBe(true);
       expect(root.querySelector<HTMLButtonElement>('button')?.disabled).toBe(true);
 
-      if (Number(roll) === 0.95 || Number(roll) === 0.8) {
+      if (animatedFile) {
         const animatedSource = root.querySelector('picture source');
 
         expect(animatedSource?.getAttribute('srcset')).toBe(
-          Number(roll) === 0.95
-            ? '/images/samvit/presences/samvit-with-bhu-blink.webp'
-            : '/images/samvit/presences/samvit-dot-eye-ear-twitch.webp',
+          `/images/samvit/presences/${animatedFile}`,
         );
         expect(animatedSource?.getAttribute('media')).toBe(
           '(prefers-reduced-motion: no-preference)',

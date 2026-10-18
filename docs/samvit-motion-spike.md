@@ -240,7 +240,7 @@ que o construtor não chama o sorteio e que o primeiro render do navegador faz a
 aleatórias, uma para a pose e outra para a frase.
 
 A dot-eye usa o PNG original e `samvit-dot-eyes2(1).png`, ambos RGBA de 1024 × 1536 px.
-O WebP `samvit-dot-eye-ear-twitch.webp` tem dois quadros: repouso de 4000 ms e movimento de 70 ms,
+A primeira montagem de `samvit-dot-eye-ear-twitch.webp` tinha dois quadros: repouso de 4000 ms e movimento de 70 ms,
 mais curto que a piscada de 340 ms do piloto com Bhu. O ciclo de 4070 ms se repete e preserva o
 fallback estático para movimento reduzido. O arquivo tem 1.075.944 bytes; a decodificação foi
 comparada aos dois PNGs, com igualdade dos valores de alfa e RGB visíveis.
@@ -292,8 +292,9 @@ alfa zero no fundo e alfa máximo 254 nos três resultados, em comparação a 25
 
 A comparação com a base detectou mudanças de cor e traço fora dos olhos e da ponta da cauda.
 O deslocamento solicitado em pixels não foi tratado como garantia de execução pelo gerador.
-Os resultados são material de revisão da autora: não foram montados em WebP, copiados para
-`public/` nem aplicados à página. A pensativa continua usando somente o PNG original.
+Os resultados daquela geração ficaram para revisão da autora: não foram montados em WebP,
+copiados para `public/` nem aplicados à página. Naquele momento, a pensativa continuava usando
+somente o PNG original.
 
 Identificação dos resultados para conferência por SHA-256:
 
@@ -302,3 +303,126 @@ Identificação dos resultados para conferência por SHA-256:
 | 02     | `cc2f20cf69b8c9f747071959ea2137ff99a48afb3fbd1849a190963f86f67882` |
 | 03     | `98230433a5264b701e2a6e311ebefcb10b929ce209727d849b4015b8f4867a2d` |
 | 04     | `3ea49287529b515a2e358cf054ecc21927a78392222ff0b38e82d572dec77114` |
+
+## Quadros corrigidos da pensativa e cadência contínua da dot-eye
+
+Em 18/10/2026, a autora forneceu `samvit-pensativa2.png`, `samvit-pensativa3.png` e
+`samvit-pensativa4.png` corrigidos. Os três têm 1024 × 1536 px, alfa de 0 a 255 e a mesma
+transparência do original. A animação usa esses arquivos completos sem repintura,
+redimensionamento, interpolação ou movimento adicional da cauda. As correções fornecidas
+mantêm a cauda parada; o movimento visível é a piscada.
+
+| Quadro | SHA-256                                                            |
+| ------ | ------------------------------------------------------------------ |
+| 02     | `42d32124d96d12267114effd86cd6d504ac40dee86686731f0f89051cd1e77da` |
+| 03     | `fec9de14453db835efa5ee40730ff426987000c6981cd32047731efe13e17a9a` |
+| 04     | `2feba59db50084e700b3850be88d6c99615186a75b319270b181a88d1b396f3f` |
+
+`samvit-contemplative-blink.webp` tem 1.065.476 bytes e seis quadros, na ordem
+01 → 02 → 03 → 04 → 03 → 02. As durações são 4000, 60, 60, 100, 60 e 60 ms, mantendo a
+mesma cadência do piloto com Bhu. O ciclo de 4340 ms se repete sem limite.
+
+A dot-eye passa a alternar seus dois desenhos a cada 250 ms, em um ciclo contínuo de 500 ms.
+O arquivo existente foi substituído, sem manter outra versão pública para a mesma função.
+O tamanho permanece em 1.075.944 bytes. Bhu mantém sua cadência anterior.
+
+Os dois WebPs foram decodificados e comparados aos PNGs: todos os valores de alfa e RGB
+visíveis permanecem iguais, assim como as durações e a repetição infinita. A página mantém
+o PNG estático para movimento reduzido; somente a pose sorteada é carregada.
+
+`npm run check` passou com 407 testes Angular, 64 testes do servidor, cobertura mínima,
+formatação, sincronização do código didático, duplicação de 1,23% e build de dez rotas
+prerenderizadas. O teste da pensativa confere a fonte animada condicionada à preferência de
+movimento, o fallback estático e as dimensões originais. A cadência visual no navegador
+da autora continua sendo a revisão pendente.
+
+Para repetir a montagem com os PNGs corrigidos em uma pasta local:
+
+```powershell
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-contemplative-still.png `
+    CAMINHO/samvit-pensativa2.png `
+    CAMINHO/samvit-pensativa3.png `
+    CAMINHO/samvit-pensativa4.png `
+  --output public/images/samvit/presences/samvit-contemplative-blink.webp
+
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-dot-eye-still.png `
+    CAMINHO/samvit-dot-eyes2.png `
+  --output public/images/samvit/presences/samvit-dot-eye-ear-twitch.webp `
+  --frame-ms 250
+```
+
+`--frame-ms` define a duração igual de cada desenho em animações contínuas de dois quadros;
+não usa a pausa de `--pause-ms`. Sem essa opção, a montagem conserva a pausa e os tempos
+anteriores. Quatro quadros continuam usando fechamento progressivo e retorno em ordem inversa.
+Não são mantidas cópias adicionais dos PNGs intermediários no diretório público.
+
+### Prompts propostos — novos quadros de abhaya e ouvinte, aguardando aprovação
+
+As tentativas menores de abhaya e os olhos deformados da ouvinte foram rejeitados. Nenhuma
+nova geração foi executada nesta entrega. Cada quadro deverá usar diretamente o respectivo
+original, sem reaproveitar uma tentativa reduzida nem ampliar artificialmente os resultados.
+As dimensões são exigências para conferência; o prompt sozinho não garante que o gerador
+as cumpra. Um resultado menor ou desalinhado não será aplicado à animação.
+
+**Abhaya — alvo único:** `samvit-abhaya-mudra(1).png`, 1233 × 1634 px.
+
+```text
+PROJETO SANAKA — QUADRO LOCALIZADO DE SAṂVIT EM ABHAYA.
+Use case: precise-object-edit.
+
+Editar o PNG original fornecido, em uma chamada independente por quadro.
+Entregar UMA imagem PNG RGBA transparente, 1233 × 1634 px, personagem inteira,
+na mesma escala e nas mesmas coordenadas do original. Manter a área transparente
+e o enquadramento existentes. Preservar a resolução; sem zoom, recorte, redução,
+nova pose, montagem ou sprite sheet.
+
+Alterar SOMENTE as pálpebras superiores, no grau indicado para este quadro.
+Manter os cantos internos e externos, a largura dos olhos e as íris fixos;
+as pálpebras descem sobre as íris sem alongar, alargar ou deslocar os olhos.
+Preservar sobrancelhas, boca fechada e expressão séria.
+
+Preservar integralmente rosto, cabeça, cabelo castanho-escuro, orelhas, cauda,
+corpo sentado com pernas cruzadas, palma levantada em abhaya, outra mão,
+tatuagem, pés, roupa preta e marfim, cores, sombras e traço mangá fino.
+Fora das pálpebras, não restaurar nem repintar a arte. Não criar efeitos,
+chama, sombras de chão, fundo ou adornos.
+
+Executar apenas o estado do quadro solicitado ao final deste prompt.
+02: deixar cerca de dois terços da abertura original de cada olho visíveis.
+03: deixar cerca de um terço da abertura original visível, com parte das íris.
+04: fechar os dois olhos com linhas delicadas, sem mudar a expressão.
+```
+
+**Ouvinte — alvo único:** `samvit-ouvinte(1).png`, 1122 × 1402 px.
+
+```text
+PROJETO SANAKA — QUADRO LOCALIZADO DE SAṂVIT OUVINTE.
+Use case: precise-object-edit.
+
+Editar o PNG original fornecido, em uma chamada independente por quadro.
+Entregar UMA imagem PNG RGBA transparente, 1122 × 1402 px, personagem inteira,
+na mesma escala e nas mesmas coordenadas do original. Manter a área transparente
+e o enquadramento existentes. Preservar a resolução; sem zoom, recorte, redução,
+nova pose, montagem ou sprite sheet.
+
+Alterar SOMENTE as pálpebras superiores e a orelha do lado esquerdo de quem vê.
+Fixar os cantos internos e externos dos olhos, sua largura e a posição das íris.
+As pálpebras cobrem as íris sem esticar os olhos nem mudar seu formato.
+Manter cabeça inclinada e apoiada na mão, boca entreaberta e expressão curiosa.
+
+A orelha indicada pode inclinar discretamente a partir da própria base fixa;
+manter sua forma, tamanho e volume. A outra orelha e os cabelos ficam parados.
+Preservar integralmente rosto, corpo, mãos, tatuagem, pernas, pés, cauda,
+roupa preta e marfim, cores, sombras e traço mangá fino. Fora das áreas
+indicadas, não restaurar nem repintar. Não adicionar chama, efeitos ou fundo.
+
+Executar apenas o estado do quadro solicitado ao final deste prompt.
+02: dois terços da abertura dos olhos; orelha inclina no máximo cerca de 2 graus.
+03: um terço da abertura, com parte das íris; orelha inclina até cerca de 4 graus.
+04: olhos fechados com linhas delicadas; orelha inclina até cerca de 6 graus.
+```
+
+O original será o quadro 01 de cada pose. A reabertura dos olhos e o retorno da orelha
+reutilizarão os desenhos em ordem inversa, somente depois da revisão da autora.

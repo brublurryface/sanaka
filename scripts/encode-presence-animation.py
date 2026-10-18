@@ -39,10 +39,17 @@ def main():
     parser.add_argument("--frames", nargs="+", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pause-ms", type=int, default=4000)
+    parser.add_argument(
+        "--frame-ms",
+        type=int,
+        help="For two-frame continuous motion, hold each drawing this many milliseconds.",
+    )
     args = parser.parse_args()
     if len(args.frames) not in (2, 4):
         parser.error("Provide two ear-twitch frames or four progressive blink frames.")
-    if args.pause_ms < 1000:
+    if args.frame_ms is not None and (len(args.frames) != 2 or args.frame_ms <= 0):
+        parser.error("Continuous motion requires two frames and a positive --frame-ms value.")
+    if args.frame_ms is None and args.pause_ms < 1000:
         parser.error("Use at least 1000 ms of rest between blinks.")
     if args.output.suffix.lower() != ".webp":
         parser.error("The output must use the .webp extension.")
@@ -62,7 +69,12 @@ def main():
     # Reuse the intermediate drawings in reverse; no redraw, resize, blur or frame interpolation.
     if len(originals) == 2:
         frames = originals
-        durations = [args.pause_ms, 70]
+        # Continuous motion uses equal holds; blinks retain their separate resting interval.
+        durations = (
+            [args.frame_ms, args.frame_ms]
+            if args.frame_ms is not None
+            else [args.pause_ms, 70]
+        )
     else:
         frames = [originals[index] for index in (0, 1, 2, 3, 2, 1)]
         durations = [args.pause_ms, 60, 60, 100, 60, 60]
