@@ -165,3 +165,64 @@ e continuidade do movimento da orelha também precisam de revisão.
 São doze PNGs gerados ao todo, apresentados para revisão, além dos quatro originais. A composição
 de WebPs, qualquer estabilização ou retoque e a aplicação dos resultados ao site continuam pendentes
 da revisão da autora. Nenhum quadro foi redimensionado, repintado ou aplicado na página nesta rodada.
+
+## Piloto com Bhu — sequência corrigida pela autora
+
+A autora forneceu `samvit-bhu-read-me2.png`, `samvit-bhu-read-me3.png` e
+`samvit-bhu-read-me4.png`, todos RGBA, 1122 × 1402 px. Eles representam fechamento progressivo,
+terminando com os olhos fechados dos dois personagens. O quadro 01 continua sendo o PNG original
+usado pelo README e pelo fallback estático. As mudanças dos quadros corrigidos se concentram nos
+rostos; o restante da composição permanece alinhado.
+
+O piloto foi autorizado para teste no site, antes de corrigir as outras poses. A sequência usada é
+`01 → 02 → 03 → 04 → 03 → 02 → 01`: os intermediários são reutilizados na ordem inversa para
+reabrir os olhos, sem gerar, redesenhar, redimensionar ou interpolar a arte.
+
+| Quadro no WebP | Fonte | Duração |
+| -------------- | ----- | ------- |
+| 1              | 01    | 4000 ms |
+| 2              | 02    | 60 ms   |
+| 3              | 03    | 60 ms   |
+| 4              | 04    | 100 ms  |
+| 5              | 03    | 60 ms   |
+| 6              | 02    | 60 ms   |
+
+O retorno ao quadro 01 ocorre na repetição do ciclo, totalizando 4340 ms. O resultado é
+`public/images/samvit/presences/samvit-with-bhu-blink.webp`, com 1.482.508 bytes, contra
+1.885.495 bytes do PNG estático original. Não se trata de um aumento acumulado com o PNG:
+`<picture>` escolhe uma fonte para a imagem conforme a preferência de movimento.
+
+Somente a presença `withBhu` oferece o WebP. A fonte animada usa
+`media="(prefers-reduced-motion: no-preference)"`; o `<img>` preserva o PNG, o texto alternativo
+e as dimensões originais. Quem pede movimento reduzido recebe a imagem estática. As outras poses
+permanecem estáticas até a revisão de seus quadros. Não há movimento CSS aplicado à personagem.
+O `<source>` existe em todas as poses e aponta para o próprio estático nas demais, mantendo a
+mesma estrutura de elementos quando o sorteio do navegador difere do HTML prerenderizado.
+As cinco frases com Bhu foram substituídas pelas fornecidas pela autora, com tradução em inglês.
+
+### Reprodução e verificação do arquivo
+
+`scripts/encode-presence-animation.py` precisa de Python com Pillow somente para preparar o asset;
+nenhuma dessas dependências é exigida pelo Angular, pelo visitante ou pelo servidor em produção.
+Os três PNGs corrigidos continuam nos arquivos de trabalho da autora, sem cópias adicionais no
+diretório público da aplicação. Depois de disponibilizar os quatro PNGs localmente:
+
+```powershell
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-with-bhu-still.png `
+    CAMINHO/samvit-bhu-read-me2.png `
+    CAMINHO/samvit-bhu-read-me3.png `
+    CAMINHO/samvit-bhu-read-me4.png `
+  --output public/images/samvit/presences/samvit-with-bhu-blink.webp
+```
+
+Substituir `CAMINHO` pela pasta dos quadros corrigidos. O script rejeita canvases diferentes,
+preserva as entradas e grava com compressão sem perda. Antes de publicar o arquivo final, ele
+decodifica os seis quadros e exige igualdade de todos os pixels de alfa e de todos os valores RGB
+visíveis com os respectivos PNGs; também confere duração e repetição infinita. Somente cores
+escondidas sob alfa zero podem ser descartadas pelo WebP. Arquivos incompletos ficam fora de
+`public/`, para não entrarem no build nem no observador do Angular.
+
+Os testes do componente conferem a condição de movimento reduzido na fonte do `<picture>`,
+o fallback PNG e o uso exclusivo dos arquivos estáticos nas poses ainda não aprovadas. A avaliação da
+velocidade e da expressão no navegador da autora continua sendo o critério de aprovação do piloto.

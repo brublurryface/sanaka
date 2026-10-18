@@ -252,11 +252,11 @@
       "withBhu": {
         "label": "Saṃvit holding Bhu",
         "alt": "A seated Saṃvit holds Bhu in her lap.",
-        "message1": "Saṃvit holds Bhu. The conversation is still resting here.",
-        "message2": "Saṃvit keeps Bhu company. You can stay a little too.",
-        "message3": "Saṃvit watches you while Bhu rests in her lap.",
-        "message4": "Saṃvit and Bhu have found a pause. The portal shares their silence.",
-        "message5": "Saṃvit holds Bhu. For now, the conversation waits."
+        "message1": "Saṃvit wants to tell you Bhu's story, but she is still reflecting on how to tell it.",
+        "message2": "Saṃvit wants to tell you Bhu's story, but she cannot right now.",
+        "message3": "Saṃvit is spending time with Bhu while she decides what to tell you.",
+        "message4": "Saṃvit wants to tell you Bhu's story, but how can she do that without plenty of reflection?",
+        "message5": "Saṃvit wants to tell you Bhu's story, but she has decided it is better for Bhu to tell his own story."
       }
     },
     "dialogue": {

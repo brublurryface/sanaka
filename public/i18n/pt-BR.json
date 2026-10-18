@@ -252,11 +252,11 @@
       "withBhu": {
         "label": "Saṃvit acolhendo Bhu",
         "alt": "Saṃvit sentada acolhe Bhu no colo.",
-        "message1": "Saṃvit acolhe Bhu. A conversa ainda repousa por aqui.",
-        "message2": "Saṃvit faz companhia a Bhu. Você também pode ficar um pouco.",
-        "message3": "Saṃvit observa você enquanto Bhu descansa em seu colo.",
-        "message4": "Saṃvit e Bhu encontraram uma pausa. O portal acompanha o silêncio.",
-        "message5": "Saṃvit acolhe Bhu. Por enquanto, a conversa espera."
+        "message1": "Saṃvit quer te contar a história do Bhu, mas ainda está refletindo como fazê-la.",
+        "message2": "Saṃvit quer te contar a história do Bhu, mas no momento, não pode.",
+        "message3": "Saṃvit está passando um tempo com o Bhu enquanto decide o que te dizer.",
+        "message4": "Saṃvit quer te contar a história do Bhu, mas como fazer isso sem refletir bastante?",
+        "message5": "Saṃvit quer te contar a história do Bhu, mas decidiu que é melhor o Bhu contar a própria história."
       }
     },
     "dialogue": {

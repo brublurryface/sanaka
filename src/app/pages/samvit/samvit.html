@@ -6,7 +6,13 @@
       <figure class="samvit-presence" [class.samvit-presence--sesha]="presence.id === 'sesha'">
         <div class="samvit-presence__aura" aria-hidden="true"></div>
 
-        <div class="samvit-presence__visual">
+        <picture class="samvit-presence__visual">
+          <!-- Estrutura igual entre poses para hidratação; movimento reduzido usa o <img>. -->
+          <source
+            [srcset]="presence.animatedImageSrc ?? presence.imageSrc"
+            [attr.type]="presence.animatedImageSrc ? 'image/webp' : null"
+            media="(prefers-reduced-motion: no-preference)"
+          />
           <img
             class="samvit-presence__image"
             [src]="presence.imageSrc"
@@ -16,7 +22,7 @@
             decoding="async"
             fetchpriority="high"
           />
-        </div>
+        </picture>
 
         <figcaption>
           <span class="samvit-presence__line" aria-hidden="true"></span>

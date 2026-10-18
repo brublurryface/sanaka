@@ -117,6 +117,9 @@ describe('Samvit', () => {
     expect(compiled.querySelector('.samvit-page__header')).toBeNull();
     expect(compiled.querySelector('.samvit-dialogue__threshold')).toBeNull();
     expect(compiled.querySelectorAll('.samvit-presence__image')).toHaveLength(1);
+    expect(compiled.querySelector('picture source')?.getAttribute('srcset')).toBe(
+      '/images/samvit/presences/samvit-sesha-sleeping-still.webp',
+    );
     expect(image?.getAttribute('src')).toBe(
       '/images/samvit/presences/samvit-sesha-sleeping-still.webp',
     );
@@ -180,11 +183,12 @@ describe('Samvit', () => {
 
   it.each([
     [0.45, 'samvit-curious-still.png', 1122, 1402],
+    [0.6, 'samvit-contemplative-still.webp', 1122, 1402],
     [0.7, 'samvit-abhaya-still.png', 1233, 1634],
     [0.8, 'samvit-dot-eye-still.png', 1024, 1536],
     [0.95, 'samvit-with-bhu-still.png', 1122, 1402],
   ])(
-    'should show the approved PNG for roll %s at its original dimensions',
+    'should show the approved still for roll %s at its original dimensions',
     async (roll, file, width, height) => {
       vi.spyOn(Math, 'random').mockReturnValueOnce(Number(roll)).mockReturnValueOnce(0);
       fixture = TestBed.createComponent(Samvit);
@@ -201,8 +205,22 @@ describe('Samvit', () => {
       expect(root.querySelector<HTMLButtonElement>('button')?.disabled).toBe(true);
 
       if (Number(roll) === 0.95) {
+        const animatedSource = root.querySelector('picture source');
+
+        expect(animatedSource?.getAttribute('srcset')).toBe(
+          '/images/samvit/presences/samvit-with-bhu-blink.webp',
+        );
+        expect(animatedSource?.getAttribute('media')).toBe(
+          '(prefers-reduced-motion: no-preference)',
+        );
+        expect(animatedSource?.getAttribute('type')).toBe('image/webp');
         expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit acolhendo Bhu');
         expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+      } else {
+        expect(root.querySelector('picture source')?.getAttribute('srcset')).toBe(
+          image?.getAttribute('src'),
+        );
+        expect(root.querySelector('picture source')?.getAttribute('type')).toBeNull();
       }
     },
   );

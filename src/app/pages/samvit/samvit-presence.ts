@@ -4,6 +4,7 @@ export type SamvitPresenceId =
 export interface SamvitPresence {
   readonly id: SamvitPresenceId;
   readonly imageSrc: string;
+  readonly animatedImageSrc?: string;
   readonly imageWidth: number;
   readonly imageHeight: number;
   readonly labelKey: string;
@@ -60,6 +61,7 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   withBhu: {
     id: 'withBhu',
     imageSrc: '/images/samvit/presences/samvit-with-bhu-still.png',
+    animatedImageSrc: '/images/samvit/presences/samvit-with-bhu-blink.webp',
     imageWidth: 1122,
     imageHeight: 1402,
     labelKey: 'samvit.presences.withBhu.label',
