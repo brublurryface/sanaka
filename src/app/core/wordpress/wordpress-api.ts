@@ -1,8 +1,11 @@
 import { inject, InjectionToken } from '@angular/core';
 
-/** Raiz compartilhada por namespaces públicos e próprios da REST API do WordPress. */
+/**
+ * Raiz compartilhada por namespaces públicos e próprios da REST API do WordPress.
+ * O hostname do CMS mantém essas integrações na Locaweb quando o site público mudar de servidor.
+ */
 export const WORDPRESS_REST_URL = new InjectionToken<string>('WORDPRESS_REST_URL', {
-  factory: () => 'https://www.sanaka.com.br/wp-json',
+  factory: () => 'https://cms.sanaka.com.br/wp-json',
 });
 
 /** Endereço-base compartilhado pelas integrações públicas com o WordPress. */

@@ -1,6 +1,6 @@
 [CmdletBinding()]
 param(
-  [string] $ApiBase = 'https://www.sanaka.com.br/wp-json/wp/v2',
+  [string] $ApiBase = 'https://cms.sanaka.com.br/wp-json/wp/v2',
   [string] $OutputDirectory = ''
 )
 
