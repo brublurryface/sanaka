@@ -248,11 +248,12 @@ comparada aos dois PNGs, com igualdade dos valores de alfa e RGB visíveis.
 A nova pensativa substitui o WebP legado por `samvit-contemplative-still.png`, copiado byte a byte
 do anexo, com 1024 × 1536 px. O texto alternativo descreve a pose abraçando os joelhos e olhando
 para cima. O arquivo substituído foi removido; não são mantidos dois arquivos para a mesma função.
-A sequência da pensativa aguarda revisão do prompt abaixo. As animações de abhaya e ouvinte
+A autora aprovou o prompt abaixo para gerar três quadros da pensativa, sujeitos à revisão visual
+antes de qualquer montagem. As animações de abhaya e ouvinte
 também aguardam novos quadros: o tamanho reduzido da primeira e o estiramento dos olhos da
 segunda impedem o uso das tentativas anteriores.
 
-### Prompt proposto — pensativa, aguardando aprovação
+### Prompt aprovado — quadros da pensativa para revisão
 
 ```text
 EDIÇÃO LOCALIZADA DE UM QUADRO DA SAṂVIT PENSATIVA.
@@ -283,4 +284,21 @@ A reabertura e o retorno da cauda reutilizarão os quadros na ordem inversa.
 
 Os valores de abertura e deslocamento são indicações para o desenho e precisam de conferência
 antes da montagem. A nova proposta usa fechamento progressivo, como nos quadros corrigidos com Bhu.
-Nenhum desses três PNGs foi gerado nesta revisão.
+
+Os três PNGs foram gerados em 18/10/2026, em chamadas independentes que usaram o mesmo original.
+Todos têm 1024 × 1536 px, formato RGBA e fundo transparente. O quadro 02 mantém os olhos
+parcialmente abertos; o 03 avança o fechamento; o 04 fecha os dois olhos. A transparência alcança
+alfa zero no fundo e alfa máximo 254 nos três resultados, em comparação a 255 no original.
+
+A comparação com a base detectou mudanças de cor e traço fora dos olhos e da ponta da cauda.
+O deslocamento solicitado em pixels não foi tratado como garantia de execução pelo gerador.
+Os resultados são material de revisão da autora: não foram montados em WebP, copiados para
+`public/` nem aplicados à página. A pensativa continua usando somente o PNG original.
+
+Identificação dos resultados para conferência por SHA-256:
+
+| Quadro | SHA-256                                                            |
+| ------ | ------------------------------------------------------------------ |
+| 02     | `cc2f20cf69b8c9f747071959ea2137ff99a48afb3fbd1849a190963f86f67882` |
+| 03     | `98230433a5264b701e2a6e311ebefcb10b929ce209727d849b4015b8f4867a2d` |
+| 04     | `3ea49287529b515a2e358cf054ecc21927a78392222ff0b38e82d572dec77114` |
