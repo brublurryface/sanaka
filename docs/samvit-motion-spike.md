@@ -494,3 +494,51 @@ python scripts/encode-presence-animation.py `
     CAMINHO/samvit-ouvinte4.png `
   --output public/images/samvit/presences/samvit-curious-blink.webp
 ```
+
+## Cadência mais calma da ouvinte e da dot-eye
+
+Após conferir as animações no navegador, a autora pediu trocas mais lentas na ouvinte e na
+dot-eye. Os mesmos desenhos e sua ordem foram preservados; somente as durações mudaram.
+
+| Presença        | Durações anteriores          | Durações atuais              | Ciclo atual |
+| --------------- | ---------------------------- | ---------------------------- | ----------- |
+| Ouvinte/curiosa | 4000, 60, 60, 100, 60, 60 ms | 4000, 90, 90, 150, 90, 90 ms | 4510 ms     |
+| Dot-eye         | 250, 250 ms                  | 375, 375 ms                  | 750 ms      |
+
+As etapas do movimento duram 50% mais. A ouvinte mantém quatro segundos de repouso entre
+os movimentos; a dot-eye continua alternando sem uma pausa longa. Bhu, pensativa e abhaya
+mantêm seus tempos. As dimensões, cores, transparência e condição de movimento reduzido
+permanecem iguais.
+
+O codificador aceita `--blink-step-ms` para ajustar a duração dos desenhos intermediários
+em uma sequência de quatro PNGs. O tempo de olhos fechados acompanha a proporção original
+de 100 para 60, e o repouso permanece independente. Sem essa opção, os tempos originais
+de 60 e 100 ms continuam sendo usados. Valores inválidos ou a combinação com dois quadros
+são rejeitados antes da leitura ou gravação de arquivos.
+
+A comparação com os WebPs anteriores confirmou igualdade de todos os valores de alfa e RGB
+visíveis, dimensões, ordem dos desenhos e repetição infinita. Somente cinco bytes da ouvinte
+e quatro da dot-eye mudaram, correspondendo aos novos tempos. Os arquivos mantêm o mesmo
+tamanho. A conferência da cadência no navegador continua com a autora.
+
+Nesta revisão, passaram a comparação dos quadros e tempos, a rejeição de parâmetros inválidos,
+`npm run format:check`, `git diff --check` e `npm run build`. As duas animações na saída do
+build são idênticas aos arquivos validados. O código Angular e os outros assets não mudaram.
+
+Para repetir a montagem com a cadência revisada:
+
+```powershell
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-curious-still.png `
+    CAMINHO/samvit-ouvinte2.png `
+    CAMINHO/samvit-ouvinte3.png `
+    CAMINHO/samvit-ouvinte4.png `
+  --output public/images/samvit/presences/samvit-curious-blink.webp `
+  --blink-step-ms 90
+
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-dot-eye-still.png `
+    CAMINHO/samvit-dot-eyes2.png `
+  --output public/images/samvit/presences/samvit-dot-eye-ear-twitch.webp `
+  --frame-ms 375
+```

@@ -44,11 +44,18 @@ def main():
         type=int,
         help="For two-frame continuous motion, hold each drawing this many milliseconds.",
     )
+    parser.add_argument(
+        "--blink-step-ms",
+        type=int,
+        help="For four-frame blinks, hold each intermediate drawing this many milliseconds.",
+    )
     args = parser.parse_args()
     if len(args.frames) not in (2, 4):
         parser.error("Provide two ear-twitch frames or four progressive blink frames.")
     if args.frame_ms is not None and (len(args.frames) != 2 or args.frame_ms <= 0):
         parser.error("Continuous motion requires two frames and a positive --frame-ms value.")
+    if args.blink_step_ms is not None and (len(args.frames) != 4 or args.blink_step_ms <= 0):
+        parser.error("Blink timing requires four frames and a positive --blink-step-ms value.")
     if args.frame_ms is None and args.pause_ms < 1000:
         parser.error("Use at least 1000 ms of rest between blinks.")
     if args.output.suffix.lower() != ".webp":
@@ -77,7 +84,10 @@ def main():
         )
     else:
         frames = [originals[index] for index in (0, 1, 2, 3, 2, 1)]
-        durations = [args.pause_ms, 60, 60, 100, 60, 60]
+        step = args.blink_step_ms if args.blink_step_ms is not None else 60
+        # Scale the closed-eye hold with the intermediate drawings, preserving the resting pause.
+        closed = round(step * 5 / 3)
+        durations = [args.pause_ms, step, step, closed, step, step]
     args.output.parent.mkdir(parents=True, exist_ok=True)
     # Keep incomplete files outside public/, so ng serve/build never sees a half-written asset.
     with TemporaryDirectory(prefix="presence-encode-", dir=Path(__file__).resolve().parent) as work:
