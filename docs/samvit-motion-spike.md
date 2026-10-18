@@ -49,18 +49,18 @@ PNGs aprovados, sem redução de dimensões ou recompressão. Os originais copia
 mantêm exatamente os bytes dos anexos. README e a presença com Bhu compartilham um único arquivo.
 As artes anteriores de Śeṣa e da contemplativa aguardam suas substituições.
 
-A próxima tentativa usa uma alteração localizada por imagem. O original já é o quadro de repouso;
-será pedido um PNG alternativo para revisão pela autora no Photoshop antes de montar qualquer WebP.
+A tentativa de 18/10 solicita alterações localizadas por imagem. O original já é o quadro de repouso;
+o PNG alternativo passa por revisão pela autora no Photoshop antes de montar qualquer WebP.
 Não aplicar movimento CSS ao desenho nem deslocar a composição inteira entre quadros.
 
-| Presença        | Alvo no projeto                                            | Canvas solicitado | Alteração do quadro alternativo                                                                                                          |
-| --------------- | ---------------------------------------------------------- | ----------------- | ---------------------------------------------------------------------------------------------------------------------------------------- |
-| Abhaya mudra    | `public/images/samvit/presences/samvit-abhaya-still.png`   | 1233 × 1634 px    | Fechar suavemente os dois olhos, preservando sobrancelhas sérias, boca e a mão erguida                                                   |
-| Curiosa/ouvinte | `public/images/samvit/presences/samvit-curious-still.png`  | 1122 × 1402 px    | Fechar suavemente os dois olhos; manter cabeça apoiada na mão, boca e postura                                                            |
-| Dot-eye         | `public/images/samvit/presences/samvit-dot-eye-still.png`  | 1024 × 1536 px    | Inclinar levemente para fora apenas a orelha à direita de quem olha, preservando a base e o outro lado; olhos pontuais permanecem iguais |
-| Com Bhu         | `public/images/samvit/presences/samvit-with-bhu-still.png` | 1122 × 1402 px    | Fechar apenas os olhos de Saṃvit; Bhu permanece inteiro e inalterado                                                                     |
+| Presença        | Alvo no projeto                                            | Canvas solicitado | Alteração do quadro alternativo                                                                                                              |
+| --------------- | ---------------------------------------------------------- | ----------------- | -------------------------------------------------------------------------------------------------------------------------------------------- |
+| Abhaya mudra    | `public/images/samvit/presences/samvit-abhaya-still.png`   | 1233 × 1634 px    | Fechar suavemente os dois olhos, preservando sobrancelhas sérias, boca e a mão erguida                                                       |
+| Curiosa/ouvinte | `public/images/samvit/presences/samvit-curious-still.png`  | 1122 × 1402 px    | Fechar suavemente os dois olhos e inclinar levemente para fora a orelha à direita de quem olha; manter cabeça apoiada na mão, boca e postura |
+| Dot-eye         | `public/images/samvit/presences/samvit-dot-eye-still.png`  | 1024 × 1536 px    | Inclinar levemente para fora apenas a orelha à direita de quem olha, preservando a base e o outro lado; olhos pontuais permanecem iguais     |
+| Com Bhu         | `public/images/samvit/presences/samvit-with-bhu-still.png` | 1122 × 1402 px    | Fechar suavemente os dois olhos de Saṃvit e os dois olhos de Bhu; preservar bocas, sobrancelhas, posição e todo o restante                   |
 
-### Prompt comum proposto para cada edição
+### Prompt comum aprovado para cada edição
 
 ```text
 EDIÇÃO LOCALIZADA DE UM QUADRO DA IMAGEM FORNECIDA.
@@ -78,15 +78,40 @@ da pequena região editada: rosto, proporções, expressão da boca, sobrancelha
 cabelo, roupa, mãos, tatuagem, corpo, pernas, cauda, cores, luz e sombras.
 Preservar o traço mangá delicado da referência, com linhas finas nítidas, cabelos definidos
 e sombras limpas. Não pintar por cima da imagem inteira, suavizar detalhes, mudar a paleta,
-clarear o cabelo, engrossar o traço, alterar anatomia, adicionar objetos ou redesenhar Bhu.
+clarear o cabelo, engrossar o traço, alterar anatomia ou adicionar objetos.
+Na edição curiosa/ouvinte, apenas os olhos e a orelha à direita de quem olha mudam;
+preservar a base da orelha, a cabeça apoiada na mão e todo o restante da pose.
 Na edição dot-eye, os olhos, a boca, as sobrancelhas e os sinais gráficos ficam inalterados.
-Na edição com Bhu, apenas os olhos de Saṃvit mudam; todo o Bhu permanece inalterado.
+Na edição com Bhu, apenas os dois olhos de Saṃvit e os dois olhos de Bhu mudam;
+todo o restante das duas personagens permanece inalterado.
 
 Alvo, tamanho e alteração: anexar exatamente a linha correspondente da tabela acima.
 ```
 
-Estes prompts aguardam aprovação antes da geração. A edição generativa pode alterar detalhes
+Prompts aprovados pela autora em 18/10/2026, após as correções de Bhu e da curiosa/ouvinte.
+A aprovação autoriza gerar os quatro PNGs para revisão; não autoriza aplicá-los como animação.
+A edição generativa pode alterar detalhes
 além do pedido; conferir cada PNG em 100%, tamanho do canvas, alinhamento e transparência.
 Quadros com mudança de escala, pose, cor ou perda de linha devem ser descartados antes da montagem.
 O WebP animado só será preparado com quadros aprovados, mantendo fallback estático e respeito
 a `prefers-reduced-motion`.
+
+### Conferência dos quatro PNGs gerados
+
+Os quatro quadros foram gerados com a ferramenta integrada de edição de imagens, uma chamada
+por alvo original, sem reaproveitar uma geração anterior como entrada. As artes estáticas da aplicação
+e do README não foram substituídas. Os resultados foram apresentados para revisão da autora.
+
+| Quadro          | Canvas recebido | Canal alfa | Resultado observado                                                                   |
+| --------------- | --------------- | ---------- | ------------------------------------------------------------------------------------- |
+| Com Bhu         | 1122 × 1402 px  | 0–255      | Saṃvit e Bhu com olhos fechados; canvas preservado                                    |
+| Curiosa/ouvinte | 1122 × 1402 px  | 0–255      | Olhos fechados e cabeça apoiada; deslocamento da orelha discreto, sujeito à revisão   |
+| Abhaya mudra    | 1089 × 1444 px  | 0–255      | Olhos fechados e expressão séria; dimensões originais não foram respeitadas           |
+| Dot-eye         | 1024 × 1536 px  | 0–254      | Olhos pontuais preservados; inclinação da orelha; opacidade máxima diferente da fonte |
+
+Todos os arquivos contêm pixels transparentes. Mesmo nos canvases preservados, a edição alterou
+detalhes de textura e traço fora das regiões solicitadas; não são alterações exatas pixel a pixel.
+Esses resultados ainda não estão aprovados para alternar com as fontes em uma animação.
+Em particular, o quadro abhaya não pode ser intercalado diretamente com o original devido às
+dimensões diferentes. Nenhum quadro foi redimensionado ou repintado para ocultar essa diferença,
+e nenhuma nova geração foi feita automaticamente após a conferência.
