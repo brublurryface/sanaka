@@ -107,6 +107,10 @@
   min-height: 34rem;
 }
 
+.samvit-presence--pending {
+  visibility: hidden;
+}
+
 .samvit-presence::before {
   position: absolute;
   right: 18%;

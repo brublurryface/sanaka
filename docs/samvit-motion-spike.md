@@ -226,3 +226,61 @@ escondidas sob alfa zero podem ser descartadas pelo WebP. Arquivos incompletos f
 Os testes do componente conferem a condição de movimento reduzido na fonte do `<picture>`,
 o fallback PNG e o uso exclusivo dos arquivos estáticos nas poses ainda não aprovadas. A avaliação da
 velocidade e da expressão no navegador da autora continua sendo o critério de aprovação do piloto.
+
+## Revisão do refresh, dot-eye e pensativa
+
+Após aprovar o piloto com Bhu, a autora pediu o título **Saṃvit e Bhu**, corrigiu o segundo quadro
+da dot-eye e forneceu `samvit-pensativa.png` como base da próxima sequência.
+
+O refresh exibia uma pose do HTML prerenderizado e depois outra sorteada no navegador. A seleção
+foi movida para `afterNextRender`: o HTML inicial reserva a área sem escolher uma personagem;
+o navegador escolhe uma única dupla de pose e frase por instância da página. A atualização é feita
+em um único signal e não se repete durante a detecção de mudanças. O teste de regressão confere
+que o construtor não chama o sorteio e que o primeiro render do navegador faz apenas duas chamadas
+aleatórias, uma para a pose e outra para a frase.
+
+A dot-eye usa o PNG original e `samvit-dot-eyes2(1).png`, ambos RGBA de 1024 × 1536 px.
+O WebP `samvit-dot-eye-ear-twitch.webp` tem dois quadros: repouso de 4000 ms e movimento de 70 ms,
+mais curto que a piscada de 340 ms do piloto com Bhu. O ciclo de 4070 ms se repete e preserva o
+fallback estático para movimento reduzido. O arquivo tem 1.075.944 bytes; a decodificação foi
+comparada aos dois PNGs, com igualdade dos valores de alfa e RGB visíveis.
+
+A nova pensativa substitui o WebP legado por `samvit-contemplative-still.png`, copiado byte a byte
+do anexo, com 1024 × 1536 px. O texto alternativo descreve a pose abraçando os joelhos e olhando
+para cima. O arquivo substituído foi removido; não são mantidos dois arquivos para a mesma função.
+A sequência da pensativa aguarda revisão do prompt abaixo. As animações de abhaya e ouvinte
+também aguardam novos quadros: o tamanho reduzido da primeira e o estiramento dos olhos da
+segunda impedem o uso das tentativas anteriores.
+
+### Prompt proposto — pensativa, aguardando aprovação
+
+```text
+EDIÇÃO LOCALIZADA DE UM QUADRO DA SAṂVIT PENSATIVA.
+Use case: precise-object-edit.
+
+Alvo único: samvit-pensativa.png. Editar o original fornecido em cada chamada.
+Entregar uma única imagem PNG RGBA transparente por chamada, 1024 × 1536 px,
+com a personagem inteira na mesma posição, escala, pose e enquadramento.
+Não criar uma nova pose, montagem ou sprite sheet.
+
+Alterar somente as pálpebras e a extremidade marfim da cauda, conforme o quadro indicado.
+Manter os cantos dos olhos e o formato original fixos; as pálpebras cobrem as íris sem
+esticar, alargar, reposicionar ou deformar os olhos. Preservar a direção do olhar,
+sobrancelhas, boca, cabeça inclinada para cima e a expressão pensativa.
+Mover apenas a ponta da cauda, sem deslocar a base, aumentar o volume ou alterar sua anatomia.
+
+Preservar cabelos, orelhas, corpo abraçando os joelhos, mãos, tatuagem, roupa, pés,
+cores, luz, sombras e traço mangá fino fora dessas pequenas regiões. Não restaurar
+ou repintar o conjunto. Não adicionar objetos, efeitos, chama ou fundo.
+
+QUADRO 02: olhos fechando, cerca de dois terços da abertura visível; ponta da cauda sobe cerca de 3 px.
+QUADRO 03: olhos mais fechados, cerca de um terço da abertura visível; ponta sobe cerca de 6 px.
+QUADRO 04: os dois olhos completamente fechados; ponta sobe no máximo cerca de 9 px.
+
+Executar somente a linha do quadro solicitado em cada chamada. O original é o quadro 01.
+A reabertura e o retorno da cauda reutilizarão os quadros na ordem inversa.
+```
+
+Os valores de abertura e deslocamento são indicações para o desenho e precisam de conferência
+antes da montagem. A nova proposta usa fechamento progressivo, como nos quadros corrigidos com Bhu.
+Nenhum desses três PNGs foi gerado nesta revisão.

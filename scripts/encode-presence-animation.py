@@ -1,4 +1,4 @@
-"""Pack four approved PNGs into a lossless blink; requires Pillow at authoring time only."""
+"""Pack two or four approved PNGs losslessly; requires Pillow at authoring time only."""
 
 import argparse
 from pathlib import Path
@@ -36,10 +36,12 @@ def verify_frames(output, frames, durations):
 
 def main():
     parser = argparse.ArgumentParser(description=__doc__)
-    parser.add_argument("--frames", nargs=4, type=Path, required=True)
+    parser.add_argument("--frames", nargs="+", type=Path, required=True)
     parser.add_argument("--output", type=Path, required=True)
     parser.add_argument("--pause-ms", type=int, default=4000)
     args = parser.parse_args()
+    if len(args.frames) not in (2, 4):
+        parser.error("Provide two ear-twitch frames or four progressive blink frames.")
     if args.pause_ms < 1000:
         parser.error("Use at least 1000 ms of rest between blinks.")
     if args.output.suffix.lower() != ".webp":
@@ -55,11 +57,15 @@ def main():
                 raise ValueError(f"{path} must be an RGBA image with transparency.")
             originals.append(image.copy())
     if len({image.size for image in originals}) != 1:
-        raise ValueError("All four source canvases must have exactly the same dimensions.")
+        raise ValueError("All source canvases must have exactly the same dimensions.")
 
     # Reuse the intermediate drawings in reverse; no redraw, resize, blur or frame interpolation.
-    frames = [originals[index] for index in (0, 1, 2, 3, 2, 1)]
-    durations = [args.pause_ms, 60, 60, 100, 60, 60]
+    if len(originals) == 2:
+        frames = originals
+        durations = [args.pause_ms, 70]
+    else:
+        frames = [originals[index] for index in (0, 1, 2, 3, 2, 1)]
+        durations = [args.pause_ms, 60, 60, 100, 60, 60]
     args.output.parent.mkdir(parents=True, exist_ok=True)
     # Keep incomplete files outside public/, so ng serve/build never sees a half-written asset.
     with TemporaryDirectory(prefix="presence-encode-", dir=Path(__file__).resolve().parent) as work:

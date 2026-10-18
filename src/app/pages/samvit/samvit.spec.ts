@@ -59,7 +59,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Dot-eye 5',
           },
           withBhu: {
-            label: 'Saṃvit acolhendo Bhu',
+            label: 'Saṃvit e Bhu',
             alt: 'Saṃvit acolhe Bhu no colo.',
             message1: 'Bhu 1',
             message2: 'Bhu 2',
@@ -100,6 +100,28 @@ describe('Samvit', () => {
 
   afterEach(() => {
     vi.restoreAllMocks();
+  });
+
+  it('should wait for the first browser render before choosing a pose and message once', async () => {
+    const random = vi.spyOn(Math, 'random').mockReturnValueOnce(0.95).mockReturnValueOnce(0);
+    fixture = TestBed.createComponent(Samvit);
+
+    // Construction also happens on the server; it must not choose an image for the static HTML.
+    expect(random).not.toHaveBeenCalled();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const root = fixture.nativeElement as HTMLElement;
+    expect(random).toHaveBeenCalledTimes(2);
+    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
+    expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+    expect(root.querySelectorAll('.samvit-presence__image')).toHaveLength(1);
+    expect(root.querySelector('.samvit-presence--pending')).toBeNull();
+
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(random).toHaveBeenCalledTimes(2);
+    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
   });
 
   it('should create the silent portal with Śeṣa as the prioritized presence', async () => {
@@ -183,7 +205,7 @@ describe('Samvit', () => {
 
   it.each([
     [0.45, 'samvit-curious-still.png', 1122, 1402],
-    [0.6, 'samvit-contemplative-still.webp', 1122, 1402],
+    [0.6, 'samvit-contemplative-still.png', 1024, 1536],
     [0.7, 'samvit-abhaya-still.png', 1233, 1634],
     [0.8, 'samvit-dot-eye-still.png', 1024, 1536],
     [0.95, 'samvit-with-bhu-still.png', 1122, 1402],
@@ -204,18 +226,22 @@ describe('Samvit', () => {
       expect(root.querySelector<HTMLTextAreaElement>('textarea')?.disabled).toBe(true);
       expect(root.querySelector<HTMLButtonElement>('button')?.disabled).toBe(true);
 
-      if (Number(roll) === 0.95) {
+      if (Number(roll) === 0.95 || Number(roll) === 0.8) {
         const animatedSource = root.querySelector('picture source');
 
         expect(animatedSource?.getAttribute('srcset')).toBe(
-          '/images/samvit/presences/samvit-with-bhu-blink.webp',
+          Number(roll) === 0.95
+            ? '/images/samvit/presences/samvit-with-bhu-blink.webp'
+            : '/images/samvit/presences/samvit-dot-eye-ear-twitch.webp',
         );
         expect(animatedSource?.getAttribute('media')).toBe(
           '(prefers-reduced-motion: no-preference)',
         );
         expect(animatedSource?.getAttribute('type')).toBe('image/webp');
-        expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit acolhendo Bhu');
-        expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+        if (Number(roll) === 0.95) {
+          expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
+          expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+        }
       } else {
         expect(root.querySelector('picture source')?.getAttribute('srcset')).toBe(
           image?.getAttribute('src'),

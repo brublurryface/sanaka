@@ -33,9 +33,9 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   },
   contemplative: {
     id: 'contemplative',
-    imageSrc: '/images/samvit/presences/samvit-contemplative-still.webp',
-    imageWidth: 1122,
-    imageHeight: 1402,
+    imageSrc: '/images/samvit/presences/samvit-contemplative-still.png',
+    imageWidth: 1024,
+    imageHeight: 1536,
     labelKey: 'samvit.presences.contemplative.label',
     altKey: 'samvit.presences.contemplative.alt',
     messageKeys: createMessageKeys('contemplative'),
@@ -52,6 +52,7 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   dotEye: {
     id: 'dotEye',
     imageSrc: '/images/samvit/presences/samvit-dot-eye-still.png',
+    animatedImageSrc: '/images/samvit/presences/samvit-dot-eye-ear-twitch.webp',
     imageWidth: 1024,
     imageHeight: 1536,
     labelKey: 'samvit.presences.dotEye.label',

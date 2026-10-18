@@ -224,7 +224,7 @@
       },
       "contemplative": {
         "label": "Saṃvit meditando e se editando",
-        "alt": "Saṃvit sentada mantém as mãos unidas em contemplação.",
+        "alt": "Saṃvit sentada abraça os joelhos e olha para cima, pensativa.",
         "message1": "Saṃvit está digerindo uma reflexão. Por enquanto, sente-se diante do silêncio.",
         "message2": "Saṃvit está digerindo uma reflexão. Por favor, aguarde.",
         "message3": "Saṃvit está digerindo uma reflexão. Tudo bem se você retornar depois.",
@@ -250,7 +250,7 @@
         "message5": "Saṃvit está refletindo sobre ter saído da cama muito cedo. Talvez seja melhor retornar para a cama por enquanto."
       },
       "withBhu": {
-        "label": "Saṃvit acolhendo Bhu",
+        "label": "Saṃvit e Bhu",
         "alt": "Saṃvit sentada acolhe Bhu no colo.",
         "message1": "Saṃvit quer te contar a história do Bhu, mas ainda está refletindo como fazê-la.",
         "message2": "Saṃvit quer te contar a história do Bhu, mas no momento, não pode.",

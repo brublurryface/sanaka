@@ -3,35 +3,42 @@
 
   <div class="samvit-page__shell">
     <div class="samvit-page__encounter">
-      <figure class="samvit-presence" [class.samvit-presence--sesha]="presence.id === 'sesha'">
-        <div class="samvit-presence__aura" aria-hidden="true"></div>
+      @if (encounter(); as encounter) {
+        @let presence = encounter.presence;
+        <figure class="samvit-presence" [class.samvit-presence--sesha]="presence.id === 'sesha'">
+          <div class="samvit-presence__aura" aria-hidden="true"></div>
 
-        <picture class="samvit-presence__visual">
-          <!-- Estrutura igual entre poses para hidratação; movimento reduzido usa o <img>. -->
-          <source
-            [srcset]="presence.animatedImageSrc ?? presence.imageSrc"
-            [attr.type]="presence.animatedImageSrc ? 'image/webp' : null"
-            media="(prefers-reduced-motion: no-preference)"
-          />
-          <img
-            class="samvit-presence__image"
-            [src]="presence.imageSrc"
-            [width]="presence.imageWidth"
-            [height]="presence.imageHeight"
-            [alt]="presence.altKey | transloco"
-            decoding="async"
-            fetchpriority="high"
-          />
-        </picture>
+          <picture class="samvit-presence__visual">
+            <!-- Estrutura igual entre poses para hidratação; movimento reduzido usa o <img>. -->
+            <source
+              [srcset]="presence.animatedImageSrc ?? presence.imageSrc"
+              [attr.type]="presence.animatedImageSrc ? 'image/webp' : null"
+              media="(prefers-reduced-motion: no-preference)"
+            />
+            <img
+              class="samvit-presence__image"
+              [src]="presence.imageSrc"
+              [width]="presence.imageWidth"
+              [height]="presence.imageHeight"
+              [alt]="presence.altKey | transloco"
+              decoding="async"
+              fetchpriority="high"
+            />
+          </picture>
 
-        <figcaption>
-          <span class="samvit-presence__line" aria-hidden="true"></span>
-          <span class="samvit-presence__label">{{ presence.labelKey | transloco }}</span>
-          <span class="samvit-presence__line" aria-hidden="true"></span>
-        </figcaption>
-      </figure>
+          <figcaption>
+            <span class="samvit-presence__line" aria-hidden="true"></span>
+            <span class="samvit-presence__label">{{ presence.labelKey | transloco }}</span>
+            <span class="samvit-presence__line" aria-hidden="true"></span>
+          </figcaption>
+        </figure>
 
-      <p class="samvit-page__message" aria-live="polite">{{ messageKey | transloco }}</p>
+        <p class="samvit-page__message" aria-live="polite">
+          {{ encounter.messageKey | transloco }}
+        </p>
+      } @else {
+        <div class="samvit-presence samvit-presence--pending" aria-hidden="true"></div>
+      }
 
       <div class="samvit-composer" role="group" aria-labelledby="samvit-message-label">
         <label id="samvit-message-label" for="samvit-message">

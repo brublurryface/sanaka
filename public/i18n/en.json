@@ -224,7 +224,7 @@
       },
       "contemplative": {
         "label": "Saṃvit meditating and editing herself",
-        "alt": "A seated Saṃvit holds her hands together in contemplation.",
+        "alt": "A seated Saṃvit hugs her knees and looks up thoughtfully.",
         "message1": "Saṃvit is digesting a reflection. For now, sit before the silence.",
         "message2": "Saṃvit is digesting a reflection. Please wait.",
         "message3": "Saṃvit is digesting a reflection. It is all right if you return later.",
@@ -250,7 +250,7 @@
         "message5": "Saṃvit is reflecting on having left bed too early. Perhaps it is best to return to bed for now."
       },
       "withBhu": {
-        "label": "Saṃvit holding Bhu",
+        "label": "Saṃvit and Bhu",
         "alt": "A seated Saṃvit holds Bhu in her lap.",
         "message1": "Saṃvit wants to tell you Bhu's story, but she is still reflecting on how to tell it.",
         "message2": "Saṃvit wants to tell you Bhu's story, but she cannot right now.",
