@@ -115,3 +115,53 @@ Esses resultados ainda não estão aprovados para alternar com as fontes em uma 
 Em particular, o quadro abhaya não pode ser intercalado diretamente com o original devido às
 dimensões diferentes. Nenhum quadro foi redimensionado ou repintado para ocultar essa diferença,
 e nenhuma nova geração foi feita automaticamente após a conferência.
+
+### Progressão de quatro quadros aprovada em 18/10/2026
+
+Após revisar os primeiros resultados, a autora pediu os intermediários de fechamento e reabertura.
+A progressão aprovada é o original mais três quadros, com os primeiros resultados na posição 03:
+
+| Quadro | Olhos nas poses com piscada                  | Orelha nas poses com esse movimento                   |
+| ------ | -------------------------------------------- | ----------------------------------------------------- |
+| 01     | Original, abertos                            | Posição original                                      |
+| 02     | Fechando, cerca de 45% da abertura original  | Início da inclinação para fora, cerca de 3°           |
+| 03     | Fechados, gerados na primeira rodada         | Inclinação máxima discreta, gerada na primeira rodada |
+| 04     | Reabrindo, cerca de 65% da abertura original | Retorno próximo ao repouso, cerca de 1,5° para fora   |
+
+Esses percentuais e ângulos são indicações de desenho, não medições garantidas pelo gerador.
+Na pose com Bhu, ambos piscam. A curiosa/ouvinte pisca e move a orelha à direita de quem olha,
+mantendo a cabeça apoiada na mão. Abhaya somente pisca. Dot-eye somente move essa orelha,
+preservando olhos pontuais, boca, sobrancelhas e os três sinais gráficos.
+
+O prompt comum e as travas de preservação acima continuam válidos. Cada chamada pediu uma única
+imagem completa com fundo transparente, a partir do PNG original correspondente, nunca de um
+quadro já gerado. Para os intermediários de piscada, o pedido explicitou íris parcialmente visíveis,
+sem fechar completamente os olhos. Para a orelha, a base deveria permanecer fixa.
+
+### Conferência dos oito intermediários
+
+| Presença        | Quadro | Canvas recebido | Canal alfa | Comparação com o canvas original |
+| --------------- | ------ | --------------- | ---------- | -------------------------------- |
+| Com Bhu         | 02     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Com Bhu         | 04     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Curiosa/ouvinte | 02     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Curiosa/ouvinte | 04     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Abhaya mudra    | 02     | 1089 × 1444 px  | 0–255      | Menor que 1233 × 1634 px         |
+| Abhaya mudra    | 04     | 1089 × 1444 px  | 0–255      | Menor que 1233 × 1634 px         |
+| Dot-eye         | 02     | 1024 × 1536 px  | 0–254      | Mesmo tamanho                    |
+| Dot-eye         | 04     | 1024 × 1536 px  | 0–254      | Mesmo tamanho                    |
+
+Os oito arquivos são PNGs RGBA e contêm pixels transparentes. A conferência visual identificou
+variações de posição e traço fora das regiões solicitadas. Na reabertura com Bhu, a composição
+se deslocou. Na curiosa, os olhos intermediários ficaram mais próximos da abertura original que
+o solicitado; a orelha do quadro 04 se afasta do repouso mais do que deveria para um retorno.
+Portanto, a ordem planejada não comprova uma interpolação visual contínua.
+
+Os três quadros gerados de abhaya têm 1089 × 1444 px, enquanto o original tem 1233 × 1634 px;
+a repetição do tamanho no prompt não resolveu essa diferença. O canvas não foi corrigido nesta
+rodada. Na dot-eye, os quadros gerados têm alfa máximo 254, diferente do original, e a intensidade
+e continuidade do movimento da orelha também precisam de revisão.
+
+São doze PNGs gerados ao todo, apresentados para revisão, além dos quatro originais. A composição
+de WebPs, qualquer estabilização ou retoque e a aplicação dos resultados ao site continuam pendentes
+da revisão da autora. Nenhum quadro foi redimensionado, repintado ou aplicado na página nesta rodada.
