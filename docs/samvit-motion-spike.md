@@ -358,10 +358,10 @@ não usa a pausa de `--pause-ms`. Sem essa opção, a montagem conserva a pausa 
 anteriores. Quatro quadros continuam usando fechamento progressivo e retorno em ordem inversa.
 Não são mantidas cópias adicionais dos PNGs intermediários no diretório público.
 
-### Prompts propostos — novos quadros de abhaya e ouvinte, aguardando aprovação
+### Histórico — proposta dos quadros de abhaya e ouvinte
 
-As tentativas menores de abhaya e os olhos deformados da ouvinte foram rejeitados. Nenhuma
-nova geração foi executada nesta entrega. Cada quadro deverá usar diretamente o respectivo
+As tentativas menores de abhaya e os olhos deformados da ouvinte foram rejeitados. Na entrega
+anterior, esta proposta aguardava aprovação da autora. Cada quadro deveria usar diretamente o respectivo
 original, sem reaproveitar uma tentativa reduzida nem ampliar artificialmente os resultados.
 As dimensões são exigências para conferência; o prompt sozinho não garante que o gerador
 as cumpra. Um resultado menor ou desalinhado não será aplicado à animação.
@@ -426,3 +426,71 @@ Executar apenas o estado do quadro solicitado ao final deste prompt.
 
 O original será o quadro 01 de cada pose. A reabertura dos olhos e o retorno da orelha
 reutilizarão os desenhos em ordem inversa, somente depois da revisão da autora.
+
+## Abhaya e ouvinte — sequências corrigidas integradas
+
+Após revisar os testes, a autora forneceu sete PNGs prontos: o novo original de abhaya e seus
+três quadros adicionais, mais os três quadros adicionais da ouvinte. A ouvinte usa como quadro 01
+o PNG original já presente na aplicação.
+
+Todos os desenhos da abhaya têm 1154 × 1483 px; os da ouvinte têm 1122 × 1402 px. A comparação
+confirma que corpo e cauda permanecem iguais aos respectivos originais. As mudanças de alfa
+presentes nos PNGs corrigidos são preservadas na montagem, incluindo o movimento das orelhas.
+Não são usadas as tentativas com canvas reduzido ou com alterações dispersas pelo corpo.
+
+O arquivo `samvit-abhaya-still.png` foi substituído byte a byte por `samvit-abhaya-mudra.png`.
+As dimensões declaradas no componente foram atualizadas para 1154 × 1483 px, mantendo o
+enquadramento fornecido pela autora. O original anterior não é mantido como outra imagem pública.
+A base estática da ouvinte permanece igual a `samvit-ouvinte(1).png`.
+
+| Sequência  | Arquivo de origem          | SHA-256                                                            |
+| ---------- | -------------------------- | ------------------------------------------------------------------ |
+| Abhaya 01  | `samvit-abhaya-mudra.png`  | `c42205b59d88f681dd5cf3f5dca5c1b3874203d28a86021e27bf6fae1f685eff` |
+| Abhaya 02  | `samvit-abhaya-mudra2.png` | `2435665b4948581a270764cc355db2873a87c0b44db4c6e9fe837a7b6c02c15e` |
+| Abhaya 03  | `samvit-abhaya-mudra3.png` | `c95eccc94f80edf74b3b8b4426bf5b7ab8edbe1b570dd2275758c7fd8f2f1c4b` |
+| Abhaya 04  | `samvit-abhaya-mudra4.png` | `c65f13720efcd5cc2ab3368c984501908d9ad6cd3dfc5f1835b43b2f34ddb264` |
+| Ouvinte 01 | `samvit-ouvinte(1).png`    | `c59c9972d852e61e49783b964b9b9ebedd27eaf73352a1639c8699342d5fba48` |
+| Ouvinte 02 | `samvit-ouvinte2.png`      | `71204ef6c6864d9d509702de66920440756ffefad0c029b61b2b2c3efdfb4a77` |
+| Ouvinte 03 | `samvit-ouvinte3.png`      | `2d7bf080d28994f0e4d0cfab9dfb60576ca60083ce90a86191a07affce60712a` |
+| Ouvinte 04 | `samvit-ouvinte4.png`      | `7e6c8589bc1be5dc41a917ee4cba68f1f9261cde582e112ea6ac584487fe466f` |
+
+Os novos arquivos são `samvit-abhaya-blink.webp` e `samvit-curious-blink.webp`. Ambos usam os
+quatro desenhos completos na ordem 01 → 02 → 03 → 04 → 03 → 02, com durações de 4000, 60,
+60, 100, 60 e 60 ms. Cada ciclo dura 4340 ms e se repete sem limite, como a pensativa e Bhu.
+O codificador existente confere todos os valores de alfa e RGB visíveis e os tempos após decodificar
+o WebP. A montagem conserva as entradas, sem redimensionar, repintar, interpolar ou limpar as bordas.
+
+| Animação                    | Bytes     | SHA-256                                                            |
+| --------------------------- | --------- | ------------------------------------------------------------------ |
+| `samvit-abhaya-blink.webp`  | 1.248.948 | `d05769c661824933feae3cfb954458bcc9acb87a4bd7aeb501787fc8c9d618ff` |
+| `samvit-curious-blink.webp` | 1.908.640 | `94d70a19e3315d17a65c5a60049ee96bc76341690e8a091018cf9a3ff35afd08` |
+
+Com isso, cinco presenças usam animação: abhaya, ouvinte, pensativa, dot-eye e Bhu. Śeṣa mantém
+seu arquivo estático e sua prioridade de 40% no sorteio. As outras probabilidades, frases e a seleção
+única por entrada permanecem iguais. Movimento reduzido continua usando o original estático da
+pose selecionada. Os testes conferem a fonte animada, essa condição de acessibilidade, as dimensões
+atualizadas e o uso estático de Śeṣa. Os PNGs intermediários corrigidos não são duplicados em `public/`.
+
+`npm run check` passou com 408 testes Angular e 64 testes do servidor, cobertura mínima,
+formatação, código didático sincronizado, duplicação de 1,23% e build de dez rotas prerenderizadas.
+As duas animações e o novo PNG estático na saída do build foram comparados byte a byte com os
+arquivos validados. Não foi realizada revisão visual em navegador nesta execução; a cadência e
+a aparência no dispositivo da autora continuam sendo sua conferência final.
+
+Para repetir a montagem com os arquivos corrigidos em uma pasta local:
+
+```powershell
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-abhaya-still.png `
+    CAMINHO/samvit-abhaya-mudra2.png `
+    CAMINHO/samvit-abhaya-mudra3.png `
+    CAMINHO/samvit-abhaya-mudra4.png `
+  --output public/images/samvit/presences/samvit-abhaya-blink.webp
+
+python scripts/encode-presence-animation.py `
+  --frames public/images/samvit/presences/samvit-curious-still.png `
+    CAMINHO/samvit-ouvinte2.png `
+    CAMINHO/samvit-ouvinte3.png `
+    CAMINHO/samvit-ouvinte4.png `
+  --output public/images/samvit/presences/samvit-curious-blink.webp
+```

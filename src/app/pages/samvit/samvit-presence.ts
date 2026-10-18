@@ -25,6 +25,7 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   curious: {
     id: 'curious',
     imageSrc: '/images/samvit/presences/samvit-curious-still.png',
+    animatedImageSrc: '/images/samvit/presences/samvit-curious-blink.webp',
     imageWidth: 1122,
     imageHeight: 1402,
     labelKey: 'samvit.presences.curious.label',
@@ -44,8 +45,9 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   suspicious: {
     id: 'suspicious',
     imageSrc: '/images/samvit/presences/samvit-abhaya-still.png',
-    imageWidth: 1233,
-    imageHeight: 1634,
+    animatedImageSrc: '/images/samvit/presences/samvit-abhaya-blink.webp',
+    imageWidth: 1154,
+    imageHeight: 1483,
     labelKey: 'samvit.presences.suspicious.label',
     altKey: 'samvit.presences.suspicious.alt',
     messageKeys: createMessageKeys('suspicious'),

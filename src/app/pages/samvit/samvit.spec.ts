@@ -204,9 +204,10 @@ describe('Samvit', () => {
   });
 
   it.each([
-    [0.45, 'samvit-curious-still.png', 1122, 1402, null],
+    [0.2, 'samvit-sesha-sleeping-still.webp', 1448, 1086, null],
+    [0.45, 'samvit-curious-still.png', 1122, 1402, 'samvit-curious-blink.webp'],
     [0.6, 'samvit-contemplative-still.png', 1024, 1536, 'samvit-contemplative-blink.webp'],
-    [0.7, 'samvit-abhaya-still.png', 1233, 1634, null],
+    [0.7, 'samvit-abhaya-still.png', 1154, 1483, 'samvit-abhaya-blink.webp'],
     [0.8, 'samvit-dot-eye-still.png', 1024, 1536, 'samvit-dot-eye-ear-twitch.webp'],
     [0.95, 'samvit-with-bhu-still.png', 1122, 1402, 'samvit-with-bhu-blink.webp'],
   ])(
