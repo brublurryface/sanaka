@@ -17,7 +17,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Contato',
           title: { line1: 'Entre vozes,', line2: 'presenças e caminhos' },
           intro: 'Sanaka também se abre ao diálogo.',
-          imageAlt: 'Māyā e Sarama observam uma nuvem de vozes.',
+          imageAlt: 'Saṃvit e Sarama observam uma nuvem de vozes.',
         },
         contentLabel: 'Redes e formulário de contato',
         social: {

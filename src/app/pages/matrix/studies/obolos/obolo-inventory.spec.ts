@@ -17,11 +17,11 @@ import { runOboloChecks } from './obolo-checks';
 describe('Obolo inventory', () => {
   // Índice zero é uma posição real, não um valor falsy que deva ser rejeitado.
   it('reads both boundary indices', () => {
-    expect(readObolo(['maya', 'mors'], 0)).toBe('maya');
-    expect(readObolo(['maya', 'mors'], 1)).toBe('mors');
+    expect(readObolo(['samvit', 'mors'], 0)).toBe('samvit');
+    expect(readObolo(['samvit', 'mors'], 1)).toBe('mors');
   });
   it.each([-1, 2, 0.5, NaN, Infinity])('rejects invalid index %s', (index) => {
-    expect(readObolo(['maya', 'mors'], index)).toBeUndefined();
+    expect(readObolo(['samvit', 'mors'], index)).toBeUndefined();
   });
   it('returns undefined for an empty inventory', () => {
     expect(readObolo([], 0)).toBeUndefined();
@@ -29,25 +29,25 @@ describe('Obolo inventory', () => {
 
   it('adds a trimmed identifier without mutating the original', () => {
     const original = Object.freeze(['mors']);
-    expect(addObolo(original, ' maya ')).toEqual(['mors', 'maya']);
+    expect(addObolo(original, ' samvit ')).toEqual(['mors', 'samvit']);
     expect(original).toEqual(['mors']);
   });
   it('preserves the original for empty input and a full inventory', () => {
     const original = ['mors'];
     const full = Array.from({ length: INVENTORY_LIMIT }, () => 'mors');
     expect(addObolo(original, '  ')).toBe(original);
-    expect(addObolo(full, 'maya')).toBe(full);
+    expect(addObolo(full, 'samvit')).toBe(full);
   });
   it('removes only the requested position and shifts the following indices', () => {
-    const original = Object.freeze(['maya', 'mors', 'maya']);
-    expect(removeObolo(original, 0)).toEqual(['mors', 'maya']);
-    expect(removeObolo(original, 1)).toEqual(['maya', 'maya']);
+    const original = Object.freeze(['samvit', 'mors', 'samvit']);
+    expect(removeObolo(original, 0)).toEqual(['mors', 'samvit']);
+    expect(removeObolo(original, 1)).toEqual(['samvit', 'samvit']);
     expect(removeObolo(original, 8)).toBe(original);
   });
   it('creates a linear visit sequence and a valid empty sequence', () => {
-    const steps = traversalSteps(['mors', 'maya']);
+    const steps = traversalSteps(['mors', 'samvit']);
     expect(steps.map((item) => item.state.activeIndex)).toEqual([null, 0, 1]);
-    expect(steps[2].parameters).toEqual({ identifier: 'maya', index: 1 });
+    expect(steps[2].parameters).toEqual({ identifier: 'samvit', index: 1 });
     expect(traversalSteps([])).toHaveLength(1);
     const input = ['mors'];
     expect(inventoryState(input).items).not.toBe(input);
@@ -66,9 +66,9 @@ describe('Obolo inventory', () => {
     { input: [] },
     { input: ['mors'] },
     { input: ['mors', 'mors'] },
-    { input: ['maya', 'maya', 'maya'] },
-    { input: ['mors', 'maya', 'maya', 'mors'] },
-    { input: ['maya', 'mors', 'akasha'] },
+    { input: ['samvit', 'samvit', 'samvit'] },
+    { input: ['mors', 'samvit', 'samvit', 'mors'] },
+    { input: ['samvit', 'mors', 'akasha'] },
   ])('both algorithms agree for $input and preserve the input', ({ input }) => {
     const original = Object.freeze([...input]);
     const nested = nestedDuplicateSteps(original);
@@ -79,9 +79,9 @@ describe('Obolo inventory', () => {
     expect(set[0].state.seen).toEqual([]);
   });
   it('associates each identifier with its quantity using Map', () => {
-    expect([...countObolos(['mors', 'maya', 'mors']).entries()]).toEqual([
+    expect([...countObolos(['mors', 'samvit', 'mors']).entries()]).toEqual([
       ['mors', 2],
-      ['maya', 1],
+      ['samvit', 1],
     ]);
     expect(countObolos([]).size).toBe(0);
     expect(countObolos(['mors']).get('akasha')).toBeUndefined();

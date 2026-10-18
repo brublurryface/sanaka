@@ -27,7 +27,7 @@ import {
 import { OBOLO_SOURCES } from './obolos-source.generated';
 
 // Os cenários são determinísticos: voltar e reiniciar sempre permitem repetir o estudo.
-const INITIAL_INVENTORY = ['maya', 'mors', 'akasha', 'mors', 'nandini', 'maya'];
+const INITIAL_INVENTORY = ['samvit', 'mors', 'akasha', 'mors', 'nandini', 'samvit'];
 
 @Component({
   selector: 'app-obolos-lab',
@@ -167,7 +167,7 @@ export class ObolosLab {
           ? []
           : kind === 'equal'
             ? ['mors', 'mors', 'mors', 'mors']
-            : ['maya', 'mors', 'akasha', 'nandini'];
+            : ['samvit', 'mors', 'akasha', 'nandini'];
     this.history.replace(traversalSteps(items).slice(0, 1));
     this.requestedIndex.set(0);
     this.messageKey.set('');

@@ -4,7 +4,7 @@
   background: var(--sanaka-bg);
 }
 
-.maya-page {
+.samvit-page {
   position: relative;
   isolation: isolate;
 
@@ -17,8 +17,8 @@
     linear-gradient(145deg, #0d1117 0%, #10141d 52%, #0d1117 100%);
 }
 
-.maya-page::before,
-.maya-page::after {
+.samvit-page::before,
+.samvit-page::after {
   position: absolute;
   z-index: -1;
 
@@ -27,7 +27,7 @@
   pointer-events: none;
 }
 
-.maya-page::before {
+.samvit-page::before {
   inset: 0;
 
   opacity: 0.42;
@@ -44,7 +44,7 @@
     31rem 27rem;
 }
 
-.maya-page::after {
+.samvit-page::after {
   right: -16rem;
   bottom: -20rem;
 
@@ -59,7 +59,7 @@
     0 0 0 10rem rgba(237, 201, 120, 0.012);
 }
 
-.maya-page__stars {
+.samvit-page__stars {
   position: absolute;
   inset: 0;
   z-index: -1;
@@ -74,13 +74,13 @@
   pointer-events: none;
 }
 
-.maya-page__shell {
+.samvit-page__shell {
   width: var(--sanaka-page-shell-width);
   margin-inline: auto;
   padding-block: clamp(3rem, 6vw, 6rem) clamp(4.5rem, 8vw, 8rem);
 }
 
-.maya-page__encounter {
+.samvit-page__encounter {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -90,7 +90,7 @@
   margin-inline: auto;
 }
 
-.maya-presence {
+.samvit-presence {
   position: relative;
 
   display: flex;
@@ -103,11 +103,11 @@
   margin: 0;
 }
 
-.maya-presence--sesha {
+.samvit-presence--sesha {
   min-height: 34rem;
 }
 
-.maya-presence::before {
+.samvit-presence::before {
   position: absolute;
   right: 18%;
   bottom: 8%;
@@ -124,7 +124,7 @@
   content: '';
 }
 
-.maya-presence__aura {
+.samvit-presence__aura {
   position: absolute;
   top: 50%;
   left: 50%;
@@ -149,7 +149,7 @@
   transform: translate(-50%, -50%);
 }
 
-.maya-presence__visual {
+.samvit-presence__visual {
   position: relative;
   z-index: 1;
 
@@ -159,7 +159,7 @@
   width: 100%;
 }
 
-.maya-presence__image {
+.samvit-presence__image {
   display: block;
 
   width: min(100%, 32rem);
@@ -172,11 +172,11 @@
   filter: drop-shadow(0 1.5rem 1.7rem rgba(0, 0, 0, 0.52));
 }
 
-.maya-presence--sesha .maya-presence__image {
+.samvit-presence--sesha .samvit-presence__image {
   width: min(100%, 48rem);
 }
 
-.maya-presence figcaption {
+.samvit-presence figcaption {
   position: relative;
   z-index: 2;
 
@@ -198,13 +198,13 @@
   text-align: center;
 }
 
-.maya-presence__label {
+.samvit-presence__label {
   max-width: 34rem;
 
   text-transform: uppercase;
 }
 
-.maya-presence__line {
+.samvit-presence__line {
   flex: 1 1 3rem;
 
   max-width: 3rem;
@@ -213,11 +213,11 @@
   background: linear-gradient(90deg, transparent, rgba(237, 201, 120, 0.6));
 }
 
-.maya-presence__line:last-child {
+.samvit-presence__line:last-child {
   transform: scaleX(-1);
 }
 
-.maya-page__message {
+.samvit-page__message {
   position: relative;
 
   width: min(100%, 46rem);
@@ -242,7 +242,7 @@
   text-align: left;
 }
 
-.maya-page__message::before {
+.samvit-page__message::before {
   position: absolute;
   bottom: -0.45rem;
   left: -0.2rem;
@@ -260,14 +260,14 @@
   transform: skewY(-45deg);
 }
 
-.maya-composer {
+.samvit-composer {
   width: min(100%, 46rem);
   padding-top: 1.5rem;
 
   border-top: 1px solid rgba(237, 201, 120, 0.2);
 }
 
-.maya-composer label {
+.samvit-composer label {
   display: block;
 
   margin-bottom: 0.8rem;
@@ -283,7 +283,7 @@
   text-transform: uppercase;
 }
 
-.maya-composer__controls {
+.samvit-composer__controls {
   display: grid;
   grid-template-columns: 1fr auto;
   align-items: stretch;
@@ -291,7 +291,7 @@
   box-shadow: 0 1rem 3rem rgba(0, 0, 0, 0.2);
 }
 
-.maya-composer textarea {
+.samvit-composer textarea {
   min-width: 0;
   min-height: 6.25rem;
   padding: 1rem;
@@ -311,13 +311,13 @@
   opacity: 1;
 }
 
-.maya-composer textarea::placeholder {
+.samvit-composer textarea::placeholder {
   color: rgba(245, 236, 221, 0.78);
 
   opacity: 1;
 }
 
-.maya-composer button {
+.samvit-composer button {
   align-self: stretch;
 
   min-width: 7rem;
@@ -337,7 +337,7 @@
   text-transform: uppercase;
 }
 
-.maya-composer button span {
+.samvit-composer button span {
   display: block;
 
   margin-top: 0.35rem;
@@ -346,69 +346,69 @@
 }
 
 @media (max-width: 800px) {
-  .maya-page__shell {
+  .samvit-page__shell {
     padding-block: 2.5rem 5rem;
   }
 
-  .maya-presence {
+  .samvit-presence {
     min-height: 35rem;
   }
 
-  .maya-presence--sesha {
+  .samvit-presence--sesha {
     min-height: 27rem;
   }
 
-  .maya-presence__image {
+  .samvit-presence__image {
     max-height: 36rem;
   }
 }
 
 @media (max-width: 520px) {
-  .maya-page__shell {
+  .samvit-page__shell {
     padding-block: 1.5rem 4rem;
   }
 
-  .maya-page__encounter {
+  .samvit-page__encounter {
     gap: 1.75rem;
   }
 
-  .maya-presence {
+  .samvit-presence {
     min-height: 29rem;
   }
 
-  .maya-presence--sesha {
+  .samvit-presence--sesha {
     min-height: 21rem;
   }
 
-  .maya-presence__image {
+  .samvit-presence__image {
     max-height: 30rem;
   }
 
-  .maya-presence figcaption {
+  .samvit-presence figcaption {
     gap: 0.5rem;
 
     letter-spacing: 0.06em;
   }
 
-  .maya-presence__line {
+  .samvit-presence__line {
     flex-basis: 1.25rem;
     max-width: 1.25rem;
   }
 
-  .maya-composer__controls {
+  .samvit-composer__controls {
     grid-template-columns: 1fr;
   }
 
-  .maya-composer textarea {
+  .samvit-composer textarea {
     border-right: 1px solid rgba(237, 201, 120, 0.34);
     border-bottom: 0;
   }
 
-  .maya-composer button {
+  .samvit-composer button {
     min-height: 3.4rem;
   }
 
-  .maya-composer button span {
+  .samvit-composer button span {
     display: inline;
 
     margin: 0 0 0 0.35rem;

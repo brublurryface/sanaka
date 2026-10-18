@@ -57,11 +57,11 @@ describe('SanakaverseBooksService', () => {
     postsRequest.flush([
       {
         id: 1,
-        slug: 'maya',
-        title: { rendered: 'Māyā &amp; o limiar' },
+        slug: 'samvit',
+        title: { rendered: 'Saṃvit &amp; o limiar' },
         sanakaverse_cover: {
-          source_url: 'https://example.com/maya.webp',
-          alt_text: 'Maya diante de um portal',
+          source_url: 'https://example.com/samvit.webp',
+          alt_text: 'Samvit diante de um portal',
         },
       },
       {
@@ -91,10 +91,10 @@ describe('SanakaverseBooksService', () => {
     expect(result).toEqual([
       {
         id: 1,
-        slug: 'maya',
-        title: 'Māyā & o limiar',
-        coverImageUrl: 'https://example.com/maya.webp',
-        coverImageAlt: 'Maya diante de um portal',
+        slug: 'samvit',
+        title: 'Saṃvit & o limiar',
+        coverImageUrl: 'https://example.com/samvit.webp',
+        coverImageAlt: 'Samvit diante de um portal',
       },
       {
         id: 2,

@@ -1,0 +1,51 @@
+<section class="samvit-page" [attr.aria-label]="'app.pageTitles.samvit' | transloco">
+  <div class="samvit-page__stars" aria-hidden="true"></div>
+
+  <div class="samvit-page__shell">
+    <div class="samvit-page__encounter">
+      <figure class="samvit-presence" [class.samvit-presence--sesha]="presence.id === 'sesha'">
+        <div class="samvit-presence__aura" aria-hidden="true"></div>
+
+        <div class="samvit-presence__visual">
+          <img
+            class="samvit-presence__image"
+            [src]="presence.imageSrc"
+            [width]="presence.imageWidth"
+            [height]="presence.imageHeight"
+            [alt]="presence.altKey | transloco"
+            decoding="async"
+            fetchpriority="high"
+          />
+        </div>
+
+        <figcaption>
+          <span class="samvit-presence__line" aria-hidden="true"></span>
+          <span class="samvit-presence__label">{{ presence.labelKey | transloco }}</span>
+          <span class="samvit-presence__line" aria-hidden="true"></span>
+        </figcaption>
+      </figure>
+
+      <p class="samvit-page__message" aria-live="polite">{{ messageKey | transloco }}</p>
+
+      <div class="samvit-composer" role="group" aria-labelledby="samvit-message-label">
+        <label id="samvit-message-label" for="samvit-message">
+          {{ 'samvit.dialogue.inputLabel' | transloco }}
+        </label>
+
+        <div class="samvit-composer__controls">
+          <textarea
+            id="samvit-message"
+            rows="3"
+            disabled
+            [placeholder]="'samvit.dialogue.placeholder' | transloco"
+          ></textarea>
+
+          <button type="button" disabled>
+            {{ 'samvit.dialogue.send' | transloco }}
+            <span aria-hidden="true">→</span>
+          </button>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
