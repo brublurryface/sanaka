@@ -24,14 +24,14 @@ export function runOboloChecks(): readonly StudyCheck[] {
     },
     {
       key: 'matrix.studies.obolos.checks.duplicates',
-      expected: ['maya'],
-      run: () => inventoryReport(setDuplicateSteps(['maya', 'mors', 'maya'])).duplicates,
+      expected: ['samvit'],
+      run: () => inventoryReport(setDuplicateSteps(['samvit', 'mors', 'samvit'])).duplicates,
     },
     {
       key: 'matrix.studies.obolos.checks.agreement',
       expected: true,
       run: () => {
-        const items = ['mors', 'maya', 'maya', 'mors'];
+        const items = ['mors', 'samvit', 'samvit', 'mors'];
         return (
           JSON.stringify(inventoryReport(nestedDuplicateSteps(items)).duplicates) ===
           JSON.stringify(inventoryReport(setDuplicateSteps(items)).duplicates)

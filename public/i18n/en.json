@@ -7,7 +7,7 @@
       "matrix": "Matrix online",
       "matrixComponents": "Components in conversation",
       "matrixRestApi": "REST API portal",
-      "maya": "Māyā",
+      "samvit": "Saṃvit",
       "about": "About",
       "contact": "Contact",
       "sanakaverse": "Sanakaverse library",
@@ -20,7 +20,7 @@
       "matrix": "A collection of experiences for touching, observing, and understanding Angular in motion.",
       "matrixComponents": "Send a value across the boundary between parent and child and follow the response returning through an event.",
       "matrixRestApi": "Open a real request, follow its journey through the network, and watch an image of the universe emerge in the portal.",
-      "maya": "Meet Sanaka's companion and cross knowledge through conversation as well.",
+      "samvit": "Meet Sanaka's companion and cross knowledge through conversation as well.",
       "about": "Fragments cross death, code, spirituality, and a name that has not finished revealing itself.",
       "contact": "Find Sanaka across social networks or send a message through the contact portal.",
       "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe.",
@@ -31,7 +31,7 @@
       "home": "Home",
       "posts": "Posts",
       "matrix": "Matrix",
-      "maya": "Māyā",
+      "samvit": "Saṃvit",
       "about": "About"
     },
     "language": {
@@ -69,7 +69,7 @@
         "line2": "Sanaka?"
       },
       "intro": "Bruna Lourenço da Silva warns: these are areas that change and transmute. Be attentive, because what is here may change without prior notice! Fragments move through death, code, spirituality, and a name that has not finished revealing itself.",
-      "imageAlt": "Māyā looks over her shoulder as shadow dragons stretch across the floor before a luminous passage."
+      "imageAlt": "Saṃvit looks over her shoulder as shadow dragons stretch across the floor before a luminous passage."
     },
     "puzzle": {
       "eyebrow": "Identity in fragments",
@@ -113,7 +113,7 @@
         "line2": "presences and paths"
       },
       "intro": "Sanaka also opens itself to dialogue. Choose a presence on social media or send a message through this portal.",
-      "imageAlt": "Māyā and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
+      "imageAlt": "Saṃvit and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
     },
     "contentLabel": "Social networks and contact form",
     "social": {
@@ -183,7 +183,7 @@
         "line2": "between worlds"
       },
       "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe.",
-      "imageAlt": "Mors writes while Māyā watches and books cross a library in motion."
+      "imageAlt": "Mors writes while Saṃvit watches and books cross a library in motion."
     },
     "collection": {
       "eyebrow": "Volumes in orbit",
@@ -202,57 +202,66 @@
       "retry": "Gather the volumes again"
     }
   },
-  "maya": {
+  "samvit": {
     "presences": {
       "sesha": {
-        "label": "Māyā sleeping on Śeṣa",
-        "alt": "Māyā sleeps on Śeṣa, the five-headed midnight-blue serpent.",
-        "message1": "Māyā sleeps on Śeṣa. While she dreams, this portal remains silent.",
-        "message2": "Māyā sleeps on Śeṣa. Her dreams are chaos! What are your dreams like?",
-        "message3": "Māyā sleeps on Śeṣa. Is this really what she meant to be doing?",
-        "message4": "Māyā sleeps on Śeṣa. Does Māyā take long to wake up?",
-        "message5": "Is Māyā really sleeping on Śeṣa?"
+        "label": "Saṃvit sleeping on Śeṣa",
+        "alt": "Saṃvit sleeps on Śeṣa, the five-headed midnight-blue serpent.",
+        "message1": "Saṃvit sleeps on Śeṣa. While she dreams, this portal remains silent.",
+        "message2": "Saṃvit sleeps on Śeṣa. Her dreams are chaos! What are your dreams like?",
+        "message3": "Saṃvit sleeps on Śeṣa. Is this really what she meant to be doing?",
+        "message4": "Saṃvit sleeps on Śeṣa. Does Saṃvit take long to wake up?",
+        "message5": "Is Saṃvit really sleeping on Śeṣa?"
       },
       "curious": {
-        "label": "Māyā manifesting herself in Īśvara",
-        "alt": "A seated Māyā observes the visitor with curiosity.",
-        "message1": "Māyā watches you with curiosity... but the conversation has not awakened yet.",
-        "message2": "Māyā watches you with curiosity... but something is still missing...",
-        "message3": "Māyā watches you with curiosity... do you feel it too?",
-        "message4": "Māyā watches you with curiosity... or is she examining you?",
-        "message5": "Māyā watches you with curiosity... there is something special about you."
+        "label": "Saṃvit manifesting herself in Īśvara",
+        "alt": "A seated Saṃvit observes the visitor with curiosity.",
+        "message1": "Saṃvit watches you with curiosity... but the conversation has not awakened yet.",
+        "message2": "Saṃvit watches you with curiosity... but something is still missing...",
+        "message3": "Saṃvit watches you with curiosity... do you feel it too?",
+        "message4": "Saṃvit watches you with curiosity... or is she examining you?",
+        "message5": "Saṃvit watches you with curiosity... there is something special about you."
       },
       "contemplative": {
-        "label": "Māyā meditating and editing herself",
-        "alt": "A seated Māyā holds her hands together in contemplation.",
-        "message1": "Māyā is digesting a reflection. For now, sit before the silence.",
-        "message2": "Māyā is digesting a reflection. Please wait.",
-        "message3": "Māyā is digesting a reflection. It is all right if you return later.",
-        "message4": "Māyā is digesting a reflection. Do you meditate? Then take this moment to meditate with Māyā.",
-        "message5": "Māyā is digesting a reflection. It may take a while."
+        "label": "Saṃvit meditating and editing herself",
+        "alt": "A seated Saṃvit hugs her knees and looks up thoughtfully.",
+        "message1": "Saṃvit is digesting a reflection. For now, sit before the silence.",
+        "message2": "Saṃvit is digesting a reflection. Please wait.",
+        "message3": "Saṃvit is digesting a reflection. It is all right if you return later.",
+        "message4": "Saṃvit is digesting a reflection. Do you meditate? Then take this moment to meditate with Saṃvit.",
+        "message5": "Saṃvit is digesting a reflection. It may take a while."
       },
       "suspicious": {
-        "label": "Māyā contacting the Administrator",
-        "alt": "A seated Māyā raises one hand in abhaya mudra and looks seriously at the visitor.",
-        "message1": "Māyā noticed your arrival. Before opening the portal, she wants to understand what brought you here.",
-        "message2": "Māyā noticed your arrival. Did you notice Māyā arriving?",
-        "message3": "Māyā noticed your arrival. What are you carrying with you?",
-        "message4": "Māyā noticed your arrival. Did you find this path, or did the path find you?",
-        "message5": "Māyā noticed your arrival. Before opening the portal, she wants to understand who brought you here."
+        "label": "Saṃvit contacting the Administrator",
+        "alt": "A seated Saṃvit raises one hand in abhaya mudra and looks seriously at the visitor.",
+        "message1": "Saṃvit noticed your arrival. Before opening the portal, she wants to understand what brought you here.",
+        "message2": "Saṃvit noticed your arrival. Did you notice Saṃvit arriving?",
+        "message3": "Saṃvit noticed your arrival. What are you carrying with you?",
+        "message4": "Saṃvit noticed your arrival. Did you find this path, or did the path find you?",
+        "message5": "Saṃvit noticed your arrival. Before opening the portal, she wants to understand who brought you here."
       },
       "dotEye": {
-        "label": "Māyā experiencing a 404 error",
-        "alt": "A seated Māyā stares at the visitor with a surprised dot-eye expression.",
-        "message1": "Māyā did not expect company so soon. Neither did the portal.",
-        "message2": "Māyā is confused. Life's encounters are not always easy to understand.",
-        "message3": "Māyā did not understand your arrival. She will have to meditate on it.",
-        "message4": "Māyā did not recognize you at first. Could it be her memory? Do you come here often?",
-        "message5": "Māyā is reflecting on having left bed too early. Perhaps it is best to return to bed for now."
+        "label": "Saṃvit experiencing a 404 error",
+        "alt": "A seated Saṃvit stares at the visitor with a surprised dot-eye expression.",
+        "message1": "Saṃvit did not expect company so soon. Neither did the portal.",
+        "message2": "Saṃvit is confused. Life's encounters are not always easy to understand.",
+        "message3": "Saṃvit did not understand your arrival. She will have to meditate on it.",
+        "message4": "Saṃvit did not recognize you at first. Could it be her memory? Do you come here often?",
+        "message5": "Saṃvit is reflecting on having left bed too early. Perhaps it is best to return to bed for now."
+      },
+      "withBhu": {
+        "label": "Saṃvit and Bhu",
+        "alt": "A seated Saṃvit holds Bhu in her lap.",
+        "message1": "Saṃvit wants to tell you Bhu's story, but she is still reflecting on how to tell it.",
+        "message2": "Saṃvit wants to tell you Bhu's story, but she cannot right now.",
+        "message3": "Saṃvit is spending time with Bhu while she decides what to tell you.",
+        "message4": "Saṃvit wants to tell you Bhu's story, but how can she do that without plenty of reflection?",
+        "message5": "Saṃvit wants to tell you Bhu's story, but she has decided it is better for Bhu to tell his own story."
       }
     },
     "dialogue": {
-      "inputLabel": "Between you and Māyā",
-      "placeholder": "The portal remains locked until Māyā allows it to be opened",
+      "inputLabel": "Between you and Saṃvit",
+      "placeholder": "The portal remains locked until Saṃvit allows it to be opened",
       "send": "Send"
     }
   },
@@ -305,7 +314,7 @@
           "title": "Matrix",
           "description": "Enter interactive experiments and watch Angular concepts unfold before you."
         },
-        "maya": {
+        "samvit": {
           "label": "Presence",
           "description": "Meet Sanaka's companion and traverse knowledge also through conversation."
         },
@@ -322,7 +331,7 @@
       "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
       "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change.",
-      "imageAlt": "Māyā, Nandinī, and Bhu watch magical books cross a celestial library.",
+      "imageAlt": "Saṃvit, Nandinī, and Bhu watch magical books cross a celestial library.",
       "sanakaverseLink": "Travel to Sanakaverse"
     },
     "search": {
@@ -958,10 +967,10 @@
         }
       },
       "padaria": {
-        "title": "Māyā’s bakery",
-        "description": "Read Māyā’s menu, place an order and see the response. Then try repeating a fictional payment.",
-        "imageAlt": "Māyā, Nandinī, Mors and Ākāśa investigate a bakery in a manga composition.",
-        "experimentTitle": "Place an order with Māyā",
+        "title": "Saṃvit’s bakery",
+        "description": "Read Saṃvit’s menu, place an order and see the response. Then try repeating a fictional payment.",
+        "imageAlt": "Saṃvit, Nandinī, Mors and Ākāśa investigate a bakery in a manga composition.",
+        "experimentTitle": "Place an order with Saṃvit",
         "simulationNote": "This bakery uses imaginary products and credits. Everything happens on this page.",
         "related": "Compare with NASA’s real HTTP request",
         "topics": {
@@ -972,12 +981,12 @@
           },
           "layers": {
             "title": "Each layer owns a responsibility",
-            "everyday": "Māyā chooses, Nandinī checks and Mors confirms. If one person owns everything, locating an error becomes harder.",
+            "everyday": "Saṃvit chooses, Nandinī checks and Mors confirms. If one person owns everything, locating an error becomes harder.",
             "technical": "The UI gathers inputs; data access prepares communication; the server validates and processes; the response updates the view. A BFF can adapt contracts or aggregate services for a frontend, but is not mandatory."
           },
           "idempotency": {
             "title": "Repeat intent, not effects",
-            "everyday": "If Māyā missed confirmation, repeating “pay for this order” should not become two charges. Identifying the same intent helps recognize repetition.",
+            "everyday": "If Saṃvit missed confirmation, repeating “pay for this order” should not become two charges. Identifying the same intent helps recognize repetition.",
             "technical": "Idempotency concerns the effect of repeating an operation. POST is not inherently idempotent; a contract may add this property through keys and consistent storage. Disabling a button is not equivalent."
           }
         },
@@ -1144,7 +1153,7 @@
           "line2": "on-line"
         },
         "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening.",
-        "imageAlt": "Māyā watches code screens while small luminous wolves cross the laboratory."
+        "imageAlt": "Saṃvit watches code screens while small luminous wolves cross the laboratory."
       },
       "list": {
         "eyebrow": "Open circuits",
@@ -1167,9 +1176,15 @@
         "eyebrow": "Next experiments",
         "title": "The Matrix will keep opening",
         "status": "Coming soon",
-        "signals": { "title": "Signals and reactive state" },
-        "observables": { "title": "Observables and data flow" },
-        "lifecycle": { "title": "Component lifecycle" }
+        "signals": {
+          "title": "Signals and reactive state"
+        },
+        "observables": {
+          "title": "Observables and data flow"
+        },
+        "lifecycle": {
+          "title": "Component lifecycle"
+        }
       }
     },
     "header": {
@@ -1180,7 +1195,7 @@
       },
       "intro": "Send a value across the boundary between parent and child. Then follow the reply returning as an event and see the code involved in each passage.",
       "action": "Start the circuit",
-      "imageAlt": "Māyā, Kalika, and Bhu study a book among lanterns and luminous Angular component diagrams."
+      "imageAlt": "Saṃvit, Kalika, and Bhu study a book among lanterns and luminous Angular component diagrams."
     },
     "exhibit": {
       "eyebrow": "Interactive circuit",
@@ -1293,7 +1308,7 @@
         },
         "intro": "Choose a subject and open a passage to a real collection. The interface turns the waiting period, the response, and even the failure of a REST request into something you can follow.",
         "action": "Cross the request",
-        "imageAlt": "Māyā contemplates her maned-wolf form as they float among luminous orbits and a cosmic cube."
+        "imageAlt": "Saṃvit contemplates her maned-wolf form as they float among luminous orbits and a cosmic cube."
       },
       "exhibit": {
         "eyebrow": "REST laboratory",

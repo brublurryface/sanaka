@@ -76,7 +76,7 @@ describe('PostDetailPage', () => {
     publishedAt: '2026-09-22',
     category: 'Bruna · Pensamentos',
     coverImageUrl: 'https://example.com/voce.jpg',
-    coverImageAlt: 'Maya escrevendo',
+    coverImageAlt: 'Samvit escrevendo',
     contentHtml: '<p>Quem é <strong>você</strong>?</p>',
     categories: [
       { id: 41, name: 'Bruna', slug: 'bruna' },

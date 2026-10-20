@@ -33,7 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             line2: 'Sanaka?',
           },
           intro: 'Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam.',
-          imageAlt: 'Māyā observa dragões de sombra diante de uma passagem luminosa.',
+          imageAlt: 'Saṃvit observa dragões de sombra diante de uma passagem luminosa.',
         },
         puzzle: {
           eyebrow: 'Identidade em fragmentos',

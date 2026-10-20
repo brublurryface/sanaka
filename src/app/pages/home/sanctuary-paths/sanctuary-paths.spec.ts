@@ -27,9 +27,9 @@ class MockTranslocoLoader implements TranslocoLoader {
               title: 'Matrix',
               description: 'Matrix description.',
             },
-            maya: {
+            samvit: {
               label: 'Presence',
-              description: 'Maya description.',
+              description: 'Samvit description.',
             },
             about: {
               label: 'About',
@@ -76,7 +76,7 @@ describe('SanctuaryPaths', () => {
     expect(section.getAttribute('aria-labelledby')).toBe('paths-title');
   });
 
-  it('should contain the posts, Matrix, Maya and About links', () => {
+  it('should contain the posts, Matrix, Samvit and About links', () => {
     const fixture = TestBed.createComponent(SanctuaryPaths);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
@@ -85,7 +85,7 @@ describe('SanctuaryPaths', () => {
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
       '/posts',
       '/matrix',
-      '/maya',
+      '/samvit',
       '/sobre',
     ]);
   });

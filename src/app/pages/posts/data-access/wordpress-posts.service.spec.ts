@@ -321,7 +321,7 @@ describe('WordPressPostsService', () => {
             {
               id: 90,
               source_url: 'https://example.com/voce.jpg',
-              alt_text: 'Maya no santuário',
+              alt_text: 'Samvit no santuário',
             },
           ],
         },

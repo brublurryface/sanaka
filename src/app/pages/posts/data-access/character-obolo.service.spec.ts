@@ -68,7 +68,7 @@ describe('CharacterOboloService', () => {
 
     httpTesting
       .expectOne(`${restUrl}/sanaka/v1/obolos/nandini`)
-      .flush({ characterSlug: 'maya', total: 10 });
+      .flush({ characterSlug: 'samvit', total: 10 });
 
     expect(error).toBeInstanceOf(Error);
   });

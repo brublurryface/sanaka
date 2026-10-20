@@ -23,12 +23,12 @@ até 250 KB por variante, não um teto que justifique destruir linhas finas.
 Pasta por laboratório: `public/images/matrix/<id>/`. Os nomes mobile da tabela abaixo
 indicam arquivos futuros; não configure URLs para imagens que ainda não existem.
 
-| Estudo   | Desktop                            | Mobile                            | Personagens                                         |
-| -------- | ---------------------------------- | --------------------------------- | --------------------------------------------------- |
-| Óbolos   | `obolos-atmosphere-desktop.webp`   | `obolos-atmosphere-mobile.webp`   | Mors                                                |
-| Entregas | `entregas-atmosphere-desktop.webp` | `entregas-atmosphere-mobile.webp` | Ākāśa                                               |
-| Jogo     | `jogo-atmosphere-desktop.webp`     | `jogo-atmosphere-mobile.webp`     | Kālikā e Mors                                       |
-| Padaria  | `padaria-atmosphere-desktop.webp`  | `padaria-atmosphere-mobile.webp`  | Māyā, Nandinī, Mors; Ākāśa se a composição permitir |
+| Estudo   | Desktop                            | Mobile                            | Personagens                                           |
+| -------- | ---------------------------------- | --------------------------------- | ----------------------------------------------------- |
+| Óbolos   | `obolos-atmosphere-desktop.webp`   | `obolos-atmosphere-mobile.webp`   | Mors                                                  |
+| Entregas | `entregas-atmosphere-desktop.webp` | `entregas-atmosphere-mobile.webp` | Ākāśa                                                 |
+| Jogo     | `jogo-atmosphere-desktop.webp`     | `jogo-atmosphere-mobile.webp`     | Kālikā e Mors                                         |
+| Padaria  | `padaria-atmosphere-desktop.webp`  | `padaria-atmosphere-mobile.webp`  | Saṃvit, Nandinī, Mors; Ākāśa se a composição permitir |
 
 Reserve uma região escura e tranquila à esquerda para título e texto no desktop.
 No mobile, componha de novo o enquadramento: não dependa de recortar a arte horizontal.
@@ -53,7 +53,7 @@ sótão. Respeitar as asas negras, cabelo e roupa da referência **Mors.png** e,
 **esclera preta**, não branca.
 
 Não inventar moedas canônicas ou reversos. Se houver moedas reconhecíveis na arte,
-usar referências aprovadas. Māyā, Mors e Ākāśa compartilham o reverso canônico.
+usar referências aprovadas. Saṃvit, Mors e Ākāśa compartilham o reverso canônico.
 
 ## Entregas de Ākāśa
 
@@ -66,21 +66,22 @@ escuras estreladas. Não substituir a imagem por um entregador humano genérico.
 A arte aprovada mostra Kālikā, Mors e um companheiro estudando cartas em uma taverna,
 entre lamparinas e espíritos. O humor está na investigação, não em expressões
 exageradamente felizes. Referência **Kalika.png**: cabelo curto, marcações,
-adornos, roupa e cauda originais. Sua proporção futura ao lado de Māyā é ligeiramente
+adornos, roupa e cauda originais. Sua proporção futura ao lado de Saṃvit é ligeiramente
 mais baixa. Não alongar cabelo ou inventar novos braços. Mors conserva sua esclera preta.
 
-## Padaria de Māyā
+## Padaria de Saṃvit
 
-Primeira ideia: Māyā diante de um balcão com dois pães; Nandinī confere a disponibilidade,
+Primeira ideia: Saṃvit diante de um balcão com dois pães; Nandinī confere a disponibilidade,
 Mors registra créditos fictícios. Ākāśa pode participar da entrega se houver espaço, sem
 apertar todos os corpos num único canto. Não desenhar cartões bancários nem prometer
 uma loja real. O cenário inteiro deve ser mangá.
 
-Referência da Māyā: **maya-bhu-readme.png**, sem adicionar Bhu automaticamente. Cabelos
-castanho-escuros até os ombros no máximo, volume canônico, roupa de monge, orelhas e
-cauda de lobo-guará. Cauda proporcional, elegante, ponta branca e origem no cóccis;
-não nas costas, em outro personagem ou com volume de esquilo. Não inserir chama só
-porque a imagem de referência contém uma.
+Referência atual da Saṃvit: `public/images/samvit/presences/samvit-with-bhu-still.png`,
+sem adicionar Bhu automaticamente. Preservar o rosto e as proporções da referência,
+cabelos castanho-escuros até os ombros, olhos vermelho-laranja-amarelos, roupa preta
+com gola alta e sobreposição longa marfim. As orelhas e a cauda são de lobo-guará.
+Cauda proporcional, elegante, ponta clara e origem no cóccis; não nas costas,
+em outro personagem ou com volume de esquilo. Não inserir chama na composição.
 
 Nandinī continua **Bull Terrier com chifres de touro**, patas e cabeça canônicas.
 Referências **Nandini.png** e **Nandini-de-lado.png**; preservar flores, cordões vermelhos,

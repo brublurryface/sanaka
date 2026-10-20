@@ -61,7 +61,7 @@ describe('CharacterOboloStore', () => {
     service.getTotal.mockReturnValueOnce(nandiniResponse).mockReturnValueOnce(of(31));
 
     store.setCharacter('nandini');
-    store.setCharacter('maya');
+    store.setCharacter('samvit');
     nandiniResponse.next(99);
 
     expect(store.state()).toEqual({ status: 'ready', total: 31 });

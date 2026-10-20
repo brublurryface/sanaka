@@ -29,8 +29,8 @@ describe('PostCard', () => {
 
   const post: Post = {
     id: 1,
-    slug: 'despertando-a-maya',
-    title: 'Despertando a Māyā',
+    slug: 'despertando-a-samvit',
+    title: 'Despertando a Saṃvit',
     excerpt: 'Uma jornada de presença e renovação.',
     publishedAt: '2026-08-28',
     category: 'Ritual',
@@ -75,14 +75,14 @@ describe('PostCard', () => {
     expect(compiled.querySelector('.post-card__category')?.textContent?.trim()).toBe('Ritual');
 
     expect(compiled.querySelector('.post-card__title')?.textContent?.trim()).toBe(
-      'Despertando a Māyā',
+      'Despertando a Saṃvit',
     );
 
     expect(compiled.querySelector('.post-card__excerpt')?.textContent?.trim()).toBe(
       'Uma jornada de presença e renovação.',
     );
     expect(compiled.querySelector('.post-card__title a')?.getAttribute('href')).toBe(
-      '/posts/despertando-a-maya',
+      '/posts/despertando-a-samvit',
     );
     expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.target).toBe('_blank');
     expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.rel).toBe('noopener');

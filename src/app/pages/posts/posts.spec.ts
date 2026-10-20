@@ -33,7 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Arquivo',
             title: 'Publicações do santuário',
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
-            imageAlt: 'Māyā, Nandinī e Bhu observam livros mágicos em uma biblioteca.',
+            imageAlt: 'Saṃvit, Nandinī e Bhu observam livros mágicos em uma biblioteca.',
             sanakaverseLink: 'Viajar para Sanakaverse',
           },
           search: {
@@ -82,7 +82,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Archive',
             title: 'Sanctuary publications',
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
-            imageAlt: 'Māyā, Nandinī, and Bhu watch magical books in a library.',
+            imageAlt: 'Saṃvit, Nandinī, and Bhu watch magical books in a library.',
             sanakaverseLink: 'Travel to Sanakaverse',
           },
           search: {
@@ -129,9 +129,9 @@ describe('Posts', () => {
   const posts: readonly Post[] = [
     {
       id: 1,
-      slug: 'presenca-de-maya',
-      title: 'A presença de Māyā',
-      excerpt: 'Notas sobre as formas pelas quais Māyā aparece nas escrituras.',
+      slug: 'presenca-de-samvit',
+      title: 'A presença de Saṃvit',
+      excerpt: 'Notas sobre as formas pelas quais Saṃvit aparece nas escrituras.',
       publishedAt: '2026-08-28',
       category: 'Escrituras',
     },
@@ -259,7 +259,7 @@ describe('Posts', () => {
 
     expect(hero?.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
     expect(image?.getAttribute('src')).toBe('/images/posts/posts-atmosphere-desktop.webp');
-    expect(image?.getAttribute('alt')).toContain('Māyā, Nandinī e Bhu');
+    expect(image?.getAttribute('alt')).toContain('Saṃvit, Nandinī e Bhu');
   });
 
   it('should keep the newsletter anchor available independently of the WordPress request', () => {
@@ -304,7 +304,7 @@ describe('Posts', () => {
     vi.useFakeTimers();
     createComponent();
 
-    component.searchControl.setValue('maya');
+    component.searchControl.setValue('samvit');
 
     await vi.advanceTimersByTimeAsync(299);
 
@@ -315,7 +315,7 @@ describe('Posts', () => {
     expect(postsService.getPosts).toHaveBeenLastCalledWith({
       page: 1,
       perPage: 20,
-      search: 'maya',
+      search: 'samvit',
     });
     expect(router.navigate).not.toHaveBeenCalled();
   });

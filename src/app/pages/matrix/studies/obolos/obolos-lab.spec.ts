@@ -51,7 +51,7 @@ describe('ObolosLab actions', () => {
       expect(lab.history.state().activeIndex).toBe(0);
       lab.history.finish();
       if (kind !== 'traverse') {
-        expect(lab.history.state().duplicates).toEqual(['maya', 'mors']);
+        expect(lab.history.state().duplicates).toEqual(['mors', 'samvit']);
       }
       expect(lab.nestedReport().duplicates).toEqual(lab.setReport().duplicates);
       lab.runChecks();

@@ -20,12 +20,17 @@ export const routes: Routes = [
     loadChildren: () => import('./pages/matrix/matrix.routes').then((m) => m.MATRIX_ROUTES),
   },
   {
-    path: 'maya',
+    path: 'samvit',
     data: {
-      titleKey: 'app.pageTitles.maya',
-      descriptionKey: 'app.pageDescriptions.maya',
+      titleKey: 'app.pageTitles.samvit',
+      descriptionKey: 'app.pageDescriptions.samvit',
     },
-    loadComponent: () => import('./pages/maya/maya').then((m) => m.Maya),
+    loadComponent: () => import('./pages/samvit/samvit').then((m) => m.Samvit),
+  },
+  {
+    path: 'maya',
+    pathMatch: 'full',
+    redirectTo: 'samvit',
   },
   {
     path: 'sobre',
