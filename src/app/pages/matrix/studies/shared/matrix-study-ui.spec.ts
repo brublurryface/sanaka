@@ -93,19 +93,13 @@ describe('Matrix guided journeys in the Angular DOM', () => {
       expect((root.querySelector('.study-technical') as HTMLDetailsElement).open).toBe(false);
       for (const details of root.querySelectorAll<HTMLDetailsElement>('.study-reference'))
         expect(details.open).toBe(false);
-      if (id !== 'padaria') {
-        expect(root.querySelector('img')!.getAttribute('src')).toBe(
-          `/images/matrix/${id}/${id}-atmosphere-desktop.webp`,
-        );
-        expect(
-          existsSync(
-            join(process.cwd(), `public/images/matrix/${id}/${id}-atmosphere-desktop.webp`),
-          ),
-        ).toBe(true);
-      } else {
-        expect(root.querySelector('.study-hero--neutral')).not.toBeNull();
-        expect(root.querySelector('img')).toBeNull();
-      }
+      expect(root.querySelector('img')!.getAttribute('src')).toBe(
+        `/images/matrix/${id}/${id}-atmosphere-desktop.webp`,
+      );
+      expect(
+        existsSync(join(process.cwd(), `public/images/matrix/${id}/${id}-atmosphere-desktop.webp`)),
+      ).toBe(true);
+      expect(root.querySelector('.study-hero--neutral')).toBeNull();
 
       // A biblioteca continua disponível, mas não ocupa o primeiro contato.
       open(root, '#study-code .study-reference');

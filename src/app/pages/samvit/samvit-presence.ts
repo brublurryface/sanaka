@@ -1,10 +1,11 @@
 export type SamvitPresenceId =
-  'sesha' | 'curious' | 'contemplative' | 'suspicious' | 'dotEye' | 'withBhu';
+  'sesha' | 'curious' | 'contemplative' | 'suspicious' | 'dotEye' | 'withBhu' | 'akasha';
 
 export interface SamvitPresence {
   readonly id: SamvitPresenceId;
   readonly imageSrc: string;
   readonly animatedImageSrc?: string;
+  readonly animatedImageType?: 'image/png' | 'image/webp';
   readonly imageWidth: number;
   readonly imageHeight: number;
   readonly labelKey: string;
@@ -15,9 +16,11 @@ export interface SamvitPresence {
 const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
   sesha: {
     id: 'sesha',
-    imageSrc: '/images/samvit/presences/samvit-sesha-sleeping-still.webp',
-    imageWidth: 1448,
-    imageHeight: 1086,
+    imageSrc: '/images/samvit/presences/samvit-sesha-sleeping-still.png',
+    animatedImageSrc: '/images/samvit/presences/samvit-sesha-blink.png',
+    animatedImageType: 'image/png',
+    imageWidth: 1484,
+    imageHeight: 1060,
     labelKey: 'samvit.presences.sesha.label',
     altKey: 'samvit.presences.sesha.alt',
     messageKeys: createMessageKeys('sesha'),
@@ -72,16 +75,28 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
     altKey: 'samvit.presences.withBhu.alt',
     messageKeys: createMessageKeys('withBhu'),
   },
+  akasha: {
+    id: 'akasha',
+    imageSrc: '/images/samvit/presences/akasha-seated-still.png',
+    animatedImageSrc: '/images/samvit/presences/akasha-seated-blink.png',
+    animatedImageType: 'image/png',
+    imageWidth: 1359,
+    imageHeight: 1158,
+    labelKey: 'samvit.presences.akasha.label',
+    altKey: 'samvit.presences.akasha.alt',
+    messageKeys: createMessageKeys('akasha'),
+  },
 };
 
 const PRESENCE_ODDS: readonly { readonly upperBound: number; readonly presence: SamvitPresence }[] =
   [
     { upperBound: 0.4, presence: SAMVIT_PRESENCES.sesha },
-    { upperBound: 0.52, presence: SAMVIT_PRESENCES.curious },
-    { upperBound: 0.64, presence: SAMVIT_PRESENCES.contemplative },
-    { upperBound: 0.76, presence: SAMVIT_PRESENCES.suspicious },
-    { upperBound: 0.88, presence: SAMVIT_PRESENCES.dotEye },
-    { upperBound: 1, presence: SAMVIT_PRESENCES.withBhu },
+    { upperBound: 0.5, presence: SAMVIT_PRESENCES.curious },
+    { upperBound: 0.6, presence: SAMVIT_PRESENCES.contemplative },
+    { upperBound: 0.7, presence: SAMVIT_PRESENCES.suspicious },
+    { upperBound: 0.8, presence: SAMVIT_PRESENCES.dotEye },
+    { upperBound: 0.9, presence: SAMVIT_PRESENCES.withBhu },
+    { upperBound: 1, presence: SAMVIT_PRESENCES.akasha },
   ];
 
 /**

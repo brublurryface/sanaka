@@ -257,6 +257,15 @@
         "message3": "Saṃvit is spending time with Bhu while she decides what to tell you.",
         "message4": "Saṃvit wants to tell you Bhu's story, but how can she do that without plenty of reflection?",
         "message5": "Saṃvit wants to tell you Bhu's story, but she has decided it is better for Bhu to tell his own story."
+      },
+      "akasha": {
+        "label": "Ākāśa",
+        "alt": "Ākāśa sitting alone, with an attentive gaze.",
+        "message1": "You were looking for Saṃvit, but found Ākāśa. You are failing in your intention to find Saṃvit.",
+        "message2": "You were looking for Saṃvit, but found Ākāśa. You are failing in your interest in finding Saṃvit.",
+        "message3": "You were looking for Saṃvit, but found Ākāśa. Something in your decision was lost along the way.",
+        "message4": "You were looking for Saṃvit, but found Ākāśa. Come back later or risk staying.",
+        "message5": "You were looking for Saṃvit, but found Ākāśa. Were you really looking for Saṃvit?"
       }
     },
     "dialogue": {
@@ -969,7 +978,7 @@
       "padaria": {
         "title": "Saṃvit’s bakery",
         "description": "Read Saṃvit’s menu, place an order and see the response. Then try repeating a fictional payment.",
-        "imageAlt": "Saṃvit, Nandinī, Mors and Ākāśa investigate a bakery in a manga composition.",
+        "imageAlt": "Saṃvit and Nandinī are in front of the cosmic bakery counter while Śambhu and Naṭarāja argue and cook.",
         "experimentTitle": "Place an order with Saṃvit",
         "simulationNote": "This bakery uses imaginary products and credits. Everything happens on this page.",
         "related": "Compare with NASA’s real HTTP request",

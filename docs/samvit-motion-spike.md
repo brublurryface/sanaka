@@ -1,5 +1,39 @@
 # Spike de movimento da Saṃvit
 
+## Atualização de 24/10/2026 — Śeṣa e presença de Ākāśa
+
+A animação de Saṃvit e das cinco cabeças de Śeṣa foi aprovada pela autora após a correção
+local da pele abaixo do olho de Saṃvit próximo à tatuagem. O APNG aprovado foi copiado sem
+alteração para `public/images/samvit/presences/samvit-sesha-blink.png`, com canvas de
+1484 × 1060 px. O repouso de olhos fechados dura 4000 ms; o quadro aberto dura 1000 ms e
+cada intermediário dura 100 ms. O fallback para movimento reduzido usa o próprio quadro
+fechado aprovado, em `samvit-sesha-sleeping-still.png`.
+
+A nova presença de Ākāśa usa `Akasha-sentada.png`, sem alterar corpo, chifres, patas,
+cauda, escala ou canal alfa. Apenas as duas regiões de pálpebras recebem o desenho fechado
+de `Akasha-deitada.png`, alinhado localmente sobre a pose sentada. A montagem é feita por
+máscaras em Python, sem gerar uma nova ilustração. O APNG `akasha-seated-blink.png` tem
+1359 × 1158 px, com 4000 ms de olhos abertos e uma piscada de 120 ms. O fallback
+`akasha-seated-still.png` é uma cópia integral da imagem sentada fornecida. A aparência da
+nova piscada de Ākāśa está disponível para revisão da autora nesta atualização.
+
+Os dois APNGs foram decodificados quadro a quadro: alfa e cores visíveis são idênticos aos
+PNGs de origem, durações são exatas e a repetição é infinita. Na montagem de Ākāśa, as
+alterações ficam restritas às máscaras dos olhos; não há deslocamento do desenho inteiro.
+O `<picture>` informa `image/png` para APNG e mantém `image/webp` para as cinco animações
+existentes. A condição `prefers-reduced-motion` continua selecionando o PNG estático.
+
+Śeṣa mantém 40% de prioridade. As outras seis presenças recebem 10% cada, incluindo
+Ākāśa. Pose e uma das cinco frases são escolhidas uma única vez por visita. As cinco frases
+de Ākāśa em PT-BR foram mantidas exatamente como enviadas pela autora, com traduções em EN.
+
+A arte aprovada `Padaria em Caos Celestial.png` também foi aplicada ao header de
+`/matrix/padaria`, em `public/images/matrix/padaria/padaria-atmosphere-desktop.webp`.
+A conversão é sem perda e sem redimensionamento, com igualdade de todos os pixels RGBA
+conferida após a decodificação. As cores e a composição de 1942 × 809 px permanecem intactas.
+
+Os registros abaixo descrevem as etapas anteriores, incluindo tentativas rejeitadas.
+
 Data: 04/10/2026
 
 Issue relacionada: [#50 — base inicial de presença e movimento](https://github.com/brublurryface/sanaka/issues/50)

@@ -5,14 +5,20 @@
     <div class="samvit-page__encounter">
       @if (encounter(); as encounter) {
         @let presence = encounter.presence;
-        <figure class="samvit-presence" [class.samvit-presence--sesha]="presence.id === 'sesha'">
+        <figure
+          class="samvit-presence"
+          [class.samvit-presence--sesha]="presence.id === 'sesha'"
+          [class.samvit-presence--akasha]="presence.id === 'akasha'"
+        >
           <div class="samvit-presence__aura" aria-hidden="true"></div>
 
           <picture class="samvit-presence__visual">
             <!-- Estrutura igual entre poses para hidratação; movimento reduzido usa o <img>. -->
             <source
               [srcset]="presence.animatedImageSrc ?? presence.imageSrc"
-              [attr.type]="presence.animatedImageSrc ? 'image/webp' : null"
+              [attr.type]="
+                presence.animatedImageSrc ? (presence.animatedImageType ?? 'image/webp') : null
+              "
               media="(prefers-reduced-motion: no-preference)"
             />
             <img

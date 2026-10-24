@@ -257,6 +257,15 @@
         "message3": "Saṃvit está passando um tempo com o Bhu enquanto decide o que te dizer.",
         "message4": "Saṃvit quer te contar a história do Bhu, mas como fazer isso sem refletir bastante?",
         "message5": "Saṃvit quer te contar a história do Bhu, mas decidiu que é melhor o Bhu contar a própria história."
+      },
+      "akasha": {
+        "label": "Ākāśa",
+        "alt": "Ākāśa sentada sozinha, com o olhar atento.",
+        "message1": "Você estava procurando Saṃvit, mas encontrou Ākāśa. Você está falhando em sua intenção em encontrar Saṃvit.",
+        "message2": "Você estava procurando Saṃvit, mas encontrou Ākāśa. Você está falhando em seu interesse em encontrar Saṃvit.",
+        "message3": "Você estava procurando Saṃvit, mas encontrou Ākāśa. Algo em sua decisão se perdeu no meio do caminho.",
+        "message4": "Você estava procurando Saṃvit, mas encontrou Ākāśa. Volte depois ou arrisque ficar.",
+        "message5": "Você estava procurando Saṃvit, mas encontrou Ākāśa. Você estava mesmo procurando a Saṃvit?"
       }
     },
     "dialogue": {
@@ -969,7 +978,7 @@
       "padaria": {
         "title": "A padaria de Saṃvit",
         "description": "Consulte o cardápio de Saṃvit, faça um pedido e veja a resposta. Depois experimente repetir um pagamento fictício.",
-        "imageAlt": "Saṃvit, Nandinī, Mors e Ākāśa investigam uma padaria em uma composição mangá.",
+        "imageAlt": "Saṃvit e Nandinī estão diante do balcão da padaria cósmica enquanto Śambhu e Naṭarāja discutem e cozinham.",
         "experimentTitle": "Faça um pedido com Saṃvit",
         "simulationNote": "Esta padaria usa produtos e créditos imaginários. Tudo acontece nesta página.",
         "related": "Compare com a chamada HTTP real da NASA",
