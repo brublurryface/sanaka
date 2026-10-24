@@ -177,12 +177,13 @@
   filter: drop-shadow(0 1.5rem 1.7rem rgba(0, 0, 0, 0.52));
 }
 
-.samvit-presence--sesha .samvit-presence__image {
-  width: min(100%, 48rem);
-}
-
 .samvit-presence--akasha .samvit-presence__image {
   width: min(100%, 36rem);
+}
+
+.samvit-presence--sesha .samvit-presence__image,
+.samvit-presence--akasha-lying .samvit-presence__image {
+  width: min(100%, 48rem);
 }
 
 .samvit-presence figcaption {

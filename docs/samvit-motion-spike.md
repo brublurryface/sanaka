@@ -14,18 +14,27 @@ cauda, escala ou canal alfa. Apenas as duas regiões de pálpebras recebem o des
 de `Akasha-deitada.png`, alinhado localmente sobre a pose sentada. A montagem é feita por
 máscaras em Python, sem gerar uma nova ilustração. O APNG `akasha-seated-blink.png` tem
 1359 × 1158 px, com 4000 ms de olhos abertos e uma piscada de 120 ms. O fallback
-`akasha-seated-still.png` é uma cópia integral da imagem sentada fornecida. A aparência da
-nova piscada de Ākāśa está disponível para revisão da autora nesta atualização.
+`akasha-seated-still.png` é uma cópia integral da imagem sentada fornecida. A autora aceitou
+essa pose e pediu também a pose deitada, com as mesmas cinco frases.
 
-Os dois APNGs foram decodificados quadro a quadro: alfa e cores visíveis são idênticos aos
+A versão deitada usa `Akasha-deitada.png` como base integral de 1536 × 1024 px e fallback
+estático em `akasha-lying-still.png`, copiado byte a byte. Apenas as pálpebras recebem os
+olhos abertos da referência sentada, com alinhamento local e a transparência original
+preservada. `akasha-lying-blink.png` repete o mesmo ritmo de 4000 ms de olhos abertos e
+120 ms de olhos fechados. Não há alteração fora das máscaras dos olhos. A nova piscada
+deitada está disponível para revisão da autora.
+
+Os APNGs foram decodificados quadro a quadro: alfa e cores visíveis são idênticos aos
 PNGs de origem, durações são exatas e a repetição é infinita. Na montagem de Ākāśa, as
 alterações ficam restritas às máscaras dos olhos; não há deslocamento do desenho inteiro.
 O `<picture>` informa `image/png` para APNG e mantém `image/webp` para as cinco animações
 existentes. A condição `prefers-reduced-motion` continua selecionando o PNG estático.
 
-Śeṣa mantém 40% de prioridade. As outras seis presenças recebem 10% cada, incluindo
-Ākāśa. Pose e uma das cinco frases são escolhidas uma única vez por visita. As cinco frases
-de Ākāśa em PT-BR foram mantidas exatamente como enviadas pela autora, com traduções em EN.
+Śeṣa mantém 40% de prioridade. As outras cinco poses de Saṃvit recebem 10% cada. Os 10%
+de Ākāśa são divididos entre a sentada e a deitada, com 5% para cada pose. Pose e uma das
+cinco frases são escolhidas uma única vez por visita. As duas poses de Ākāśa usam as mesmas
+cinco chaves de tradução, com as frases em PT-BR exatamente como enviadas pela autora e
+traduções em EN; não existem cópias de frases para manter separadamente.
 
 A arte aprovada `Padaria em Caos Celestial.png` também foi aplicada ao header de
 `/matrix/padaria`, em `public/images/matrix/padaria/padaria-atmosphere-desktop.webp`.

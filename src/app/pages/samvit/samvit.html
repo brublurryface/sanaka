@@ -8,7 +8,10 @@
         <figure
           class="samvit-presence"
           [class.samvit-presence--sesha]="presence.id === 'sesha'"
-          [class.samvit-presence--akasha]="presence.id === 'akasha'"
+          [class.samvit-presence--akasha]="
+            presence.id === 'akasha' || presence.id === 'akashaLying'
+          "
+          [class.samvit-presence--akasha-lying]="presence.id === 'akashaLying'"
         >
           <div class="samvit-presence__aura" aria-hidden="true"></div>
 

@@ -261,6 +261,7 @@
       "akasha": {
         "label": "Ākāśa",
         "alt": "Ākāśa sitting alone, with an attentive gaze.",
+        "lyingAlt": "Ākāśa lying alone at rest.",
         "message1": "You were looking for Saṃvit, but found Ākāśa. You are failing in your intention to find Saṃvit.",
         "message2": "You were looking for Saṃvit, but found Ākāśa. You are failing in your interest in finding Saṃvit.",
         "message3": "You were looking for Saṃvit, but found Ākāśa. Something in your decision was lost along the way.",

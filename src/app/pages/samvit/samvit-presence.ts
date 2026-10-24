@@ -1,5 +1,12 @@
 export type SamvitPresenceId =
-  'sesha' | 'curious' | 'contemplative' | 'suspicious' | 'dotEye' | 'withBhu' | 'akasha';
+  | 'sesha'
+  | 'curious'
+  | 'contemplative'
+  | 'suspicious'
+  | 'dotEye'
+  | 'withBhu'
+  | 'akasha'
+  | 'akashaLying';
 
 export interface SamvitPresence {
   readonly id: SamvitPresenceId;
@@ -86,6 +93,17 @@ const SAMVIT_PRESENCES: Readonly<Record<SamvitPresenceId, SamvitPresence>> = {
     altKey: 'samvit.presences.akasha.alt',
     messageKeys: createMessageKeys('akasha'),
   },
+  akashaLying: {
+    id: 'akashaLying',
+    imageSrc: '/images/samvit/presences/akasha-lying-still.png',
+    animatedImageSrc: '/images/samvit/presences/akasha-lying-blink.png',
+    animatedImageType: 'image/png',
+    imageWidth: 1536,
+    imageHeight: 1024,
+    labelKey: 'samvit.presences.akasha.label',
+    altKey: 'samvit.presences.akasha.lyingAlt',
+    messageKeys: createMessageKeys('akasha'),
+  },
 };
 
 const PRESENCE_ODDS: readonly { readonly upperBound: number; readonly presence: SamvitPresence }[] =
@@ -96,7 +114,8 @@ const PRESENCE_ODDS: readonly { readonly upperBound: number; readonly presence: 
     { upperBound: 0.7, presence: SAMVIT_PRESENCES.suspicious },
     { upperBound: 0.8, presence: SAMVIT_PRESENCES.dotEye },
     { upperBound: 0.9, presence: SAMVIT_PRESENCES.withBhu },
-    { upperBound: 1, presence: SAMVIT_PRESENCES.akasha },
+    { upperBound: 0.95, presence: SAMVIT_PRESENCES.akasha },
+    { upperBound: 1, presence: SAMVIT_PRESENCES.akashaLying },
   ];
 
 /**

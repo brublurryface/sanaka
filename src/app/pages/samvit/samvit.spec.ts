@@ -70,6 +70,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           akasha: {
             label: 'Ākāśa',
             alt: 'Ākāśa sentada sozinha.',
+            lyingAlt: 'Ākāśa deitada sozinha.',
             message1: 'Akasha 1',
             message2: 'Akasha 2',
             message3: 'Akasha 3',
@@ -183,7 +184,9 @@ describe('Samvit', () => {
     [0.8, 'withBhu'],
     [0.8999, 'withBhu'],
     [0.9, 'akasha'],
-    [0.9999, 'akasha'],
+    [0.9499, 'akasha'],
+    [0.95, 'akashaLying'],
+    [0.9999, 'akashaLying'],
   ])('should map the roll %s to the %s presence', (roll, expectedPresence) => {
     expect(chooseSamvitPresence(roll).id).toBe(expectedPresence);
   });
@@ -214,6 +217,19 @@ describe('Samvit', () => {
     );
   });
 
+  it('should share the same five message keys between both Ākāśa poses', () => {
+    const seated = chooseSamvitPresence(0.925);
+    const lying = chooseSamvitPresence(0.975);
+
+    expect(seated.messageKeys).toHaveLength(5);
+    expect(lying.messageKeys).toEqual(seated.messageKeys);
+    for (const [index, roll] of [0, 0.2, 0.4, 0.6, 0.8].entries()) {
+      const expected = `samvit.presences.akasha.message${index + 1}`;
+      expect(chooseSamvitMessageKey(seated, roll)).toBe(expected);
+      expect(chooseSamvitMessageKey(lying, roll)).toBe(expected);
+    }
+  });
+
   it.each([
     [0.2, 'samvit-sesha-sleeping-still.png', 1484, 1060, 'samvit-sesha-blink.png'],
     [0.45, 'samvit-curious-still.png', 1122, 1402, 'samvit-curious-blink.webp'],
@@ -221,7 +237,8 @@ describe('Samvit', () => {
     [0.65, 'samvit-abhaya-still.png', 1154, 1483, 'samvit-abhaya-blink.webp'],
     [0.75, 'samvit-dot-eye-still.png', 1024, 1536, 'samvit-dot-eye-ear-twitch.webp'],
     [0.85, 'samvit-with-bhu-still.png', 1122, 1402, 'samvit-with-bhu-blink.webp'],
-    [0.95, 'akasha-seated-still.png', 1359, 1158, 'akasha-seated-blink.png'],
+    [0.925, 'akasha-seated-still.png', 1359, 1158, 'akasha-seated-blink.png'],
+    [0.975, 'akasha-lying-still.png', 1536, 1024, 'akasha-lying-blink.png'],
   ])(
     'should show the approved still for roll %s at its original dimensions',
     async (roll, file, width, height, animatedFile) => {
@@ -255,9 +272,12 @@ describe('Samvit', () => {
           expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
           expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
         }
-        if (Number(roll) === 0.95) {
+        if (Number(roll) === 0.925 || Number(roll) === 0.975) {
           expect(root.querySelector('figcaption')?.textContent).toContain('Ākāśa');
           expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Akasha 1');
+        }
+        if (Number(roll) === 0.975) {
+          expect(image?.getAttribute('alt')).toBe('Ākāśa deitada sozinha.');
         }
       } else {
         expect(root.querySelector('picture source')?.getAttribute('srcset')).toBe(
