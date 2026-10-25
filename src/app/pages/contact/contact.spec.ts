@@ -92,7 +92,7 @@ describe('Contact', () => {
     const socialLinks = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('.contact-social'));
 
     expect(image?.getAttribute('src')).toBe('/images/contact/contact-atmosphere-desktop.webp');
-    expect(image?.getAttribute('width')).toBe('1942');
+    expect(image?.getAttribute('width')).toBe('1945');
     expect(socialLinks.map((link) => link.getAttribute('href'))).toEqual([
       'https://www.instagram.com/omsanaka/',
       'https://br.linkedin.com/in/brublurryface',
