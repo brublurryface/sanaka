@@ -4,11 +4,11 @@ Em 15/10/2026 foram aplicadas as três artes enviadas pela autora. Cada imagem m
 o enquadramento e as dimensões de origem (1942 × 809 px), convertidos para WebP com
 qualidade 92. Não houve redesenho, alteração de iluminação ou ampliação artificial.
 
-| Estudo   | Arte aprovada                                      | Arquivo publicado                                                | Tamanho       |
-| -------- | -------------------------------------------------- | ---------------------------------------------------------------- | ------------- |
-| Óbolos   | Mors e Busca no Sótão das Relíquias.png            | `public/images/matrix/obolos/obolos-atmosphere-desktop.webp`     | 426.504 bytes |
-| Entregas | As Entregas de Akasha v2.png                       | `public/images/matrix/entregas/entregas-atmosphere-desktop.webp` | 625.834 bytes |
-| Jogo     | Kalika na Taverna Oculta de Cartas e Espíritos.png | `public/images/matrix/jogo/jogo-atmosphere-desktop.webp`         | 461.300 bytes |
+| Estudo   | Arte aprovada                                      | Arquivo publicado                                                | Tamanho         |
+| -------- | -------------------------------------------------- | ---------------------------------------------------------------- | --------------- |
+| Óbolos   | Mors e Busca no Sótão das Relíquias.png            | `public/images/matrix/obolos/obolos-atmosphere-desktop.webp`     | 426.504 bytes   |
+| Entregas | As Entregas de Akasha v3.png                       | `public/images/matrix/entregas/entregas-atmosphere-desktop.webp` | 2.412.664 bytes |
+| Jogo     | Kalika na Taverna Oculta de Cartas e Espíritos.png | `public/images/matrix/jogo/jogo-atmosphere-desktop.webp`         | 461.300 bytes   |
 
 Os três usam o mesmo Header, degradês, sombra de texto e comportamento responsivo.
 O mobile usa o recorte compartilhado da imagem horizontal; não há arte vertical
@@ -56,6 +56,11 @@ Não inventar moedas canônicas ou reversos. Se houver moedas reconhecíveis na 
 usar referências aprovadas. Saṃvit, Mors e Ākāśa compartilham o reverso canônico.
 
 ## Entregas de Ākāśa
+
+Em 25/10/2026, a arte foi substituída por **As Entregas de Akasha v3.png**, enviada
+pela autora após corrigir erros da versão anterior. A conversão atual é WebP sem perda,
+sem redimensionamento (1942 × 809 px), com igualdade de todos os pixels RGBA verificada
+após a decodificação. Essa versão substitui a conversão de qualidade 92 registrada em 15/10.
 
 A arte aprovada mostra Ākāśa diante de painéis estelares com alertas, personagens nas
 telas e fios de energia. Mantém sua forma quadrúpede, chifres, peito claro e escamas
