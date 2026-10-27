@@ -33,7 +33,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Arquivo',
             title: 'Publicações do santuário',
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
-            imageAlt: 'Saṃvit, Nandinī e Bhu observam livros mágicos em uma biblioteca.',
+            imageAlt: 'Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca.',
             sanakaverseLink: 'Viajar para Sanakaverse',
           },
           search: {
@@ -82,7 +82,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Archive',
             title: 'Sanctuary publications',
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
-            imageAlt: 'Saṃvit, Nandinī, and Bhu watch magical books in a library.',
+            imageAlt: 'Saṃvit, Nandinī, and Bhū watch magical books in a library.',
             sanakaverseLink: 'Travel to Sanakaverse',
           },
           search: {
@@ -259,7 +259,7 @@ describe('Posts', () => {
 
     expect(hero?.classList.contains('sanaka-atmosphere-hero--cinematic')).toBe(true);
     expect(image?.getAttribute('src')).toBe('/images/posts/posts-atmosphere-desktop.webp');
-    expect(image?.getAttribute('alt')).toContain('Saṃvit, Nandinī e Bhu');
+    expect(image?.getAttribute('alt')).toContain('Saṃvit, Nandinī e Bhū');
   });
 
   it('should keep the newsletter anchor available independently of the WordPress request', () => {

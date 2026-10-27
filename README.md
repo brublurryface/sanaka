@@ -2,7 +2,7 @@
   <img
     src="./public/images/samvit/presences/samvit-with-bhu-still.png"
     width="300"
-    alt="Saṃvit acolhendo Bhu, personagens do projeto Sanaka"
+    alt="Saṃvit acolhendo Bhū, personagens do projeto Sanaka"
   />
 
 # Sanaka

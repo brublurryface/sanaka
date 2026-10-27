@@ -16,7 +16,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           title: { line1: 'Matrix', line2: 'Online' },
           intro: 'Watch Angular respond.',
           action: 'Enter the experiment',
-          imageAlt: 'Saṃvit, Kalika, and Bhu in conversation.',
+          imageAlt: 'Saṃvit, Kalika, and Bhū in conversation.',
         },
         exhibit: {
           eyebrow: 'Experiment 01',

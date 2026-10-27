@@ -250,13 +250,13 @@
         "message5": "Saṃvit está refletindo sobre ter saído da cama muito cedo. Talvez seja melhor retornar para a cama por enquanto."
       },
       "withBhu": {
-        "label": "Saṃvit e Bhu",
-        "alt": "Saṃvit sentada acolhe Bhu no colo.",
-        "message1": "Saṃvit quer te contar a história do Bhu, mas ainda está refletindo como fazê-la.",
-        "message2": "Saṃvit quer te contar a história do Bhu, mas no momento, não pode.",
-        "message3": "Saṃvit está passando um tempo com o Bhu enquanto decide o que te dizer.",
-        "message4": "Saṃvit quer te contar a história do Bhu, mas como fazer isso sem refletir bastante?",
-        "message5": "Saṃvit quer te contar a história do Bhu, mas decidiu que é melhor o Bhu contar a própria história."
+        "label": "Saṃvit e Bhū",
+        "alt": "Saṃvit sentada acolhe Bhū no colo.",
+        "message1": "Saṃvit quer te contar a história do Bhū, mas ainda está refletindo como fazê-la.",
+        "message2": "Saṃvit quer te contar a história do Bhū, mas no momento, não pode.",
+        "message3": "Saṃvit está passando um tempo com o Bhū enquanto decide o que te dizer.",
+        "message4": "Saṃvit quer te contar a história do Bhū, mas como fazer isso sem refletir bastante?",
+        "message5": "Saṃvit quer te contar a história do Bhū, mas decidiu que é melhor o Bhū contar a própria história."
       },
       "akasha": {
         "label": "Ākāśa",
@@ -341,7 +341,7 @@
       "eyebrow": "Biblioteca em Sanaka",
       "title": "Publicações do santuário",
       "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança.",
-      "imageAlt": "Saṃvit, Nandinī e Bhu observam livros mágicos atravessando uma biblioteca celestial.",
+      "imageAlt": "Saṃvit, Nandinī e Bhū observam livros mágicos atravessando uma biblioteca celestial.",
       "sanakaverseLink": "Viajar para Sanakaverse"
     },
     "search": {
@@ -1163,7 +1163,7 @@
           "line2": "on-line"
         },
         "intro": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento. Cada circuito transforma um conceito do código em algo que pode ser visto acontecendo.",
-        "imageAlt": "Saṃvit observa telas de código enquanto pequenos lobos luminosos atravessam o laboratório."
+        "imageAlt": "Saṃvit, de costas e vestida de preto, observa telas de código entre gaṇāḥ luminosos azuis e violetas."
       },
       "list": {
         "eyebrow": "Circuitos abertos",
@@ -1199,7 +1199,7 @@
       },
       "intro": "Faça um valor atravessar a fronteira entre pai e filho. Depois, acompanhe a resposta voltando por um evento e veja o código envolvido em cada passagem.",
       "action": "Iniciar circuito",
-      "imageAlt": "Saṃvit, Kalika e Bhu analisam um livro entre lanternas e diagramas luminosos de componentes Angular."
+      "imageAlt": "Saṃvit, Kalika e Bhū analisam um livro entre lanternas e diagramas luminosos de componentes Angular."
     },
     "exhibit": {
       "eyebrow": "Circuito interativo",

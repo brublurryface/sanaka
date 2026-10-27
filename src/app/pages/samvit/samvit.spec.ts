@@ -59,13 +59,13 @@ class MockTranslocoLoader implements TranslocoLoader {
             message5: 'Dot-eye 5',
           },
           withBhu: {
-            label: 'Saṃvit e Bhu',
-            alt: 'Saṃvit acolhe Bhu no colo.',
-            message1: 'Bhu 1',
-            message2: 'Bhu 2',
-            message3: 'Bhu 3',
-            message4: 'Bhu 4',
-            message5: 'Bhu 5',
+            label: 'Saṃvit e Bhū',
+            alt: 'Saṃvit acolhe Bhū no colo.',
+            message1: 'Bhū 1',
+            message2: 'Bhū 2',
+            message3: 'Bhū 3',
+            message4: 'Bhū 4',
+            message5: 'Bhū 5',
           },
           akasha: {
             label: 'Ākāśa',
@@ -123,15 +123,15 @@ describe('Samvit', () => {
     await fixture.whenStable();
     const root = fixture.nativeElement as HTMLElement;
     expect(random).toHaveBeenCalledTimes(2);
-    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
-    expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhū');
+    expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhū 1');
     expect(root.querySelectorAll('.samvit-presence__image')).toHaveLength(1);
     expect(root.querySelector('.samvit-presence--pending')).toBeNull();
 
     fixture.detectChanges();
     await fixture.whenStable();
     expect(random).toHaveBeenCalledTimes(2);
-    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
+    expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhū');
   });
 
   it('should create the silent portal with Śeṣa as the prioritized presence', async () => {
@@ -269,8 +269,8 @@ describe('Samvit', () => {
           String(animatedFile).endsWith('.png') ? 'image/png' : 'image/webp',
         );
         if (Number(roll) === 0.85) {
-          expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhu');
-          expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhu 1');
+          expect(root.querySelector('figcaption')?.textContent).toContain('Saṃvit e Bhū');
+          expect(root.querySelector('.samvit-page__message')?.textContent).toContain('Bhū 1');
         }
         if (Number(roll) === 0.925 || Number(roll) === 0.975) {
           expect(root.querySelector('figcaption')?.textContent).toContain('Ākāśa');

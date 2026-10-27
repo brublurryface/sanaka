@@ -89,7 +89,7 @@ WebP animado pode ser reavaliado se receber quadros autorados corretamente. Rive
 
 O registro e as medições acima pertencem à tentativa de 04/10. A entrega atual aplica quatro
 PNGs aprovados, sem redução de dimensões ou recompressão. Os originais copiados para o projeto
-mantêm exatamente os bytes dos anexos. README e a presença com Bhu compartilham um único arquivo.
+mantêm exatamente os bytes dos anexos. README e a presença com Bhū compartilham um único arquivo.
 As artes anteriores de Śeṣa e da contemplativa aguardam suas substituições.
 
 A tentativa de 18/10 solicita alterações localizadas por imagem. O original já é o quadro de repouso;
@@ -101,7 +101,7 @@ Não aplicar movimento CSS ao desenho nem deslocar a composição inteira entre 
 | Abhaya mudra    | `public/images/samvit/presences/samvit-abhaya-still.png`   | 1233 × 1634 px    | Fechar suavemente os dois olhos, preservando sobrancelhas sérias, boca e a mão erguida                                                       |
 | Curiosa/ouvinte | `public/images/samvit/presences/samvit-curious-still.png`  | 1122 × 1402 px    | Fechar suavemente os dois olhos e inclinar levemente para fora a orelha à direita de quem olha; manter cabeça apoiada na mão, boca e postura |
 | Dot-eye         | `public/images/samvit/presences/samvit-dot-eye-still.png`  | 1024 × 1536 px    | Inclinar levemente para fora apenas a orelha à direita de quem olha, preservando a base e o outro lado; olhos pontuais permanecem iguais     |
-| Com Bhu         | `public/images/samvit/presences/samvit-with-bhu-still.png` | 1122 × 1402 px    | Fechar suavemente os dois olhos de Saṃvit e os dois olhos de Bhu; preservar bocas, sobrancelhas, posição e todo o restante                   |
+| Com Bhū         | `public/images/samvit/presences/samvit-with-bhu-still.png` | 1122 × 1402 px    | Fechar suavemente os dois olhos de Saṃvit e os dois olhos de Bhū; preservar bocas, sobrancelhas, posição e todo o restante                   |
 
 ### Prompt comum aprovado para cada edição
 
@@ -125,13 +125,13 @@ clarear o cabelo, engrossar o traço, alterar anatomia ou adicionar objetos.
 Na edição curiosa/ouvinte, apenas os olhos e a orelha à direita de quem olha mudam;
 preservar a base da orelha, a cabeça apoiada na mão e todo o restante da pose.
 Na edição dot-eye, os olhos, a boca, as sobrancelhas e os sinais gráficos ficam inalterados.
-Na edição com Bhu, apenas os dois olhos de Saṃvit e os dois olhos de Bhu mudam;
+Na edição com Bhū, apenas os dois olhos de Saṃvit e os dois olhos de Bhū mudam;
 todo o restante das duas personagens permanece inalterado.
 
 Alvo, tamanho e alteração: anexar exatamente a linha correspondente da tabela acima.
 ```
 
-Prompts aprovados pela autora em 18/10/2026, após as correções de Bhu e da curiosa/ouvinte.
+Prompts aprovados pela autora em 18/10/2026, após as correções de Bhū e da curiosa/ouvinte.
 A aprovação autoriza gerar os quatro PNGs para revisão; não autoriza aplicá-los como animação.
 A edição generativa pode alterar detalhes
 além do pedido; conferir cada PNG em 100%, tamanho do canvas, alinhamento e transparência.
@@ -147,7 +147,7 @@ e do README não foram substituídas. Os resultados foram apresentados para revi
 
 | Quadro          | Canvas recebido | Canal alfa | Resultado observado                                                                   |
 | --------------- | --------------- | ---------- | ------------------------------------------------------------------------------------- |
-| Com Bhu         | 1122 × 1402 px  | 0–255      | Saṃvit e Bhu com olhos fechados; canvas preservado                                    |
+| Com Bhū         | 1122 × 1402 px  | 0–255      | Saṃvit e Bhū com olhos fechados; canvas preservado                                    |
 | Curiosa/ouvinte | 1122 × 1402 px  | 0–255      | Olhos fechados e cabeça apoiada; deslocamento da orelha discreto, sujeito à revisão   |
 | Abhaya mudra    | 1089 × 1444 px  | 0–255      | Olhos fechados e expressão séria; dimensões originais não foram respeitadas           |
 | Dot-eye         | 1024 × 1536 px  | 0–254      | Olhos pontuais preservados; inclinação da orelha; opacidade máxima diferente da fonte |
@@ -172,7 +172,7 @@ A progressão aprovada é o original mais três quadros, com os primeiros result
 | 04     | Reabrindo, cerca de 65% da abertura original | Retorno próximo ao repouso, cerca de 1,5° para fora   |
 
 Esses percentuais e ângulos são indicações de desenho, não medições garantidas pelo gerador.
-Na pose com Bhu, ambos piscam. A curiosa/ouvinte pisca e move a orelha à direita de quem olha,
+Na pose com Bhū, ambos piscam. A curiosa/ouvinte pisca e move a orelha à direita de quem olha,
 mantendo a cabeça apoiada na mão. Abhaya somente pisca. Dot-eye somente move essa orelha,
 preservando olhos pontuais, boca, sobrancelhas e os três sinais gráficos.
 
@@ -185,8 +185,8 @@ sem fechar completamente os olhos. Para a orelha, a base deveria permanecer fixa
 
 | Presença        | Quadro | Canvas recebido | Canal alfa | Comparação com o canvas original |
 | --------------- | ------ | --------------- | ---------- | -------------------------------- |
-| Com Bhu         | 02     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
-| Com Bhu         | 04     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Com Bhū         | 02     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
+| Com Bhū         | 04     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
 | Curiosa/ouvinte | 02     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
 | Curiosa/ouvinte | 04     | 1122 × 1402 px  | 0–255      | Mesmo tamanho                    |
 | Abhaya mudra    | 02     | 1089 × 1444 px  | 0–255      | Menor que 1233 × 1634 px         |
@@ -195,7 +195,7 @@ sem fechar completamente os olhos. Para a orelha, a base deveria permanecer fixa
 | Dot-eye         | 04     | 1024 × 1536 px  | 0–254      | Mesmo tamanho                    |
 
 Os oito arquivos são PNGs RGBA e contêm pixels transparentes. A conferência visual identificou
-variações de posição e traço fora das regiões solicitadas. Na reabertura com Bhu, a composição
+variações de posição e traço fora das regiões solicitadas. Na reabertura com Bhū, a composição
 se deslocou. Na curiosa, os olhos intermediários ficaram mais próximos da abertura original que
 o solicitado; a orelha do quadro 04 se afasta do repouso mais do que deveria para um retorno.
 Portanto, a ordem planejada não comprova uma interpolação visual contínua.
@@ -209,7 +209,7 @@ São doze PNGs gerados ao todo, apresentados para revisão, além dos quatro ori
 de WebPs, qualquer estabilização ou retoque e a aplicação dos resultados ao site continuam pendentes
 da revisão da autora. Nenhum quadro foi redimensionado, repintado ou aplicado na página nesta rodada.
 
-## Piloto com Bhu — sequência corrigida pela autora
+## Piloto com Bhū — sequência corrigida pela autora
 
 A autora forneceu `samvit-bhu-read-me2.png`, `samvit-bhu-read-me3.png` e
 `samvit-bhu-read-me4.png`, todos RGBA, 1122 × 1402 px. Eles representam fechamento progressivo,
@@ -241,7 +241,7 @@ e as dimensões originais. Quem pede movimento reduzido recebe a imagem estátic
 permanecem estáticas até a revisão de seus quadros. Não há movimento CSS aplicado à personagem.
 O `<source>` existe em todas as poses e aponta para o próprio estático nas demais, mantendo a
 mesma estrutura de elementos quando o sorteio do navegador difere do HTML prerenderizado.
-As cinco frases com Bhu foram substituídas pelas fornecidas pela autora, com tradução em inglês.
+As cinco frases com Bhū foram substituídas pelas fornecidas pela autora, com tradução em inglês.
 
 ### Reprodução e verificação do arquivo
 
@@ -272,7 +272,7 @@ velocidade e da expressão no navegador da autora continua sendo o critério de 
 
 ## Revisão do refresh, dot-eye e pensativa
 
-Após aprovar o piloto com Bhu, a autora pediu o título **Saṃvit e Bhu**, corrigiu o segundo quadro
+Após aprovar o piloto com Bhū, a autora pediu o título **Saṃvit e Bhū**, corrigiu o segundo quadro
 da dot-eye e forneceu `samvit-pensativa.png` como base da próxima sequência.
 
 O refresh exibia uma pose do HTML prerenderizado e depois outra sorteada no navegador. A seleção
@@ -284,7 +284,7 @@ aleatórias, uma para a pose e outra para a frase.
 
 A dot-eye usa o PNG original e `samvit-dot-eyes2(1).png`, ambos RGBA de 1024 × 1536 px.
 A primeira montagem de `samvit-dot-eye-ear-twitch.webp` tinha dois quadros: repouso de 4000 ms e movimento de 70 ms,
-mais curto que a piscada de 340 ms do piloto com Bhu. O ciclo de 4070 ms se repete e preserva o
+mais curto que a piscada de 340 ms do piloto com Bhū. O ciclo de 4070 ms se repete e preserva o
 fallback estático para movimento reduzido. O arquivo tem 1.075.944 bytes; a decodificação foi
 comparada aos dois PNGs, com igualdade dos valores de alfa e RGB visíveis.
 
@@ -326,7 +326,7 @@ A reabertura e o retorno da cauda reutilizarão os quadros na ordem inversa.
 ```
 
 Os valores de abertura e deslocamento são indicações para o desenho e precisam de conferência
-antes da montagem. A nova proposta usa fechamento progressivo, como nos quadros corrigidos com Bhu.
+antes da montagem. A nova proposta usa fechamento progressivo, como nos quadros corrigidos com Bhū.
 
 Os três PNGs foram gerados em 18/10/2026, em chamadas independentes que usaram o mesmo original.
 Todos têm 1024 × 1536 px, formato RGBA e fundo transparente. O quadro 02 mantém os olhos
@@ -363,11 +363,11 @@ mantêm a cauda parada; o movimento visível é a piscada.
 
 `samvit-contemplative-blink.webp` tem 1.065.476 bytes e seis quadros, na ordem
 01 → 02 → 03 → 04 → 03 → 02. As durações são 4000, 60, 60, 100, 60 e 60 ms, mantendo a
-mesma cadência do piloto com Bhu. O ciclo de 4340 ms se repete sem limite.
+mesma cadência do piloto com Bhū. O ciclo de 4340 ms se repete sem limite.
 
 A dot-eye passa a alternar seus dois desenhos a cada 250 ms, em um ciclo contínuo de 500 ms.
 O arquivo existente foi substituído, sem manter outra versão pública para a mesma função.
-O tamanho permanece em 1.075.944 bytes. Bhu mantém sua cadência anterior.
+O tamanho permanece em 1.075.944 bytes. Bhū mantém sua cadência anterior.
 
 Os dois WebPs foram decodificados e comparados aos PNGs: todos os valores de alfa e RGB
 visíveis permanecem iguais, assim como as durações e a repetição infinita. A página mantém
@@ -499,7 +499,7 @@ A base estática da ouvinte permanece igual a `samvit-ouvinte(1).png`.
 
 Os novos arquivos são `samvit-abhaya-blink.webp` e `samvit-curious-blink.webp`. Ambos usam os
 quatro desenhos completos na ordem 01 → 02 → 03 → 04 → 03 → 02, com durações de 4000, 60,
-60, 100, 60 e 60 ms. Cada ciclo dura 4340 ms e se repete sem limite, como a pensativa e Bhu.
+60, 100, 60 e 60 ms. Cada ciclo dura 4340 ms e se repete sem limite, como a pensativa e Bhū.
 O codificador existente confere todos os valores de alfa e RGB visíveis e os tempos após decodificar
 o WebP. A montagem conserva as entradas, sem redimensionar, repintar, interpolar ou limpar as bordas.
 
@@ -508,7 +508,7 @@ o WebP. A montagem conserva as entradas, sem redimensionar, repintar, interpolar
 | `samvit-abhaya-blink.webp`  | 1.248.948 | `d05769c661824933feae3cfb954458bcc9acb87a4bd7aeb501787fc8c9d618ff` |
 | `samvit-curious-blink.webp` | 1.908.640 | `94d70a19e3315d17a65c5a60049ee96bc76341690e8a091018cf9a3ff35afd08` |
 
-Com isso, cinco presenças usam animação: abhaya, ouvinte, pensativa, dot-eye e Bhu. Śeṣa mantém
+Com isso, cinco presenças usam animação: abhaya, ouvinte, pensativa, dot-eye e Bhū. Śeṣa mantém
 seu arquivo estático e sua prioridade de 40% no sorteio. As outras probabilidades, frases e a seleção
 única por entrada permanecem iguais. Movimento reduzido continua usando o original estático da
 pose selecionada. Os testes conferem a fonte animada, essa condição de acessibilidade, as dimensões
@@ -549,7 +549,7 @@ dot-eye. Os mesmos desenhos e sua ordem foram preservados; somente as durações
 | Dot-eye         | 250, 250 ms                  | 375, 375 ms                  | 750 ms      |
 
 As etapas do movimento duram 50% mais. A ouvinte mantém quatro segundos de repouso entre
-os movimentos; a dot-eye continua alternando sem uma pausa longa. Bhu, pensativa e abhaya
+os movimentos; a dot-eye continua alternando sem uma pausa longa. Bhū, pensativa e abhaya
 mantêm seus tempos. As dimensões, cores, transparência e condição de movimento reduzido
 permanecem iguais.
 

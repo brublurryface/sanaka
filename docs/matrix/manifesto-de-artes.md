@@ -14,6 +14,15 @@ Os três usam o mesmo Header, degradês, sombra de texto e comportamento respons
 O mobile usa o recorte compartilhado da imagem horizontal; não há arte vertical
 exclusiva. A Padaria continua com fallback neutro até receber sua arte aprovada.
 
+## Entrada da Matrix — Saṃvit e gaṇāḥ
+
+Em 27/10/2026, a autora autorizou a substituição da arte da entrada da Matrix pela
+versão de Saṃvit de costas, vestida de preto, com gaṇāḥ azuis e violetas no laboratório.
+O arquivo `public/images/matrix/matrix-atmosphere-desktop.webp` tem 1942 × 809 px e
+1.296.608 bytes. A conversão usa WebP sem perda, com igualdade dos pixels RGBA
+verificada após a decodificação. As dimensões do HTML e os textos alternativos em
+PT-BR e inglês acompanham essa versão.
+
 ## Contrato comum
 
 Criação desktop: **2400 × 1000 px**. Criação mobile: **1080 × 1350 px**.
@@ -82,7 +91,7 @@ apertar todos os corpos num único canto. Não desenhar cartões bancários nem 
 uma loja real. O cenário inteiro deve ser mangá.
 
 Referência atual da Saṃvit: `public/images/samvit/presences/samvit-with-bhu-still.png`,
-sem adicionar Bhu automaticamente. Preservar o rosto e as proporções da referência,
+sem adicionar Bhū automaticamente. Preservar o rosto e as proporções da referência,
 cabelos castanho-escuros até os ombros, olhos vermelho-laranja-amarelos, roupa preta
 com gola alta e sobreposição longa marfim. As orelhas e a cauda são de lobo-guará.
 Cauda proporcional, elegante, ponta clara e origem no cóccis; não nas costas,
