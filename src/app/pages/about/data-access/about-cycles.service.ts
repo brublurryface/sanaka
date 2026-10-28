@@ -37,6 +37,9 @@ const ROMAN_CYCLE_ORDER = new Map<string, number>([
   ['IV', 4],
   ['V', 5],
   ['VI', 6],
+  ['VII', 7],
+  ['VIII', 8],
+  ['IX', 9],
 ]);
 
 /** Consulta a coleção autobiográfica publicada no WordPress. */
@@ -49,7 +52,7 @@ export class AboutCyclesService {
   private readonly wordpressText = inject(WordPressTextService);
 
   /**
-   * Carrega os seis fragmentos autobiográficos diretamente pela política editorial.
+   * Carrega os nove fragmentos autobiográficos diretamente pela política editorial.
    *
    * O ID fica centralizado porque pertence à instalação atual do WordPress e deve ser revisto
    * somente em uma eventual migração das taxonomias.
@@ -57,7 +60,7 @@ export class AboutCyclesService {
   getCycles(): Observable<readonly AboutCyclePost[]> {
     const postsParams = new HttpParams()
       .set('categories', String(this.contentPolicy.aboutCycleCategoryId))
-      .set('per_page', '6')
+      .set('per_page', '9')
       .set('_fields', 'id,slug,title,excerpt,hover_text,meta');
 
     return this.http
@@ -88,7 +91,7 @@ export class AboutCyclesService {
   }
 
   private readCycleOrder(title: string): number {
-    const romanNumeral = title.match(/^\s*(I{1,3}|IV|V|VI)\b/)?.[1];
+    const romanNumeral = title.match(/^\s*(VIII|VII|VI|IV|IX|III|II|I|V)\b/)?.[1];
     return ROMAN_CYCLE_ORDER.get(romanNumeral ?? '') ?? Number.MAX_SAFE_INTEGER;
   }
 

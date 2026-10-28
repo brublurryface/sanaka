@@ -74,7 +74,7 @@
     "puzzle": {
       "eyebrow": "Identidade em fragmentos",
       "title": {
-        "line1": "Seis peças,",
+        "line1": "Nove peças,",
         "line2": "nenhuma conclusão"
       },
       "intro": {
@@ -82,7 +82,7 @@
         "middle": "sobe no ratinho",
         "end": "para se locomover, e passeie pelos fragmentos em forma de quebra-cabeça sobre Sanaka. Para saber mais, escolha adentrar um dos fragmentos…"
       },
-      "ariaLabel": "Quebra-cabeça dos seis ciclos autobiográficos",
+      "ariaLabel": "Quebra-cabeça dos nove ciclos autobiográficos",
       "select": "Fragmento",
       "loading": "Reunindo fragmentos de Sanaka",
       "error": "As peças não puderam ser reunidas agora."

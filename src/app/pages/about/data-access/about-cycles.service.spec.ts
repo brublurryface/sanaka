@@ -38,7 +38,7 @@ describe('AboutCyclesService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('62');
-    expect(postsRequest.request.params.get('per_page')).toBe('6');
+    expect(postsRequest.request.params.get('per_page')).toBe('9');
     expect(postsRequest.request.params.get('_fields')).not.toContain('link');
     expect(postsRequest.request.params.get('_fields')).toContain('meta');
 
@@ -94,6 +94,33 @@ describe('AboutCyclesService', () => {
         order: 6,
       },
     ]);
+  });
+
+  it('should order all nine fragments and preserve the three new publication slugs', () => {
+    let result: readonly AboutCyclePost[] | undefined;
+    const titles = ['I', 'II', 'III', 'IV', 'V', 'VI', 'VII', 'VIII', 'IX'];
+    const addedSlugs = ['vii-aplicacao', 'viii-personagens', 'ix-fim-por-enquanto'];
+
+    service.getCycles().subscribe((cycles) => {
+      result = cycles;
+    });
+
+    const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+
+    expect(postsRequest.request.params.get('per_page')).toBe('9');
+    postsRequest.flush(
+      titles
+        .map((numeral, index) => ({
+          id: index + 1,
+          slug: addedSlugs[index - 6] ?? `cycle-${index + 1}`,
+          title: { rendered: `${numeral} — Fragmento ${index + 1}` },
+          excerpt: { rendered: `<p>Fragmento ${index + 1}</p>` },
+        }))
+        .reverse(),
+    );
+
+    expect(result?.map((cycle) => cycle.order)).toEqual([1, 2, 3, 4, 5, 6, 7, 8, 9]);
+    expect(result?.slice(6).map((cycle) => cycle.slug)).toEqual(addedSlugs);
   });
 
   it('should return an empty collection when WordPress has no autobiographical cycles', () => {

@@ -6,9 +6,11 @@ import { of, throwError } from 'rxjs';
 import { About } from './about';
 import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
 
-const cycles: readonly AboutCyclePost[] = Array.from({ length: 6 }, (_, index) => ({
+const addedCycleSlugs = ['vii-aplicacao', 'viii-personagens', 'ix-fim-por-enquanto'];
+
+const cycles: readonly AboutCyclePost[] = Array.from({ length: 9 }, (_, index) => ({
   id: index + 1,
-  slug: `cycle-${index + 1}`,
+  slug: addedCycleSlugs[index - 6] ?? `cycle-${index + 1}`,
   title: `${index + 1} — Cycle ${index + 1}`,
   hoverText: `Hover ${index + 1}`,
   excerpt: `Excerpt ${index + 1}`,
@@ -38,7 +40,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         puzzle: {
           eyebrow: 'Identidade em fragmentos',
           title: {
-            line1: 'Seis peças,',
+            line1: 'Nove peças,',
             line2: 'nenhuma conclusão',
           },
           intro: {
@@ -101,7 +103,7 @@ describe('About', () => {
     fixture = TestBed.createComponent(About);
   });
 
-  it('should render six WordPress cycles and preserve the contact destinations', () => {
+  it('should render nine WordPress cycles and preserve the contact destinations', () => {
     fixture.detectChanges();
 
     const compiled = fixture.nativeElement as HTMLElement;
@@ -120,16 +122,20 @@ describe('About', () => {
     expect(compiled.querySelector('.about-hero__veil')).not.toBeNull();
     expect(compiled.querySelectorAll('.about-hero h1 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-section-heading h2 span')).toHaveLength(2);
-    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
-    expect(compiled.querySelectorAll('.about-puzzle-mobile__piece')).toHaveLength(6);
-    expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle-mobile__piece')).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(9);
     expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
-    expect(compiled.querySelectorAll('.about-puzzle__shade')).toHaveLength(6);
-    expect(compiled.querySelectorAll('.about-puzzle-mobile__shade')).toHaveLength(6);
-    expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(6);
-    expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
+    expect(compiled.querySelectorAll('.about-puzzle__shade')).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle-mobile__shade')).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(9);
+    expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch-nine.webp');
     expect(puzzleImage?.getAttribute('x')).toBe('-16');
     expect(puzzleImage?.getAttribute('width')).toBe('332');
+    expect(puzzleImage?.getAttribute('height')).toBe('332');
+    expect(compiled.querySelector('.about-puzzle__art')?.getAttribute('viewBox')).toBe(
+      '-16 -16 332 332',
+    );
     expect(compiled.querySelector('.about-puzzle-mobile__art')?.getAttribute('viewBox')).toBe(
       '-18 -18 136 136',
     );
@@ -190,6 +196,47 @@ describe('About', () => {
     );
   });
 
+  it('should select each added fragment from desktop and mobile with its own art and link', () => {
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+    const selectors = compiled.querySelectorAll<HTMLButtonElement>('.about-puzzle__selector');
+    const mobileSelectors = compiled.querySelectorAll<HTMLButtonElement>(
+      '.about-puzzle-mobile__selector',
+    );
+    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
+    const mobileArt = compiled.querySelectorAll<SVGElement>('.about-puzzle-mobile__art');
+    const viewBoxes = ['-18 182 136 136', '82 182 136 136', '182 182 136 136'];
+
+    for (const [offset, slug] of addedCycleSlugs.entries()) {
+      const index = offset + 6;
+      const order = index + 1;
+
+      selectors[index].click();
+      fixture.detectChanges();
+
+      expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
+        `/posts/${slug}`,
+      );
+      expect(selectors[index].getAttribute('aria-pressed')).toBe('true');
+      expect(images[index].getAttribute('clip-path')).toBe(`url(#about-puzzle-piece-${order})`);
+      expect(images[index].classList.contains('about-puzzle__image--active')).toBe(true);
+      expect(mobileArt[index].getAttribute('viewBox')).toBe(viewBoxes[offset]);
+
+      selectors[0].click();
+      fixture.detectChanges();
+      mobileSelectors[index].click();
+      fixture.detectChanges();
+
+      expect(compiled.querySelector('.about-story__link')?.getAttribute('href')).toBe(
+        `/posts/${slug}`,
+      );
+      expect(mobileSelectors[index].getAttribute('aria-pressed')).toBe('true');
+      expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
+      expect(compiled.querySelectorAll('.about-puzzle-mobile__image--active')).toHaveLength(1);
+    }
+  });
+
   it('should show a retry action when WordPress cannot load the cycles', () => {
     cyclesService.getCycles.mockReturnValueOnce(throwError(() => new Error('offline')));
 
@@ -204,6 +251,6 @@ describe('About', () => {
     fixture.detectChanges();
 
     expect(cyclesService.getCycles).toHaveBeenCalledTimes(2);
-    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(6);
+    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(9);
   });
 });
