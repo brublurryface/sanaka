@@ -81,11 +81,15 @@
             [class.about-puzzle__image--active]="selectedCycleId() === cycle.id"
             [attr.data-piece]="cycle.order"
             [attr.clip-path]="'url(#about-puzzle-piece-' + cycle.order + ')'"
-            href="/images/about/about-cycles-sketch-nine.webp"
+            [attr.href]="
+              cycle.order <= 6
+                ? '/images/about/about-cycles-sketch.webp'
+                : '/images/about/about-cycles-sketch-nine.webp'
+            "
             x="-16"
             y="-16"
             width="332"
-            height="332"
+            [attr.height]="cycle.order <= 6 ? 232 : 332"
             preserveAspectRatio="none"
           />
         }

@@ -129,10 +129,10 @@ describe('About', () => {
     expect(compiled.querySelectorAll('.about-puzzle__shade')).toHaveLength(9);
     expect(compiled.querySelectorAll('.about-puzzle-mobile__shade')).toHaveLength(9);
     expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(9);
-    expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch-nine.webp');
+    expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
     expect(puzzleImage?.getAttribute('x')).toBe('-16');
     expect(puzzleImage?.getAttribute('width')).toBe('332');
-    expect(puzzleImage?.getAttribute('height')).toBe('332');
+    expect(puzzleImage?.getAttribute('height')).toBe('232');
     expect(compiled.querySelector('.about-puzzle__art')?.getAttribute('viewBox')).toBe(
       '-16 -16 332 332',
     );
@@ -156,6 +156,33 @@ describe('About', () => {
     expect(sanakaverseLink?.getAttribute('href')).toBe('/sanakaverse');
     expect(sanakaverseLink?.target).toBe('_blank');
     expect(sanakaverseLink?.rel).toBe('noopener');
+  });
+
+  it('should preserve the original six illustrations and use the approved art for the last three on desktop and mobile', () => {
+    fixture.detectChanges();
+
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    for (const selector of ['.about-puzzle__image', '.about-puzzle-mobile__image']) {
+      const images = compiled.querySelectorAll<SVGImageElement>(selector);
+
+      expect(images).toHaveLength(9);
+
+      for (const [index, image] of images.entries()) {
+        const isOriginal = index < 6;
+
+        expect(image.getAttribute('href')).toBe(
+          isOriginal
+            ? '/images/about/about-cycles-sketch.webp'
+            : '/images/about/about-cycles-sketch-nine.webp',
+        );
+        expect(image.getAttribute('x')).toBe('-16');
+        expect(image.getAttribute('y')).toBe('-16');
+        expect(image.getAttribute('width')).toBe('332');
+        expect(image.getAttribute('height')).toBe(isOriginal ? '232' : '332');
+        expect(image.getAttribute('preserveAspectRatio')).toBe('none');
+      }
+    }
   });
 
   it('should expose the selected excerpt and its internal publication link', () => {
