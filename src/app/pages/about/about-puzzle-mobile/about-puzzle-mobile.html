@@ -44,6 +44,7 @@
 
           <image
             class="about-puzzle-mobile__image"
+            [class.about-puzzle-mobile__image--additional]="cycle.order > 6"
             [class.about-puzzle-mobile__image--active]="selectedCycleId() === cycle.id"
             [attr.clip-path]="'url(#about-puzzle-mobile-piece-' + cycle.order + ')'"
             [attr.href]="

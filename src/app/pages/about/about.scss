@@ -168,7 +168,11 @@
 }
 
 .about-puzzle__image--active {
-  filter: saturate(1.28);
+  filter: none;
+}
+
+.about-puzzle__image--additional.about-puzzle__image--active {
+  filter: saturate(0.78) brightness(0.96);
 }
 
 .about-puzzle__shade {
