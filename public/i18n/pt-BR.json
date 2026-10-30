@@ -348,6 +348,21 @@
       "label": "Buscar nas publicações",
       "placeholder": "Busque por título ou conteúdo..."
     },
+    "filters": {
+      "title": "Filtrar publicações",
+      "category": "Categoria",
+      "subcategory": "Subcategoria",
+      "allCategories": "Todas as categorias",
+      "allSubcategories": "Todas as subcategorias",
+      "chooseCategory": "Escolha uma categoria primeiro",
+      "noSubcategories": "Esta categoria não tem subcategorias",
+      "active": "Filtros ativos",
+      "remove": "Retirar filtro {{ name }}",
+      "clear": "Limpar filtros",
+      "loading": "Carregando categorias...",
+      "error": "Não foi possível carregar as categorias.",
+      "browseCategory": "Ver publicações em {{ name }}"
+    },
     "view": {
       "label": "Modo de leitura",
       "continuous": "Contínua",

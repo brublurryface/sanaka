@@ -4,7 +4,7 @@ import { provideTransloco, TranslocoLoader, TranslocoService } from '@jsverse/tr
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
-import { Post } from './post';
+import { Post, PostCategory } from './post';
 import { Posts } from './posts';
 import { PostsStore } from './posts.store';
 import { NewsletterService } from './newsletter-signup/data-access/newsletter.service';
@@ -45,6 +45,21 @@ class MockTranslocoLoader implements TranslocoLoader {
             label: 'Modo de leitura',
             continuous: 'Contínua',
             paged: 'Por páginas',
+          },
+          filters: {
+            title: 'Filtrar publicações',
+            category: 'Categoria',
+            subcategory: 'Subcategoria',
+            allCategories: 'Todas as categorias',
+            allSubcategories: 'Todas as subcategorias',
+            chooseCategory: 'Escolha uma categoria primeiro',
+            noSubcategories: 'Esta categoria não tem subcategorias',
+            active: 'Filtros ativos',
+            remove: 'Retirar filtro {{ name }}',
+            clear: 'Limpar filtros',
+            loading: 'Carregando categorias...',
+            error: 'Não foi possível carregar as categorias.',
+            browseCategory: 'Ver publicações em {{ name }}',
           },
           list: {
             title: 'Publicações',
@@ -95,6 +110,21 @@ class MockTranslocoLoader implements TranslocoLoader {
             continuous: 'Continuous',
             paged: 'Pages',
           },
+          filters: {
+            title: 'Filter publications',
+            category: 'Category',
+            subcategory: 'Subcategory',
+            allCategories: 'All categories',
+            allSubcategories: 'All subcategories',
+            chooseCategory: 'Choose a category first',
+            noSubcategories: 'This category has no subcategories',
+            active: 'Active filters',
+            remove: 'Remove {{ name }} filter',
+            clear: 'Clear filters',
+            loading: 'Loading categories...',
+            error: 'Categories could not be loaded.',
+            browseCategory: 'Browse publications in {{ name }}',
+          },
           list: {
             title: 'Publications',
           },
@@ -134,6 +164,7 @@ describe('Posts', () => {
       excerpt: 'Notas sobre as formas pelas quais Saṃvit aparece nas escrituras.',
       publishedAt: '2026-08-28',
       category: 'Escrituras',
+      categories: [{ id: 3, name: 'Escrituras', slug: 'escrituras' }],
     },
     {
       id: 2,
@@ -142,6 +173,7 @@ describe('Posts', () => {
       excerpt: 'Reflexões sobre a construção de um espaço digital dedicado a textos e estudos.',
       publishedAt: '2026-08-24',
       category: 'Estudos',
+      categories: [{ id: 4, name: 'Estudos', slug: 'estudos' }],
     },
   ];
 
@@ -162,6 +194,7 @@ describe('Posts', () => {
         excerpt: 'Uma investigação sobre silêncio, espaço e presença.',
         publishedAt: '2026-08-20',
         category: 'Reflexões',
+        categories: [{ id: 5, name: 'Reflexões', slug: 'reflexoes' }],
       },
     ],
     page: 2,
@@ -172,10 +205,19 @@ describe('Posts', () => {
 
   const postsService = {
     getPosts: vi.fn<(query?: PostsQuery) => Observable<PostsPage>>(),
+    getArchiveCategories: vi.fn<() => Observable<readonly PostCategory[]>>(),
   };
+
+  const categories: readonly PostCategory[] = [
+    { id: 41, name: 'Bruna', slug: 'bruna', parentId: 0 },
+    { id: 3, name: 'Catuhsana', slug: 'catuhsana', parentId: 0 },
+    { id: 45, name: 'Pensamentos', slug: 'pensamentos', parentId: 41 },
+    { id: 46, name: 'De Preto', slug: 'de-preto', parentId: 41 },
+  ];
 
   beforeEach(async () => {
     postsService.getPosts.mockReset();
+    postsService.getArchiveCategories.mockReset().mockReturnValue(of(categories));
 
     await TestBed.configureTestingModule({
       imports: [Posts],
@@ -423,5 +465,119 @@ describe('Posts', () => {
 
     expect(fixture.nativeElement.textContent).toContain('Sanctuary publications');
     expect(component.posts().map((post) => post.title)).toEqual(posts.map((post) => post.title));
+  });
+
+  function selectFilter(id: string, slug: string): void {
+    const select = fixture.nativeElement.querySelector(`#${id}`) as HTMLSelectElement;
+    select.value = slug;
+    select.dispatchEvent(new Event('change'));
+    fixture.detectChanges();
+  }
+
+  it('should expose category and dependent subcategory selectors below search', () => {
+    createComponent();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const category = compiled.querySelector<HTMLSelectElement>('#posts-category');
+    const subcategory = compiled.querySelector<HTMLSelectElement>('#posts-subcategory');
+
+    expect(
+      compiled
+        .querySelector('.posts-search')
+        ?.nextElementSibling?.classList.contains('posts-filters'),
+    ).toBe(true);
+    expect(Array.from(category?.options ?? []).map((option) => option.text)).toEqual([
+      'Todas as categorias',
+      'Bruna',
+      'Catuhsana',
+    ]);
+    expect(subcategory?.disabled).toBe(true);
+
+    selectFilter('posts-category', 'bruna');
+    expect(subcategory?.disabled).toBe(false);
+    expect(Array.from(subcategory?.options ?? []).map((option) => option.text)).toEqual([
+      'Todas as subcategorias',
+      'Pensamentos',
+      'De Preto',
+    ]);
+
+    selectFilter('posts-category', 'catuhsana');
+    expect(subcategory?.disabled).toBe(true);
+    expect(component.subcategoryControl.value).toBe('');
+  });
+
+  it('should keep search while filtering and remove a child or its entire branch with the X buttons', async () => {
+    vi.useFakeTimers();
+    createComponent();
+    component.searchControl.setValue('presença');
+    await vi.advanceTimersByTimeAsync(300);
+    selectFilter('posts-category', 'bruna');
+    selectFilter('posts-subcategory', 'pensamentos');
+
+    expect(postsService.getPosts).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 20,
+      search: 'presença',
+      categorySlug: 'pensamentos',
+    });
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelectorAll('.posts-filters__chip')).toHaveLength(2);
+
+    compiled.querySelector<HTMLButtonElement>('[aria-label="Retirar filtro Pensamentos"]')?.click();
+    fixture.detectChanges();
+    expect(postsService.getPosts).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 20,
+      search: 'presença',
+      categorySlug: 'bruna',
+    });
+    expect(compiled.querySelectorAll('.posts-filters__chip')).toHaveLength(1);
+    expect(document.activeElement).toBe(compiled.querySelector('#posts-category'));
+
+    selectFilter('posts-subcategory', 'de-preto');
+    compiled.querySelector<HTMLButtonElement>('[aria-label="Retirar filtro Bruna"]')?.click();
+    fixture.detectChanges();
+    expect(component.categoryControl.value).toBe('');
+    expect(component.subcategoryControl.value).toBe('');
+    expect(compiled.querySelector('.posts-filters__active')).toBeNull();
+    expect(postsService.getPosts).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 20,
+      search: 'presença',
+    });
+  });
+
+  it('should show filters supplied by category links and reset pagination when clearing them', () => {
+    createComponent();
+    const store = TestBed.inject(PostsStore);
+    store.activateRoute('paged', '2', 'de-preto', 'despertar');
+    fixture.detectChanges();
+
+    expect(component.categoryControl.value).toBe('bruna');
+    expect(component.subcategoryControl.value).toBe('de-preto');
+    expect(fixture.nativeElement.querySelectorAll('.posts-filters__chip')).toHaveLength(3);
+    fixture.nativeElement.querySelector('.posts-filters__clear').click();
+    fixture.detectChanges();
+
+    expect(component.currentPage()).toBe(1);
+    expect(component.hasActiveFilters()).toBe(false);
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged'], { replaceUrl: false });
+    expect(postsService.getPosts).toHaveBeenLastCalledWith({ page: 1, perPage: 20, search: '' });
+  });
+
+  it('should let the visitor retry category options after an error', () => {
+    postsService.getArchiveCategories
+      .mockReturnValueOnce(throwError(() => new Error('Unavailable')))
+      .mockReturnValueOnce(of(categories));
+    createComponent();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(compiled.querySelector('.posts-filters__feedback')?.textContent).toContain(
+      'Não foi possível carregar as categorias.',
+    );
+    expect(compiled.querySelector<HTMLSelectElement>('#posts-category')?.disabled).toBe(true);
+
+    compiled.querySelector<HTMLButtonElement>('.posts-filters__feedback button')?.click();
+    fixture.detectChanges();
+    expect(compiled.querySelector<HTMLSelectElement>('#posts-category')?.disabled).toBe(false);
+    expect(compiled.querySelector('.posts-filters__feedback')).toBeNull();
   });
 });

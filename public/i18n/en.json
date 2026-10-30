@@ -348,6 +348,21 @@
       "label": "Search publications",
       "placeholder": "Search by title or content..."
     },
+    "filters": {
+      "title": "Filter publications",
+      "category": "Category",
+      "subcategory": "Subcategory",
+      "allCategories": "All categories",
+      "allSubcategories": "All subcategories",
+      "chooseCategory": "Choose a category first",
+      "noSubcategories": "This category has no subcategories",
+      "active": "Active filters",
+      "remove": "Remove {{ name }} filter",
+      "clear": "Clear filters",
+      "loading": "Loading categories...",
+      "error": "Categories could not be loaded.",
+      "browseCategory": "Browse publications in {{ name }}"
+    },
     "view": {
       "label": "Reading mode",
       "continuous": "Continuous",

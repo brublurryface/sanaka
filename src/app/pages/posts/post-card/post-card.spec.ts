@@ -14,8 +14,8 @@ import { PostCard } from './post-card';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations: Record<string, Translation> = {
-      'pt-BR': {},
-      en: {},
+      'pt-BR': { posts: { filters: { browseCategory: 'Ver publicações em {{ name }}' } } },
+      en: { posts: { filters: { browseCategory: 'Browse publications in {{ name }}' } } },
     };
 
     return of(translations[lang] ?? {});
@@ -34,6 +34,10 @@ describe('PostCard', () => {
     excerpt: 'Uma jornada de presença e renovação.',
     publishedAt: '2026-08-28',
     category: 'Ritual',
+    categories: [
+      { id: 41, name: 'Bruna', slug: 'bruna' },
+      { id: 45, name: 'Ritual', slug: 'ritual' },
+    ],
     coverImageUrl: '/images/home/hero.jpg',
     coverImageAlt: 'Pessoa meditando em silêncio',
   };
@@ -72,7 +76,7 @@ describe('PostCard', () => {
   it('should render the post metadata and content', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.post-card__category')?.textContent?.trim()).toBe('Ritual');
+    expect(compiled.querySelector('.post-card__category')?.textContent).toContain('Ritual');
 
     expect(compiled.querySelector('.post-card__title')?.textContent?.trim()).toBe(
       'Despertando a Saṃvit',
@@ -93,6 +97,17 @@ describe('PostCard', () => {
     const time = compiled.querySelector('time');
 
     expect(time?.getAttribute('datetime')).toBe('2026-08-28');
+  });
+
+  it('should make every category and subcategory beside the date a filter link', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const links = compiled.querySelectorAll<HTMLAnchorElement>('.post-card__category a');
+    expect(Array.from(links).map((link) => link.getAttribute('href'))).toEqual([
+      '/posts?category=bruna',
+      '/posts?category=ritual',
+    ]);
+    expect(links[1].getAttribute('aria-label')).toBe('Ver publicações em Ritual');
+    expect(links[1].target).toBe('');
   });
 
   it('should format the publication date for pt-BR without changing the calendar day', () => {

@@ -469,11 +469,119 @@
   border: 0;
 }
 
+.posts-filters {
+  width: var(--posts-content-width);
+  margin: 0 auto 1.5rem;
+
+  font-family: var(--sanaka-font-body);
+}
+
+.posts-filters__controls {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 1rem;
+}
+
+.posts-filters__field {
+  min-width: 0;
+
+  label {
+    display: block;
+    margin-bottom: 0.65rem;
+
+    color: var(--sanaka-gold-soft);
+    font-size: var(--sanaka-type-editorial-label-size);
+    font-weight: 600;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+  }
+
+  select {
+    width: 100%;
+    min-height: 2.9rem;
+    padding: 0.75rem;
+
+    border: 1px solid rgba(237, 201, 120, 0.28);
+    border-radius: 0;
+    background: rgba(22, 27, 34, 0.92);
+
+    color: var(--sanaka-ivory);
+    color-scheme: dark;
+    font: inherit;
+    font-size: 0.9rem;
+    text-overflow: ellipsis;
+  }
+
+  select:disabled {
+    opacity: 0.55;
+  }
+}
+
+.posts-filters__active {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 0.6rem;
+  margin-top: 1rem;
+}
+
+.posts-filters__chip {
+  display: inline-flex;
+  align-items: center;
+  gap: 0.7rem;
+  min-height: 2.5rem;
+  padding: 0.5rem 0.8rem;
+
+  border: 1px solid rgba(237, 201, 120, 0.38);
+  border-radius: 1.5rem;
+  background: rgba(237, 201, 120, 0.08);
+
+  color: var(--sanaka-gold-soft);
+  font: inherit;
+  font-size: 0.82rem;
+  text-align: left;
+  cursor: pointer;
+}
+
+.posts-filters__clear,
+.posts-filters__feedback button {
+  padding: 0.5rem;
+  border: 0;
+  background: transparent;
+
+  color: var(--sanaka-gold-soft);
+  font: inherit;
+  font-size: 0.85rem;
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+  cursor: pointer;
+}
+
+.posts-filters__field select:focus-visible,
+.posts-filters button:focus-visible {
+  outline: 2px solid var(--sanaka-gold-soft);
+  outline-offset: 3px;
+}
+
+.posts-filters__feedback {
+  margin: 0.8rem 0 0;
+  color: var(--sanaka-ivory-muted);
+  font-size: 0.85rem;
+
+  p {
+    margin: 0;
+  }
+}
+
 /* -----------------------
    MÓVEL
 ------------------------ */
 
 @media (max-width: 700px) {
+  .posts-filters__controls {
+    grid-template-columns: 1fr;
+  }
+
   .posts-header__eyebrow {
     margin-bottom: 0.8rem;
   }

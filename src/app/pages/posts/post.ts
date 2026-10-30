@@ -5,6 +5,7 @@ export interface Post {
   readonly excerpt: string;
   readonly publishedAt: string;
   readonly category: string;
+  readonly categories: readonly PostTaxonomy[];
   readonly coverImageUrl?: string;
   readonly coverImageAlt?: string;
 }
@@ -13,6 +14,10 @@ export interface PostTaxonomy {
   readonly id: number;
   readonly name: string;
   readonly slug: string;
+}
+
+export interface PostCategory extends PostTaxonomy {
+  readonly parentId: number;
 }
 
 export interface PostNavigation {
@@ -30,7 +35,6 @@ export interface CharacterObolo {
 
 export interface PostDetail extends Post {
   readonly contentHtml: string;
-  readonly categories: readonly PostTaxonomy[];
   readonly relatedCategories: readonly PostTaxonomy[];
   readonly exploreCategories: readonly PostTaxonomy[];
   readonly tags: readonly PostTaxonomy[];

@@ -30,6 +30,7 @@
   align-items: center;
   justify-content: space-between;
   gap: 1rem;
+  flex-wrap: wrap;
   margin-bottom: 1rem;
 
   color: var(--sanaka-ivory-muted);
@@ -41,6 +42,22 @@
 
 .post-card__category {
   color: var(--sanaka-gold-soft);
+
+  a {
+    color: inherit;
+    text-decoration: none;
+    text-underline-offset: 0.2em;
+  }
+
+  a:hover,
+  a:focus-visible {
+    text-decoration: underline;
+  }
+
+  a:focus-visible {
+    outline: 1px solid var(--sanaka-gold-soft);
+    outline-offset: 3px;
+  }
 }
 
 .post-card__title {

@@ -1,12 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
-import { Router } from '@angular/router';
-import { catchError, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
+import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
+import { NavigationEnd, Router } from '@angular/router';
+import { catchError, filter, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
-import { Post } from './post';
+import { Post, PostCategory } from './post';
 import { PostsPage, WordPressPostsService } from './data-access/wordpress-posts.service';
 
 export type PostsViewMode = 'continuous' | 'paged';
+
+interface CategoriesState {
+  readonly status: 'loading' | 'success' | 'error';
+  readonly categories: readonly PostCategory[];
+}
 
 interface PostsRequest {
   readonly page: number;
@@ -48,6 +53,7 @@ export class PostsStore {
   private readonly router = inject(Router);
 
   private readonly requests = new Subject<PostsRequest>();
+  private readonly categoryRequests = new Subject<void>();
   private readonly searchTerm = signal('');
   private readonly categorySlug = signal<string | undefined>(undefined);
   private readonly tagSlug = signal<string | undefined>(undefined);
@@ -63,8 +69,61 @@ export class PostsStore {
   };
 
   readonly search = this.searchTerm.asReadonly();
+  readonly selectedCategorySlug = this.categorySlug.asReadonly();
+  readonly selectedTagSlug = this.tagSlug.asReadonly();
   readonly viewMode = signal<PostsViewMode>('continuous');
   readonly currentPage = signal(1);
+
+  private readonly categoriesState = toSignal(
+    this.categoryRequests.pipe(
+      startWith(undefined),
+      switchMap(() =>
+        this.postsService.getArchiveCategories().pipe(
+          map((categories): CategoriesState => ({ status: 'success', categories })),
+          startWith<CategoriesState>({ status: 'loading', categories: [] }),
+          catchError(() => of<CategoriesState>({ status: 'error', categories: [] })),
+        ),
+      ),
+    ),
+    { initialValue: { status: 'loading', categories: [] } as CategoriesState },
+  );
+
+  readonly categories = computed(() => this.categoriesState().categories);
+  readonly isLoadingCategories = computed(() => this.categoriesState().status === 'loading');
+  readonly hasCategoriesError = computed(() => this.categoriesState().status === 'error');
+  readonly rootCategories = computed(() =>
+    this.categories().filter((category) => category.parentId === 0),
+  );
+  readonly activeCategories = computed(() => {
+    const selected = this.categories().find((category) => category.slug === this.categorySlug());
+    if (selected) {
+      return this.categoryLineage(selected);
+    }
+    const slug = this.categorySlug();
+    return slug ? [{ id: 0, name: slug, slug, parentId: 0 }] : [];
+  });
+  readonly selectedRootCategory = computed(() => this.activeCategories()[0]);
+  readonly selectedSubcategory = computed(() =>
+    this.activeCategories().length > 1 ? this.activeCategories().at(-1) : undefined,
+  );
+  readonly subcategories = computed(() => {
+    const root = this.selectedRootCategory();
+    if (!root) {
+      return [];
+    }
+    return this.categories()
+      .filter(
+        (category) => category.parentId > 0 && this.categoryLineage(category)[0]?.id === root.id,
+      )
+      .map((category) => ({
+        ...category,
+        label: this.categoryLineage(category)
+          .slice(1)
+          .map((ancestor) => ancestor.name)
+          .join(' / '),
+      }));
+  });
+  readonly hasActiveFilters = computed(() => Boolean(this.categorySlug() || this.tagSlug()));
 
   private readonly state = toSignal(
     this.requests.pipe(
@@ -116,6 +175,80 @@ export class PostsStore {
   readonly pageNumbers = computed(() =>
     Array.from({ length: this.totalPages() }, (_, index) => index + 1),
   );
+
+  constructor() {
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe((event) => {
+        const path = event.urlAfterRedirects.split(/[?#]/)[0];
+        if (path !== '/posts' && !path.startsWith('/posts/')) {
+          this.searchTerm.set('');
+          this.categorySlug.set(undefined);
+          this.tagSlug.set(undefined);
+          this.currentPage.set(1);
+          this.viewMode.set('continuous');
+          this.routeInitialized = false;
+        }
+      });
+  }
+
+  setCategory(slug: string): void {
+    const categorySlug = this.normalizeTaxonomySlug(slug);
+    if (categorySlug === this.categorySlug()) {
+      return;
+    }
+    this.categorySlug.set(categorySlug);
+    this.refreshFilters();
+  }
+
+  removeCategory(slug: string): void {
+    const categories = this.activeCategories();
+    const index = categories.findIndex((category) => category.slug === slug);
+    if (index >= 0) {
+      this.setCategory(index > 0 ? categories[index - 1].slug : '');
+    }
+  }
+
+  removeTag(): void {
+    if (this.tagSlug()) {
+      this.tagSlug.set(undefined);
+      this.refreshFilters();
+    }
+  }
+
+  clearFilters(): void {
+    if (this.hasActiveFilters()) {
+      this.categorySlug.set(undefined);
+      this.tagSlug.set(undefined);
+      this.refreshFilters();
+    }
+  }
+
+  retryCategories(): void {
+    this.categoryRequests.next();
+  }
+
+  private refreshFilters(): void {
+    this.currentPage.set(1);
+    this.navigateTo(this.viewMode(), 1);
+    this.requests.next(this.createRequest(false));
+  }
+
+  private categoryLineage(category: PostCategory): readonly PostCategory[] {
+    const categories = new Map(this.categories().map((item) => [item.id, item]));
+    const lineage: PostCategory[] = [];
+    const visited = new Set<number>();
+    let current: PostCategory | undefined = category;
+    while (current && !visited.has(current.id)) {
+      visited.add(current.id);
+      lineage.unshift(current);
+      current = categories.get(current.parentId);
+    }
+    return lineage;
+  }
 
   activateRoute(
     view: unknown,
