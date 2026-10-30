@@ -560,7 +560,10 @@ describe('Posts', () => {
 
     expect(component.currentPage()).toBe(1);
     expect(component.hasActiveFilters()).toBe(false);
-    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged'], { replaceUrl: false });
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged'], {
+      replaceUrl: false,
+      scroll: 'manual',
+    });
     expect(postsService.getPosts).toHaveBeenLastCalledWith({ page: 1, perPage: 20, search: '' });
   });
 

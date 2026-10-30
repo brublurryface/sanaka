@@ -1,6 +1,6 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
-import { NavigationEnd, Router } from '@angular/router';
+import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { catchError, filter, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post, PostCategory } from './post';
@@ -233,7 +233,7 @@ export class PostsStore {
 
   private refreshFilters(): void {
     this.currentPage.set(1);
-    this.navigateTo(this.viewMode(), 1);
+    this.navigateTo(this.viewMode(), 1, { scroll: 'manual' });
     this.requests.next(this.createRequest(false));
   }
 
@@ -264,7 +264,7 @@ export class PostsStore {
     const tagSlug = this.normalizeTaxonomySlug(tagValue);
 
     if (mode === 'paged' && pageValue !== null && !hasValidPage) {
-      this.navigateTo('paged', 1, true);
+      this.navigateTo('paged', 1, { replaceUrl: true });
     }
 
     if (
@@ -294,7 +294,7 @@ export class PostsStore {
     this.currentPage.set(1);
 
     if (this.viewMode() === 'paged') {
-      this.navigateTo('paged', 1, true);
+      this.navigateTo('paged', 1, { replaceUrl: true, scroll: 'manual' });
     }
 
     this.requests.next(this.createRequest(false));
@@ -398,7 +398,11 @@ export class PostsStore {
     };
   }
 
-  private navigateTo(mode: PostsViewMode, page: number, replaceUrl = false): void {
+  private navigateTo(
+    mode: PostsViewMode,
+    page: number,
+    options: Pick<NavigationExtras, 'replaceUrl' | 'scroll'> = {},
+  ): void {
     const commands =
       mode === 'continuous'
         ? ['/posts']
@@ -411,12 +415,11 @@ export class PostsStore {
       tag: this.tagSlug(),
     };
 
-    void this.router.navigate(
-      commands,
-      this.categorySlug() || this.tagSlug()
-        ? { replaceUrl, queryParams: taxonomyQueryParams }
-        : { replaceUrl },
-    );
+    void this.router.navigate(commands, {
+      replaceUrl: false,
+      ...options,
+      ...(this.categorySlug() || this.tagSlug() ? { queryParams: taxonomyQueryParams } : {}),
+    });
   }
 
   private normalizeTaxonomySlug(value: string | null): string | undefined {

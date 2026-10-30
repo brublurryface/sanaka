@@ -62,6 +62,41 @@ describe('PostsStore visit filters', () => {
     });
   });
 
+  it('should preserve scroll for category selection, X, clearing and search while retaining normal page navigation', () => {
+    store.activateRoute('continuous', null);
+    store.setCategory('pensamentos');
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts'], {
+      replaceUrl: false,
+      scroll: 'manual',
+      queryParams: { category: 'pensamentos', tag: undefined },
+    });
+
+    store.removeCategory('pensamentos');
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts'], {
+      replaceUrl: false,
+      scroll: 'manual',
+      queryParams: { category: 'bruna', tag: undefined },
+    });
+
+    store.clearFilters();
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts'], {
+      replaceUrl: false,
+      scroll: 'manual',
+    });
+
+    store.setViewMode('paged');
+    store.setSearch('presença');
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged'], {
+      replaceUrl: true,
+      scroll: 'manual',
+    });
+
+    store.goToPage(2);
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged', 2], {
+      replaceUrl: false,
+    });
+  });
+
   it('should clear the visit when leaving Posts even if its route injector is reused', () => {
     store.activateRoute('paged', '2', 'pensamentos', 'identidade');
     store.setSearch('presença');
