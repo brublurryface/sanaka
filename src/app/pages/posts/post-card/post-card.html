@@ -21,8 +21,8 @@
       <span class="post-card__category">
         @for (category of post().categories; track category.id; let last = $last) {
           <a
-            routerLink="/posts"
-            [queryParams]="{ category: category.slug }"
+            [href]="categoryHref(category.slug)"
+            (click)="selectCategory($event, category.slug)"
             [attr.aria-label]="'posts.filters.browseCategory' | transloco: { name: category.name }"
             >{{ category.name }}</a
           >

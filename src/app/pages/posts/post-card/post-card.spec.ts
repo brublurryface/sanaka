@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { Router, provideRouter } from '@angular/router';
 import {
   Translation,
   TranslocoLoader,
@@ -108,6 +109,47 @@ describe('PostCard', () => {
     ]);
     expect(links[1].getAttribute('aria-label')).toBe('Ver publicações em Ritual');
     expect(links[1].target).toBe('');
+  });
+
+  it('should apply category and subcategory links without resetting scroll', () => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const links = compiled.querySelectorAll<HTMLAnchorElement>('.post-card__category a');
+
+    for (const [index, slug] of ['bruna', 'ritual'].entries()) {
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+      links[index].dispatchEvent(click);
+
+      expect(click.defaultPrevented).toBe(true);
+      expect(navigate).toHaveBeenNthCalledWith(index + 1, ['/posts'], {
+        queryParams: { category: slug },
+        scroll: 'manual',
+      });
+    }
+
+    expect(navigate).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    { ctrlKey: true },
+    { metaKey: true },
+    { shiftKey: true },
+    { altKey: true },
+    { button: 1 },
+    { button: 2 },
+  ])('should preserve native category link behavior for %j', (options) => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const link = compiled.querySelector<HTMLAnchorElement>('.post-card__category a')!;
+    const click = new MouseEvent('click', { ...options, bubbles: true, cancelable: true });
+
+    fixture.debugElement
+      .query(By.css('.post-card__category a'))
+      .triggerEventHandler('click', click);
+
+    expect(click.defaultPrevented).toBe(false);
+    expect(navigate).not.toHaveBeenCalled();
+    expect(link.getAttribute('href')).toBe('/posts?category=bruna');
   });
 
   it('should format the publication date for pt-BR without changing the calendar day', () => {
