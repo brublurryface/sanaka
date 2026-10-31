@@ -19,7 +19,17 @@
   <div class="post-card__content">
     <div class="post-card__meta">
       <span class="post-card__category">
-        {{ post().category }}
+        @for (category of post().categories; track category.id; let last = $last) {
+          <a
+            [href]="categoryHref(category.slug)"
+            (click)="selectCategory($event, category.slug)"
+            [attr.aria-label]="'posts.filters.browseCategory' | transloco: { name: category.name }"
+            >{{ category.name }}</a
+          >
+          @if (!last) {
+            <span aria-hidden="true"> · </span>
+          }
+        }
       </span>
 
       <time [attr.datetime]="post().publishedAt">

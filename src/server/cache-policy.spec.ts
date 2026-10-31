@@ -13,7 +13,7 @@ describe('server cache policy', () => {
   });
 
   it.each([
-    '/browser/images/maya/maya-sanaka.png',
+    '/browser/images/samvit/samvit-sanaka.png',
     '/browser/i18n/pt-BR.json',
     '/browser/favicon.ico',
     '/browser/main.js',

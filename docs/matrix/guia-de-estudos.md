@@ -92,7 +92,7 @@ Uma função pura não é inferior a classes. A composição se justifica pela p
 de trocar políticas. A primeira regra que decide encerra a rodada: a ordem é parte do
 contrato. As regras clássicas precisam continuar passando nos testes após a extensão.
 
-### Padaria de Māyā
+### Padaria de Saṃvit
 
 1. **Consultar cardápio:** consulte e use **Receber resposta**. A espera é manual e explicada.
 2. **Criar um pedido:** envie produto/quantidade e receba a resposta `201`.

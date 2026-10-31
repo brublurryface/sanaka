@@ -1,5 +1,5 @@
 import { TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { provideRouter, Router } from '@angular/router';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
 import { of } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
@@ -20,7 +20,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             home: 'Início',
             posts: 'Posts',
             matrix: 'Matrix',
-            maya: 'Māyā',
+            samvit: 'Saṃvit',
             about: 'Sobre',
           },
           language: {
@@ -44,7 +44,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             home: 'Home',
             posts: 'Posts',
             matrix: 'Matrix',
-            maya: 'Māyā',
+            samvit: 'Saṃvit',
             about: 'About',
           },
           language: {
@@ -139,8 +139,16 @@ describe('App', () => {
     expect(links.map((link) => link.getAttribute('href'))).toContain('/');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/matrix');
-    expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
+    expect(links.map((link) => link.getAttribute('href'))).toContain('/samvit');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/sobre');
+  });
+
+  it('should send visitors from the former companion address to Samvit', async () => {
+    const router = TestBed.inject(Router);
+
+    await router.navigateByUrl('/maya');
+
+    expect(router.url).toBe('/samvit');
   });
 
   it('should link the footer to About, Contact, Sanakaverse and the internal newsletter anchor', () => {

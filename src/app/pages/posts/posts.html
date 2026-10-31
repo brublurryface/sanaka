@@ -7,7 +7,7 @@
       class="posts-header__image sanaka-atmosphere-hero__image"
       src="/images/posts/posts-atmosphere-desktop.webp"
       width="1942"
-      height="809"
+      height="810"
       fetchpriority="high"
       decoding="async"
       [alt]="'posts.header.imageAlt' | transloco"
@@ -58,6 +58,80 @@
       ></button>
     </div>
   </div>
+
+  <section class="posts-filters" [attr.aria-label]="'posts.filters.title' | transloco">
+    <div class="posts-filters__controls">
+      <div class="posts-filters__field">
+        <label for="posts-category">{{ 'posts.filters.category' | transloco }}</label>
+        <select #categoryInput id="posts-category" [formControl]="categoryControl">
+          <option value="">{{ 'posts.filters.allCategories' | transloco }}</option>
+          @for (category of rootCategories(); track category.id) {
+            <option [value]="category.slug">{{ category.name }}</option>
+          }
+        </select>
+      </div>
+
+      <div class="posts-filters__field">
+        <label for="posts-subcategory">{{ 'posts.filters.subcategory' | transloco }}</label>
+        <select id="posts-subcategory" [formControl]="subcategoryControl">
+          <option value="">
+            {{
+              (!selectedRootCategory()
+                ? 'posts.filters.chooseCategory'
+                : subcategories().length === 0
+                  ? 'posts.filters.noSubcategories'
+                  : 'posts.filters.allSubcategories'
+              ) | transloco
+            }}
+          </option>
+          @for (category of subcategories(); track category.id) {
+            <option [value]="category.slug">{{ category.label }}</option>
+          }
+        </select>
+      </div>
+    </div>
+
+    @if (isLoadingCategories()) {
+      <p class="posts-filters__feedback" role="status">{{ 'posts.filters.loading' | transloco }}</p>
+    } @else if (hasCategoriesError()) {
+      <div class="posts-filters__feedback" role="alert">
+        <p>{{ 'posts.filters.error' | transloco }}</p>
+        <button type="button" (click)="retryCategories()">
+          {{ 'common.actions.retry' | transloco }}
+        </button>
+      </div>
+    }
+
+    @if (hasActiveFilters()) {
+      <div class="posts-filters__active" [attr.aria-label]="'posts.filters.active' | transloco">
+        @for (category of activeCategories(); track category.slug) {
+          <button
+            type="button"
+            class="posts-filters__chip"
+            [attr.aria-label]="'posts.filters.remove' | transloco: { name: category.name }"
+            (click)="removeCategory(category.slug, categoryInput)"
+          >
+            <span>{{ category.name }}</span>
+            <span aria-hidden="true">×</span>
+          </button>
+        }
+        @if (selectedTagSlug(); as tag) {
+          <button
+            type="button"
+            class="posts-filters__chip"
+            [attr.aria-label]="'posts.filters.remove' | transloco: { name: tag }"
+            (click)="removeTag(categoryInput)"
+          >
+            <span>#{{ tag }}</span>
+            <span aria-hidden="true">×</span>
+          </button>
+        }
+        <button type="button" class="posts-filters__clear" (click)="clearFilters(categoryInput)">
+          {{ 'posts.filters.clear' | transloco }}
+        </button>
+      </div>
+    }
+  </section>
 
   <div class="posts-toolbar">
     <fieldset class="posts-view">

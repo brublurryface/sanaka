@@ -93,19 +93,13 @@ describe('Matrix guided journeys in the Angular DOM', () => {
       expect((root.querySelector('.study-technical') as HTMLDetailsElement).open).toBe(false);
       for (const details of root.querySelectorAll<HTMLDetailsElement>('.study-reference'))
         expect(details.open).toBe(false);
-      if (id !== 'padaria') {
-        expect(root.querySelector('img')!.getAttribute('src')).toBe(
-          `/images/matrix/${id}/${id}-atmosphere-desktop.webp`,
-        );
-        expect(
-          existsSync(
-            join(process.cwd(), `public/images/matrix/${id}/${id}-atmosphere-desktop.webp`),
-          ),
-        ).toBe(true);
-      } else {
-        expect(root.querySelector('.study-hero--neutral')).not.toBeNull();
-        expect(root.querySelector('img')).toBeNull();
-      }
+      expect(root.querySelector('img')!.getAttribute('src')).toBe(
+        `/images/matrix/${id}/${id}-atmosphere-desktop.webp`,
+      );
+      expect(
+        existsSync(join(process.cwd(), `public/images/matrix/${id}/${id}-atmosphere-desktop.webp`)),
+      ).toBe(true);
+      expect(root.querySelector('.study-hero--neutral')).toBeNull();
 
       // A biblioteca continua disponível, mas não ocupa o primeiro contato.
       open(root, '#study-code .study-reference');
@@ -204,7 +198,7 @@ describe('Matrix guided journeys in the Angular DOM', () => {
     expect(button(root, 'Continuar: Organizar a caixa →').disabled).toBe(true);
     expect(root.querySelector('#obolo-name')).toBeNull();
     click(root, 'Consultar posição', detect);
-    expect(root.querySelector('.study-feedback')!.textContent).toContain('maya');
+    expect(root.querySelector('.study-feedback')!.textContent).toContain('samvit');
     expect(fixture.componentInstance.stepSource()!.text).toContain('readObolo');
     click(root, 'Continuar: Organizar a caixa →', detect);
     await fixture.whenStable();
@@ -218,7 +212,7 @@ describe('Matrix guided journeys in the Angular DOM', () => {
     expect(button(root, 'Continuar: Contar por nome →').disabled).toBe(true);
     while (fixture.componentInstance.history.canGoForward())
       click(root, 'Examinar próximo óbolo →', detect);
-    expect(fixture.componentInstance.history.state().duplicates).toEqual(['maya', 'mors']);
+    expect(fixture.componentInstance.history.state().duplicates).toEqual(['mors', 'samvit']);
     open(root, '.study-technical');
     expect(root.querySelector('.study-technical .code-window__snippet')!.textContent).toContain(
       'seen.has',

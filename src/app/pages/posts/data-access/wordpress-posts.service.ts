@@ -6,7 +6,14 @@ import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
-import { CharacterObolo, Post, PostDetail, PostNavigation, PostTaxonomy } from '../post';
+import {
+  CharacterObolo,
+  Post,
+  PostCategory,
+  PostDetail,
+  PostNavigation,
+  PostTaxonomy,
+} from '../post';
 
 export { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 
@@ -146,6 +153,35 @@ export class WordPressPostsService {
           map(({ response, categories }) => this.mapPostsPage(response, resolvedQuery, categories)),
         ),
       ),
+      timeout({ first: this.requestTimeoutMs }),
+    );
+  }
+
+  getArchiveCategories(): Observable<readonly PostCategory[]> {
+    return this.categories$.pipe(
+      map((categories) => {
+        const excludedIds = new Set([
+          ...this.contentPolicy.excludedCategoryIds,
+          this.contentPolicy.sanakaverseCategoryId,
+          ...categories
+            .filter((category) => this.isArchiveExcludedCategory(category))
+            .map((category) => category.id),
+        ]);
+
+        let excludedCount: number;
+        do {
+          excludedCount = excludedIds.size;
+          for (const category of categories) {
+            if (excludedIds.has(category.parent)) {
+              excludedIds.add(category.id);
+            }
+          }
+        } while (excludedIds.size !== excludedCount);
+
+        return categories
+          .filter((category) => !excludedIds.has(category.id))
+          .map((category) => ({ ...this.toTaxonomy(category), parentId: category.parent }));
+      }),
       timeout({ first: this.requestTimeoutMs }),
     );
   }
@@ -345,15 +381,16 @@ export class WordPressPostsService {
     coverImage?: WordPressMedia,
     options: { readonly detail: boolean } = { detail: false },
   ): Post {
+    const mappedCategories = this.mapTaxonomies(post.categories, categories);
+
     return {
       id: post.id,
       slug: post.slug,
       title: this.wordpressText.toText(post.title.rendered),
       excerpt: this.wordpressText.toText(post.excerpt.rendered),
       publishedAt: post.date.slice(0, 10),
-      category: this.mapTaxonomies(post.categories, categories)
-        .map((item) => item.name)
-        .join(' · '),
+      category: mappedCategories.map((item) => item.name).join(' · '),
+      categories: mappedCategories,
       coverImageUrl:
         this.getCoverImageUrl(coverImage, options.detail) ??
         (options.detail ? this.defaultCoverImageUrl : undefined),

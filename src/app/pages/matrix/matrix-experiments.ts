@@ -80,7 +80,7 @@ export const MATRIX_EXPERIMENTS: readonly MatrixExperiment[] = [
     translationKey: 'matrix.studies.padaria',
     status: 'available',
     route: '/matrix/padaria',
-    character: 'Māyā',
+    character: 'Saṃvit',
     concepts: ['HTTP', 'API', 'BFF', 'idempotency'],
     difficulty: 'intermediate',
     prerequisites: ['entregas'],

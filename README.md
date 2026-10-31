@@ -1,8 +1,8 @@
 <div align="center">
   <img
-    src="./docs/assets/samvit-bhu-readme.webp"
+    src="./public/images/samvit/presences/samvit-with-bhu-still.png"
     width="300"
-    alt="Saṃvit acolhendo Bhu, personagens do projeto Sanaka"
+    alt="Saṃvit acolhendo Bhū, personagens do projeto Sanaka"
   />
 
 # Sanaka
@@ -52,7 +52,7 @@ Essa separação permite evoluir a interface sem perder o histórico já publica
 - leitura paginada com URLs navegáveis;
 - capas, categorias, títulos, resumos e datas vindos do WordPress;
 - estados visuais de carregamento, erro, nova tentativa e ausência de resultados;
-- carregamento tardio das rotas de publicações e de Māyā;
+- carregamento tardio das rotas de publicações e de Saṃvit;
 - Matrix Online com demonstrações visuais e interativas de conceitos do Angular;
 - portal REST interativo com busca de imagens do universo no acervo da NASA;
 - renderização híbrida, combinando prerenderização e execução no navegador;
@@ -79,7 +79,7 @@ Quando uma publicação aparece na tela, ela já atravessou algumas camadas. Cad
 
 #### Portas abertas somente quando visitadas — Angular standalone e lazy loading
 
-Os componentes são standalone e as áreas de publicações, Matrix Online e Māyā usam imports dinâmicos. Com isso, o código dessas rotas fica em chunks separados e só é baixado quando a pessoa navega até elas, reduzindo o trabalho necessário no carregamento inicial.
+Os componentes são standalone e as áreas de publicações, Matrix Online e Saṃvit usam imports dinâmicos. Com isso, o código dessas rotas fica em chunks separados e só é baixado quando a pessoa navega até elas, reduzindo o trabalho necessário no carregamento inicial.
 
 #### Pulso e corrente — Signals e RxJS
 
@@ -110,7 +110,7 @@ Os textos da interface usam Transloco e podem ser alternados entre português e 
 | `/matrix`            | Catálogo dos experimentos interativos da Matrix Online |
 | `/matrix/components` | Experimento de comunicação entre componentes Angular   |
 | `/matrix/rest-api`   | Experimento visual do ciclo de uma requisição REST     |
-| `/maya`              | Espaço reservado para a evolução de Māyā               |
+| `/samvit`            | Espaço reservado para a evolução de Saṃvit             |
 
 ### Ferramentas do santuário
 
@@ -170,7 +170,7 @@ O repositório inclui uma auditoria reproduzível do conteúdo público do WordP
 - definir a taxonomia que distribuirá conteúdos entre diferentes experiências editoriais;
 - criar a experiência editorial de leitura de cada publicação;
 - avaliar uma camada de backend entre o Angular e o WordPress;
-- desenvolver Māyā como companheira com estado, memória e permissões controladas;
+- desenvolver Saṃvit como companheira com estado, memória e permissões controladas;
 - ampliar a **Matrix Online** com experimentos sobre Signals, Observables, ciclo de vida e lazy loading;
 - investigar separadamente personagens, sliders e mídias legadas do antigo site.
 
@@ -204,7 +204,7 @@ This separation makes it possible to evolve the interface without losing the pub
 - paginated reading with navigable URLs;
 - covers, categories, titles, excerpts, and dates supplied by WordPress;
 - loading, error, retry, and empty states;
-- lazy-loaded publication and Māyā routes;
+- lazy-loaded publication and Saṃvit routes;
 - Matrix Online with visual and interactive Angular concept demonstrations;
 - interactive REST portal powered by images of the universe from NASA's collection;
 - hybrid rendering combining prerendering and client-side execution;
@@ -231,7 +231,7 @@ By the time a publication reaches the screen, it has already crossed several lay
 
 #### Doors opened only when visited — standalone Angular and lazy loading
 
-The project uses standalone components, while the publication, Matrix Online, and Māyā areas use dynamic imports. Their code is emitted into separate chunks and downloaded only when someone navigates to the corresponding route, reducing the work required during the initial load.
+The project uses standalone components, while the publication, Matrix Online, and Saṃvit areas use dynamic imports. Their code is emitted into separate chunks and downloaded only when someone navigates to the corresponding route, reducing the work required during the initial load.
 
 #### Pulse and current — Signals and RxJS
 
@@ -262,7 +262,7 @@ Interface text is managed with Transloco and can be switched between Portuguese 
 | `/matrix`            | Catalog of Matrix Online interactive experiments   |
 | `/matrix/components` | Angular component communication experiment         |
 | `/matrix/rest-api`   | Visual experiment showing a REST request lifecycle |
-| `/maya`              | Space reserved for Māyā's evolution                |
+| `/samvit`            | Space reserved for Saṃvit's evolution              |
 
 ### Tools behind the sanctuary
 
@@ -322,7 +322,7 @@ The repository includes a reproducible audit of the public WordPress content. It
 - define the taxonomy used to distribute content across different editorial experiences;
 - build the editorial reading experience for individual publications;
 - evaluate a backend layer between Angular and WordPress;
-- develop Māyā as a companion with state, memory, and controlled permissions;
+- develop Saṃvit as a companion with state, memory, and controlled permissions;
 - expand **Matrix Online** with experiments about Signals, Observables, lifecycle, and lazy loading;
 - investigate legacy characters, sliders, and media separately.
 

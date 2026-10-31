@@ -2,7 +2,7 @@ import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
 
-import { PostDetail } from '../post';
+import { PostCategory, PostDetail } from '../post';
 import { PostsPage, WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
 
 describe('WordPressPostsService', () => {
@@ -29,6 +29,29 @@ describe('WordPressPostsService', () => {
 
   afterEach(() => {
     httpTesting.verify();
+  });
+
+  it('should expose decoded archive category hierarchy and omit excluded branches', () => {
+    let result: readonly PostCategory[] | undefined;
+    service.getArchiveCategories().subscribe((categories) => {
+      result = categories;
+    });
+    const request = httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`);
+    request.flush([
+      { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
+      { id: 45, name: 'Pensamentos &amp; Ensaios', slug: 'pensamentos', parent: 41 },
+      { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
+      { id: 109, name: 'Privado', slug: 'privado', parent: 43 },
+      { id: 111, name: 'Volume', slug: 'volume', parent: 110 },
+      { id: 110, name: 'Coleção', slug: 'colecao', parent: 108 },
+      { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+    ]);
+    expect(result).toEqual([
+      { id: 41, name: 'Bruna', slug: 'bruna', parentId: 0 },
+      { id: 45, name: 'Pensamentos & Ensaios', slug: 'pensamentos', parentId: 41 },
+    ]);
+    service.getArchiveCategories().subscribe((categories) => expect(categories).toEqual(result));
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/categories`);
   });
 
   it('should load one page and expose WordPress pagination metadata', () => {
@@ -114,6 +137,10 @@ describe('WordPressPostsService', () => {
           excerpt: 'Primeiro trecho. Segundo trecho…',
           publishedAt: '2023-06-20',
           category: 'Bruna · Pensamentos & Ensaios',
+          categories: [
+            { id: 41, name: 'Bruna', slug: 'bruna' },
+            { id: 45, name: 'Pensamentos & Ensaios', slug: 'pensamentos' },
+          ],
           coverImageUrl: 'https://example.com/cover-768.jpg',
           coverImageAlt: 'Capa do post',
         },
@@ -175,6 +202,7 @@ describe('WordPressPostsService', () => {
           excerpt: 'Resumo.',
           publishedAt: '2026-09-02',
           category: '',
+          categories: [],
           coverImageUrl: undefined,
           coverImageAlt: undefined,
         },
@@ -321,7 +349,7 @@ describe('WordPressPostsService', () => {
             {
               id: 90,
               source_url: 'https://example.com/voce.jpg',
-              alt_text: 'Maya no santuário',
+              alt_text: 'Samvit no santuário',
             },
           ],
         },

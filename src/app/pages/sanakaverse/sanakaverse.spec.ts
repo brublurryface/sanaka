@@ -10,10 +10,10 @@ import { SanakaverseBook } from './sanakaverse-book';
 const books: readonly SanakaverseBook[] = [
   {
     id: 1,
-    slug: 'maya',
-    title: 'Māyā',
-    coverImageUrl: 'https://example.com/maya.webp',
-    coverImageAlt: 'Maya diante de um portal',
+    slug: 'samvit',
+    title: 'Saṃvit',
+    coverImageUrl: 'https://example.com/samvit.webp',
+    coverImageAlt: 'Samvit diante de um portal',
   },
   {
     id: 2,
@@ -46,7 +46,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Sanakaverse',
           title: { line1: 'Biblioteca', line2: 'entre mundos' },
           intro: 'Livros flutuam onde histórias encontram passagem.',
-          imageAlt: 'Mors writes while Māyā watches.',
+          imageAlt: 'Mors writes while Saṃvit watches.',
         },
         collection: {
           eyebrow: 'Volumes em órbita',
@@ -116,12 +116,12 @@ describe('Sanakaverse', () => {
     expect(compiled.querySelectorAll('.sanakaverse-hero h1 span')).toHaveLength(2);
     expect(renderedBooks).toHaveLength(4);
     expect(images).toHaveLength(3);
-    expect(images[0].getAttribute('src')).toBe('https://example.com/maya.webp');
-    expect(images[0].getAttribute('alt')).toBe('Maya diante de um portal');
+    expect(images[0].getAttribute('src')).toBe('https://example.com/samvit.webp');
+    expect(images[0].getAttribute('alt')).toBe('Samvit diante de um portal');
     expect(images[0].getAttribute('width')).toBe('1200');
     expect(images[0].getAttribute('height')).toBe('1200');
     expect(compiled.querySelectorAll('.sanakaverse-book__placeholder')).toHaveLength(1);
-    expect(links[0].getAttribute('href')).toBe('/posts/maya');
+    expect(links[0].getAttribute('href')).toBe('/posts/samvit');
     expect(links[0].target).toBe('_blank');
     expect(links[0].rel).toBe('noopener');
   });

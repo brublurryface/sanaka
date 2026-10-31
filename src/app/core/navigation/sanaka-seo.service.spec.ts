@@ -51,14 +51,14 @@ describe('SanakaSeoService', () => {
       language: 'en',
       type: 'article',
       imageUrl: 'https://images.example/voce.webp',
-      imageAlt: 'Māyā diante de um livro',
+      imageAlt: 'Saṃvit diante de um livro',
       publishedAt: '2026-09-22',
     });
 
     expect(document.documentElement.lang).toBe('en');
     expect(meta.getTag("property='og:type'")?.content).toBe('article');
     expect(meta.getTag("property='og:image'")?.content).toBe('https://images.example/voce.webp');
-    expect(meta.getTag("property='og:image:alt'")?.content).toBe('Māyā diante de um livro');
+    expect(meta.getTag("property='og:image:alt'")?.content).toBe('Saṃvit diante de um livro');
     expect(meta.getTag("property='article:published_time'")?.content).toBe('2026-09-22');
 
     service.applyPage({

@@ -18,7 +18,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             eyebrow: 'Interactive laboratory',
             title: { line1: 'Matrix', line2: 'on-line' },
             intro: 'Choose an experiment.',
-            imageAlt: 'Māyā in the Matrix laboratory.',
+            imageAlt: 'Saṃvit in the Matrix laboratory.',
           },
           list: { eyebrow: 'Open circuits', title: 'Experiments', intro: 'Choose one.' },
           available: {
@@ -54,7 +54,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           obolos: { title: 'Mors’s obols', description: 'An inventory.' },
           entregas: { title: 'Ākāśa’s deliveries', description: 'A queue.' },
           jogo: { title: 'Kālikā’s game', description: 'Rules.' },
-          padaria: { title: 'Māyā’s bakery', description: 'Requests.' },
+          padaria: { title: 'Saṃvit’s bakery', description: 'Requests.' },
         },
       },
     });
