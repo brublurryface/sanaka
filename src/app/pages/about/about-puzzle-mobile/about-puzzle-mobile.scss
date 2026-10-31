@@ -72,11 +72,15 @@
   }
 
   .about-puzzle-mobile__image {
-    filter: saturate(0.78) brightness(0.82);
+    filter: saturate(0.35) brightness(0.78);
   }
 
   .about-puzzle-mobile__image--active {
-    filter: saturate(1.2) brightness(1);
+    filter: none;
+  }
+
+  .about-puzzle-mobile__image--additional.about-puzzle-mobile__image--active {
+    filter: saturate(0.78) brightness(0.96);
   }
 
   .about-puzzle-mobile__outline {

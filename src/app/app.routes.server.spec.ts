@@ -12,7 +12,7 @@ describe('serverRoutes', () => {
 
   it.each([
     '',
-    'maya',
+    'samvit',
     'matrix',
     'matrix/components',
     'matrix/rest-api',
@@ -30,5 +30,12 @@ describe('serverRoutes', () => {
     const wildcardRoute = serverRoutes.find((route) => route.path === '**');
 
     expect(wildcardRoute).toMatchObject({ renderMode: RenderMode.Server, status: 404 });
+  });
+
+  it('should keep the former companion route available for a permanent redirect', () => {
+    expect(serverRoutes.find((route) => route.path === 'maya')).toMatchObject({
+      renderMode: RenderMode.Server,
+      status: 301,
+    });
   });
 });

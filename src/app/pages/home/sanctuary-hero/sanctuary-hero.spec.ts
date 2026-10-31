@@ -68,16 +68,16 @@ describe('SanctuaryHero', () => {
     const element = fixture.nativeElement as HTMLElement;
     const links = Array.from(element.querySelectorAll('a'));
 
-    expect(links.map((link) => link.getAttribute('href'))).toContain('/maya');
+    expect(links.map((link) => link.getAttribute('href'))).toContain('/samvit');
     expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
   });
 
-  it('should contain the scroll link and Maya image alt text', () => {
+  it('should contain the scroll link and Samvit image alt text', () => {
     const fixture = TestBed.createComponent(SanctuaryHero);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
 
     expect(element.querySelector('a[href="#sanctuary-paths"]')).toBeTruthy();
-    expect(element.querySelector('img')?.getAttribute('alt')).toBe('Māyā');
+    expect(element.querySelector('img')?.getAttribute('alt')).toBe('Saṃvit');
   });
 });

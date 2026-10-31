@@ -17,7 +17,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Contato',
           title: { line1: 'Entre vozes,', line2: 'presenças e caminhos' },
           intro: 'Sanaka também se abre ao diálogo.',
-          imageAlt: 'Māyā e Sarama observam uma nuvem de vozes.',
+          imageAlt: 'Saṃvit e Sarama observam uma nuvem de vozes.',
         },
         contentLabel: 'Redes e formulário de contato',
         social: {
@@ -92,7 +92,7 @@ describe('Contact', () => {
     const socialLinks = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('.contact-social'));
 
     expect(image?.getAttribute('src')).toBe('/images/contact/contact-atmosphere-desktop.webp');
-    expect(image?.getAttribute('width')).toBe('1942');
+    expect(image?.getAttribute('width')).toBe('1945');
     expect(socialLinks.map((link) => link.getAttribute('href'))).toEqual([
       'https://www.instagram.com/omsanaka/',
       'https://br.linkedin.com/in/brublurryface',

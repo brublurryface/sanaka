@@ -26,8 +26,13 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Client,
   },
   {
-    path: 'maya',
+    path: 'samvit',
     renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'maya',
+    renderMode: RenderMode.Server,
+    status: 301,
   },
   {
     path: 'matrix',

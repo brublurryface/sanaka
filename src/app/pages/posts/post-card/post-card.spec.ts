@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
-import { provideRouter } from '@angular/router';
+import { By } from '@angular/platform-browser';
+import { Router, provideRouter } from '@angular/router';
 import {
   Translation,
   TranslocoLoader,
@@ -14,8 +15,8 @@ import { PostCard } from './post-card';
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations: Record<string, Translation> = {
-      'pt-BR': {},
-      en: {},
+      'pt-BR': { posts: { filters: { browseCategory: 'Ver publicações em {{ name }}' } } },
+      en: { posts: { filters: { browseCategory: 'Browse publications in {{ name }}' } } },
     };
 
     return of(translations[lang] ?? {});
@@ -29,11 +30,15 @@ describe('PostCard', () => {
 
   const post: Post = {
     id: 1,
-    slug: 'despertando-a-maya',
-    title: 'Despertando a Māyā',
+    slug: 'despertando-a-samvit',
+    title: 'Despertando a Saṃvit',
     excerpt: 'Uma jornada de presença e renovação.',
     publishedAt: '2026-08-28',
     category: 'Ritual',
+    categories: [
+      { id: 41, name: 'Bruna', slug: 'bruna' },
+      { id: 45, name: 'Ritual', slug: 'ritual' },
+    ],
     coverImageUrl: '/images/home/hero.jpg',
     coverImageAlt: 'Pessoa meditando em silêncio',
   };
@@ -72,17 +77,17 @@ describe('PostCard', () => {
   it('should render the post metadata and content', () => {
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.post-card__category')?.textContent?.trim()).toBe('Ritual');
+    expect(compiled.querySelector('.post-card__category')?.textContent).toContain('Ritual');
 
     expect(compiled.querySelector('.post-card__title')?.textContent?.trim()).toBe(
-      'Despertando a Māyā',
+      'Despertando a Saṃvit',
     );
 
     expect(compiled.querySelector('.post-card__excerpt')?.textContent?.trim()).toBe(
       'Uma jornada de presença e renovação.',
     );
     expect(compiled.querySelector('.post-card__title a')?.getAttribute('href')).toBe(
-      '/posts/despertando-a-maya',
+      '/posts/despertando-a-samvit',
     );
     expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.target).toBe('_blank');
     expect(compiled.querySelector<HTMLAnchorElement>('.post-card__title a')?.rel).toBe('noopener');
@@ -93,6 +98,58 @@ describe('PostCard', () => {
     const time = compiled.querySelector('time');
 
     expect(time?.getAttribute('datetime')).toBe('2026-08-28');
+  });
+
+  it('should make every category and subcategory beside the date a filter link', () => {
+    const compiled = fixture.nativeElement as HTMLElement;
+    const links = compiled.querySelectorAll<HTMLAnchorElement>('.post-card__category a');
+    expect(Array.from(links).map((link) => link.getAttribute('href'))).toEqual([
+      '/posts?category=bruna',
+      '/posts?category=ritual',
+    ]);
+    expect(links[1].getAttribute('aria-label')).toBe('Ver publicações em Ritual');
+    expect(links[1].target).toBe('');
+  });
+
+  it('should apply category and subcategory links without resetting scroll', () => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const links = compiled.querySelectorAll<HTMLAnchorElement>('.post-card__category a');
+
+    for (const [index, slug] of ['bruna', 'ritual'].entries()) {
+      const click = new MouseEvent('click', { bubbles: true, cancelable: true });
+      links[index].dispatchEvent(click);
+
+      expect(click.defaultPrevented).toBe(true);
+      expect(navigate).toHaveBeenNthCalledWith(index + 1, ['/posts'], {
+        queryParams: { category: slug },
+        scroll: 'manual',
+      });
+    }
+
+    expect(navigate).toHaveBeenCalledTimes(2);
+  });
+
+  it.each([
+    { ctrlKey: true },
+    { metaKey: true },
+    { shiftKey: true },
+    { altKey: true },
+    { button: 1 },
+    { button: 2 },
+  ])('should preserve native category link behavior for %j', (options) => {
+    const navigate = vi.spyOn(TestBed.inject(Router), 'navigate').mockResolvedValue(true);
+    const compiled = fixture.nativeElement as HTMLElement;
+    const link = compiled.querySelector<HTMLAnchorElement>('.post-card__category a')!;
+    const click = new MouseEvent('click', { ...options, bubbles: true, cancelable: true });
+
+    fixture.debugElement
+      .query(By.css('.post-card__category a'))
+      .triggerEventHandler('click', click);
+
+    expect(click.defaultPrevented).toBe(false);
+    expect(navigate).not.toHaveBeenCalled();
+    expect(link.getAttribute('href')).toBe('/posts?category=bruna');
   });
 
   it('should format the publication date for pt-BR without changing the calendar day', () => {

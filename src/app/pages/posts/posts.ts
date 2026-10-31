@@ -1,4 +1,4 @@
-import { ChangeDetectionStrategy, Component, inject } from '@angular/core';
+import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, RouterLink } from '@angular/router';
@@ -23,6 +23,17 @@ export class Posts {
   readonly searchControl = new FormControl(this.store.search(), {
     nonNullable: true,
   });
+  readonly categoryControl = new FormControl('', { nonNullable: true });
+  readonly subcategoryControl = new FormControl('', { nonNullable: true });
+
+  readonly rootCategories = this.store.rootCategories;
+  readonly subcategories = this.store.subcategories;
+  readonly activeCategories = this.store.activeCategories;
+  readonly selectedRootCategory = this.store.selectedRootCategory;
+  readonly selectedTagSlug = this.store.selectedTagSlug;
+  readonly hasActiveFilters = this.store.hasActiveFilters;
+  readonly isLoadingCategories = this.store.isLoadingCategories;
+  readonly hasCategoriesError = this.store.hasCategoriesError;
 
   readonly posts = this.store.posts;
   readonly total = this.store.total;
@@ -43,6 +54,33 @@ export class Posts {
       this.route.snapshot.queryParamMap.get('category'),
       this.route.snapshot.queryParamMap.get('tag'),
     );
+
+    effect(() => {
+      this.categoryControl.setValue(this.store.selectedRootCategory()?.slug ?? '', {
+        emitEvent: false,
+      });
+      this.subcategoryControl.setValue(this.store.selectedSubcategory()?.slug ?? '', {
+        emitEvent: false,
+      });
+      const unavailable = this.isLoadingCategories() || this.hasCategoriesError();
+      if (unavailable) {
+        this.categoryControl.disable({ emitEvent: false });
+      } else {
+        this.categoryControl.enable({ emitEvent: false });
+      }
+      if (unavailable || this.subcategories().length === 0) {
+        this.subcategoryControl.disable({ emitEvent: false });
+      } else {
+        this.subcategoryControl.enable({ emitEvent: false });
+      }
+    });
+
+    this.categoryControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((slug) => this.store.setCategory(slug));
+    this.subcategoryControl.valueChanges
+      .pipe(takeUntilDestroyed())
+      .subscribe((slug) => this.store.setCategory(slug || this.selectedRootCategory()?.slug || ''));
 
     combineLatest([this.route.paramMap, this.route.queryParamMap])
       .pipe(takeUntilDestroyed())
@@ -72,6 +110,28 @@ export class Posts {
   clearSearch(input: HTMLInputElement): void {
     this.searchControl.setValue('');
     input.focus();
+  }
+
+  removeCategory(slug: string, input: HTMLSelectElement): void {
+    this.store.removeCategory(slug);
+    input.focus();
+  }
+
+  removeTag(input: HTMLSelectElement): void {
+    this.store.removeTag();
+    input.focus();
+  }
+
+  clearFilters(input: HTMLSelectElement): void {
+    this.store.clearFilters();
+    input.focus();
+  }
+
+  retryCategories(): void {
+    this.store.retryCategories();
+    if (this.hasError()) {
+      this.store.retry();
+    }
   }
 
   loadMore(): void {

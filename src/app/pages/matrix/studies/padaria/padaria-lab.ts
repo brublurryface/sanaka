@@ -34,6 +34,7 @@ import { BAKERY_SOURCES } from './padaria-source.generated';
 export class PadariaLab {
   readonly study: MatrixStudyDefinition = {
     id: 'padaria',
+    desktopImage: '/images/matrix/padaria/padaria-atmosphere-desktop.webp',
     topics: ['contract', 'layers', 'idempotency'],
     investigations: ['invalid', 'repeated', 'failure', 'newRule'],
     relatedRoute: '/matrix/rest-api',

@@ -45,9 +45,9 @@ class MockTranslocoLoader implements TranslocoLoader {
               title: 'Matrix',
               description: 'Matrix description.',
             },
-            maya: {
+            samvit: {
               label: 'Presence',
-              description: 'Maya description.',
+              description: 'Samvit description.',
             },
           },
         },
