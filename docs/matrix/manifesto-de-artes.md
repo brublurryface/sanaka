@@ -61,6 +61,12 @@ A arte aprovada mostra Mors e seus companheiros procurando moedas e relíquias e
 sótão. Respeitar as asas negras, cabelo e roupa da referência **Mors.png** e, sobretudo,
 **esclera preta**, não branca.
 
+Em 31/10/2026, a autora aprovou a versão com o olho de Nandinī revisado a partir de
+**Nandini-de-lado.png**. O asset conserva as dimensões de 1942 × 809 px e usa WebP
+sem perda, com igualdade de todos os pixels RGBA verificada em relação ao PNG
+aprovado. Essa versão substitui a conversão de qualidade 92 registrada em 15/10.
+O Header, os degradês e o recorte responsivo permanecem os mesmos.
+
 Não inventar moedas canônicas ou reversos. Se houver moedas reconhecíveis na arte,
 usar referências aprovadas. Saṃvit, Mors e Ākāśa compartilham o reverso canônico.
 
