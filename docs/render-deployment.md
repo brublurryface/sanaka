@@ -1,6 +1,24 @@
 # Implantação de Sanaka no Render
 
-## Estado desta entrega
+## Estado em 01/11/2026
+
+O serviço Node está ativo em [sanaka.onrender.com](https://sanaka.onrender.com), no workspace
+Sanaka, com uma instância `0.5c-512mb` em Virginia e deploy automático desativado. A prévia
+mantém `SITE_NOINDEX=true`. O domínio público ainda é servido pela Locaweb.
+
+A autora configurou as credenciais no painel do Render e confirmou o recebimento do teste
+de contato. A newsletter responde `available: true`; o fluxo completo de confirmação ainda
+precisa ser conferido nessa origem. O retorno DOI já está configurado para
+`https://sanaka.onrender.com/posts#newsletter`.
+
+O conector criou o serviço com a verificação TCP padrão. No painel, configurar
+**Settings → Health Checks → Health Check Path** como `/api/health`.
+
+As 12 URLs de capas e óbolos dos posts publicados de Mors, Nandinī, Ākāśa e Nemi foram
+ajustadas para o CMS e verificadas na API. As URLs principais do WordPress continuam em
+`https://sanaka.com.br`; sua troca para o CMS deve acompanhar a virada do domínio.
+
+## Configuração original da entrega
 
 Configuração preparada para uma primeira conferência em `https://<serviço>.onrender.com`.
 Esta entrega não cria recursos pagos, não configura credenciais remotas e não altera DNS.
@@ -160,6 +178,25 @@ Isso não conclui a mudança: as URLs internas do WordPress e das mídias ainda 
 ajustadas antes de apontar o domínio público para o Render.
 
 ### Preparação para a troca final
+
+Os redirecionamentos necessários estão em `src/server/legacy-wordpress-redirects.ts`,
+com inventário público de 01/11/2026 em `src/server/legacy-wordpress-data.ts`:
+
+- As 21 publicações de Sanaka em `/ano/mês/slug/` e seus links curtos `?p=ID` apontam
+  para `/posts/slug`, com HTTP 301.
+- Os posts da categoria Romance (43), arquivos por data, páginas legadas, categorias,
+  tags, autores e feeds mantêm o caminho no WordPress em `https://cms.sanaka.com.br`.
+  A página `/contato` permanece na aplicação.
+- Mídias, arquivos do WordPress, painel, login e API são encaminhados ao CMS com HTTP 308,
+  preservando método e corpo dos clientes antigos. Os parâmetros da URL são mantidos;
+  links curtos de Sanaka removem somente o parâmetro de identificação usado no redirecionamento.
+- Pré-visualizações editoriais continuam no WordPress. Rotas e APIs da aplicação continuam
+  com seu comportamento anterior; caminhos fora dos espaços legados mantêm a página 404.
+
+Conferir essas regras no endereço do Render depois do merge e do deploy. O inventário
+usa os mesmos IDs e a exclusão de Romance adotada pela aplicação; se um endereço legado
+mudar de destino, atualizar esse inventário. As regras não criam, apagam ou transferem
+conteúdo no WordPress, nem dependem de uma chamada REST por acesso.
 
 Com a aplicação aprovada na URL de conferência do Render e um backup atualizado de arquivos e banco:
 
