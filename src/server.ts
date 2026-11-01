@@ -8,6 +8,7 @@ import express from 'express';
 import { join } from 'node:path';
 import { getStaticCacheControl, HTML_CACHE_CONTROL } from './server/cache-policy';
 import { contactHandler } from './server/contact';
+import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
 import { readRuntimeOptions } from './server/runtime-options';
 
@@ -38,6 +39,9 @@ app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 app.use('/api/contact', express.json({ limit: '16kb' }));
 app.post('/api/contact', contactHandler);
 app.use('/api/newsletter', createNewsletterRouter());
+
+// Os links do WordPress continuam válidos quando o domínio público passar para o Render.
+app.use(legacyWordPressRedirect);
 
 /**
  * Serve static files from /browser
