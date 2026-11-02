@@ -2,28 +2,42 @@
 
 ## Estado em 01/11/2026
 
-O serviço Node está ativo em [sanaka.onrender.com](https://sanaka.onrender.com), no workspace
-Sanaka, com uma instância `0.5c-512mb` em Virginia e deploy automático desativado. A prévia
-mantém `SITE_NOINDEX=true`. O domínio público ainda é servido pela Locaweb.
+A aplicação está publicada em [sanaka.com.br](https://sanaka.com.br), com HTTPS ativo.
+O endereço `www.sanaka.com.br` redireciona para o domínio principal. O serviço existente
+`srv-dbjo9o6c6qcc73c4hf0g` mantém uma instância `0.5c-512mb` em Virginia, no workspace
+Sanaka, com deploy automático desativado e health check HTTP em `/api/health`.
 
-A autora configurou as credenciais no painel do Render e confirmou o recebimento do teste
-de contato. A newsletter responde `available: true`; o fluxo completo de confirmação ainda
-precisa ser conferido nessa origem. O retorno DOI já está configurado para
-`https://sanaka.onrender.com/posts#newsletter`.
+O WordPress usa `https://cms.sanaka.com.br` como `home` e `siteurl`, na mesma instalação
+da Locaweb. O login permanece nesse host. As 12 URLs de capas e óbolos dos posts publicados
+de Mors, Nandinī, Ākāśa e Nemi foram ajustadas para o CMS e verificadas na API.
 
-O conector criou o serviço com a verificação TCP padrão. No painel, configurar
-**Settings → Health Checks → Health Check Path** como `/api/health`.
+A configuração de produção foi aplicada ao serviço existente pelo conector do Render:
 
-As 12 URLs de capas e óbolos dos posts publicados de Mors, Nandinī, Ākāśa e Nemi foram
-ajustadas para o CMS e verificadas na API. As URLs principais do WordPress continuam em
-`https://sanaka.com.br`; sua troca para o CMS deve acompanhar a virada do domínio.
+- `SITE_NOINDEX=false`: o cabeçalho de bloqueio foi removido; Home e post mantêm
+  `<meta name="robots" content="index, follow">`.
+- `BREVO_NEWSLETTER_REDIRECT_URL=https://sanaka.com.br/posts#newsletter`: retorno DOI
+  no domínio público.
+
+O `render.yaml` registra esses mesmos valores para uma futura sincronização do Blueprint.
+Essa alteração do arquivo não cria outro serviço nem aplica uma sincronização. O serviço
+atual continua gerenciado pelo painel/conector; usar o recurso existente ao adotar um Blueprint.
+Para uma nova prévia, definir `SITE_NOINDEX=true` e o retorno DOI no endereço desse ambiente.
+
+Após o deploy `dep-dbjukvutlv9c73eaq340`, as 12 conferências HTTP passaram: Home, post,
+contato, saúde, disponibilidade da newsletter, redirecionamento de `www`, link antigo de post,
+mídia antiga, painel antigo, rota inexistente, API do CMS com CORS para a origem pública
+e mídia direta do CMS. Não apareceram novos erros de execução na consulta feita após o deploy.
+
+A autora confirmou o recebimento do teste de contato na prévia. A newsletter responde
+`available: true`; uma inscrição real ainda precisa confirmar entrega do DOI, inclusão na lista
+e retorno ao domínio definitivo. A disponibilidade da configuração não comprova esse fluxo.
 
 ## Configuração original da entrega
 
-Configuração preparada para uma primeira conferência em `https://<serviço>.onrender.com`.
-Esta entrega não cria recursos pagos, não configura credenciais remotas e não altera DNS.
-A publicação definitiva depende da aprovação das artes de Saṃvit e da preservação do acesso
-ao WordPress e às suas mídias.
+As seções de primeiro deploy abaixo registram o procedimento inicial de conferência em
+`https://<serviço>.onrender.com`. A publicação no domínio definitivo já foi aplicada ao serviço
+existente, conforme o estado acima. Para reproduzir a configuração, usar os valores de produção
+do `render.yaml`; reservar o bloqueio de indexação e o retorno temporário do DOI às prévias.
 
 O `render.yaml` descreve **um único Web Service Node**. Não criar um Static Site: o formulário
 de contato e a newsletter dependem do Express, assim como a resposta HTTP da página 404.
@@ -84,7 +98,7 @@ O health check não comprova que essas integrações estão configuradas.
 | `RENDER_EXTERNAL_HOSTNAME`      | Fornecida pelo Render; autoriza somente o hostname exato no Angular        |
 | `NG_ALLOWED_HOSTS`              | Opcional, hosts adicionais separados por vírgula; sem protocolo ou caminho |
 | `TRUST_PROXY_HOPS`              | `1` no Blueprint; hipótese a confirmar no ingresso real do Render          |
-| `SITE_NOINDEX`                  | `true` na conferência; emite `X-Robots-Tag: noindex, nofollow`             |
+| `SITE_NOINDEX`                  | `false` em produção; `true` somente na conferência                         |
 | `SMTP_HOST`                     | `email-ssl.com.br`                                                         |
 | `SMTP_PORT`                     | `465`                                                                      |
 | `SMTP_SECURE`                   | `true`                                                                     |
@@ -155,11 +169,11 @@ O subdomínio já tem HTTPS e um registro A próprio para a Locaweb, independent
 
 | Recurso          | Endereço                                              | Situação                                                                  |
 | ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------- |
-| Site público     | `https://sanaka.com.br` e `https://www.sanaka.com.br` | Ainda servidos pela Locaweb; destino futuro: Render                       |
+| Site público     | `https://sanaka.com.br` e `https://www.sanaka.com.br` | Render; `www` redireciona para o domínio principal                         |
 | API editorial    | `https://cms.sanaka.com.br/wp-json/wp/v2`             | Consultada pelo Angular e pelo script de auditoria                        |
 | API de óbolos    | `https://cms.sanaka.com.br/wp-json/sanaka/v1`         | Mesmos contadores da instalação atual                                     |
-| Painel WordPress | `https://cms.sanaka.com.br/wp-admin/`                 | Ainda redireciona o login para o domínio antigo                           |
-| Mídias           | `https://cms.sanaka.com.br/wp-content/uploads/…`      | Arquivos acessíveis; URLs retornadas pela API ainda usam o domínio antigo |
+| Painel WordPress | `https://cms.sanaka.com.br/wp-admin/`                 | Login no host do CMS                                                       |
+| Mídias           | `https://cms.sanaka.com.br/wp-content/uploads/…`      | Arquivos acessíveis no CMS                                                 |
 
 O endereço REST fica em `src/app/core/wordpress/wordpress-api.ts`. Posts, fragmentos do Sobre,
 livros do Sanakaverse e óbolos usam os tokens compartilhados desse arquivo. A troca do hostname
