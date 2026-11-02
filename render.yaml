@@ -1,4 +1,4 @@
-# Primeiro deploy em onrender.com; o domínio definitivo será configurado depois da revisão.
+# Produção em sanaka.com.br; valores alinhados ao serviço existente no Render.
 services:
   - type: web
     name: sanaka
@@ -17,7 +17,7 @@ services:
       - key: TRUST_PROXY_HOPS
         value: '1'
       - key: SITE_NOINDEX
-        value: 'true'
+        value: 'false'
       - key: SMTP_HOST
         value: email-ssl.com.br
       - key: SMTP_PORT
@@ -38,3 +38,5 @@ services:
         value: '4'
       - key: BREVO_NEWSLETTER_TEMPLATE_ID
         value: '1'
+      - key: BREVO_NEWSLETTER_REDIRECT_URL
+        value: https://sanaka.com.br/posts#newsletter
