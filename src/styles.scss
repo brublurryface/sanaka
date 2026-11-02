@@ -76,6 +76,19 @@ html {
   --sanaka-space-page-content-start: 1.75rem;
 }
 
+.sanaka-arrow {
+  display: inline-block;
+  flex: 0 0 auto;
+
+  width: 1em;
+  height: 1em;
+
+  vertical-align: -0.1em;
+  background-color: currentColor;
+  -webkit-mask: url('/icons/arrow-up-right.svg') no-repeat center / contain;
+  mask: url('/icons/arrow-up-right.svg') no-repeat center / contain;
+}
+
 .sanaka-atmosphere-hero {
   position: relative;
   isolation: isolate;

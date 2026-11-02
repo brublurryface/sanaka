@@ -8,7 +8,7 @@
 
     display: block;
 
-    margin-top: 2.5rem;
+    margin-top: 1.25rem;
   }
 
   .about-puzzle-mobile__track {
@@ -122,7 +122,13 @@
 
     min-width: 0;
 
+    visibility: hidden;
+
     pointer-events: none;
+  }
+
+  .about-puzzle-mobile__piece--active .about-puzzle-mobile__copy {
+    visibility: visible;
   }
 
   .about-puzzle-mobile__number {
