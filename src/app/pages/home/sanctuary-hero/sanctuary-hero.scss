@@ -16,7 +16,7 @@
   align-items: center;
   gap: clamp(3rem, 6vw, 7rem);
 
-  height: calc(100dvh - var(--sanaka-header-height, 64px));
+  min-height: calc(100dvh - var(--sanaka-header-height, 64px));
 
   padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 7vw, 7.5rem);
 

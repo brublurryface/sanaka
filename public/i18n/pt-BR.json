@@ -14,7 +14,7 @@
       "notFound": "Caminho não encontrado"
     },
     "pageDescriptions": {
-      "home": "Um espaço para investigar ideias, símbolos e histórias com atenção. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "home": "Estudos onde o desvendar do ciclo da vida e da morte ganham a presença de uma promotora e de uma advogada que fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
       "posts": "Escrituras, estudos e reflexões reunidos em Sanaka. Deguste com a mente, os sentidos e o coração.",
       "post": "Leia esta publicação no santuário de Sanaka.",
       "matrix": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento.",
@@ -290,13 +290,13 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Santuário de conhecimento e consciência",
+      "eyebrow": "Autoconhecimento e lógica",
       "title": {
-        "line1": "Um santuário",
-        "line2": "vivo na escuridão",
-        "line3": "fértil."
+        "line1": "O santuário",
+        "line2": "integrado pela escuridão",
+        "line3": "e a luz"
       },
-      "intro": "Um espaço para investigar ideias, símbolos e histórias com atenção. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "intro": "Estudos onde o desvendar do ciclo da vida e da morte ganham a presença de uma promotora e de uma advogada que fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
       "action": {
         "enter": "Entrar no santuário",
         "read": "Ler agora"

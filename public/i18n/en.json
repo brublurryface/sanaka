@@ -14,7 +14,7 @@
       "notFound": "Path not found"
     },
     "pageDescriptions": {
-      "home": "A space to investigate ideas, symbols, and stories with care. Enter slowly: some knowledge reveals itself only when silence takes part.",
+      "home": "Studies in which the unveiling of the cycle of life and death is joined by a prosecutor and an attorney who merged to create a student who experiences herself in every truth she discovers.",
       "posts": "Writings, studies, and reflections gathered in Sanaka. Take them in with mind, senses, and heart.",
       "post": "Read this publication inside the Sanaka sanctuary.",
       "matrix": "A collection of experiences for touching, observing, and understanding Angular in motion.",
@@ -290,13 +290,13 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Sanctuary of knowledge and consciousness",
+      "eyebrow": "Self-knowledge and logic",
       "title": {
-        "line1": "A living sanctuary",
-        "line2": "in fertile",
-        "line3": "darkness."
+        "line1": "The sanctuary",
+        "line2": "united by darkness",
+        "line3": "and light"
       },
-      "intro": "A space to investigate ideas, symbols, and stories with care. Enter slowly: some knowledge reveals itself only when silence takes part.",
+      "intro": "Studies in which the unveiling of the cycle of life and death is joined by a prosecutor and an attorney who merged to create a student who experiences herself in every truth she discovers.",
       "action": {
         "enter": "Enter the sanctuary",
         "read": "Read now"
