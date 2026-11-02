@@ -14,14 +14,14 @@
       "notFound": "Caminho não encontrado"
     },
     "pageDescriptions": {
-      "home": "Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "home": "Estudos em que o desvendar do ciclo da vida e da morte ganha a presença de uma promotora e de uma advogada que se fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
       "posts": "Escrituras, estudos e reflexões reunidos em Sanaka. Deguste com a mente, os sentidos e o coração.",
       "post": "Leia esta publicação no santuário de Sanaka.",
       "matrix": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento.",
-      "matrixComponents": "Faça um valor atravessar a fronteira entre pai e filho e acompanhe a resposta voltando por um evento.",
-      "matrixRestApi": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no portal.",
-      "samvit": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa.",
-      "about": "Fragmentos atravessam morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
+      "matrixComponents": "Envie um valor do componente pai ao filho e acompanhe a resposta que retorna por um evento.",
+      "matrixRestApi": "Envie uma requisição real, acompanhe sua resposta e veja uma imagem do universo surgir no portal.",
+      "samvit": "Conheça Saṃvit, companheira de Sanaka, e suas diferentes presenças.",
+      "about": "Fragmentos falam de morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
       "contact": "Encontre Sanaka nas redes ou envie uma mensagem diretamente pelo portal de contato.",
       "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
       "notFound": "A rota solicitada não existe, mudou de lugar ou ainda não encontrou forma em Sanaka."
@@ -68,7 +68,7 @@
         "line1": "Quem transcende",
         "line2": "Sanaka?"
       },
-      "intro": "Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam. Atente‑se, pois o que há aqui pode sofrer alterações sem aviso prévio! Fragmentos atravessam morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
+      "intro": "Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam. Atente‑se, pois o que há aqui pode sofrer alterações sem aviso prévio! Fragmentos falam de morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
       "imageAlt": "Saṃvit olha por cima do ombro enquanto dragões de sombra se projetam pelo chão diante de uma passagem luminosa."
     },
     "puzzle": {
@@ -119,14 +119,18 @@
     "social": {
       "eyebrow": "Outros portais",
       "title": "Onde me encontrar",
-      "intro": "Cada rede mostra uma face diferente do mesmo caminho.",
+      "intro": "Sanaka também está existindo por aqui:",
       "instagram": {
         "presence": "Sanaka sem limites",
-        "description": "Imagens, personagens, símbolos e fragmentos fora das margens formais."
+        "description": "Uma forma de devolver aprendizados, perguntas e dúvidas ao mundo."
       },
       "linkedin": {
         "presence": "Sanaka formal",
-        "description": "Minha trajetória profissional, experiências e presença no mundo do trabalho."
+        "description": "Minha trajetória profissional e experiências no mundo da energia de troca."
+      },
+      "github": {
+        "presence": "Laboratório cibernético",
+        "description": "Vivência dos meus estudos como pessoa desenvolvedora."
       }
     },
     "email": {
@@ -144,7 +148,7 @@
       "submit": "Enviar mensagem",
       "sending": "Enviando",
       "privacy": "Nome, e-mail e mensagem serão usados somente para responder a este contato.",
-      "success": "A mensagem atravessou o portal.",
+      "success": "Sua mensagem foi enviada.",
       "rateLimited": "Muitas mensagens chegaram em pouco tempo. Aguarde alguns minutos antes de tentar novamente.",
       "error": "O portal não conseguiu entregar a mensagem agora. Você ainda pode escrever para sanaka@sanaka.com.br.",
       "errors": {
@@ -188,7 +192,7 @@
     "collection": {
       "eyebrow": "Volumes em órbita",
       "title": "Escolha um livro",
-      "intro": "Quando uma história estiver pronta para atravessar o portal, sua capa surgirá aqui. Aproxime-se das capas e mergulhe no volume que chamar por você.",
+      "intro": "Quando uma história estiver pronta para entrar na biblioteca, sua capa surgirá aqui. Aproxime-se das capas e conheça o volume que chamar sua atenção.",
       "ariaLabel": "Livros do Sanakaverse"
     },
     "book": {
@@ -290,13 +294,13 @@
   },
   "home": {
     "hero": {
-      "eyebrow": "Santuário de conhecimento e consciência",
+      "eyebrow": "Autoconhecimento e lógica",
       "title": {
-        "line1": "Um santuário",
-        "line2": "vivo na escuridão",
-        "line3": "fértil."
+        "line1": "O santuário",
+        "line2": "integrado pela",
+        "line3": "escuridão e a luz."
       },
-      "intro": "Um espaço para atravessar ideias, símbolos e histórias com presença. Entre devagar: há conhecimento que só se revela quando o silêncio também participa.",
+      "intro": "Estudos em que o desvendar do ciclo da vida e da morte ganha a presença de uma promotora e de uma advogada que se fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
       "action": {
         "enter": "Entrar no santuário",
         "read": "Ler agora"
@@ -307,26 +311,26 @@
       }
     },
     "paths": {
-      "eyebrow": "Dentro do santuário",
+      "eyebrow": "Dentro de Sanaka",
       "title": {
         "line1": "Escolha por onde",
-        "line2": "atravessar."
+        "line2": "começar."
       },
-      "intro": "Sanaka reúne leitura, investigação e diálogo. Cada caminho conduz ao mesmo centro por uma perspectiva diferente.",
+      "intro": "Sanaka trafega pela leitura, pelo estudo e por investigações de diálogos. Cada caminho conduz ao centro de uma perspectiva diferente.",
       "card": {
         "readings": {
-          "label": "Biblioteca em Sanaka",
-          "title": "Publicações do santuário",
-          "description": "Mergulhe nos pensamentos, textos, estudos e histórias preservados no santuário."
+          "label": "Biblioteca",
+          "title": "As publicações do santuário",
+          "description": "Encontre canalizações, pensamentos, textos, estudos e histórias preservados."
         },
         "matrix": {
           "label": "Laboratório",
           "title": "Matrix",
-          "description": "Atravesse experiências interativas e observe conceitos do Angular acontecendo diante de você."
+          "description": "Experimente conceitos de programação e observe o que acontece na interface."
         },
         "samvit": {
-          "label": "Presença",
-          "description": "Encontre a companheira de Sanaka e atravesse o conhecimento também pela conversa."
+          "label": "Presença em IA",
+          "description": "Conheça Saṃvit, a protagonista em Sanaka."
         },
         "about": {
           "label": "Sobre",
@@ -341,7 +345,7 @@
       "eyebrow": "Biblioteca em Sanaka",
       "title": "Publicações do santuário",
       "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança.",
-      "imageAlt": "Saṃvit, Nandinī e Bhū observam livros mágicos atravessando uma biblioteca celestial.",
+      "imageAlt": "Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca celestial.",
       "sanakaverseLink": "Viajar para Sanakaverse"
     },
     "search": {
@@ -1183,7 +1187,7 @@
       "list": {
         "eyebrow": "Circuitos abertos",
         "title": "Escolha uma experiência",
-        "intro": "Cada página investiga uma ideia por vez. Você interfere no exemplo, acompanha a reação da interface e depois visita o código responsável pelo movimento."
+        "intro": "Cada página investiga uma dúvida que eu tive enquanto estudava. Você interfere no exemplo, acompanha a reação da interface e depois visita o código responsável pelo movimento."
       },
       "available": {
         "status": "Disponível agora",
@@ -1194,7 +1198,7 @@
       "rest": {
         "status": "Disponível agora",
         "title": "Portal da API REST",
-        "description": "Abra uma requisição real, acompanhe a travessia pela rede e veja uma imagem do universo surgir no centro do portal.",
+        "description": "Envie uma requisição real, acompanhe sua resposta e veja uma imagem do universo surgir no centro do portal.",
         "action": "Abrir o portal"
       },
       "upcoming": {
@@ -1212,7 +1216,7 @@
         "line1": "Componentes",
         "line2": "em conversa"
       },
-      "intro": "Faça um valor atravessar a fronteira entre pai e filho. Depois, acompanhe a resposta voltando por um evento e veja o código envolvido em cada passagem.",
+      "intro": "Envie um valor do componente pai ao filho. Depois, acompanhe a resposta que volta por um evento e veja o código envolvido em cada etapa.",
       "action": "Iniciar circuito",
       "imageAlt": "Saṃvit, Kalika e Bhū analisam um livro entre lanternas e diagramas luminosos de componentes Angular."
     },
@@ -1222,7 +1226,7 @@
       "intro": "O pai guarda a mensagem e o Angular a conduz ao filho. O filho escolhe uma resposta e emite um evento de retorno. Você aciona o fluxo; a interface registra cada passagem.",
       "guide": {
         "eyebrow": "Como experimentar",
-        "title": "Faça a mensagem atravessar o circuito",
+        "title": "Acompanhe o caminho da mensagem",
         "parent": {
           "title": "O pai envia",
           "text": "Escreva uma mensagem ou use o exemplo."
@@ -1240,7 +1244,7 @@
         "eyebrow": "Componente pai",
         "title": "O emissor",
         "label": "Mensagem para o componente filho",
-        "placeholder": "Escreva algo para atravessar...",
+        "placeholder": "Escreva uma mensagem...",
         "hint": "Não sabe o que escrever? Comece com uma mensagem pronta.",
         "useExample": "Usar exemplo",
         "exampleMessage": "Você recebeu esta mensagem?",
@@ -1326,7 +1330,7 @@
           "line2": "para o universo"
         },
         "intro": "Escolha um tema e abra uma passagem até um acervo real. A interface transforma a espera, a resposta e até a falha de uma requisição REST em algo que pode ser acompanhado.",
-        "action": "Atravessar a requisição",
+        "action": "Iniciar experimento",
         "imageAlt": "Saṃvit contempla sua forma de lobo-guará enquanto ambas flutuam entre órbitas luminosas e um cubo cósmico."
       },
       "exhibit": {
@@ -1350,11 +1354,11 @@
       "portal": {
         "idle": {
           "title": "O portal está em repouso",
-          "text": "Nenhuma requisição foi enviada. Escolha um tema para iniciar a travessia.",
+          "text": "Nenhuma requisição foi enviada. Escolha um tema para começar.",
           "action": "Invocar"
         },
         "loading": {
-          "title": "Atravessando a rede",
+          "title": "Buscando resultados",
           "text": "Consultando o acervo da NASA para “{{ query }}”."
         },
         "imageLoading": {
@@ -1362,7 +1366,7 @@
           "text": "Os dados chegaram. Carregando o arquivo visual."
         },
         "empty": {
-          "title": "Nada atravessou",
+          "title": "Nenhuma imagem encontrada",
           "text": "A busca por “{{ query }}” não devolveu um registro com imagem que pudesse ser exibida."
         },
         "error": {
@@ -1390,7 +1394,7 @@
       },
       "inspector": {
         "eyebrow": "Inspetor da requisição",
-        "title": "O que atravessou o portal",
+        "title": "Requisição e resposta",
         "intro": "Esta não é uma simulação: são o método, o endereço, os parâmetros e o resultado mapeado da requisição real.",
         "method": "Método",
         "status": "Status HTTP",

@@ -13,8 +13,8 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Sanctuary eyebrow',
           title: {
             line1: 'A line',
-            line2: 'another line',
-            line3: 'final.',
+            line2: 'united by',
+            line3: 'darkness and light.',
           },
           intro: 'Hero intro text.',
           action: {
@@ -60,6 +60,21 @@ describe('SanctuaryHero', () => {
     fixture.detectChanges();
 
     expect(fixture.nativeElement.querySelector('#sanctuary-title')).toBeTruthy();
+  });
+
+  it('should highlight darkness and light while keeping the complete title', () => {
+    const fixture = TestBed.createComponent(SanctuaryHero);
+    fixture.detectChanges();
+
+    const title = fixture.nativeElement.querySelector('#sanctuary-title') as HTMLElement;
+    const highlights = Array.from(title.querySelectorAll('.title-accent')).map((element) =>
+      element.textContent?.trim(),
+    );
+
+    expect(highlights).toEqual(['darkness and light.']);
+    expect(title.textContent?.replace(/\s+/g, ' ').trim()).toBe(
+      'A line united by darkness and light.',
+    );
   });
 
   it('should contain the destination links', () => {

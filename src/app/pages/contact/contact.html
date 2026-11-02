@@ -34,7 +34,7 @@
       @for (social of socialLinks; track social.id) {
         <a class="contact-social" [href]="social.href" target="_blank" rel="noopener noreferrer">
           <span class="contact-social__mark" aria-hidden="true">
-            {{ social.id === 'instagram' ? '◎' : 'in' }}
+            {{ social.mark }}
           </span>
           <span class="contact-social__copy">
             <span class="contact-social__platform">{{ social.name }}</span>
@@ -42,7 +42,7 @@
             <span>{{ social.descriptionKey | transloco }}</span>
             <small>{{ social.handle }}</small>
           </span>
-          <span class="contact-social__arrow" aria-hidden="true">↗</span>
+          <span class="contact-social__arrow sanaka-arrow" aria-hidden="true"></span>
         </a>
       }
     </div>

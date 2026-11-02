@@ -16,7 +16,7 @@
   align-items: center;
   gap: clamp(3rem, 6vw, 7rem);
 
-  height: calc(100dvh - var(--sanaka-header-height, 64px));
+  min-height: calc(100dvh - var(--sanaka-header-height, 64px));
 
   padding: clamp(3rem, 5vw, 5rem) clamp(2rem, 7vw, 7.5rem);
 
@@ -137,6 +137,8 @@
   align-self: center;
 
   max-width: 42rem;
+
+  container-type: inline-size;
 }
 
 .eyebrow {
@@ -160,17 +162,20 @@ h1 {
 
   font-family: var(--sanaka-font-display);
   font-size: var(--sanaka-type-home-title-size);
+  font-size: min(var(--sanaka-type-home-title-size), 14cqi);
   font-weight: 500;
   line-height: var(--sanaka-type-home-title-line-height);
   letter-spacing: -0.03em;
 }
 
-h1 span {
+h1 > span {
   display: block;
 }
 
 .title-accent {
   color: var(--sanaka-gold-soft);
+
+  white-space: nowrap;
 }
 
 .hero-intro {
@@ -352,7 +357,7 @@ h1 span {
   align-self: end;
 
   width: auto;
-  height: min(100%, 32rem);
+  height: min(68dvh, 32rem);
   max-width: 100%;
   max-height: 100%;
 
