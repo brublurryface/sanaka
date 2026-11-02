@@ -32,6 +32,10 @@ class MockTranslocoLoader implements TranslocoLoader {
             presence: 'Sanaka formal',
             description: 'Trajetória profissional.',
           },
+          github: {
+            presence: 'Laboratório cibernético',
+            description: 'Vivência dos meus estudos como pessoa desenvolvedora.',
+          },
         },
         email: { label: 'E-mail direto', address: 'sanaka@sanaka.com.br' },
         form: {
@@ -86,7 +90,7 @@ describe('Contact', () => {
     fixture.detectChanges();
   });
 
-  it('should present the approved atmosphere and the two active social profiles', () => {
+  it('should present the approved atmosphere and the three active social profiles', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const image = compiled.querySelector<HTMLImageElement>('.contact-hero__image');
     const socialLinks = Array.from(compiled.querySelectorAll<HTMLAnchorElement>('.contact-social'));
@@ -96,9 +100,11 @@ describe('Contact', () => {
     expect(socialLinks.map((link) => link.getAttribute('href'))).toEqual([
       'https://www.instagram.com/omsanaka/',
       'https://br.linkedin.com/in/brublurryface',
+      'https://github.com/brublurryface',
     ]);
     expect(compiled.textContent).toContain('Sanaka sem limites');
     expect(compiled.textContent).toContain('Sanaka formal');
+    expect(compiled.textContent).toContain('Laboratório cibernético');
   });
 
   it('should expose validation errors before sending an empty form', () => {

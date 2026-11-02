@@ -137,6 +137,8 @@
   align-self: center;
 
   max-width: 42rem;
+
+  container-type: inline-size;
 }
 
 .eyebrow {
@@ -160,6 +162,7 @@ h1 {
 
   font-family: var(--sanaka-font-display);
   font-size: var(--sanaka-type-home-title-size);
+  font-size: min(var(--sanaka-type-home-title-size), 14cqi);
   font-weight: 500;
   line-height: var(--sanaka-type-home-title-line-height);
   letter-spacing: -0.03em;
@@ -171,6 +174,8 @@ h1 > span {
 
 .title-accent {
   color: var(--sanaka-gold-soft);
+
+  white-space: nowrap;
 }
 
 .hero-intro {

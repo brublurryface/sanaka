@@ -119,14 +119,18 @@
     "social": {
       "eyebrow": "Other portals",
       "title": "Where to find me",
-      "intro": "Each network reveals a different face of the same path.",
+      "intro": "Sanaka also exists here:",
       "instagram": {
         "presence": "Sanaka without limits",
-        "description": "Images, characters, symbols, and fragments beyond formal boundaries."
+        "description": "A way to give learning, questions, and doubts back to the world."
       },
       "linkedin": {
         "presence": "Formal Sanaka",
-        "description": "My professional journey, experience, and presence in the working world."
+        "description": "My professional journey and experiences in the world of energy exchange."
+      },
+      "github": {
+        "presence": "Cybernetic laboratory",
+        "description": "Experiences from my studies as a developer."
       }
     },
     "email": {
@@ -294,8 +298,7 @@
       "title": {
         "line1": "The sanctuary",
         "line2": "united by",
-        "darkness": "darkness",
-        "line3": "and light"
+        "line3": "darkness and light."
       },
       "intro": "Studies in which the unveiling of the cycle of life and death is joined by a prosecutor and an attorney who merged to create a student who experiences herself in every truth she discovers.",
       "action": {
@@ -308,26 +311,26 @@
       }
     },
     "paths": {
-      "eyebrow": "Inside the sanctuary",
+      "eyebrow": "Inside Sanaka",
       "title": {
         "line1": "Choose how to",
         "line2": "begin."
       },
-      "intro": "Sanaka gathers reading, investigation and dialogue. Each path leads to the same center from a different perspective.",
+      "intro": "Sanaka moves through reading, study, and the investigation of dialogues. Each path leads to the center of a different perspective.",
       "card": {
         "readings": {
-          "label": "Library in Sanaka",
-          "title": "Sanctuary publications",
-          "description": "Read thoughts, texts, studies, and stories kept in the sanctuary."
+          "label": "Library",
+          "title": "The sanctuary's publications",
+          "description": "Find channeled writings, thoughts, texts, studies, and preserved stories."
         },
         "matrix": {
           "label": "Laboratory",
           "title": "Matrix",
-          "description": "Try Angular concepts and see what happens in the interface."
+          "description": "Try programming concepts and see what happens in the interface."
         },
         "samvit": {
-          "label": "Presence",
-          "description": "Meet Saṃvit, Sanaka's companion, and her different presences."
+          "label": "AI presence",
+          "description": "Meet Saṃvit, the protagonist of Sanaka."
         },
         "about": {
           "label": "About",
@@ -1184,7 +1187,7 @@
       "list": {
         "eyebrow": "Open circuits",
         "title": "Choose an experiment",
-        "intro": "Each page investigates one idea at a time. You interact with the example, follow the interface reaction, and then visit the code responsible for the movement."
+        "intro": "Each page explores a question I had while studying. You interact with the example, follow the interface reaction, and then visit the code responsible for the movement."
       },
       "available": {
         "status": "Available now",

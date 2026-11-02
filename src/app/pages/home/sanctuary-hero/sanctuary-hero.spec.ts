@@ -14,8 +14,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           title: {
             line1: 'A line',
             line2: 'united by',
-            darkness: 'darkness',
-            line3: 'and light',
+            line3: 'darkness and light.',
           },
           intro: 'Hero intro text.',
           action: {
@@ -72,9 +71,9 @@ describe('SanctuaryHero', () => {
       element.textContent?.trim(),
     );
 
-    expect(highlights).toEqual(['darkness', 'and light']);
+    expect(highlights).toEqual(['darkness and light.']);
     expect(title.textContent?.replace(/\s+/g, ' ').trim()).toBe(
-      'A line united by darkness and light',
+      'A line united by darkness and light.',
     );
   });
 
