@@ -1,7 +1,18 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { SecurityContext, inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
-import { concat, forkJoin, map, Observable, of, shareReplay, switchMap, timeout } from 'rxjs';
+import {
+  catchError,
+  combineLatest,
+  forkJoin,
+  map,
+  Observable,
+  of,
+  shareReplay,
+  startWith,
+  switchMap,
+  timeout,
+} from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
@@ -121,14 +132,14 @@ export class WordPressPostsService {
   private readonly categories$ = this.loadCategories().pipe(
     shareReplay({
       bufferSize: 1,
-      refCount: false,
+      refCount: true,
     }),
   );
 
   private readonly tags$ = this.loadTags().pipe(
     shareReplay({
       bufferSize: 1,
-      refCount: false,
+      refCount: true,
     }),
   );
 
@@ -198,29 +209,52 @@ export class WordPressPostsService {
         'id,slug,date,title,excerpt,content,featured_media,categories,tags,sanaka_character_slug,sanaka_character_name,sanaka_obolo_front,sanaka_obolo_back,_links,_embedded',
       );
 
-    return forkJoin({
-      posts: this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }),
-      categories: this.categories$,
-      tags: this.tags$,
-    }).pipe(
-      switchMap(({ posts, categories, tags }) => {
+    return this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
+      timeout({ first: this.requestTimeoutMs }),
+      switchMap((posts) => {
         const post = posts[0];
 
-        if (!post) {
+        if (
+          !post ||
+          post.categories.some((id) => this.contentPolicy.excludedCategoryIds.includes(id))
+        ) {
           return of(null);
         }
 
-        const detail = this.mapPostDetail(post, categories, tags);
+        const emptyCategoryDetails = {
+          categories: [] as readonly WordPressCategory[],
+          previous: undefined,
+          next: undefined,
+        };
+        const categoryDetails$ = this.categories$.pipe(
+          timeout({ first: this.requestTimeoutMs }),
+          // Sem categorias confirmadas, não se presume a coleção da navegação.
+          switchMap((categories) =>
+            combineLatest({
+              previous: this.getAdjacentPost(post, categories, 'previous').pipe(
+                startWith(undefined),
+              ),
+              next: this.getAdjacentPost(post, categories, 'next').pipe(startWith(undefined)),
+            }).pipe(map((navigation) => ({ categories, ...navigation }))),
+          ),
+          startWith(emptyCategoryDetails),
+          catchError(() => of(emptyCategoryDetails)),
+        );
+        const tags$ = this.tags$.pipe(
+          timeout({ first: this.requestTimeoutMs }),
+          catchError(() => of([])),
+          startWith([]),
+        );
 
-        return concat(
-          of(detail),
-          forkJoin({
-            previous: this.getAdjacentPost(post, categories, 'previous'),
-            next: this.getAdjacentPost(post, categories, 'next'),
-          }).pipe(map((navigation) => ({ ...detail, ...navigation }))),
+        // O corpo aparece primeiro; complementos independentes nunca o substituem por erro.
+        return combineLatest({ categoryDetails: categoryDetails$, tags: tags$ }).pipe(
+          map(({ categoryDetails, tags }) => ({
+            ...this.mapPostDetail(post, categoryDetails.categories, tags),
+            previous: categoryDetails.previous,
+            next: categoryDetails.next,
+          })),
         );
       }),
-      timeout({ first: this.requestTimeoutMs }),
     );
   }
 
@@ -494,6 +528,8 @@ export class WordPressPostsService {
               }
             : undefined;
         }),
+        timeout({ first: this.requestTimeoutMs }),
+        catchError(() => of(undefined)),
       );
   }
 
