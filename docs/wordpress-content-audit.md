@@ -91,25 +91,33 @@ The same De Preto post should be queried by both frontends rather than duplicate
 
 ### Sanaka enforcement
 
-Since 2026-09-28, every post query made by Sanaka excludes category `43` (Romance), including:
+Sanaka resolves category IDs from stable editorial slugs before querying content. The `romance`
+branch defines the WoD boundary, including its descendants. This exclusion applies to the archive,
+search, filters, direct slug lookup, adjacent navigation, About cycles and Sanakaverse library.
 
-- archive, search, pagination, category, and tag filters;
-- direct lookup by slug;
-- previous and next post navigation.
+The Posts archive additionally excludes the `sanakaverse` branch. Volumes remain readable by direct
+slug lookup from the library; their adjacent navigation stays inside that branch, including children.
 
-The Posts archive additionally excludes category `97` (Sanakaverse) from archive pages, search,
-filters, ordinary previous/next navigation, and exploratory category links. Direct lookup by slug
-continues to accept Sanakaverse volumes because their internal reading route is opened from the
-dedicated library. Navigation inside a volume remains constrained to that same collection.
+Stable slugs are configured in `wordpress-content-policy.ts`. `WordPressContentPolicyService` resolves
+current IDs in a targeted query and shares in-flight requests. A completed snapshot may be reused
+for five minutes; the next subscription after expiry revalidates it. Failure or absence of a required
+WoD boundary blocks content queries instead of falling back to historic IDs. Confirmed absence of
+optional `sobre` or `sanakaverse` leaves those collections empty.
 
-These rules are centralized in `wordpress-content-policy.ts`. The archive also checks the category
-resolved from the stable `sanakaverse` slug before rendering, preventing an obsolete numeric ID from
-silently exposing volumes in the general Posts archive.
+The REST object form uses `include_children=true` for branch exclusions before WordPress counts
+and paginates the collection. Archive totals must come from `X-WP-Total` and `X-WP-TotalPages` on that
+same filtered response. Missing or inconsistent metadata produces a recoverable error. A response
+containing excluded posts is rejected; filtering them locally cannot repair its totals. The category
+hierarchy is loaded across all necessary pages.
+
+Numeric IDs in the inventory above are a historical snapshot. See
+[`architecture/wordpress-editorial-pagination.md`](architecture/wordpress-editorial-pagination.md)
+for this implementation and its validation.
 
 ## Risks and unresolved decisions
 
 - The `not_included` slug is a legacy name even though the underlying image was replaced.
-- The category ID is stable inside the current WordPress installation but must be reviewed during a taxonomy migration.
+- Editorial slugs must remain stable. Numeric IDs are resolved from the CMS; a completed policy snapshot is reused for at most five minutes before the next query revalidates it.
 - Empty categories must not be deleted until their historical purpose is reviewed.
 - Character profiles and slider content may remain in the database outside the standard post endpoint.
 - Media cleanup requires a backup and an audit of plugin, page, database, and filesystem references.

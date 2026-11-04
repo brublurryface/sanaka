@@ -58,5 +58,8 @@ representado dentro da arte uma anatomia única.
 - Publicações da categoria Sanakaverse pertencem somente à coleção de livros e não ao catálogo
   editorial de Posts.
 - A ausência da categoria `sanakaverse` representa uma biblioteca ainda vazia, não uma falha.
+- A categoria e a exclusão de Romance/WoD usam IDs resolvidos pelos slugs no CMS, incluindo as
+  subcategorias. Falha na resolução da fronteira WoD interrompe a consulta em vez de retirar a
+  exclusão.
 - A ausência da capa representa um volume ainda não revelado, não autoriza usar a imagem destacada
   como substituta.
