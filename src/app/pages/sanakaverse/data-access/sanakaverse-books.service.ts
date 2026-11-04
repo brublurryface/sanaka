@@ -68,21 +68,19 @@ export class SanakaverseBooksService {
    */
   getBooks(page = 1): Observable<SanakaverseBooksPage> {
     const requestedPage = Number.isSafeInteger(page) && page > 0 ? page : 1;
-    return this.contentPolicy
-      .resolve()
-      .pipe(
-        switchMap((policy) =>
-          policy.sanakaverseCategoryId === undefined
-            ? of({
-                books: [],
-                page: requestedPage,
-                perPage: this.pageSize,
-                total: 0,
-                totalPages: 0,
-              })
-            : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy, requestedPage),
-        ),
-      );
+    return this.contentPolicy.resolve().pipe(
+      switchMap((policy) =>
+        policy.sanakaverseCategoryId === undefined
+          ? of({
+              books: [],
+              page: requestedPage,
+              perPage: this.pageSize,
+              total: 0,
+              totalPages: 0,
+            })
+          : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy, requestedPage),
+      ),
+    );
   }
 
   private loadCategoryBooks(
