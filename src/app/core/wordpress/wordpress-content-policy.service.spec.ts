@@ -196,7 +196,13 @@ describe('WordPress editorial policy', () => {
     const books = watch(TestBed.inject(SanakaverseBooksService).getBooks());
     const cycles = watch(TestBed.inject(AboutCyclesService).getCycles());
     respondPolicy(categories.filter((category) => category.slug === 'romance'));
-    expect(books.next).toHaveBeenCalledExactlyOnceWith([]);
+    expect(books.next).toHaveBeenCalledExactlyOnceWith({
+      books: [],
+      page: 1,
+      perPage: 12,
+      total: 0,
+      totalPages: 0,
+    });
     expect(cycles.next).toHaveBeenCalledExactlyOnceWith([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
   });
@@ -403,7 +409,13 @@ describe('WordPress editorial policy', () => {
     post.flush([{ ...article, slug: 'volume', categories: [901] }]);
     expect(result.next.mock.calls.at(-1)?.[0]?.contentHtml).toBe('<p>Leitura preservada.</p>');
     respondCategories();
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/tags`);
+    const context = httpTesting.expectOne(
+      (request) => request.params.get('_fields') === 'tags,categories',
+    );
+    expect(context.request.params.get('categories[terms]')).toBe('108');
+    expect(context.request.params.get('categories_exclude[terms]')).toBe('201');
+    context.flush([]);
     const navigation = httpTesting.match(
       (request) => request.params.has('before') || request.params.has('after'),
     );
@@ -431,10 +443,18 @@ describe('WordPress editorial policy', () => {
       expect(request.request.params.get('categories_exclude[include_children]')).toBe('true');
     }
     expect(about.request.params.get('per_page')).toBe('9');
+    expect(library.request.params.get('per_page')).toBe('12');
+    expect(library.request.params.get('page')).toBe('1');
     expect(library.request.params.get('_fields')).toContain('sanakaverse_cover');
     about.flush([]);
-    library.flush([]);
+    library.flush([], { headers: { 'X-WP-Total': '0', 'X-WP-TotalPages': '0' } });
     expect(cycles.next).toHaveBeenCalledExactlyOnceWith([]);
-    expect(books.next).toHaveBeenCalledExactlyOnceWith([]);
+    expect(books.next).toHaveBeenCalledExactlyOnceWith({
+      books: [],
+      page: 1,
+      perPage: 12,
+      total: 0,
+      totalPages: 0,
+    });
   });
 });

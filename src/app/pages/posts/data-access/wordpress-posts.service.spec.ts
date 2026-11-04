@@ -43,6 +43,14 @@ describe('WordPressPostsService', () => {
     httpTesting.verify();
   });
 
+  function finishEmptyTagSuggestions() {
+    httpTesting
+      .expectOne((request) => request.params.get('_fields') === 'tags,categories')
+      .flush([]);
+  }
+
+  const tagHeaders = { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' };
+
   it('should expose decoded archive category hierarchy and omit excluded branches', () => {
     editorialPolicy.resolve.mockReturnValue(of({ ...defaultPolicy, sanakaverseCategoryId: 108 }));
     let result: readonly PostCategory[] | undefined;
@@ -440,12 +448,21 @@ describe('WordPressPostsService', () => {
       ]);
     const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
     expect(tagsRequest.request.params.get('per_page')).toBe('100');
+    expect(tagsRequest.request.params.get('post')).toBe('77');
     expect(tagsRequest.request.params.has('include')).toBe(false);
-    tagsRequest.flush([
-      { id: 8, name: 'Identidade', slug: 'identidade' },
-      { id: 9, name: 'Existência', slug: 'existencia' },
-      { id: 10, name: 'Consciência', slug: 'consciencia' },
-    ]);
+    tagsRequest.flush(
+      [
+        { id: 8, name: 'Identidade', slug: 'identidade' },
+        { id: 9, name: 'Existência', slug: 'existencia' },
+      ],
+      { headers: { 'X-WP-Total': '2', 'X-WP-TotalPages': '1' } },
+    );
+    httpTesting
+      .expectOne((request) => request.params.get('_fields') === 'tags,categories')
+      .flush([{ categories: [45], tags: [10] }]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/tags` && request.params.has('include'))
+      .flush([{ id: 10, name: 'Consciência', slug: 'consciencia' }]);
     expect(result?.slug).toBe('voce');
     expect(result?.title).toBe('VOCÊ');
     expect(result?.previous).toBeUndefined();
@@ -524,7 +541,8 @@ describe('WordPressPostsService', () => {
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
       .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+    finishEmptyTagSuggestions();
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/tags`);
 
     const adjacentRequests = httpTesting.match(
       (request) =>
@@ -582,7 +600,10 @@ describe('WordPressPostsService', () => {
 
     function flushTaxonomies() {
       httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush(categories);
-      httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush(tags);
+      httpTesting
+        .expectOne((request) => request.url === `${apiUrl}/tags`)
+        .flush(tags, { headers: tagHeaders });
+      finishEmptyTagSuggestions();
     }
 
     function adjacentRequests() {
@@ -661,6 +682,7 @@ describe('WordPressPostsService', () => {
       const result = watchDetail();
       result.request.flush([post]);
       httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush(categories);
+      finishEmptyTagSuggestions();
       httpTesting
         .expectOne((request) => request.url === `${apiUrl}/tags`)
         .flush(null, { status: 503, statusText: 'Unavailable' });
@@ -688,7 +710,7 @@ describe('WordPressPostsService', () => {
         .expectOne((request) => request.url === `${apiUrl}/categories`)
         .flush(null, { status: 503, statusText: 'Unavailable' });
       const tagRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
-      if (!tagRequest.cancelled) tagRequest.flush(tags);
+      if (!tagRequest.cancelled) tagRequest.flush(tags, { headers: tagHeaders });
 
       expect(result.errors).toEqual([]);
       expect(result.values.at(-1)?.contentHtml).toBe('<p>Corpo preservado.</p>');
@@ -781,9 +803,10 @@ describe('WordPressPostsService', () => {
         );
         const tagRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
         if (stalled === 'categories') {
-          tagRequest.flush(tags);
+          tagRequest.flush(tags, { headers: tagHeaders });
         } else {
           categoryRequest.flush(categories);
+          finishEmptyTagSuggestions();
           httpTesting
             .match((request) => request.params.has('before') || request.params.has('after'))
             .forEach((request) => request.flush([]));
@@ -826,6 +849,12 @@ describe('WordPressPostsService', () => {
       httpTesting
         .expectOne((request) => request.params.get('slug') === 'outro')
         .flush([{ ...post, id: 78, slug: 'outro' }]);
+      httpTesting
+        .expectOne(
+          (request) => request.url === `${apiUrl}/tags` && request.params.get('post') === '78',
+        )
+        .flush(tags, { headers: tagHeaders });
+      finishEmptyTagSuggestions();
       const newNavigation = adjacentRequests();
       newNavigation.previous.flush([]);
       newNavigation.next.flush([]);
@@ -900,7 +929,7 @@ describe('WordPressPostsService', () => {
       ]);
 
     httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`).flush([]);
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/tags`);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
     httpTesting
       .match(
