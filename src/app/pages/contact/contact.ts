@@ -6,6 +6,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { CONTACT_SOCIAL_LINKS } from './contact-social-links';
 import { ContactService } from './data-access/contact.service';
+import { CONTACT_LIMITS } from '../../../shared/contact';
 
 type ContactStatus = 'idle' | 'sending' | 'success' | 'rate-limited' | 'error';
 
@@ -23,12 +24,16 @@ export class Contact {
 
   protected readonly socialLinks = CONTACT_SOCIAL_LINKS;
   protected readonly status = signal<ContactStatus>('idle');
+  protected readonly limits = CONTACT_LIMITS;
 
   protected readonly form = this.formBuilder.nonNullable.group({
-    name: ['', [Validators.required, Validators.maxLength(80)]],
-    email: ['', [Validators.required, Validators.email, Validators.maxLength(254)]],
-    subject: ['', [Validators.maxLength(120)]],
-    message: ['', [Validators.required, Validators.maxLength(4_000)]],
+    name: ['', [Validators.required, Validators.maxLength(CONTACT_LIMITS.name)]],
+    email: [
+      '',
+      [Validators.required, Validators.email, Validators.maxLength(CONTACT_LIMITS.email)],
+    ],
+    subject: ['', [Validators.maxLength(CONTACT_LIMITS.subject)]],
+    message: ['', [Validators.required, Validators.maxLength(CONTACT_LIMITS.message)]],
     website: [''],
   });
 

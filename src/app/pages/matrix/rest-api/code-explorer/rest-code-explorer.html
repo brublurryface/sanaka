@@ -81,7 +81,7 @@
         [class.matrix-code-layer--active]="activeIndex() === 1"
         [attr.aria-hidden]="activeIndex() !== 1"
         [attr.tabindex]="activeIndex() === 1 ? 0 : -1"
-      ><code><span class="token-keyword">const</span> nasaId = <span class="token-keyword">this</span>.<span class="token-call">curatedNasaId</span>(query);
+      ><code><span class="token-comment">// nasaId é recebido explicitamente do portal.</span>
 <span class="token-keyword">const</span> params = <span class="token-keyword">new</span> <span class="token-type">HttpParams</span>()
   .<span class="token-call">set</span>(nasaId ? <span class="token-string">'nasa_id'</span> : <span class="token-string">'q'</span>, nasaId ?? query)
   .<span class="token-call">set</span>(<span class="token-string">'media_type'</span>, <span class="token-string">'image'</span>)
@@ -101,7 +101,7 @@
   .<span class="token-call">pipe</span>(
     <span class="token-call">tap</span>((query) =&gt; <span class="token-keyword">this</span>.<span class="token-call">beginRequest</span>(query)),
     <span class="token-call">switchMap</span>((query) =&gt;
-      <span class="token-keyword">this</span>.api.<span class="token-call">searchImages</span>(query).<span class="token-call">pipe</span>(
+      <span class="token-keyword">this</span>.<span class="token-call">searchImages</span>(query).<span class="token-call">pipe</span>(
         <span class="token-call">catchError</span>((error) =&gt; <span class="token-call">of</span>({{ '{' }} kind: <span class="token-string">'error'</span>, error {{ '}' }})),
       ),
     ),
