@@ -42,3 +42,16 @@ A telemetria é injetada com `--import` somente no processo de benchmark e usa I
 As medições brutas ficam em `docs/performance/data/post-ssr-spike-2026-11.json`. Não extrapolar suas taxas para o plano de produção. O SSR faz oito GETs à fixture por artigo nesta composição; há custo real nos complementos que a renderização precisa aguardar. Antes de ativá-lo: medir no plano equivalente, estabelecer orçamento de tempo para enriquecimentos, confirmar hidratação no navegador e revisar a política editorial de invalidação. Uma otimização futura pode adiar complementos ao cliente, mas precisa preservar a leitura e ser medida separadamente.
 
 Referências: [SSR híbrido e RESPONSE_INIT](https://angular.dev/guide/ssr), [configuração do TransferCache](https://angular.dev/guide/ssr#configuring-the-caching-options).
+
+## Resultado de carga local
+
+| Modo | Concorrência | Requisições | p50 do HTML (ms) | p95 do HTML (ms) | CPU (s) | Pico RSS (MiB) | GETs à fixture |
+| ---- | ------------ | ----------- | ---------------- | ---------------- | ------- | -------------- | -------------- |
+| CSR  | 1            | 100         | 1.3              | 3.1              | 0.13    | 68.6           | 0              |
+| CSR  | 5            | 100         | 2.7              | 5.1              | 0.07    | 71.1           | 0              |
+| CSR  | 20           | 100         | 7.3              | 12.8             | 0.08    | 72.4           | 0              |
+| SSR  | 1            | 100         | 105.2            | 115.7            | 5.44    | 218.3          | 800            |
+| SSR  | 5            | 100         | 162.0            | 240.5            | 4.45    | 251.4          | 800            |
+| SSR  | 20           | 100         | 544.5            | 798.4            | 4.46    | 295.0          | 800            |
+
+Medição: 2026-11-04T20:50:22.747Z. Sem outro build ou suíte de testes concorrente. O pico de RSS inclui aquecimento e efeitos do GC; não representa uma garantia de capacidade no Render.
