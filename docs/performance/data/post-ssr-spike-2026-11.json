@@ -1,0 +1,235 @@
+{
+  "date": "2026-11-04T20:47:09.213Z",
+  "node": "v24.22.1",
+  "fixtureDelayMs": 20,
+  "heapLimitMiB": 384,
+  "environment": {
+    "cpuQuota": "800000 100000",
+    "memoryLimit": "8589934592"
+  },
+  "variants": [
+    {
+      "name": "csr",
+      "entry": "dist/sanaka/server/server.mjs",
+      "scenarios": [
+        {
+          "slug": "audit-article",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 230.62916799999994,
+          "bytes": 40063,
+          "title": "Sanaka",
+          "ogTitle": "Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        },
+        {
+          "slug": "optional-error",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 43.02490799999998,
+          "bytes": 40063,
+          "title": "Sanaka",
+          "ogTitle": "Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        },
+        {
+          "slug": "does-not-exist",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 30.519446000000016,
+          "bytes": 40063,
+          "title": "Sanaka",
+          "ogTitle": "Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        },
+        {
+          "slug": "cms-unavailable",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 23.95366899999999,
+          "bytes": 40063,
+          "title": "Sanaka",
+          "ogTitle": "Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        },
+        {
+          "slug": "policy-unavailable",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 34.89828899999998,
+          "bytes": 40063,
+          "title": "Sanaka",
+          "ogTitle": "Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        }
+      ],
+      "load": [
+        {
+          "concurrency": 1,
+          "requests": 100,
+          "p50Ms": 1.307215000000042,
+          "p95Ms": 3.037307999999939,
+          "elapsedMs": 154.791516,
+          "cpuSeconds": 0.12262099999999998,
+          "peakRssMiB": 68.76953125,
+          "fixtureRequests": 0
+        },
+        {
+          "concurrency": 5,
+          "requests": 100,
+          "p50Ms": 2.7814910000001873,
+          "p95Ms": 4.556752999999844,
+          "elapsedMs": 84.55206899999985,
+          "cpuSeconds": 0.07258999999999999,
+          "peakRssMiB": 71.39453125,
+          "fixtureRequests": 0
+        },
+        {
+          "concurrency": 20,
+          "requests": 100,
+          "p50Ms": 8.886811999999964,
+          "p95Ms": 20.148386000000073,
+          "elapsedMs": 80.94371999999998,
+          "cpuSeconds": 0.08282699999999998,
+          "peakRssMiB": 72.51953125,
+          "fixtureRequests": 0
+        }
+      ],
+      "stderrWarnings": []
+    },
+    {
+      "name": "ssr",
+      "entry": "dist/ssr-spike/server/server.mjs",
+      "scenarios": [
+        {
+          "slug": "audit-article",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 600.1701229999999,
+          "bytes": 91241,
+          "title": "Artigo de auditoria 1 | Sanaka",
+          "canonical": "https://sanaka.com.br/posts/audit-article",
+          "ogTitle": "Artigo de auditoria 1 | Sanaka",
+          "robots": "index, follow",
+          "hasArticle": true,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": true
+        },
+        {
+          "slug": "optional-error",
+          "status": 200,
+          "cacheControl": "public, max-age=0, must-revalidate",
+          "retryAfter": null,
+          "milliseconds": 188.54833099999996,
+          "bytes": 88235,
+          "title": "Artigo de auditoria 1 | Sanaka",
+          "canonical": "https://sanaka.com.br/posts/optional-error",
+          "ogTitle": "Artigo de auditoria 1 | Sanaka",
+          "robots": "index, follow",
+          "hasArticle": true,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": true
+        },
+        {
+          "slug": "does-not-exist",
+          "status": 404,
+          "cacheControl": "no-store",
+          "retryAfter": null,
+          "milliseconds": 114.2737790000001,
+          "bytes": 69614,
+          "title": "Publicação | Sanaka",
+          "canonical": "https://sanaka.com.br/posts/does-not-exist",
+          "ogTitle": "Publicação | Sanaka",
+          "robots": "noindex, nofollow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": true
+        },
+        {
+          "slug": "cms-unavailable",
+          "status": 503,
+          "cacheControl": "no-store",
+          "retryAfter": "60",
+          "milliseconds": 122.67364600000019,
+          "bytes": 69368,
+          "title": "Publicação | Sanaka",
+          "canonical": "https://sanaka.com.br/posts/cms-unavailable",
+          "ogTitle": "Publicação | Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": true
+        },
+        {
+          "slug": "policy-unavailable",
+          "status": 503,
+          "cacheControl": "no-store",
+          "retryAfter": "60",
+          "milliseconds": 81.6654440000002,
+          "bytes": 68967,
+          "title": "Publicação | Sanaka",
+          "canonical": "https://sanaka.com.br/posts/policy-unavailable",
+          "ogTitle": "Publicação | Sanaka",
+          "robots": "index, follow",
+          "hasArticle": false,
+          "transferredCounter": false,
+          "transferredPaginationHeaders": false
+        }
+      ],
+      "load": [
+        {
+          "concurrency": 1,
+          "requests": 100,
+          "p50Ms": 107.6183030000002,
+          "p95Ms": 118.64085100000011,
+          "elapsedMs": 10905.493206,
+          "cpuSeconds": 6.0666340000000005,
+          "peakRssMiB": 224.78125,
+          "fixtureRequests": 800
+        },
+        {
+          "concurrency": 5,
+          "requests": 100,
+          "p50Ms": 148.0113059999985,
+          "p95Ms": 173.24116299999878,
+          "elapsedMs": 3086.166599,
+          "cpuSeconds": 3.876253,
+          "peakRssMiB": 253.3671875,
+          "fixtureRequests": 800
+        },
+        {
+          "concurrency": 20,
+          "requests": 100,
+          "p50Ms": 477.46168399999806,
+          "p95Ms": 515.6495489999979,
+          "elapsedMs": 2457.304763,
+          "cpuSeconds": 3.812531999999999,
+          "peakRssMiB": 289.76953125,
+          "fixtureRequests": 800
+        }
+      ],
+      "stderrWarnings": []
+    }
+  ]
+}

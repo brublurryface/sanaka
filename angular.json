@@ -60,6 +60,16 @@
               "optimization": false,
               "extractLicenses": false,
               "sourceMap": true
+            },
+            "ssr-spike": {
+              "server": "experiments/ssr/main.server.ts",
+              "fileReplacements": [
+                {
+                  "replace": "src/app/app.routes.server.ts",
+                  "with": "experiments/ssr/app.routes.server.ts"
+                }
+              ],
+              "tsConfig": "experiments/ssr/tsconfig.json"
             }
           },
           "defaultConfiguration": "production"

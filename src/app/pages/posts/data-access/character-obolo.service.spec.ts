@@ -38,6 +38,7 @@ describe('CharacterOboloService', () => {
     const request = httpTesting.expectOne(`${restUrl}/sanaka/v1/obolos/nandin%C4%AB`);
 
     expect(request.request.method).toBe('GET');
+    expect(request.request.transferCache).toBe(false);
     request.flush({ characterSlug: 'nandinī', total: 128 });
     expect(total).toBe(128);
   });
