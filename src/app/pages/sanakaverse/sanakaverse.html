@@ -59,8 +59,10 @@
         </div>
       } @else if (books().length > 0) {
         <ol
+          id="sanakaverse-books"
           class="sanakaverse-grid"
           [attr.aria-label]="'sanakaverse.collection.ariaLabel' | transloco"
+          [attr.aria-busy]="isLoadingMore()"
         >
           @for (book of books(); track book.id) {
             <li class="sanakaverse-book">
@@ -98,6 +100,34 @@
             </li>
           }
         </ol>
+        <div class="sanakaverse-pagination">
+          <p role="status">
+            {{
+              'sanakaverse.pagination.progress'
+                | transloco: { shown: books().length, total: total() }
+            }}
+          </p>
+          @if (hasLoadMoreError()) {
+            <p role="alert">{{ 'sanakaverse.pagination.error' | transloco }}</p>
+          }
+          @if (hasMore()) {
+            <button
+              type="button"
+              aria-controls="sanakaverse-books"
+              [disabled]="isLoadingMore()"
+              (click)="loadMore()"
+            >
+              {{
+                (isLoadingMore()
+                  ? 'sanakaverse.pagination.loading'
+                  : hasLoadMoreError()
+                    ? 'sanakaverse.pagination.retry'
+                    : 'sanakaverse.pagination.loadMore'
+                ) | transloco
+              }}
+            </button>
+          }
+        </div>
       }
     </section>
   </div>

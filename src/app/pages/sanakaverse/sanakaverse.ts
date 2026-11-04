@@ -1,4 +1,4 @@
-import { Component, DestroyRef, inject, OnInit, signal } from '@angular/core';
+import { Component, computed, DestroyRef, inject, OnInit, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
@@ -20,30 +20,56 @@ export class Sanakaverse implements OnInit {
   protected readonly books = signal<readonly SanakaverseBook[]>([]);
   protected readonly isLoading = signal(true);
   protected readonly hasError = signal(false);
+  protected readonly isLoadingMore = signal(false);
+  protected readonly hasLoadMoreError = signal(false);
+  protected readonly total = signal(0);
+  private readonly currentPage = signal(0);
+  private readonly totalPages = signal(0);
+  protected readonly hasMore = computed(() => this.currentPage() < this.totalPages());
 
   ngOnInit(): void {
     this.loadBooks();
   }
 
   protected retry(): void {
-    this.loadBooks();
+    if (!this.isLoading() && !this.isLoadingMore()) this.loadBooks();
   }
 
-  private loadBooks(): void {
-    this.isLoading.set(true);
+  protected loadMore(): void {
+    if (this.isLoading() || this.isLoadingMore() || !this.hasMore()) return;
+    this.loadBooks(this.currentPage() + 1, true);
+  }
+
+  private loadBooks(page = 1, append = false): void {
+    this.isLoading.set(!append);
+    this.isLoadingMore.set(append);
     this.hasError.set(false);
+    this.hasLoadMoreError.set(false);
 
     this.booksService
-      .getBooks()
+      .getBooks(page)
       .pipe(
         takeUntilDestroyed(this.destroyRef),
-        finalize(() => this.isLoading.set(false)),
+        finalize(() => {
+          this.isLoading.set(false);
+          this.isLoadingMore.set(false);
+        }),
       )
       .subscribe({
-        next: (books) => this.books.set(books),
+        next: (result) => {
+          const books =
+            append && result.total > 0 ? [...this.books(), ...result.books] : result.books;
+          this.books.set([...new Map(books.map((book) => [book.id, book])).values()]);
+          this.currentPage.set(result.page);
+          this.total.set(result.total);
+          this.totalPages.set(result.totalPages);
+        },
         error: () => {
-          this.books.set([]);
-          this.hasError.set(true);
+          if (append) this.hasLoadMoreError.set(true);
+          else {
+            this.books.set([]);
+            this.hasError.set(true);
+          }
         },
       });
   }

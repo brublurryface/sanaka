@@ -200,6 +200,13 @@
       "untitled": "Untitled volume",
       "unrevealed": "Cover not yet revealed"
     },
+    "pagination": {
+      "progress": "Showing {{ shown }} of {{ total }} books.",
+      "loadMore": "Load more books",
+      "loading": "Loading books…",
+      "error": "More books could not be loaded. The displayed volumes remain available.",
+      "retry": "Try again"
+    },
     "loading": "Aligning the books with the stars…",
     "error": {
       "title": "The books' orbit came apart for a moment.",

@@ -7,8 +7,7 @@ import { ResolvedWordPressContentPolicy } from '../../../core/wordpress/wordpres
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
-import { SanakaverseBook } from '../sanakaverse-book';
-import { SanakaverseBooksService } from './sanakaverse-books.service';
+import { SanakaverseBooksPage, SanakaverseBooksService } from './sanakaverse-books.service';
 
 describe('SanakaverseBooksService', () => {
   let httpTesting: HttpTestingController;
@@ -39,7 +38,7 @@ describe('SanakaverseBooksService', () => {
   });
 
   it('should use the resolved Sanakaverse category and map its dedicated book covers', () => {
-    let result: readonly SanakaverseBook[] | undefined;
+    let result: SanakaverseBooksPage | undefined;
 
     service.getBooks().subscribe((books) => {
       result = books;
@@ -49,46 +48,50 @@ describe('SanakaverseBooksService', () => {
 
     expect(postsRequest.request.params.get('categories[terms]')).toBe('72');
     expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43');
-    expect(postsRequest.request.params.get('per_page')).toBe('100');
+    expect(postsRequest.request.params.get('per_page')).toBe('12');
+    expect(postsRequest.request.params.get('page')).toBe('1');
     expect(postsRequest.request.params.get('orderby')).toBe('date');
     expect(postsRequest.request.params.get('order')).toBe('asc');
     expect(postsRequest.request.params.get('_fields')).toContain('sanakaverse_cover');
 
-    postsRequest.flush([
-      {
-        id: 1,
-        slug: 'samvit',
-        title: { rendered: 'Saṃvit &amp; o limiar' },
-        sanakaverse_cover: {
-          source_url: 'https://example.com/samvit.webp',
-          alt_text: 'Samvit diante de um portal',
-        },
-      },
-      {
-        id: 2,
-        slug: 'vasuki',
-        title: { rendered: 'Vāsuki' },
-        meta: {
+    postsRequest.flush(
+      [
+        {
+          id: 1,
+          slug: 'samvit',
+          title: { rendered: 'Saṃvit &amp; o limiar' },
           sanakaverse_cover: {
-            url: 'https://example.com/vasuki.webp',
-            alt: 'Vasuki em sua capa',
+            source_url: 'https://example.com/samvit.webp',
+            alt_text: 'Samvit diante de um portal',
           },
         },
-      },
-      {
-        id: 3,
-        slug: 'mors',
-        title: { rendered: 'Mors' },
-        sanakaverse_cover: ['https://example.com/mors.webp'],
-      },
-      {
-        id: 4,
-        slug: 'kalika',
-        title: { rendered: 'Kālikā' },
-      },
-    ]);
+        {
+          id: 2,
+          slug: 'vasuki',
+          title: { rendered: 'Vāsuki' },
+          meta: {
+            sanakaverse_cover: {
+              url: 'https://example.com/vasuki.webp',
+              alt: 'Vasuki em sua capa',
+            },
+          },
+        },
+        {
+          id: 3,
+          slug: 'mors',
+          title: { rendered: 'Mors' },
+          sanakaverse_cover: ['https://example.com/mors.webp'],
+        },
+        {
+          id: 4,
+          slug: 'kalika',
+          title: { rendered: 'Kālikā' },
+        },
+      ],
+      { headers: { 'X-WP-Total': '4', 'X-WP-TotalPages': '1' } },
+    );
 
-    expect(result).toEqual([
+    expect(result?.books).toEqual([
       {
         id: 1,
         slug: 'samvit',
@@ -118,17 +121,18 @@ describe('SanakaverseBooksService', () => {
         coverImageAlt: undefined,
       },
     ]);
+    expect(result).toMatchObject({ page: 1, perPage: 12, total: 4, totalPages: 1 });
   });
 
   it('should keep the collection empty when its category does not exist yet', () => {
     editorialPolicy.resolve.mockReturnValue(of({ excludedCategoryIds: [43] }));
-    let result: readonly SanakaverseBook[] | undefined;
+    let result: SanakaverseBooksPage | undefined;
 
     service.getBooks().subscribe((books) => {
       result = books;
     });
 
-    expect(result).toEqual([]);
+    expect(result).toEqual({ books: [], page: 1, perPage: 12, total: 0, totalPages: 0 });
     httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
   });
 });
