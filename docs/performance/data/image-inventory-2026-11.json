@@ -1,0 +1,274 @@
+[
+  {
+    "path": "public/images/samvit/presences/samvit-sesha-blink.png",
+    "bytes": 5446333,
+    "width": 1484,
+    "height": 1060,
+    "frames": 4,
+    "sha256": "afa1c9bfaae9188a1e18122434666d96fa1f1e6cf58169063feb426b1e723266"
+  },
+  {
+    "path": "public/images/about/about-cycles-sketch-nine.webp",
+    "bytes": 2765158,
+    "width": 1254,
+    "height": 1254,
+    "frames": 1,
+    "sha256": "186e5bf22283e1313e99701e8649a9ed03be5dacd21c1ce6e93792223ec4a383"
+  },
+  {
+    "path": "public/images/about/about-cycles-sketch.webp",
+    "bytes": 2560744,
+    "width": 1536,
+    "height": 1024,
+    "frames": 1,
+    "sha256": "4e0221eadbbf0f62bc2cbf42c538ef11683999112c47e18199ebc5a1d1ef2bbe"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-sesha-sleeping-still.png",
+    "bytes": 2440792,
+    "width": 1484,
+    "height": 1060,
+    "frames": 1,
+    "sha256": "09ae6e3f9c6764fb7ff3f3e94f4ff8ca69c85ccb6de379dd734b4912d6628728"
+  },
+  {
+    "path": "public/images/matrix/entregas/entregas-atmosphere-desktop.webp",
+    "bytes": 2412664,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "c5da848101e2ee2cff9b77c6404ffe9b0daa3d4f198ec398638ed9ed79ea6787"
+  },
+  {
+    "path": "public/images/not-found/nemi.png",
+    "bytes": 2293263,
+    "width": 1448,
+    "height": 1086,
+    "frames": 1,
+    "sha256": "090600c1093f9d22d40a62e6ed1dde73ee5506f089b28b6f7b80bd29d562580e"
+  },
+  {
+    "path": "public/images/matrix/padaria/padaria-atmosphere-desktop.webp",
+    "bytes": 2218890,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "9b0dc5ef9f77145f30fc64227b49b1492b67697a145e61cb3714a9a07e7822e4"
+  },
+  {
+    "path": "public/images/matrix/rest-api/rest-api-atmosphere-desktop.webp",
+    "bytes": 2134900,
+    "width": 1983,
+    "height": 793,
+    "frames": 1,
+    "sha256": "dd625d309853674f8c140519a4842a87907844ebff9909096e8490144786ad09"
+  },
+  {
+    "path": "public/images/samvit/presences/akasha-seated-still.png",
+    "bytes": 2028765,
+    "width": 1359,
+    "height": 1158,
+    "frames": 1,
+    "sha256": "6682bca741ae2f2f0658de7a966748a1fbc5102f3d811914b214f28f5802e867"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-abhaya-still.png",
+    "bytes": 2015857,
+    "width": 1154,
+    "height": 1483,
+    "frames": 1,
+    "sha256": "c42205b59d88f681dd5cf3f5dca5c1b3874203d28a86021e27bf6fae1f685eff"
+  },
+  {
+    "path": "public/images/samvit/presences/akasha-lying-still.png",
+    "bytes": 1962546,
+    "width": 1536,
+    "height": 1024,
+    "frames": 1,
+    "sha256": "0c4aadd904910fe92d54055b4f5ab1af1a1d5a4ee535ca077d46588c7fea99d9"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-curious-blink.webp",
+    "bytes": 1908640,
+    "width": 1122,
+    "height": 1402,
+    "frames": 6,
+    "sha256": "40d287885e4a5f8aaabefbc05e270b8a80da255f8efa8608e06a97032fa2ccb0"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-with-bhu-still.png",
+    "bytes": 1885495,
+    "width": 1122,
+    "height": 1402,
+    "frames": 1,
+    "sha256": "3db5f1e690abe05ef2dcfb7887b64a5e05995847bc43dd8de7b4c6a741004253"
+  },
+  {
+    "path": "public/images/contact/contact-atmosphere-desktop.webp",
+    "bytes": 1864122,
+    "width": 1945,
+    "height": 808,
+    "frames": 1,
+    "sha256": "e87d2651319054d089c6e392a35a5db02d1fc1fc9339893096a8d198227c42ea"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-contemplative-still.png",
+    "bytes": 1822571,
+    "width": 1024,
+    "height": 1536,
+    "frames": 1,
+    "sha256": "722cf226c04a250431bebf28259204d467186730bab182b353f14ffe28d3d9a5"
+  },
+  {
+    "path": "public/images/home/sanctuary-hero.png",
+    "bytes": 1819062,
+    "width": 1672,
+    "height": 941,
+    "frames": 1,
+    "sha256": "4408472aec17f7bfe517ae415507f6154aaea9cf55a8d94d065cfa68d30100c8"
+  },
+  {
+    "path": "public/images/posts/posts-atmosphere-desktop.webp",
+    "bytes": 1808422,
+    "width": 1942,
+    "height": 810,
+    "frames": 1,
+    "sha256": "368ce4cef9025a1a20f29e3de7c6c51e4f73168ade99cb37383e9362c7e0a825"
+  },
+  {
+    "path": "public/images/samvit/presences/akasha-seated-blink.png",
+    "bytes": 1796518,
+    "width": 1359,
+    "height": 1158,
+    "frames": 2,
+    "sha256": "0991c943fc33dcaece6bd3bbda11d02ea758b9c900fff5fd1b8053e9ab95dd45"
+  },
+  {
+    "path": "public/images/about/about-atmosphere-desktop.webp",
+    "bytes": 1773586,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "6880fa13b3872fc75dc04eb0fe0a29d672a976f6ae2eec84df57a17a829ccb97"
+  },
+  {
+    "path": "public/images/sanakaverse/sanakaverse-atmosphere-desktop.webp",
+    "bytes": 1772914,
+    "width": 2048,
+    "height": 853,
+    "frames": 1,
+    "sha256": "55e98349c2cf5b9e1f85cc8350314c56cb8224326ba076501839d4f2ace94183"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-curious-still.png",
+    "bytes": 1756524,
+    "width": 1122,
+    "height": 1402,
+    "frames": 1,
+    "sha256": "c59c9972d852e61e49783b964b9b9ebedd27eaf73352a1639c8699342d5fba48"
+  },
+  {
+    "path": "public/images/matrix/obolos/obolos-atmosphere-desktop.webp",
+    "bytes": 1741298,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "e8f99d8ab8da29bb1343300c49bd9fd6ab07053a288c3e7b6f661e715bf346b2"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-dot-eye-still.png",
+    "bytes": 1701734,
+    "width": 1024,
+    "height": 1536,
+    "frames": 1,
+    "sha256": "f0b7ad3262f629f63833b4d211b44ed21670a1b3702003a406b2aa99b3d0f4d0"
+  },
+  {
+    "path": "public/images/samvit/presences/akasha-lying-blink.png",
+    "bytes": 1687851,
+    "width": 1536,
+    "height": 1024,
+    "frames": 2,
+    "sha256": "b8089f479c74a082911ef0acad9a1fc78cccf1470d42861b5be48c57e5fc2b47"
+  },
+  {
+    "path": "public/images/matrix/components/components-atmosphere-desktop.webp",
+    "bytes": 1618894,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "b618a30931c3b36696ff869dc44a0878453fa79a3f11f3b572887388b1714bdd"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-with-bhu-blink.webp",
+    "bytes": 1482508,
+    "width": 1122,
+    "height": 1402,
+    "frames": 6,
+    "sha256": "f5ef948a438c0eca2ea5b22784e4e0bf93509bb7495d5cb7ecb3e5f14dfa2d29"
+  },
+  {
+    "path": "public/images/samvit/samvit-sanaka.png",
+    "bytes": 1469618,
+    "width": 900,
+    "height": 1254,
+    "frames": 1,
+    "sha256": "2a9bcbc379b4ee55ddcf7a8ae73ca36be71b983c438fe82e8d7413cd8ccad3dc"
+  },
+  {
+    "path": "public/images/matrix/matrix-atmosphere-desktop.webp",
+    "bytes": 1296608,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "398ea8f315f0bfdc615243d864ac05c4eb56dc80250ee4110966797e510343c9"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-abhaya-blink.webp",
+    "bytes": 1248948,
+    "width": 1154,
+    "height": 1483,
+    "frames": 6,
+    "sha256": "d05769c661824933feae3cfb954458bcc9acb87a4bd7aeb501787fc8c9d618ff"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-dot-eye-ear-twitch.webp",
+    "bytes": 1075944,
+    "width": 1024,
+    "height": 1536,
+    "frames": 2,
+    "sha256": "d3619d068cee9ff7c9bcc84fdd1ea97af7a4ad849e82c90acd1f7981df7de3bd"
+  },
+  {
+    "path": "public/images/samvit/presences/samvit-contemplative-blink.webp",
+    "bytes": 1065476,
+    "width": 1024,
+    "height": 1536,
+    "frames": 6,
+    "sha256": "ff867f7ec873d5398c889a2df6298d1c3cfdaef83db599f83d4802f079ae4240"
+  },
+  {
+    "path": "public/images/matrix/jogo/jogo-atmosphere-desktop.webp",
+    "bytes": 461300,
+    "width": 1942,
+    "height": 809,
+    "frames": 1,
+    "sha256": "fde4b9e0cb1cab5c1e97508559f5b55abf2dd94651f56ddd850266c0d213c26b"
+  },
+  {
+    "path": "public/images/sanakaverse/sanakaverse-stars.webp",
+    "bytes": 50846,
+    "width": 2048,
+    "height": 682,
+    "frames": 1,
+    "sha256": "aec53500831c9c14148fce1d75d875cf0d80536615b6106ae271a652df7294a6"
+  },
+  {
+    "path": "public/images/brand/flame-mark.webp",
+    "bytes": 4210,
+    "width": 71,
+    "height": 144,
+    "frames": 1,
+    "sha256": "9ac9565b39b8331944b02087f4d58506110b5bec4f46babe8465c99cee4cda77"
+  }
+]

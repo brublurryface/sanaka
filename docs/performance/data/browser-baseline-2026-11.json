@@ -1,0 +1,41 @@
+{
+  "date": "2026-11-04",
+  "build": "production,performance",
+  "method": "Same-origin iframe in cloud Chrome; no CPU/network throttling; sequential samples with shared cache and heap",
+  "columns": [
+    "sample",
+    "width",
+    "posts",
+    "books",
+    "elements",
+    "usedHeapMiB",
+    "lcpMs",
+    "cls",
+    "maxObservedInteractionMs",
+    "navigationTtfbMs",
+    "transferBytes",
+    "resources"
+  ],
+  "samples": [
+    ["archive-20-mobile", 390, 20, 0, 326, 11.9419, 168, 0.347602, null, 1.6, 51849, 22],
+    ["archive-200-mobile", 390, 200, 0, 2126, 15.6791, 168, 0.806864, 32, 1.6, 466881, 31],
+    ["archive-500-mobile", 390, 500, 0, 5125, 12.9795, 168, 0.806864, 9208, 1.6, 1158996, 46],
+    ["archive-20-desktop", 1280, 20, 0, 326, 14.4193, 192, 0.147879, null, 2.1, 51849, 22],
+    ["archive-200-desktop", 1280, 200, 0, 2126, 16.2197, 192, 0.345345, null, 2.1, 466881, 31],
+    ["archive-500-desktop", 1280, 500, 0, 5125, 23.7419, 192, 0.361651, null, 2.1, 1158996, 46],
+    ["library-100-mobile", 390, 0, 100, 799, 22.9077, 152, 0.357713, null, 2, 4666945, 25],
+    ["large-article-mobile", 390, 0, 0, 184, 24.0121, 448, 0.276955, null, 3.1, 5539252, 25],
+    ["home-mobile", 390, 0, 0, 138, 26.3345, 228, 0.23017, null, 2, 3395258, 14],
+    ["home-desktop", 1280, 0, 0, 138, 28.2806, 148, 0.04227, null, 1.4, 3000, 14],
+    ["samvit-mobile", 390, 0, 0, 98, 32.4622, 152, 0.044015, null, 1.9, 57548, 13]
+  ],
+  "limitations": [
+    "LCP and CLS are laboratory observations, not field p75; scrolling/clicking and automation can affect timings.",
+    "maxObservedInteractionMs is Event Timing output, not an INP implementation; the 9208ms outlier is not attributed to application code without a trace.",
+    "performance.memory is shared Chromium heap and fluctuates with GC; values are not isolated retained component memory.",
+    "The archive fixture has text-only cards and books reuse one cover; image payload cannot be extrapolated to a real collection.",
+    "Cache was shared across samples. A 304 may report zero encoded bytes; use the image inventory for original asset sizes.",
+    "The iframe reproduces responsive CSS viewport width, not an actual phone's CPU, DPR, browser chrome or network.",
+    "The performance build uses CSR even for the Home; the production Home is prerendered, so initial navigation timings are not equivalent."
+  ]
+}
