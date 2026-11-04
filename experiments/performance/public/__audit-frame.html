@@ -1,0 +1,64 @@
+<!doctype html>
+<html lang="pt-BR">
+  <meta charset="utf-8" />
+  <title>Sanaka — laboratório de desempenho</title>
+  <style>
+    body {
+      margin: 0;
+      background: #eee;
+      font: 14px sans-serif;
+    }
+    header {
+      padding: 8px;
+    }
+    iframe {
+      display: block;
+      border: 1px solid #777;
+      margin: auto;
+      max-width: none;
+      width: var(--frame-width, 1280px);
+    }
+  </style>
+  <script>
+    const requestedWidth = new URL(location.href).searchParams.get('width');
+    if (['390', '320'].includes(requestedWidth))
+      document.documentElement.style.setProperty('--frame-width', `${requestedWidth}px`);
+  </script>
+  <header>
+    <label
+      >Largura
+      <select id="viewport">
+        <option>1280</option>
+        <option>390</option>
+        <option>320</option>
+      </select></label
+    >
+    <label
+      >Página
+      <select id="route">
+        <option value="/posts">Arquivo</option>
+        <option value="/">Home</option>
+        <option value="/posts/audit-article">Artigo grande</option>
+        <option value="/samvit">Saṃvit</option>
+        <option value="/sanakaverse">Biblioteca</option>
+      </select></label
+    >
+  </header>
+  <iframe id="audit-frame" title="Sanaka no viewport escolhido" width="1280" height="844"></iframe>
+  <script>
+    const frame = document.getElementById('audit-frame');
+    const route = new URL(location.href).searchParams.get('route');
+    frame.src = ['/', '/posts', '/posts/audit-article', '/samvit', '/sanakaverse'].includes(route)
+      ? route
+      : '/posts';
+    document.getElementById('route').value = frame.src.replace(location.origin, '');
+    document.getElementById('viewport').value = requestedWidth || '1280';
+    document.getElementById('viewport').onchange = (e) => {
+      frame.width = e.target.value;
+      frame.style.width = `${e.target.value}px`;
+    };
+    document.getElementById('route').onchange = (e) => {
+      frame.src = e.target.value;
+    };
+  </script>
+</html>
