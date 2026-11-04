@@ -1,28 +1,43 @@
+import { HttpParams } from '@angular/common/http';
 import { InjectionToken } from '@angular/core';
 
 /** Regras editoriais que delimitam o conteúdo público de Sanaka no WordPress compartilhado. */
 export interface WordPressContentPolicy {
-  readonly excludedCategoryIds: readonly number[];
-  readonly aboutCycleCategoryId: number;
-  readonly sanakaverseCategoryId: number;
+  readonly excludedCategorySlugs: readonly string[];
+  readonly aboutCycleCategorySlug: string;
   readonly sanakaverseCategorySlug: string;
+}
+
+/** IDs confirmados no CMS, sem vínculo com a instalação original. */
+export interface ResolvedWordPressContentPolicy {
+  readonly excludedCategoryIds: readonly number[];
+  readonly aboutCycleCategoryId?: number;
+  readonly sanakaverseCategoryId?: number;
 }
 
 /**
  * Romance pertence ao WoD, Sobre reúne os fragmentos autobiográficos e Sanakaverse identifica
- * sua coleção pelo ID exigido nos filtros REST e pelo slug usado na validação semântica.
- *
- * Os IDs fixos pertencem à instalação WordPress que é a fonte de verdade dos dois projetos. Se uma
- * migração recriar essas taxonomias, este é o único ponto da aplicação que precisa ser atualizado.
+ * sua coleção por slugs estáveis. Os IDs exigidos pela REST API são resolvidos no CMS.
  */
 export const SANAKA_WORDPRESS_CONTENT_POLICY = new InjectionToken<WordPressContentPolicy>(
   'SANAKA_WORDPRESS_CONTENT_POLICY',
   {
     factory: () => ({
-      excludedCategoryIds: [43],
-      aboutCycleCategoryId: 62,
-      sanakaverseCategoryId: 97,
+      excludedCategorySlugs: ['romance'],
+      aboutCycleCategorySlug: 'sobre',
       sanakaverseCategorySlug: 'sanakaverse',
     }),
   },
 );
+
+/** A forma simples de categories_exclude não inclui descendentes na REST API. */
+export function excludeWordPressCategoryBranches(
+  params: HttpParams,
+  categoryIds: readonly number[],
+): HttpParams {
+  return categoryIds.length
+    ? params
+        .set('categories_exclude[terms]', categoryIds.join(','))
+        .set('categories_exclude[include_children]', 'true')
+    : params;
+}

@@ -15,7 +15,11 @@ import {
 } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
-import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
+import {
+  excludeWordPressCategoryBranches,
+  ResolvedWordPressContentPolicy,
+} from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 import {
   CharacterObolo,
@@ -125,7 +129,7 @@ export class WordPressPostsService {
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
-  private readonly contentPolicy = inject(SANAKA_WORDPRESS_CONTENT_POLICY);
+  private readonly contentPolicy = inject(WordPressContentPolicyService);
   private readonly wordpressText = inject(WordPressTextService);
   private readonly sanitizer = inject(DomSanitizer);
 
@@ -152,43 +156,42 @@ export class WordPressPostsService {
   getPosts(query: PostsQuery = {}): Observable<PostsPage> {
     const normalizedQuery = this.normalizeQuery(query);
 
-    return this.resolveTaxonomyFilters(normalizedQuery).pipe(
-      switchMap((resolvedQuery) =>
-        forkJoin({
+    return forkJoin({
+      query: this.resolveTaxonomyFilters(normalizedQuery),
+      policy: this.contentPolicy.resolve(),
+    }).pipe(
+      switchMap(({ query: resolvedQuery, policy }) => {
+        if (!resolvedQuery)
+          return of({
+            posts: [],
+            page: normalizedQuery.page,
+            perPage: normalizedQuery.perPage,
+            total: 0,
+            totalPages: 0,
+          });
+        return forkJoin({
           response: this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
-            params: this.buildPostsParams(resolvedQuery),
+            params: this.buildPostsParams(resolvedQuery, policy),
             observe: 'response',
           }),
           categories: this.categories$,
         }).pipe(
-          map(({ response, categories }) => this.mapPostsPage(response, resolvedQuery, categories)),
-        ),
-      ),
+          map(({ response, categories }) =>
+            this.mapPostsPage(response, resolvedQuery, categories, policy),
+          ),
+        );
+      }),
       timeout({ first: this.requestTimeoutMs }),
     );
   }
 
   getArchiveCategories(): Observable<readonly PostCategory[]> {
-    return this.categories$.pipe(
-      map((categories) => {
-        const excludedIds = new Set([
-          ...this.contentPolicy.excludedCategoryIds,
-          this.contentPolicy.sanakaverseCategoryId,
-          ...categories
-            .filter((category) => this.isArchiveExcludedCategory(category))
-            .map((category) => category.id),
-        ]);
-
-        let excludedCount: number;
-        do {
-          excludedCount = excludedIds.size;
-          for (const category of categories) {
-            if (excludedIds.has(category.parent)) {
-              excludedIds.add(category.id);
-            }
-          }
-        } while (excludedIds.size !== excludedCount);
-
+    return forkJoin({ categories: this.categories$, policy: this.contentPolicy.resolve() }).pipe(
+      map(({ categories, policy }) => {
+        const excludedIds = this.categoryBranchIds(
+          categories,
+          this.archiveExcludedCategoryIds(policy),
+        );
         return categories
           .filter((category) => !excludedIds.has(category.id))
           .map((category) => ({ ...this.toTaxonomy(category), parentId: category.parent }));
@@ -199,25 +202,33 @@ export class WordPressPostsService {
 
   /** Busca e normaliza uma publicação completa usando o slug público da aplicação. */
   getPostBySlug(slug: string): Observable<PostDetail | null> {
-    const params = new HttpParams()
-      .set('slug', slug)
-      .set('per_page', '1')
-      .set('categories_exclude', this.excludedCategoryIds)
-      .set('_embed', 'wp:featuredmedia')
-      .set(
-        '_fields',
-        'id,slug,date,title,excerpt,content,featured_media,categories,tags,sanaka_character_slug,sanaka_character_name,sanaka_obolo_front,sanaka_obolo_back,_links,_embedded',
-      );
+    return this.contentPolicy
+      .resolve()
+      .pipe(switchMap((policy) => this.loadPostDetail(slug, policy)));
+  }
+
+  private loadPostDetail(
+    slug: string,
+    policy: ResolvedWordPressContentPolicy,
+  ): Observable<PostDetail | null> {
+    const params = excludeWordPressCategoryBranches(
+      new HttpParams()
+        .set('slug', slug)
+        .set('per_page', '1')
+        .set('_embed', 'wp:featuredmedia')
+        .set(
+          '_fields',
+          'id,slug,date,title,excerpt,content,featured_media,categories,tags,sanaka_character_slug,sanaka_character_name,sanaka_obolo_front,sanaka_obolo_back,_links,_embedded',
+        ),
+      policy.excludedCategoryIds,
+    );
 
     return this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
       timeout({ first: this.requestTimeoutMs }),
       switchMap((posts) => {
         const post = posts[0];
 
-        if (
-          !post ||
-          post.categories.some((id) => this.contentPolicy.excludedCategoryIds.includes(id))
-        ) {
+        if (!post || post.categories.some((id) => policy.excludedCategoryIds.includes(id))) {
           return of(null);
         }
 
@@ -231,10 +242,12 @@ export class WordPressPostsService {
           // Sem categorias confirmadas, não se presume a coleção da navegação.
           switchMap((categories) =>
             combineLatest({
-              previous: this.getAdjacentPost(post, categories, 'previous').pipe(
+              previous: this.getAdjacentPost(post, categories, 'previous', policy).pipe(
                 startWith(undefined),
               ),
-              next: this.getAdjacentPost(post, categories, 'next').pipe(startWith(undefined)),
+              next: this.getAdjacentPost(post, categories, 'next', policy).pipe(
+                startWith(undefined),
+              ),
             }).pipe(map((navigation) => ({ categories, ...navigation }))),
           ),
           startWith(emptyCategoryDetails),
@@ -249,7 +262,7 @@ export class WordPressPostsService {
         // O corpo aparece primeiro; complementos independentes nunca o substituem por erro.
         return combineLatest({ categoryDetails: categoryDetails$, tags: tags$ }).pipe(
           map(({ categoryDetails, tags }) => ({
-            ...this.mapPostDetail(post, categoryDetails.categories, tags),
+            ...this.mapPostDetail(post, categoryDetails.categories, tags, policy),
             previous: categoryDetails.previous,
             next: categoryDetails.next,
           })),
@@ -270,51 +283,72 @@ export class WordPressPostsService {
     };
   }
 
-  private resolveTaxonomyFilters(query: NormalizedPostsQuery): Observable<NormalizedPostsQuery> {
+  private resolveTaxonomyFilters(
+    query: NormalizedPostsQuery,
+  ): Observable<NormalizedPostsQuery | null> {
     const categoryId$ =
       query.categoryId || !query.categorySlug
         ? of(query.categoryId)
         : this.categories$.pipe(
             map(
               (categories) =>
-                categories.find((category) => category.slug === query.categorySlug)?.id ?? -1,
+                categories.find((category) => category.slug === query.categorySlug)?.id,
             ),
           );
     const tagId$ =
       query.tagId || !query.tagSlug
         ? of(query.tagId)
-        : this.tags$.pipe(map((tags) => tags.find((tag) => tag.slug === query.tagSlug)?.id ?? -1));
-
+        : this.http
+            .get<readonly WordPressTag[]>(`${this.apiUrl}/tags`, {
+              params: new HttpParams()
+                .set('slug', query.tagSlug)
+                .set('per_page', '1')
+                .set('_fields', 'id,name,slug'),
+            })
+            .pipe(map((tags) => tags.find((tag) => tag.slug === query.tagSlug)?.id));
     return forkJoin({ categoryId: categoryId$, tagId: tagId$ }).pipe(
-      map(({ categoryId, tagId }) => ({ ...query, categoryId, tagId })),
+      map(({ categoryId, tagId }) => {
+        if (
+          (!query.categoryId && query.categorySlug && categoryId === undefined) ||
+          (!query.tagId && query.tagSlug && tagId === undefined)
+        )
+          return null;
+        return { ...query, categoryId, tagId };
+      }),
     );
   }
 
-  private buildPostsParams(query: NormalizedPostsQuery): HttpParams {
+  private buildPostsParams(
+    query: NormalizedPostsQuery,
+    policy: ResolvedWordPressContentPolicy,
+  ): HttpParams {
     let params = new HttpParams()
       .set('page', String(query.page))
       .set('per_page', String(query.perPage))
-      .set('categories_exclude', this.archiveExcludedCategoryIds)
       .set('_embed', 'wp:featuredmedia')
       .set('_fields', 'id,slug,date,title,excerpt,featured_media,categories,_links,_embedded');
 
     params = query.search ? params.set('search', query.search) : params;
     params = query.categoryId ? params.set('categories', String(query.categoryId)) : params;
-    return query.tagId ? params.set('tags', String(query.tagId)) : params;
+    params = query.tagId ? params.set('tags', String(query.tagId)) : params;
+    return excludeWordPressCategoryBranches(params, this.archiveExcludedCategoryIds(policy));
   }
 
   private mapPostsPage(
     response: HttpResponse<readonly WordPressPost[]>,
     query: NormalizedPostsQuery,
     categories: readonly WordPressCategory[],
+    policy: ResolvedWordPressContentPolicy,
   ): PostsPage {
-    const posts = this.excludeArchiveOnlyPosts(response.body ?? [], categories);
-    const fallbackTotal = (query.page - 1) * query.perPage + posts.length;
-    const total = this.readCountHeader(response.headers.get('X-WP-Total'), fallbackTotal);
-    const totalPages = this.readCountHeader(
-      response.headers.get('X-WP-TotalPages'),
-      total === 0 ? 0 : Math.ceil(total / query.perPage),
-    );
+    const posts = response.body ?? [];
+    const excludedIds = this.categoryBranchIds(categories, this.archiveExcludedCategoryIds(policy));
+    // Um filtro local não pode corrigir os totais de outra coleção.
+    if (posts.some((post) => post.categories.some((id) => excludedIds.has(id))))
+      throw new Error('O WordPress retornou publicações fora da coleção editorial consultada.');
+    const total = this.readCountHeader(response.headers.get('X-WP-Total'));
+    const totalPages = this.readCountHeader(response.headers.get('X-WP-TotalPages'));
+    if (total < posts.length || totalPages !== Math.ceil(total / query.perPage))
+      throw new Error('O WordPress retornou totais de paginação incoerentes.');
 
     return {
       posts: this.mapPosts(posts, categories),
@@ -325,10 +359,31 @@ export class WordPressPostsService {
     };
   }
 
-  private loadCategories(): Observable<readonly WordPressCategory[]> {
-    return this.http.get<readonly WordPressCategory[]>(`${this.apiUrl}/categories`, {
-      params: new HttpParams().set('per_page', '100').set('_fields', 'id,name,slug,parent'),
-    });
+  private loadCategories(page = 1): Observable<readonly WordPressCategory[]> {
+    return this.http
+      .get<readonly WordPressCategory[]>(`${this.apiUrl}/categories`, {
+        params: new HttpParams()
+          .set('page', String(page))
+          .set('per_page', '100')
+          .set('_fields', 'id,name,slug,parent'),
+        observe: 'response',
+      })
+      .pipe(
+        timeout({ first: this.requestTimeoutMs }),
+        switchMap((response) => {
+          const categories = response.body ?? [];
+          const header = response.headers.get('X-WP-TotalPages');
+          const totalPages = Number(header);
+          if (header !== null && (!Number.isInteger(totalPages) || totalPages < 0))
+            throw new Error('Paginação de categorias inválida.');
+          const hasMore = header !== null ? page < totalPages : categories.length === 100;
+          if (hasMore && categories.length === 0)
+            throw new Error('Paginação de categorias incompleta.');
+          return hasMore
+            ? this.loadCategories(page + 1).pipe(map((next) => [...categories, ...next]))
+            : of(categories);
+        }),
+      );
   }
 
   private loadTags(): Observable<readonly WordPressTag[]> {
@@ -348,12 +403,14 @@ export class WordPressPostsService {
     post: WordPressPost,
     categories: readonly WordPressCategory[],
     tags: readonly WordPressTag[],
+    policy: ResolvedWordPressContentPolicy,
   ): PostDetail {
     const coverImage = this.getFeaturedMedia(post);
     const content = post.content?.rendered ?? '';
     const plainContent = this.wordpressText.toText(content);
     const mappedCategories = this.mapTaxonomies(post.categories, categories);
     const selectedCategoryIds = new Set(post.categories);
+    const excludedIds = this.categoryBranchIds(categories, this.archiveExcludedCategoryIds(policy));
     const selectedTagIds = new Set(post.tags ?? []);
     const rootCategory = mappedCategories[0];
     const mappedTags = tags.map((tag) => this.toTaxonomy(tag));
@@ -368,7 +425,7 @@ export class WordPressPostsService {
               (category) =>
                 category.parent === rootCategory.id &&
                 !selectedCategoryIds.has(category.id) &&
-                !this.isArchiveExcludedCategory(category),
+                !excludedIds.has(category.id),
             )
             .map((category) => this.toTaxonomy(category))
         : [],
@@ -377,7 +434,7 @@ export class WordPressPostsService {
           (category) =>
             category.parent === 0 &&
             category.id !== rootCategory?.id &&
-            !this.isArchiveExcludedCategory(category),
+            !excludedIds.has(category.id),
         )
         .map((category) => this.toTaxonomy(category)),
       tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
@@ -493,39 +550,36 @@ export class WordPressPostsService {
     post: WordPressPost,
     categories: readonly WordPressCategory[],
     direction: 'previous' | 'next',
+    policy: ResolvedWordPressContentPolicy,
   ): Observable<PostNavigation | undefined> {
     const isPrevious = direction === 'previous';
-    const sanakaverseCategory = this.findSanakaverseCategory(categories);
-    const isSanakaverseVolume = sanakaverseCategory
-      ? post.categories.includes(sanakaverseCategory.id)
-      : false;
-    let params = new HttpParams()
-      .set(isPrevious ? 'before' : 'after', post.date)
-      .set('per_page', '1')
-      .set('orderby', 'date')
-      .set('order', isPrevious ? 'desc' : 'asc')
-      .set('exclude', String(post.id))
-      .set(
-        'categories_exclude',
-        isSanakaverseVolume ? this.excludedCategoryIds : this.archiveExcludedCategoryIds,
-      )
-      .set('_fields', 'slug,title');
-
-    if (isSanakaverseVolume && sanakaverseCategory) {
-      params = params.set('categories', String(sanakaverseCategory.id));
-    }
-
+    const volumeCategoryId = policy.sanakaverseCategoryId;
+    const volumeIds = this.categoryBranchIds(
+      categories,
+      volumeCategoryId === undefined ? [] : [volumeCategoryId],
+    );
+    const isSanakaverseVolume = post.categories.some((id) => volumeIds.has(id));
+    let params = excludeWordPressCategoryBranches(
+      new HttpParams()
+        .set(isPrevious ? 'before' : 'after', post.date)
+        .set('per_page', '1')
+        .set('orderby', 'date')
+        .set('order', isPrevious ? 'desc' : 'asc')
+        .set('exclude', String(post.id))
+        .set('_fields', 'slug,title'),
+      isSanakaverseVolume ? policy.excludedCategoryIds : this.archiveExcludedCategoryIds(policy),
+    );
+    if (isSanakaverseVolume && volumeCategoryId !== undefined)
+      params = params
+        .set('categories[terms]', String(volumeCategoryId))
+        .set('categories[include_children]', 'true');
     return this.http
       .get<readonly Pick<WordPressPost, 'slug' | 'title'>[]>(`${this.apiUrl}/posts`, { params })
       .pipe(
         map((posts) => {
           const adjacent = posts[0];
-
           return adjacent
-            ? {
-                slug: adjacent.slug,
-                title: this.wordpressText.toText(adjacent.title.rendered),
-              }
+            ? { slug: adjacent.slug, title: this.wordpressText.toText(adjacent.title.rendered) }
             : undefined;
         }),
         timeout({ first: this.requestTimeoutMs }),
@@ -537,56 +591,35 @@ export class WordPressPostsService {
     return Number.isInteger(value) && Number(value) > 0 ? Number(value) : fallback;
   }
 
-  private get excludedCategoryIds(): string {
-    return this.contentPolicy.excludedCategoryIds.join(',');
-  }
-
-  private get archiveExcludedCategoryIds(): string {
+  private archiveExcludedCategoryIds(policy: ResolvedWordPressContentPolicy): readonly number[] {
     return [
-      ...this.contentPolicy.excludedCategoryIds,
-      this.contentPolicy.sanakaverseCategoryId,
-    ].join(',');
+      ...policy.excludedCategoryIds,
+      ...(policy.sanakaverseCategoryId === undefined ? [] : [policy.sanakaverseCategoryId]),
+    ];
   }
 
-  private findSanakaverseCategory(
+  private categoryBranchIds(
     categories: readonly WordPressCategory[],
-  ): WordPressCategory | undefined {
-    return categories.find(
-      (category) => category.slug === this.contentPolicy.sanakaverseCategorySlug,
-    );
+    roots: readonly number[],
+  ): ReadonlySet<number> {
+    const ids = new Set(roots);
+    let previousSize: number;
+    do {
+      previousSize = ids.size;
+      for (const category of categories) if (ids.has(category.parent)) ids.add(category.id);
+    } while (ids.size !== previousSize);
+    return ids;
   }
 
-  private isArchiveExcludedCategory(category: WordPressCategory): boolean {
-    return (
-      this.contentPolicy.excludedCategoryIds.includes(category.id) ||
-      category.slug === this.contentPolicy.sanakaverseCategorySlug
-    );
-  }
-
-  /** Impede que uma divergência futura de ID exponha volumes no arquivo antes da política ser atualizada. */
-  private excludeArchiveOnlyPosts(
-    posts: readonly WordPressPost[],
-    categories: readonly WordPressCategory[],
-  ): readonly WordPressPost[] {
-    const sanakaverseCategory = this.findSanakaverseCategory(categories);
-    const excludedIds = new Set([
-      ...this.contentPolicy.excludedCategoryIds,
-      this.contentPolicy.sanakaverseCategoryId,
-      ...(sanakaverseCategory ? [sanakaverseCategory.id] : []),
-    ]);
-
-    return posts.filter(
-      (post) => !post.categories.some((categoryId) => excludedIds.has(categoryId)),
-    );
-  }
-
-  private readCountHeader(value: string | null, fallback: number): number {
-    if (value === null) {
-      return fallback;
-    }
-
+  private readCountHeader(value: string | null): number {
     const parsedValue = Number(value);
-
-    return Number.isInteger(parsedValue) && parsedValue >= 0 ? parsedValue : fallback;
+    if (
+      value === null ||
+      value.trim() === '' ||
+      !Number.isSafeInteger(parsedValue) ||
+      parsedValue < 0
+    )
+      throw new Error('Metadados de paginação do WordPress indisponíveis ou inválidos.');
+    return parsedValue;
   }
 }
