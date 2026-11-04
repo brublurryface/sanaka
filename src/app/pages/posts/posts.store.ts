@@ -1,12 +1,17 @@
 import { computed, inject, Injectable, signal } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
 import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
-import { catchError, filter, map, of, scan, startWith, Subject, switchMap } from 'rxjs';
+import { catchError, filter, map, Observable, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post, PostCategory } from './post';
-import { PostsPage, WordPressPostsService } from './data-access/wordpress-posts.service';
+import {
+  PostsPage,
+  PostsPageOutOfRangeError,
+  WordPressPostsService,
+} from './data-access/wordpress-posts.service';
 
 export type PostsViewMode = 'continuous' | 'paged';
+export type PostsPaginationItem = number | 'start-ellipsis' | 'end-ellipsis';
 
 interface CategoriesState {
   readonly status: 'loading' | 'success' | 'error';
@@ -14,6 +19,7 @@ interface CategoriesState {
 }
 
 interface PostsRequest {
+  readonly view: PostsViewMode;
   readonly page: number;
   readonly search: string;
   readonly append: boolean;
@@ -128,31 +134,12 @@ export class PostsStore {
   private readonly state = toSignal(
     this.requests.pipe(
       switchMap((request) =>
-        this.postsService
-          .getPosts({
-            page: request.page,
-            perPage: this.perPage,
-            search: request.search,
-            ...(request.categorySlug ? { categorySlug: request.categorySlug } : {}),
-            ...(request.tagSlug ? { tagSlug: request.tagSlug } : {}),
-          })
-          .pipe(
-            map((page): PostsEvent => ({
-              type: 'success',
-              request,
-              page,
-            })),
-            startWith<PostsEvent>({
-              type: 'loading',
-              request,
-            }),
-            catchError(() =>
-              of<PostsEvent>({
-                type: 'error',
-                request,
-              }),
-            ),
-          ),
+        this.loadRequest(request).pipe(
+          startWith<PostsEvent>({
+            type: 'loading',
+            request,
+          }),
+        ),
       ),
       scan(
         (state: PostsState, event: PostsEvent): PostsState => this.reduceState(state, event),
@@ -172,8 +159,17 @@ export class PostsStore {
   readonly isLoadingMore = computed(() => this.state().isLoadingMore);
   readonly hasLoadMoreError = computed(() => this.state().hasLoadMoreError);
   readonly hasMore = computed(() => this.currentPage() < this.totalPages());
+  readonly paginationItems = computed<readonly PostsPaginationItem[]>(() => {
+    const total = this.totalPages();
+    const current = this.currentPage();
+    if (total <= 7) return Array.from({ length: total }, (_, index) => index + 1);
+    if (current <= 4) return [1, 2, 3, 4, 5, 'end-ellipsis', total];
+    if (current >= total - 3)
+      return [1, 'start-ellipsis', total - 4, total - 3, total - 2, total - 1, total];
+    return [1, 'start-ellipsis', current - 1, current, current + 1, 'end-ellipsis', total];
+  });
   readonly pageNumbers = computed(() =>
-    Array.from({ length: this.totalPages() }, (_, index) => index + 1),
+    this.paginationItems().filter((item): item is number => typeof item === 'number'),
   );
 
   constructor() {
@@ -258,31 +254,32 @@ export class PostsStore {
   ): void {
     const mode: PostsViewMode = view === 'paged' ? 'paged' : 'continuous';
     const parsedPage = Number(pageValue);
-    const hasValidPage = Number.isInteger(parsedPage) && parsedPage > 0;
+    const hasValidPage =
+      pageValue !== null &&
+      /^\d+$/.test(pageValue) &&
+      Number.isSafeInteger(parsedPage) &&
+      parsedPage > 0;
     const page = mode === 'paged' && hasValidPage ? parsedPage : 1;
     const categorySlug = this.normalizeTaxonomySlug(categoryValue);
     const tagSlug = this.normalizeTaxonomySlug(tagValue);
 
-    if (mode === 'paged' && pageValue !== null && !hasValidPage) {
-      this.navigateTo('paged', 1, { replaceUrl: true });
-    }
-
-    if (
+    const isSameVisit =
       this.routeInitialized &&
       mode === this.viewMode() &&
       page === this.currentPage() &&
       categorySlug === this.categorySlug() &&
-      tagSlug === this.tagSlug()
-    ) {
-      return;
-    }
+      tagSlug === this.tagSlug();
 
     this.routeInitialized = true;
     this.viewMode.set(mode);
     this.currentPage.set(page);
     this.categorySlug.set(categorySlug);
     this.tagSlug.set(tagSlug);
-    this.requests.next(this.createRequest(false));
+    // Canonicaliza depois de aplicar os filtros recebidos pela URL.
+    if (mode === 'paged' && pageValue !== null && (page === 1 || pageValue !== String(page))) {
+      this.navigateTo('paged', page, { replaceUrl: true });
+    }
+    if (!isSameVisit) this.requests.next(this.createRequest(false));
   }
 
   setSearch(search: string): void {
@@ -323,6 +320,7 @@ export class PostsStore {
   goToPage(page: number): void {
     if (
       this.viewMode() !== 'paged' ||
+      !Number.isSafeInteger(page) ||
       page < 1 ||
       page > this.totalPages() ||
       page === this.currentPage()
@@ -345,6 +343,40 @@ export class PostsStore {
 
   retry(): void {
     this.requests.next(this.createRequest(this.hasLoadMoreError()));
+  }
+
+  private loadRequest(request: PostsRequest): Observable<PostsEvent> {
+    return this.postsService
+      .getPosts({
+        page: request.page,
+        perPage: this.perPage,
+        search: request.search,
+        ...(request.categorySlug ? { categorySlug: request.categorySlug } : {}),
+        ...(request.tagSlug ? { tagSlug: request.tagSlug } : {}),
+      })
+      .pipe(
+        switchMap((page): Observable<PostsEvent> => {
+          if (request.view === 'paged' && request.page > Math.max(1, page.totalPages)) {
+            return this.recoverFirstPage(request, page.totalPages === 0 ? page : undefined);
+          }
+          return of({ type: 'success', request, page });
+        }),
+        catchError((error: unknown) =>
+          request.view === 'paged' && request.page > 1 && error instanceof PostsPageOutOfRangeError
+            ? this.recoverFirstPage(request)
+            : of<PostsEvent>({ type: 'error', request }),
+        ),
+      );
+  }
+
+  private recoverFirstPage(request: PostsRequest, emptyPage?: PostsPage): Observable<PostsEvent> {
+    const firstRequest: PostsRequest = { ...request, page: 1, append: false };
+    this.currentPage.set(1);
+    this.navigateTo('paged', 1, { replaceUrl: true });
+    // A primeira página não satisfaz a condição de recuperação; não há redirecionamento em loop.
+    return emptyPage
+      ? of({ type: 'success', request: firstRequest, page: { ...emptyPage, page: 1 } })
+      : this.loadRequest(firstRequest);
   }
 
   private reduceState(state: PostsState, event: PostsEvent): PostsState {
@@ -390,6 +422,7 @@ export class PostsStore {
 
   private createRequest(append: boolean): PostsRequest {
     return {
+      view: this.viewMode(),
       page: this.currentPage(),
       search: this.searchTerm(),
       append,

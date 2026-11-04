@@ -341,6 +341,26 @@ describe('WordPressPostsService', () => {
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
   });
 
+  it('should expose a domain error for a WordPress page outside the archive range', () => {
+    let error: unknown;
+    service.getPosts({ page: 999999 }).subscribe({
+      error: (value) => {
+        error = value;
+      },
+    });
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/posts`)
+      .flush(
+        { code: 'rest_post_invalid_page_number', data: { status: 400 } },
+        { status: 400, statusText: 'Bad Request' },
+      );
+    httpTesting
+      .match((request) => request.url === `${apiUrl}/categories`)
+      .filter((request) => !request.cancelled)
+      .forEach((request) => request.flush([]));
+    expect(error).toMatchObject({ name: 'PostsPageOutOfRangeError' });
+  });
+
   it('should load a complete post with category lineage, tags, media and adjacent posts', () => {
     let result: PostDetail | null | undefined;
 

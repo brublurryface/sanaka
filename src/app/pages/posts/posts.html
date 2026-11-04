@@ -220,17 +220,21 @@
         </button>
 
         <div class="posts-pagination__pages">
-          @for (page of pageNumbers(); track page) {
-            <button
-              type="button"
-              class="posts-pagination__page"
-              [class.posts-pagination__page--active]="page === currentPage()"
-              [attr.aria-current]="page === currentPage() ? 'page' : null"
-              [attr.aria-label]="'posts.pagination.goToPage' | transloco: { page }"
-              (click)="goToPage(page)"
-            >
-              {{ page }}
-            </button>
+          @for (page of paginationItems(); track page) {
+            @if (page === 'start-ellipsis' || page === 'end-ellipsis') {
+              <span class="posts-pagination__ellipsis" aria-hidden="true">…</span>
+            } @else {
+              <button
+                type="button"
+                class="posts-pagination__page"
+                [class.posts-pagination__page--active]="page === currentPage()"
+                [attr.aria-current]="page === currentPage() ? 'page' : null"
+                [attr.aria-label]="'posts.pagination.goToPage' | transloco: { page }"
+                (click)="goToPage(page)"
+              >
+                {{ page }}
+              </button>
+            }
           }
         </div>
 

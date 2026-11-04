@@ -467,6 +467,37 @@ describe('Posts', () => {
     expect(component.posts().map((post) => post.title)).toEqual(posts.map((post) => post.title));
   });
 
+  it('should render a bounded pagination window with accessible current, first and last pages', () => {
+    createComponent(of({ ...firstPage, total: 10_000, totalPages: 500 }));
+    component.setViewMode('paged');
+    component.goToPage(250);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nav = compiled.querySelector('.posts-pagination--paged');
+    expect(nav?.getAttribute('aria-label')).toBe('Paginação das publicações');
+    expect(nav?.querySelectorAll('.posts-pagination__page').length).toBeLessThanOrEqual(7);
+    expect(nav?.querySelectorAll('.posts-pagination__ellipsis')).toHaveLength(2);
+    expect(nav?.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+    expect(nav?.querySelector('[aria-current="page"]')?.textContent?.trim()).toBe('250');
+    const last = nav?.querySelector<HTMLButtonElement>('[aria-label="Ir para a página 500"]');
+    last?.click();
+    fixture.detectChanges();
+    expect(component.currentPage()).toBe(500);
+    expect(
+      compiled.querySelectorAll<HTMLButtonElement>('.posts-pagination__direction')[1].disabled,
+    ).toBe(true);
+    compiled.querySelector<HTMLButtonElement>('[aria-label="Ir para a página 1"]')?.click();
+    fixture.detectChanges();
+    expect(component.currentPage()).toBe(1);
+    expect(
+      compiled.querySelector<HTMLButtonElement>('.posts-pagination__direction')?.disabled,
+    ).toBe(true);
+    for (const gap of compiled.querySelectorAll('.posts-pagination__ellipsis')) {
+      expect(gap.getAttribute('aria-hidden')).toBe('true');
+      expect(gap.querySelector('button')).toBeNull();
+    }
+  });
+
   function selectFilter(id: string, slug: string): void {
     const select = fixture.nativeElement.querySelector(`#${id}`) as HTMLSelectElement;
     select.value = slug;

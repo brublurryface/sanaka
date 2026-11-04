@@ -44,6 +44,7 @@ export class Posts {
   readonly hasLoadMoreError = this.store.hasLoadMoreError;
   readonly hasMore = this.store.hasMore;
   readonly pageNumbers = this.store.pageNumbers;
+  readonly paginationItems = this.store.paginationItems;
   readonly viewMode = this.store.viewMode;
   readonly currentPage = this.store.currentPage;
 
