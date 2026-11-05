@@ -36,6 +36,14 @@ function sanaka_obolo_operations_install(): void
         PRIMARY KEY (operation_key)
     ) ENGINE=InnoDB {$collation}");
     if ($created !== false) {
+        $count = $wpdb->get_var("SELECT COUNT(*) FROM {$operations} WHERE operation_key <> 'capacity'");
+        if ($count === null || $wpdb->query($wpdb->prepare(
+            "INSERT INTO {$operations} (operation_key, character_slug, completed_total, created_at)
+             VALUES ('capacity', '', %d, %s) ON DUPLICATE KEY UPDATE operation_key = operation_key",
+            (int) $count, current_time('mysql', true)
+        )) === false) {
+            return;
+        }
         update_option('sanaka_obolo_operations_version', '1', false);
     }
 }
@@ -68,6 +76,12 @@ function sanaka_obolo_operations_offer(WP_REST_Request $request)
         return sanaka_obolo_operations_error();
     }
     try {
+        // Limita registros sem apagar recibos necessários a retentativas tardias.
+        $capacity = $wpdb->get_var("SELECT completed_total FROM {$operations} WHERE operation_key = 'capacity' FOR UPDATE");
+        $limit = apply_filters('sanaka_obolo_operation_limit', 50000);
+        if ($capacity === null || !is_int($limit) || $limit < 1) {
+            throw new RuntimeException('Operation capacity unavailable.');
+        }
         $hash = hash('sha256', $key);
         $now = current_time('mysql', true);
         if ($wpdb->query($wpdb->prepare(
@@ -88,6 +102,9 @@ function sanaka_obolo_operations_offer(WP_REST_Request $request)
         }
         $total = $operation['completed_total'];
         if ($total === null) {
+            if ((int) $capacity >= $limit || $wpdb->query("UPDATE {$operations} SET completed_total = completed_total + 1 WHERE operation_key = 'capacity'") === false) {
+                throw new RuntimeException('Operation capacity reached.');
+            }
             if ($wpdb->query($wpdb->prepare(
                 "INSERT INTO {$totals} (character_slug, total, updated_at) VALUES (%s, 1, %s)
                  ON DUPLICATE KEY UPDATE total = total + 1, updated_at = %s", $slug, $now, $now

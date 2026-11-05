@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, timeout } from 'rxjs';
 
 import { WORDPRESS_REST_URL } from '../../../core/wordpress/wordpress-api';
+import { OBOLO_IDEMPOTENCY_ENABLED } from '../../../core/wordpress/obolo-protocol';
 
 interface WordPressOboloResponse {
   readonly characterSlug: string;
@@ -15,6 +16,7 @@ export class CharacterOboloService {
   private readonly requestTimeoutMs = 10_000;
   private readonly http = inject(HttpClient);
   private readonly restUrl = inject(WORDPRESS_REST_URL);
+  private readonly idempotencyEnabled = inject(OBOLO_IDEMPOTENCY_ENABLED);
 
   /** Consulta o total persistido para a personagem. */
   getTotal(characterSlug: string): Observable<number> {
@@ -30,7 +32,7 @@ export class CharacterOboloService {
   offer(characterSlug: string, operationId: string): Observable<number> {
     return this.http
       .post<WordPressOboloResponse>(this.buildUrl(characterSlug), null, {
-        headers: { 'Idempotency-Key': operationId },
+        headers: this.idempotencyEnabled ? { 'Idempotency-Key': operationId } : undefined,
         transferCache: false,
       })
       .pipe(

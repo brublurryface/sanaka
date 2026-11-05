@@ -80,7 +80,7 @@ describe('contact rate-limit regression', () => {
       sendMail.mockRejectedValueOnce(
         new Error('recipient@example.com password=private message=private'),
       );
-      expect((await submit()).status).toHaveBeenCalledWith(500);
+      expect((await submit()).status).toHaveBeenCalledWith(503);
       expect(log).toHaveBeenCalledExactlyOnceWith('Contact message delivery failed.');
     } finally {
       log.mockRestore();

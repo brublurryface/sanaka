@@ -76,6 +76,7 @@ function sanaka_obolos_character_exists($slug): bool { return in_array($slug, ['
 function rest_ensure_response($data): TestResponse { return new TestResponse($data); }
 function add_action(...$args): void {}
 function add_filter(...$args): void {}
+function apply_filters($name, $value) { return getenv('SANAKA_TEST_OPERATION_LIMIT') !== false ? (int) getenv('SANAKA_TEST_OPERATION_LIMIT') : $value; }
 $wpdb = new TestWpdb($connection, $argv[4] ?? '');
 require __DIR__ . '/../sanaka-obolo-idempotency.php';
 
@@ -137,6 +138,10 @@ check(result(worker('nandini', keyFor(23)))['data']['total'] === 23 && total() =
 check(result(worker('nandini', 'invalid'))['status'] === 400 && total() === 23, 'Invalid key changed the counter.');
 check(result(worker('unknown', keyFor(24)))['status'] === 404, 'Unknown character accepted.');
 check(result(worker('samvit', keyFor(1)))['status'] === 409, 'Same key changed character.');
+putenv('SANAKA_TEST_OPERATION_LIMIT=2');
+check(result(worker('nandini', keyFor(25)))['status'] === 503 && total() === 23, 'Capacity must fail closed for new operations.');
+check(result(worker('nandini', keyFor(1)))['status'] === 200 && total() === 23, 'Capacity must not block a completed replay.');
+putenv('SANAKA_TEST_OPERATION_LIMIT');
 
 $route = '/sanaka/v1/obolos/(?P<character_slug>[a-z0-9-]+)';
 $endpoints = [$route => [['methods'=>['GET'=>true], 'callback'=>'legacy-get'], ['methods'=>['POST'=>true], 'callback'=>static fn($r) => 'legacy-post', 'permission_callback'=>'existing-permission', 'args'=>['unchanged'=>true]]]];
