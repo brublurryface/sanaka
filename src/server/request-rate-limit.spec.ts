@@ -3,6 +3,13 @@ import { afterEach, describe, expect, it, vi } from 'vitest';
 import { createRateLimiter } from './request-rate-limit';
 
 describe('createRateLimiter', () => {
+  it('does not pretend to share attempts between different processes or instances', () => {
+    const first = createRateLimiter({ maxRequests: 1, windowMs: 10_000 });
+    const second = createRateLimiter({ maxRequests: 1, windowMs: 10_000 });
+    expect(first('same-client')).toBe(0);
+    expect(first('same-client')).toBeGreaterThan(0);
+    expect(second('same-client')).toBe(0);
+  });
   afterEach(() => vi.useRealTimers());
 
   it('allows the configured number of attempts and returns the remaining wait in seconds', () => {

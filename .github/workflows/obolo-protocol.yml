@@ -1,0 +1,38 @@
+name: Validate obolo protocol
+
+on:
+  pull_request:
+    paths:
+      - 'wordpress/**'
+      - '.github/workflows/obolo-protocol.yml'
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+jobs:
+  protocol:
+    name: PHP and MySQL idempotency
+    runs-on: ubuntu-24.04
+    timeout-minutes: 10
+    env:
+      SANAKA_TEST_DB_HOST: 127.0.0.1
+      SANAKA_TEST_DB_NAME: sanaka_obolo_test
+      SANAKA_TEST_DB_USER: root
+      SANAKA_TEST_DB_PASSWORD: root
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Verify PHP runtime and syntax
+        run: |
+          php --version
+          php -r 'exit(PHP_VERSION_ID >= 80300 && extension_loaded("mysqli") ? 0 : 1);'
+          php -l wordpress/sanaka-obolo-idempotency.php
+          php -l wordpress/tests/obolo-idempotency.test.php
+      - name: Start isolated runner database
+        run: |
+          sudo systemctl start mysql.service
+          mysql --host=127.0.0.1 --user=root --password=root --execute='CREATE DATABASE sanaka_obolo_test CHARACTER SET utf8mb4;'
+      - name: Exercise concurrent operations and lost responses
+        run: php wordpress/tests/obolo-idempotency.test.php

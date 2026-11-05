@@ -27,11 +27,16 @@ export class CharacterOboloService {
   }
 
   /** Deposita exatamente um óbolo; o backend não aceita um incremento escolhido pelo cliente. */
-  offer(characterSlug: string): Observable<number> {
-    return this.http.post<WordPressOboloResponse>(this.buildUrl(characterSlug), null).pipe(
-      map((response) => this.readTotal(response, characterSlug)),
-      timeout({ first: this.requestTimeoutMs }),
-    );
+  offer(characterSlug: string, operationId: string): Observable<number> {
+    return this.http
+      .post<WordPressOboloResponse>(this.buildUrl(characterSlug), null, {
+        headers: { 'Idempotency-Key': operationId },
+        transferCache: false,
+      })
+      .pipe(
+        map((response) => this.readTotal(response, characterSlug)),
+        timeout({ first: this.requestTimeoutMs }),
+      );
   }
 
   private buildUrl(characterSlug: string): string {
@@ -41,7 +46,7 @@ export class CharacterOboloService {
   private readTotal(response: WordPressOboloResponse, requestedSlug: string): number {
     if (
       response.characterSlug !== requestedSlug ||
-      !Number.isInteger(response.total) ||
+      !Number.isSafeInteger(response.total) ||
       response.total < 0
     ) {
       throw new Error('Resposta inválida do contador de óbolos.');

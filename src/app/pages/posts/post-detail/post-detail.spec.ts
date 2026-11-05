@@ -106,7 +106,7 @@ describe('PostDetailPage', () => {
 
   const oboloService = {
     getTotal: vi.fn<(slug: string) => Observable<number>>(),
-    offer: vi.fn<(slug: string) => Observable<number>>(),
+    offer: vi.fn<(slug: string, operationId: string) => Observable<number>>(),
   };
 
   beforeEach(async () => {
@@ -216,7 +216,10 @@ describe('PostDetailPage', () => {
     fixture.detectChanges();
 
     expect(oboloService.offer).toHaveBeenCalledTimes(1);
-    expect(oboloService.offer).toHaveBeenCalledWith('nandini');
+    expect(oboloService.offer).toHaveBeenCalledWith(
+      'nandini',
+      expect.stringMatching(/^[0-9a-f-]{36}$/),
+    );
     expect(compiled.querySelector('.post-reader__obolo--mobile')?.textContent).toContain(
       '129 recebidos',
     );

@@ -46,7 +46,7 @@ describe('CharacterOboloService', () => {
   it('should offer exactly one obolo without sending a client-defined increment', () => {
     let total: number | undefined;
 
-    service.offer('nandini').subscribe((value) => {
+    service.offer('nandini', '00000000-0000-4000-8000-000000000001').subscribe((value) => {
       total = value;
     });
 
@@ -54,6 +54,10 @@ describe('CharacterOboloService', () => {
 
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toBeNull();
+    expect(request.request.headers.get('Idempotency-Key')).toBe(
+      '00000000-0000-4000-8000-000000000001',
+    );
+    expect(request.request.transferCache).toBe(false);
     request.flush({ characterSlug: 'nandini', total: 129 });
     expect(total).toBe(129);
   });
@@ -71,6 +75,19 @@ describe('CharacterOboloService', () => {
       .expectOne(`${restUrl}/sanaka/v1/obolos/nandini`)
       .flush({ characterSlug: 'samvit', total: 10 });
 
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  it('rejects totals that cannot be represented safely', () => {
+    let error: unknown;
+    service.getTotal('nandini').subscribe({
+      error: (reason) => {
+        error = reason;
+      },
+    });
+    httpTesting
+      .expectOne(`${restUrl}/sanaka/v1/obolos/nandini`)
+      .flush({ characterSlug: 'nandini', total: Number.MAX_SAFE_INTEGER + 1 });
     expect(error).toBeInstanceOf(Error);
   });
 });

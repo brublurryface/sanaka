@@ -124,8 +124,8 @@ export const contactHandler: RequestHandler = async (request, response) => {
     });
 
     response.status(200).json({ delivered: true });
-  } catch (error) {
-    console.error('Contact message delivery failed.', error);
+  } catch {
+    console.error('Contact message delivery failed.');
     response.status(503).json({ delivered: false });
   }
 };
