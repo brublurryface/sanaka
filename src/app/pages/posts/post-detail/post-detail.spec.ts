@@ -1,3 +1,5 @@
+import { provideHttpClient } from '@angular/common/http';
+import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
@@ -7,7 +9,7 @@ import { vi } from 'vitest';
 
 import { PostDetail } from '../post';
 import { CharacterOboloService } from '../data-access/character-obolo.service';
-import { WordPressPostsService } from '../data-access/wordpress-posts.service';
+import { WORDPRESS_API_URL, WordPressPostsService } from '../data-access/wordpress-posts.service';
 import { PostDetailPage } from './post-detail';
 
 class MockTranslocoLoader implements TranslocoLoader {
@@ -258,6 +260,74 @@ describe('PostDetailPage', () => {
     component.updateReadingProgress();
 
     expect(component.readingProgress()).toBe(100);
+  });
+
+  it('should preserve the article, SEO and obolo when optional HTTP enrichments fail', () => {
+    const apiUrl = 'https://example.com/wp-json/wp/v2';
+    TestBed.configureTestingModule({
+      providers: [
+        provideHttpClient(),
+        provideHttpClientTesting(),
+        { provide: WORDPRESS_API_URL, useValue: apiUrl },
+      ],
+    });
+    TestBed.overrideProvider(WordPressPostsService, {
+      useFactory: () => new WordPressPostsService(),
+    });
+    fixture = TestBed.createComponent(PostDetailPage);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const httpTesting = TestBed.inject(HttpTestingController);
+    httpTesting
+      .expectOne((request) => request.params.get('slug') === 'voce')
+      .flush([
+        {
+          id: post.id,
+          slug: post.slug,
+          date: '2026-09-22T12:00:00',
+          title: { rendered: post.title },
+          excerpt: { rendered: post.excerpt },
+          content: { rendered: post.contentHtml },
+          featured_media: 0,
+          categories: [45],
+          tags: [9],
+          sanaka_character_slug: 'nandini',
+          sanaka_character_name: 'Nandinī',
+          sanaka_obolo_front: post.obolo?.frontImageUrl,
+        },
+      ]);
+    fixture.detectChanges();
+    const article = compiled.querySelector('.post-reader__article');
+    fixture.componentInstance.readingProgress.set(33);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories`)
+      .flush([{ id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 }]);
+    httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/tags`)
+      .flush(null, { status: 503, statusText: 'Unavailable' });
+    const navigation = httpTesting.match(
+      (request) => request.params.has('before') || request.params.has('after'),
+    );
+    navigation
+      .filter((request) => !request.cancelled)
+      .forEach((request) => request.flush(null, { status: 503, statusText: 'Unavailable' }));
+    fixture.detectChanges();
+    httpTesting.verify();
+
+    expect(article).not.toBeNull();
+    expect(compiled.querySelector('.post-reader__article')).toBe(article);
+    expect(compiled.querySelector('.post-reader__content')?.textContent?.trim()).toBe(
+      'Quem é você?',
+    );
+    expect(fixture.componentInstance.state().status).toBe('success');
+    expect(fixture.componentInstance.readingProgress()).toBe(33);
+    expect(TestBed.inject(Title).getTitle()).toBe('VOCÊ | Sanaka');
+    expect(oboloService.getTotal).toHaveBeenCalledExactlyOnceWith('nandini');
+    expect(compiled.querySelector('.post-reader__obolo--mobile')?.textContent).toContain(
+      '128 recebidos',
+    );
+    expect(navigation).toHaveLength(2);
+    expect(compiled.querySelectorAll('.post-detail__adjacent a')).toHaveLength(0);
   });
 
   it('should show the not-found state without rendering an article', () => {
