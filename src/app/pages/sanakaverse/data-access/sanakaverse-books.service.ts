@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams } from '@angular/common/http';
+import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
 import { map, Observable, of, switchMap, timeout } from 'rxjs';
 
@@ -42,10 +42,19 @@ interface WordPressBookPost {
   };
 }
 
+export interface SanakaverseBooksPage {
+  readonly books: readonly SanakaverseBook[];
+  readonly page: number;
+  readonly perPage: number;
+  readonly total: number;
+  readonly totalPages: number;
+}
+
 /** Consulta apenas os posts publicados como volumes do Sanakaverse. */
 @Injectable({ providedIn: 'root' })
 export class SanakaverseBooksService {
   private readonly requestTimeoutMs = 10_000;
+  private readonly pageSize = 12;
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
   private readonly contentPolicy = inject(WordPressContentPolicyService);
@@ -57,36 +66,75 @@ export class SanakaverseBooksService {
    * A capa é deliberadamente independente da imagem destacada do post. O campo REST
    * `sanakaverse_cover` deve entregar a URL e, de preferência, o texto alternativo da capa.
    */
-  getBooks(): Observable<readonly SanakaverseBook[]> {
-    return this.contentPolicy
-      .resolve()
-      .pipe(
-        switchMap((policy) =>
-          policy.sanakaverseCategoryId === undefined
-            ? of([])
-            : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy),
-        ),
-      );
+  getBooks(page = 1): Observable<SanakaverseBooksPage> {
+    const requestedPage = Number.isSafeInteger(page) && page > 0 ? page : 1;
+    return this.contentPolicy.resolve().pipe(
+      switchMap((policy) =>
+        policy.sanakaverseCategoryId === undefined
+          ? of({
+              books: [],
+              page: requestedPage,
+              perPage: this.pageSize,
+              total: 0,
+              totalPages: 0,
+            })
+          : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy, requestedPage),
+      ),
+    );
   }
 
   private loadCategoryBooks(
     categoryId: number,
     policy: ResolvedWordPressContentPolicy,
-  ): Observable<readonly SanakaverseBook[]> {
+    page: number,
+  ): Observable<SanakaverseBooksPage> {
     const params = excludeWordPressCategoryBranches(
       new HttpParams()
         .set('categories[terms]', String(categoryId))
         .set('categories[include_children]', 'true')
-        .set('per_page', '100')
+        .set('page', String(page))
+        .set('per_page', String(this.pageSize))
         .set('orderby', 'date')
         .set('order', 'asc')
         .set('_fields', 'id,slug,title,sanakaverse_cover,meta'),
       policy.excludedCategoryIds,
     );
-    return this.http.get<readonly WordPressBookPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
-      map((posts) => posts.map((post) => this.mapBook(post))),
-      timeout({ first: this.requestTimeoutMs }),
-    );
+    return this.http
+      .get<readonly WordPressBookPost[]>(`${this.apiUrl}/posts`, { params, observe: 'response' })
+      .pipe(
+        map((response) => this.mapPage(response, page)),
+        timeout({ first: this.requestTimeoutMs }),
+      );
+  }
+
+  private mapPage(
+    response: HttpResponse<readonly WordPressBookPost[]>,
+    page: number,
+  ): SanakaverseBooksPage {
+    const posts = response.body ?? [];
+    const count = (name: string): number => {
+      const value = response.headers.get(name);
+      const parsed = Number(value);
+      if (value === null || value.trim() === '' || !Number.isSafeInteger(parsed) || parsed < 0)
+        throw new Error('Paginação dos livros indisponível ou inválida.');
+      return parsed;
+    };
+    const total = count('X-WP-Total');
+    const totalPages = count('X-WP-TotalPages');
+    const expectedSize = Math.min(this.pageSize, Math.max(0, total - (page - 1) * this.pageSize));
+    if (
+      totalPages !== Math.ceil(total / this.pageSize) ||
+      posts.length !== expectedSize ||
+      (totalPages > 0 && page > totalPages)
+    )
+      throw new Error('O WordPress retornou uma página de livros incoerente.');
+    return {
+      books: posts.map((post) => this.mapBook(post)),
+      page,
+      perPage: this.pageSize,
+      total,
+      totalPages,
+    };
   }
 
   private mapBook(post: WordPressBookPost): SanakaverseBook {

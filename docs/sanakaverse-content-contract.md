@@ -63,3 +63,17 @@ representado dentro da arte uma anatomia única.
   exclusão.
 - A ausência da capa representa um volume ainda não revelado, não autoriza usar a imagem destacada
   como substituta.
+
+## Carregamento da biblioteca
+
+A biblioteca solicita doze volumes por página, em ordem crescente de publicação
+(`orderby=date&order=asc`). O botão **Carregar mais livros** consulta somente a
+próxima página e mantém os volumes já exibidos. A contagem usa os cabeçalhos da
+mesma consulta filtrada; metadados ausentes ou incoerentes produzem erro
+recuperável. Uma falha numa página adicional mantém os livros e oferece nova
+tentativa da mesma página.
+
+Doze é o tamanho da página inicial, não um limite do catálogo. Os testes incluem
+101 volumes alcançáveis em nove solicitações explícitas, sem consulta antecipada
+das páginas restantes. Abertura em nova aba, títulos em maiúsculas na interface,
+capas independentes e exclusões editoriais permanecem preservados.

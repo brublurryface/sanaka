@@ -1,9 +1,12 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 
-import { SanakaverseBooksService } from './data-access/sanakaverse-books.service';
+import {
+  SanakaverseBooksPage,
+  SanakaverseBooksService,
+} from './data-access/sanakaverse-books.service';
 import { Sanakaverse } from './sanakaverse';
 import { SanakaverseBook } from './sanakaverse-book';
 
@@ -34,8 +37,28 @@ const books: readonly SanakaverseBook[] = [
   },
 ];
 
+function bookPage(page = 1, total = books.length): SanakaverseBooksPage {
+  const start = (page - 1) * 12;
+  return {
+    books:
+      total === books.length
+        ? books
+        : Array.from({ length: Math.min(12, total - start) }, (_, index) => ({
+            id: start + index + 1,
+            slug: `volume-${start + index + 1}`,
+            title: `Volume ${start + index + 1}`,
+          })),
+    page,
+    perPage: 12,
+    total,
+    totalPages: Math.ceil(total / 12),
+  };
+}
+
 class MockSanakaverseBooksService {
-  getBooks = vi.fn(() => of(books));
+  getBooks = vi.fn<(page?: number) => Observable<SanakaverseBooksPage>>((page = 1) =>
+    of(bookPage(page)),
+  );
 }
 
 class MockTranslocoLoader implements TranslocoLoader {
@@ -63,6 +86,13 @@ class MockTranslocoLoader implements TranslocoLoader {
         error: {
           title: 'A órbita se desfez.',
           retry: 'Tentar reunir os volumes',
+        },
+        pagination: {
+          progress: 'Exibindo {{ shown }} de {{ total }} livros.',
+          loadMore: 'Carregar mais livros',
+          loading: 'Carregando livros…',
+          error: 'Não foi possível carregar mais livros.',
+          retry: 'Tentar novamente',
         },
       },
     });
@@ -127,7 +157,9 @@ describe('Sanakaverse', () => {
   });
 
   it('should keep the stellar collection open without adding an empty-state card', () => {
-    booksService.getBooks.mockReturnValueOnce(of([]));
+    booksService.getBooks.mockReturnValueOnce(
+      of({ ...bookPage(), books: [], total: 0, totalPages: 0 }),
+    );
 
     fixture.detectChanges();
 
@@ -155,5 +187,76 @@ describe('Sanakaverse', () => {
 
     expect(booksService.getBooks).toHaveBeenCalledTimes(2);
     expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(4);
+  });
+
+  it('should reach all 101 books only as more pages are requested', () => {
+    booksService.getBooks.mockImplementation((page = 1) => of(bookPage(page, 101)));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    expect(booksService.getBooks).toHaveBeenCalledExactlyOnceWith(1);
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(12);
+    expect(compiled.querySelector('[role="status"]')?.textContent).toContain('12 de 101');
+    for (let page = 2; page <= 9; page++) {
+      compiled.querySelector<HTMLButtonElement>('.sanakaverse-pagination button')?.click();
+      fixture.detectChanges();
+      expect(booksService.getBooks).toHaveBeenLastCalledWith(page);
+      expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(Math.min(page * 12, 101));
+    }
+    expect(booksService.getBooks).toHaveBeenCalledTimes(9);
+    expect(compiled.querySelector('.sanakaverse-pagination button')).toBeNull();
+    expect(compiled.querySelectorAll('.sanakaverse-book__link')[100]?.getAttribute('href')).toBe(
+      '/posts/volume-101',
+    );
+  });
+
+  it('should retain books while loading and reject duplicate load-more clicks', () => {
+    const pending = new Subject<SanakaverseBooksPage>();
+    booksService.getBooks.mockReturnValueOnce(of(bookPage(1, 101))).mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const button = compiled.querySelector<HTMLButtonElement>('.sanakaverse-pagination button');
+    button?.click();
+    button?.click();
+    fixture.detectChanges();
+    expect(booksService.getBooks).toHaveBeenCalledTimes(2);
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(12);
+    expect(compiled.querySelector('.sanakaverse-grid')?.getAttribute('aria-busy')).toBe('true');
+    expect(button?.disabled).toBe(true);
+    pending.next(bookPage(2, 101));
+    pending.complete();
+    fixture.detectChanges();
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(24);
+    expect(button?.disabled).toBe(false);
+  });
+
+  it('should retry the failed next page without losing or duplicating previous books', () => {
+    booksService.getBooks
+      .mockReturnValueOnce(of(bookPage(1, 101)))
+      .mockReturnValueOnce(throwError(() => new Error('offline')))
+      .mockReturnValueOnce(of(bookPage(2, 101)));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    compiled.querySelector<HTMLButtonElement>('.sanakaverse-pagination button')?.click();
+    fixture.detectChanges();
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(12);
+    expect(compiled.querySelector('.sanakaverse-feedback--error')).toBeNull();
+    expect(compiled.querySelector('.sanakaverse-pagination [role="alert"]')).not.toBeNull();
+    expect(compiled.querySelector('.sanakaverse-pagination button')?.textContent).toContain(
+      'Tentar novamente',
+    );
+    compiled.querySelector<HTMLButtonElement>('.sanakaverse-pagination button')?.click();
+    fixture.detectChanges();
+    expect(booksService.getBooks.mock.calls.map(([page]) => page)).toEqual([1, 2, 2]);
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(24);
+    expect(compiled.querySelector('.sanakaverse-pagination [role="alert"]')).toBeNull();
+  });
+
+  it('should cancel an unfinished page when leaving the library', () => {
+    const pending = new Subject<SanakaverseBooksPage>();
+    booksService.getBooks.mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    expect(pending.observed).toBe(true);
+    fixture.destroy();
+    expect(pending.observed).toBe(false);
   });
 });

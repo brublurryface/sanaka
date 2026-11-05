@@ -288,7 +288,8 @@
   margin: 0;
 }
 
-.sanakaverse-feedback button {
+.sanakaverse-feedback button,
+.sanakaverse-pagination button {
   padding: 0.8rem 1rem;
 
   border: 1px solid var(--sanaka-gold-soft);
@@ -300,9 +301,28 @@
   cursor: pointer;
 }
 
-.sanakaverse-feedback button:focus-visible {
+.sanakaverse-feedback button:focus-visible,
+.sanakaverse-pagination button:focus-visible {
   outline: 1px solid var(--sanaka-ivory);
   outline-offset: 5px;
+}
+
+.sanakaverse-pagination {
+  display: grid;
+  justify-items: center;
+  gap: 1rem;
+  margin-top: 3rem;
+  color: var(--sanaka-ivory-muted);
+  text-align: center;
+}
+
+.sanakaverse-pagination p {
+  margin: 0;
+}
+
+.sanakaverse-pagination button:disabled {
+  opacity: 0.65;
+  cursor: wait;
 }
 
 .sanakaverse-loading-books {

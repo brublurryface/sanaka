@@ -312,6 +312,9 @@ describe('PostDetailPage', () => {
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/tags`)
       .flush(null, { status: 503, statusText: 'Unavailable' });
+    httpTesting
+      .expectOne((request) => request.params.get('_fields') === 'tags,categories')
+      .flush(null, { status: 503, statusText: 'Unavailable' });
     const navigation = httpTesting.match(
       (request) => request.params.has('before') || request.params.has('after'),
     );

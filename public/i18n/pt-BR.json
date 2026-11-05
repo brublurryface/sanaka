@@ -200,6 +200,13 @@
       "untitled": "Volume sem título",
       "unrevealed": "Capa ainda não revelada"
     },
+    "pagination": {
+      "progress": "Exibindo {{ shown }} de {{ total }} livros.",
+      "loadMore": "Carregar mais livros",
+      "loading": "Carregando livros…",
+      "error": "Não foi possível carregar mais livros. Os volumes já exibidos continuam disponíveis.",
+      "retry": "Tentar novamente"
+    },
     "loading": "Alinhando os livros às estrelas…",
     "error": {
       "title": "A órbita dos livros se desfez por um instante.",
