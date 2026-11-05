@@ -5,7 +5,6 @@ import { provideTransloco, TranslocoLoader, TranslocoService } from '@jsverse/tr
 import { Observable, of, Subject } from 'rxjs';
 import { vi } from 'vitest';
 
-import { NASA_IMAGE_PRESETS } from './nasa-image-presets';
 import { NasaImagesService } from './data-access/nasa-images.service';
 import { RestRequestDetails, ImageSearchResult } from './rest-api.models';
 import { RestApiPortal } from './rest-api-portal';
@@ -124,12 +123,11 @@ class MockTranslocoLoader implements TranslocoLoader {
 }
 
 class MockNasaImagesService {
-  readonly searchImages = vi.fn((_query: string): Observable<ImageSearchResult> =>
+  readonly searchImages = vi.fn((_query: string, _nasaId?: string): Observable<ImageSearchResult> =>
     of(createResult('Default image')),
   );
 
-  describeRequest(query: string): RestRequestDetails {
-    const nasaId = NASA_IMAGE_PRESETS.find((preset) => preset.query === query)?.nasaId;
+  describeRequest(query: string, nasaId?: string): RestRequestDetails {
     const name = nasaId ? 'nasa_id' : 'q';
     const value = nasaId ?? query.trim();
 
@@ -531,7 +529,9 @@ describe('RestApiPortal', () => {
         name: preset.nasaId ? 'nasa_id' : 'q',
         value: preset.nasaId ?? preset.query,
       });
-      expect(api.searchImages).toHaveBeenLastCalledWith(preset.query);
+      expect(api.searchImages.mock.calls.at(-1)).toEqual(
+        preset.nasaId ? [preset.query, preset.nasaId] : [preset.query],
+      );
     }
   });
 
@@ -548,7 +548,7 @@ describe('RestApiPortal', () => {
 
     buttons[1].click();
     fixture.detectChanges();
-    expect(api.searchImages).toHaveBeenLastCalledWith('Global Color Views of Mars');
+    expect(api.searchImages).toHaveBeenLastCalledWith('Global Color Views of Mars', 'PIA00407');
     expect(fixture.componentInstance.requestDetails().parameters[0]).toEqual({
       name: 'nasa_id',
       value: 'PIA00407',
@@ -556,7 +556,7 @@ describe('RestApiPortal', () => {
 
     buttons[3].click();
     fixture.detectChanges();
-    expect(api.searchImages).toHaveBeenLastCalledWith('Black Holes: Monsters in Space');
+    expect(api.searchImages).toHaveBeenLastCalledWith('Black Holes: Monsters in Space', 'PIA16695');
     expect(fixture.componentInstance.requestDetails().parameters[0]).toEqual({
       name: 'nasa_id',
       value: 'PIA16695',

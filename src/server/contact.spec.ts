@@ -1,5 +1,6 @@
 import type { Request, Response } from 'express';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { CONTACT_LIMITS, ContactMessage } from '../shared/contact';
 
 const sendMail = vi.hoisted(() => vi.fn());
 vi.mock('nodemailer', () => ({
@@ -22,7 +23,7 @@ describe('contact rate-limit regression', () => {
 
   afterEach(() => vi.unstubAllEnvs());
 
-  async function submit(website = '') {
+  async function submit(website = '', overrides: Partial<ContactMessage> = {}) {
     const request = {
       is: () => 'application/json',
       ip: 'test-ip',
@@ -33,6 +34,7 @@ describe('contact rate-limit regression', () => {
         subject: 'Sanaka',
         message: 'Test message',
         website,
+        ...overrides,
       },
     } as unknown as Request;
     const response = {
@@ -71,4 +73,18 @@ describe('contact rate-limit regression', () => {
     expect((await submit()).status).toHaveBeenCalledWith(200);
     expect(sendMail).toHaveBeenCalledTimes(1);
   });
+
+  it.each(['name', 'email', 'subject', 'message'] as const)(
+    'enforces the shared %s limit even when the browser is bypassed',
+    async (field) => {
+      const limit = CONTACT_LIMITS[field];
+      const text = (length: number) =>
+        field === 'email'
+          ? `${'a'.repeat(64)}@${'b'.repeat(63)}.${'c'.repeat(63)}.${'d'.repeat(length - 193)}`
+          : 'x'.repeat(length);
+      expect((await submit('', { [field]: text(limit) })).status).toHaveBeenCalledWith(200);
+      expect((await submit('', { [field]: text(limit + 1) })).status).toHaveBeenCalledWith(400);
+      expect(sendMail).toHaveBeenCalledOnce();
+    },
+  );
 });

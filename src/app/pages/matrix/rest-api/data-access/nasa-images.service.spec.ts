@@ -6,6 +6,7 @@ import { vi } from 'vitest';
 
 import { NASA_IMAGES_API_URL, NasaImagesService } from './nasa-images.service';
 import { ImageSearchResult } from '../rest-api.models';
+import { NASA_QUERY_MAX_LENGTH } from '../nasa-query';
 
 const previewUrl = 'https://images-assets.nasa.gov/image/test-nebula/test-nebula~thumb.jpg';
 
@@ -99,13 +100,23 @@ describe('NasaImagesService', () => {
     expect(result?.image?.credit).toBe('NASA, ESA and the Hubble team');
   });
 
+  it('should not infer a visual preset from a manual query in the HTTP adapter', () => {
+    const query = 'Global Color Views of Mars';
+    service.searchImages(query).subscribe();
+    const request = httpTesting.expectOne((candidate) => candidate.url === `${apiUrl}/search`);
+    const params = request.request.params;
+    request.flush({ collection: { items: [] } });
+    expect(params.get('q')).toBe(query);
+    expect(params.has('nasa_id')).toBe(false);
+  });
+
   it.each([
     ['Global Color Views of Mars', 'PIA00407'],
     ['Black Holes: Monsters in Space', 'PIA16695'],
   ])('should target the selected record for %s with nasa_id=%s', (query, nasaId) => {
     let result: ImageSearchResult | undefined;
-    const details = service.describeRequest(query);
-    service.searchImages(query).subscribe((value) => (result = value));
+    const details = service.describeRequest(query, nasaId);
+    service.searchImages(query, nasaId).subscribe((value) => (result = value));
 
     const request = httpTesting.expectOne(details.url);
     expect(request.request.params.get('nasa_id')).toBe(nasaId);
@@ -126,10 +137,10 @@ describe('NasaImagesService', () => {
     expect(result?.query).toBe(query);
   });
 
-  it('should normalize whitespace and case before recognizing a selected example', () => {
+  it('should normalize free text and an explicit identifier consistently', () => {
     const query = '  GLOBAL   COLOR VIEWS OF MARS  ';
-    const details = service.describeRequest(query);
-    service.searchImages(query).subscribe();
+    const details = service.describeRequest(query, ' PIA00407 ');
+    service.searchImages(query, ' PIA00407 ').subscribe();
 
     const request = httpTesting.expectOne(details.url);
     expect(request.request.params.get('nasa_id')).toBe('PIA00407');
@@ -139,28 +150,36 @@ describe('NasaImagesService', () => {
 
   it('should skip a different record before finding the requested curated NASA ID', () => {
     let result: ImageSearchResult | undefined;
-    service.searchImages('Global Color Views of Mars').subscribe((value) => (result = value));
-    httpTesting.expectOne(service.describeRequest('Global Color Views of Mars').url).flush({
-      collection: {
-        items: [
-          createImageItem({ nasa_id: 'PIA10569', title: 'Unrelated technical image' }),
-          createImageItem({ nasa_id: 'PIA00407', title: 'Global Color Views of Mars' }),
-        ],
-      },
-    });
+    service
+      .searchImages('Global Color Views of Mars', 'PIA00407')
+      .subscribe((value) => (result = value));
+    httpTesting
+      .expectOne(service.describeRequest('Global Color Views of Mars', 'PIA00407').url)
+      .flush({
+        collection: {
+          items: [
+            createImageItem({ nasa_id: 'PIA10569', title: 'Unrelated technical image' }),
+            createImageItem({ nasa_id: 'PIA00407', title: 'Global Color Views of Mars' }),
+          ],
+        },
+      });
 
     expect(result?.image?.id).toBe('PIA00407');
   });
 
   it('should return empty rather than substitute an unrelated image for a curated example', () => {
     let result: ImageSearchResult | undefined;
-    service.searchImages('Black Holes: Monsters in Space').subscribe((value) => (result = value));
-    httpTesting.expectOne(service.describeRequest('Black Holes: Monsters in Space').url).flush({
-      collection: {
-        items: [createImageItem({ nasa_id: 'different-record' })],
-        metadata: { total_hits: 1 },
-      },
-    });
+    service
+      .searchImages('Black Holes: Monsters in Space', 'PIA16695')
+      .subscribe((value) => (result = value));
+    httpTesting
+      .expectOne(service.describeRequest('Black Holes: Monsters in Space', 'PIA16695').url)
+      .flush({
+        collection: {
+          items: [createImageItem({ nasa_id: 'different-record' })],
+          metadata: { total_hits: 1 },
+        },
+      });
 
     expect(result?.image).toBeNull();
     expect(result?.status).toBe(200);
@@ -168,9 +187,9 @@ describe('NasaImagesService', () => {
   });
 
   it('should keep a manual search free of the previous curated NASA ID', () => {
-    service.searchImages('Global Color Views of Mars').subscribe();
+    service.searchImages('Global Color Views of Mars', 'PIA00407').subscribe();
     httpTesting
-      .expectOne(service.describeRequest('Global Color Views of Mars').url)
+      .expectOne(service.describeRequest('Global Color Views of Mars', 'PIA00407').url)
       .flush({ collection: { items: [] } });
 
     const details = service.describeRequest('mars');
@@ -268,12 +287,12 @@ describe('NasaImagesService', () => {
   });
 
   it('should limit the query to 60 characters in both the request and inspector', () => {
-    const query = 'n'.repeat(80);
+    const query = 'n'.repeat(NASA_QUERY_MAX_LENGTH + 20);
     const details = service.describeRequest(query);
     service.searchImages(query).subscribe();
 
     const request = httpTesting.expectOne(details.url);
-    expect(request.request.params.get('q')).toHaveLength(60);
+    expect(request.request.params.get('q')).toHaveLength(NASA_QUERY_MAX_LENGTH);
     request.flush({ collection: { items: [] } });
   });
 

@@ -2,7 +2,7 @@ import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable, InjectionToken } from '@angular/core';
 import { map, Observable, timeout } from 'rxjs';
 
-import { NASA_IMAGE_PRESETS } from '../nasa-image-presets';
+import { normalizeNasaQuery } from '../nasa-query';
 import { ImageSearchResult, PortalImageViewModel, RestRequestDetails } from '../rest-api.models';
 
 export const NASA_IMAGES_API_URL = new InjectionToken<string>('NASA_IMAGES_API_URL', {
@@ -10,7 +10,6 @@ export const NASA_IMAGES_API_URL = new InjectionToken<string>('NASA_IMAGES_API_U
 });
 
 const RESULT_LIMIT = 12;
-const QUERY_LIMIT = 60;
 
 interface NasaImageDataDto {
   readonly nasa_id?: string;
@@ -50,21 +49,22 @@ export class NasaImagesService {
   readonly endpoint = `${this.apiUrl.replace(/\/$/, '')}/search`;
 
   /**
-   * Pesquisa imagens usando uma consulta livre ou o identificador de um exemplo curado.
+   * Pesquisa imagens por texto ou por um identificador fornecido explicitamente pelo chamador.
    *
    * @param query Assunto informado no portal.
    * @returns Um fluxo com a primeira imagem válida e os metadados da resposta.
    */
-  searchImages(query: string): Observable<ImageSearchResult> {
-    const normalizedQuery = this.normalizeQuery(query);
+  searchImages(query: string, nasaId?: string): Observable<ImageSearchResult> {
+    const normalizedQuery = normalizeNasaQuery(query);
+    const requestedId = nasaId?.trim() || undefined;
 
     return this.http
       .get<NasaSearchResponseDto>(this.endpoint, {
-        params: this.buildParams(normalizedQuery),
+        params: this.buildParams(normalizedQuery, requestedId),
         observe: 'response',
       })
       .pipe(
-        map((response) => this.mapResponse(response, normalizedQuery)),
+        map((response) => this.mapResponse(response, normalizedQuery, requestedId)),
         timeout({ first: this.requestTimeoutMs }),
       );
   }
@@ -75,8 +75,8 @@ export class NasaImagesService {
    * @param query Assunto que será normalizado para a consulta.
    * @returns Método, endpoint, parâmetros e URL final da requisição.
    */
-  describeRequest(query: string): RestRequestDetails {
-    const params = this.buildParams(this.normalizeQuery(query));
+  describeRequest(query: string, nasaId?: string): RestRequestDetails {
+    const params = this.buildParams(normalizeNasaQuery(query), nasaId?.trim() || undefined);
 
     return {
       method: 'GET',
@@ -86,9 +86,7 @@ export class NasaImagesService {
     };
   }
 
-  private buildParams(query: string): HttpParams {
-    const nasaId = this.curatedNasaId(query);
-
+  private buildParams(query: string, nasaId?: string): HttpParams {
     return new HttpParams()
       .set(nasaId ? 'nasa_id' : 'q', nasaId ?? query)
       .set('media_type', 'image')
@@ -98,11 +96,12 @@ export class NasaImagesService {
   private mapResponse(
     response: HttpResponse<NasaSearchResponseDto>,
     query: string,
+    requestedId?: string,
   ): ImageSearchResult {
     const collection = response.body?.collection;
 
     return {
-      image: this.findImage(collection?.items ?? [], this.curatedNasaId(query)),
+      image: this.findImage(collection?.items ?? [], requestedId),
       query,
       status: response.status,
       total: collection?.metadata?.total_hits ?? 0,
@@ -155,14 +154,5 @@ export class NasaImagesService {
     } catch {
       return false;
     }
-  }
-
-  private normalizeQuery(query: string): string {
-    return query.trim().replace(/\s+/g, ' ').slice(0, QUERY_LIMIT);
-  }
-
-  private curatedNasaId(query: string): string | undefined {
-    return NASA_IMAGE_PRESETS.find((preset) => preset.query.toLowerCase() === query.toLowerCase())
-      ?.nasaId;
   }
 }

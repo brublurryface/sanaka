@@ -1,22 +1,11 @@
 import { RequestHandler } from 'express';
 import nodemailer from 'nodemailer';
+import { CONTACT_LIMITS, ContactMessage } from '../shared/contact';
 
 import { createRateLimiter } from './request-rate-limit';
 
-const MAX_NAME_LENGTH = 80;
-const MAX_EMAIL_LENGTH = 254;
-const MAX_SUBJECT_LENGTH = 120;
-const MAX_MESSAGE_LENGTH = 4_000;
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1_000;
 const RATE_LIMIT_MAX_REQUESTS = 4;
-
-interface ContactPayload {
-  readonly name: string;
-  readonly email: string;
-  readonly subject: string;
-  readonly message: string;
-  readonly website: string;
-}
 
 const limitAttempts = createRateLimiter({
   maxRequests: RATE_LIMIT_MAX_REQUESTS,
@@ -33,17 +22,17 @@ function readText(value: unknown, maxLength: number): string | null {
   return normalized.length <= maxLength ? normalized : null;
 }
 
-function parseContactPayload(body: unknown): ContactPayload | null {
+function parseContactPayload(body: unknown): ContactMessage | null {
   if (!body || typeof body !== 'object') {
     return null;
   }
 
   const candidate = body as Record<string, unknown>;
-  const name = readText(candidate['name'], MAX_NAME_LENGTH);
-  const email = readText(candidate['email'], MAX_EMAIL_LENGTH);
-  const subject = readText(candidate['subject'] ?? '', MAX_SUBJECT_LENGTH);
-  const message = readText(candidate['message'], MAX_MESSAGE_LENGTH);
-  const website = readText(candidate['website'] ?? '', MAX_EMAIL_LENGTH);
+  const name = readText(candidate['name'], CONTACT_LIMITS.name);
+  const email = readText(candidate['email'], CONTACT_LIMITS.email);
+  const subject = readText(candidate['subject'] ?? '', CONTACT_LIMITS.subject);
+  const message = readText(candidate['message'], CONTACT_LIMITS.message);
+  const website = readText(candidate['website'] ?? '', CONTACT_LIMITS.email);
 
   if (
     !name ||
@@ -69,7 +58,7 @@ function requireEnvironment(name: string): string {
   return value;
 }
 
-function buildMessageText(payload: ContactPayload): string {
+function buildMessageText(payload: ContactMessage): string {
   return [
     `Nome: ${payload.name}`,
     `E-mail: ${payload.email}`,

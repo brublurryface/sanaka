@@ -16,6 +16,7 @@ import {
 } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
+import { POSTS_PAGE_SIZE } from '../post-query';
 import {
   excludeWordPressCategoryBranches,
   ResolvedWordPressContentPolicy,
@@ -133,7 +134,7 @@ interface NormalizedPostsQuery {
 })
 export class WordPressPostsService {
   private readonly requestTimeoutMs = 10_000;
-  private readonly defaultPerPage = 20;
+  private readonly defaultPerPage = POSTS_PAGE_SIZE;
   private readonly defaultCoverImageUrl = '/images/posts/posts-atmosphere-desktop.webp';
   private readonly tagSuggestionLimit = 8;
   private readonly tagContextPostLimit = 5;

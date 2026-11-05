@@ -6,6 +6,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { catchError, map, of, Subject, switchMap, takeUntil, tap } from 'rxjs';
 
 import { NASA_IMAGE_PRESETS } from './nasa-image-presets';
+import { NASA_QUERY_MAX_LENGTH, normalizeNasaQuery } from './nasa-query';
 import { NasaImagesService } from './data-access/nasa-images.service';
 import { ArcanePortal } from './arcane-portal/arcane-portal';
 import { RestCodeExplorer } from './code-explorer/rest-code-explorer';
@@ -27,7 +28,7 @@ export class RestApiPortal {
   private readonly searchRequests = new Subject<string>();
   private readonly cancelRequests = new Subject<void>();
 
-  readonly queryMaxLength = 60;
+  readonly queryMaxLength = NASA_QUERY_MAX_LENGTH;
   readonly query = signal('Orion nebula');
   readonly submittedQuery = signal<string | null>(null);
   readonly lastQuery = signal<string | null>(null);
@@ -40,9 +41,11 @@ export class RestApiPortal {
   readonly presets = NASA_IMAGE_PRESETS;
 
   readonly canSearch = computed(() => this.query().trim().length > 0);
-  readonly requestDetails = computed(() =>
-    this.api.describeRequest(this.submittedQuery() ?? this.query()),
-  );
+  readonly requestDetails = computed(() => {
+    const query = this.submittedQuery() ?? this.query();
+    const id = this.selectedNasaId(query);
+    return id ? this.api.describeRequest(query, id) : this.api.describeRequest(query);
+  });
   readonly responseStatus = computed(() => {
     const status = this.result()?.status ?? this.errorStatus();
     // O Angular usa 0 quando não há status HTTP; esse valor não é uma resposta do servidor.
@@ -87,7 +90,7 @@ export class RestApiPortal {
       .pipe(
         tap((query) => this.beginRequest(query)),
         switchMap((query) =>
-          this.api.searchImages(query).pipe(
+          this.searchImages(query).pipe(
             map((result): SearchOutcome => ({ kind: 'result', result })),
             catchError((error: unknown) =>
               of<SearchOutcome>({
@@ -113,7 +116,7 @@ export class RestApiPortal {
   }
 
   search(): void {
-    const query = this.query().trim().replace(/\s+/g, ' ');
+    const query = normalizeNasaQuery(this.query());
 
     if (!query) {
       return;
@@ -165,6 +168,16 @@ export class RestApiPortal {
     this.errorStatus.set(null);
     this.imageFailed.set(false);
     this.imageLoaded.set(false);
+  }
+
+  private selectedNasaId(query: string): string | undefined {
+    const normalized = normalizeNasaQuery(query).toLowerCase();
+    return this.presets.find((preset) => preset.query.toLowerCase() === normalized)?.nasaId;
+  }
+
+  private searchImages(query: string) {
+    const id = this.selectedNasaId(query);
+    return id ? this.api.searchImages(query, id) : this.api.searchImages(query);
   }
 
   private finishRequest(outcome: SearchOutcome): void {

@@ -4,6 +4,7 @@ import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { catchError, filter, map, Observable, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post, PostCategory } from './post';
+import { POSTS_PAGE_SIZE } from './post-query';
 import {
   PostsPage,
   PostsPageOutOfRangeError,
@@ -53,7 +54,7 @@ type PostsEvent =
 
 @Injectable()
 export class PostsStore {
-  private readonly perPage = 20;
+  private readonly perPage = POSTS_PAGE_SIZE;
 
   private readonly postsService = inject(WordPressPostsService);
   private readonly router = inject(Router);

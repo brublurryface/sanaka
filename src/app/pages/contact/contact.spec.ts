@@ -4,6 +4,7 @@ import { of } from 'rxjs';
 
 import { Contact } from './contact';
 import { ContactService } from './data-access/contact.service';
+import { CONTACT_LIMITS } from '../../../shared/contact';
 
 class MockContactService {
   send = vi.fn(() => of({ delivered: true }));
@@ -137,6 +138,37 @@ describe('Contact', () => {
       'A mensagem atravessou o portal.',
     );
   });
+
+  it.each(['name', 'email', 'subject', 'message'] as const)(
+    'should keep the %s control and validator aligned with the shared contract',
+    (field) => {
+      const compiled = fixture.nativeElement as HTMLElement;
+      const limit = CONTACT_LIMITS[field];
+      const selector = `[formControlName="${field}"]`;
+      expect(compiled.querySelector(selector)?.getAttribute('maxlength')).toBe(String(limit));
+      const fillValid = () => {
+        for (const [name, value] of Object.entries({
+          name: 'Reader',
+          email: 'reader@example.com',
+          subject: 'Sanaka',
+          message: 'Message',
+        }))
+          setInputValue(compiled, `[formControlName="${name}"]`, value);
+      };
+      const text = (length: number) =>
+        field === 'email'
+          ? `${'a'.repeat(64)}@${'b'.repeat(63)}.${'c'.repeat(63)}.${'d'.repeat(length - 193)}`
+          : 'x'.repeat(length);
+      fillValid();
+      setInputValue(compiled, selector, text(limit));
+      compiled.querySelector('form')?.dispatchEvent(new Event('submit'));
+      expect(contactService.send).toHaveBeenCalledOnce();
+      fillValid();
+      setInputValue(compiled, selector, text(limit + 1));
+      compiled.querySelector('form')?.dispatchEvent(new Event('submit'));
+      expect(contactService.send).toHaveBeenCalledOnce();
+    },
+  );
 });
 
 function setInputValue(compiled: HTMLElement, selector: string, value: string): void {

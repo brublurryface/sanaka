@@ -66,7 +66,7 @@
             type="text"
             formControlName="name"
             autocomplete="name"
-            maxlength="80"
+            [attr.maxlength]="limits.name"
             [attr.aria-invalid]="form.controls.name.invalid && form.controls.name.touched"
             [attr.aria-describedby]="
               form.controls.name.invalid && form.controls.name.touched ? 'contact-name-error' : null
@@ -86,7 +86,7 @@
             formControlName="email"
             autocomplete="email"
             inputmode="email"
-            maxlength="254"
+            [attr.maxlength]="limits.email"
             [attr.aria-invalid]="form.controls.email.invalid && form.controls.email.touched"
             [attr.aria-describedby]="
               form.controls.email.invalid && form.controls.email.touched
@@ -104,7 +104,7 @@
 
       <label>
         <span>{{ 'contact.form.subject' | transloco }}</span>
-        <input type="text" formControlName="subject" maxlength="120" />
+        <input type="text" formControlName="subject" [attr.maxlength]="limits.subject" />
       </label>
 
       <label>
@@ -112,7 +112,7 @@
         <textarea
           formControlName="message"
           rows="7"
-          maxlength="4000"
+          [attr.maxlength]="limits.message"
           [attr.aria-invalid]="form.controls.message.invalid && form.controls.message.touched"
           [attr.aria-describedby]="
             form.controls.message.invalid && form.controls.message.touched
