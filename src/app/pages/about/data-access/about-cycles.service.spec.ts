@@ -1,6 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
+import { vi } from 'vitest';
+import { ResolvedWordPressContentPolicy } from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { AboutCyclePost, AboutCyclesService } from './about-cycles.service';
@@ -10,12 +14,17 @@ describe('AboutCyclesService', () => {
   let service: AboutCyclesService;
 
   const apiUrl = 'https://example.com/wp-json/wp/v2';
+  const editorialPolicy = { resolve: vi.fn<() => Observable<ResolvedWordPressContentPolicy>>() };
 
   beforeEach(() => {
+    editorialPolicy.resolve.mockReturnValue(
+      of({ excludedCategoryIds: [43], aboutCycleCategoryId: 62, sanakaverseCategoryId: 97 }),
+    );
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: WordPressContentPolicyService, useValue: editorialPolicy },
         { provide: WORDPRESS_API_URL, useValue: apiUrl },
       ],
     });
@@ -38,6 +47,8 @@ describe('AboutCyclesService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('62');
+    expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43');
+    expect(postsRequest.request.params.get('categories_exclude[include_children]')).toBe('true');
     expect(postsRequest.request.params.get('per_page')).toBe('9');
     expect(postsRequest.request.params.get('_fields')).not.toContain('link');
     expect(postsRequest.request.params.get('_fields')).toContain('meta');

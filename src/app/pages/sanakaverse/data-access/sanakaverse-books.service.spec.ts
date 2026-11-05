@@ -1,6 +1,10 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { Observable, of } from 'rxjs';
+import { vi } from 'vitest';
+import { ResolvedWordPressContentPolicy } from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SanakaverseBook } from '../sanakaverse-book';
@@ -11,12 +15,17 @@ describe('SanakaverseBooksService', () => {
   let service: SanakaverseBooksService;
 
   const apiUrl = 'https://example.com/wp-json/wp/v2';
+  const editorialPolicy = { resolve: vi.fn<() => Observable<ResolvedWordPressContentPolicy>>() };
 
   beforeEach(() => {
+    editorialPolicy.resolve.mockReturnValue(
+      of({ excludedCategoryIds: [43], sanakaverseCategoryId: 72 }),
+    );
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: WordPressContentPolicyService, useValue: editorialPolicy },
         { provide: WORDPRESS_API_URL, useValue: apiUrl },
       ],
     });
@@ -29,26 +38,17 @@ describe('SanakaverseBooksService', () => {
     httpTesting.verify();
   });
 
-  it('should resolve the Sanakaverse category and map its dedicated book covers', () => {
+  it('should use the resolved Sanakaverse category and map its dedicated book covers', () => {
     let result: readonly SanakaverseBook[] | undefined;
 
     service.getBooks().subscribe((books) => {
       result = books;
     });
 
-    const categoryRequest = httpTesting.expectOne(
-      (request) => request.url === `${apiUrl}/categories`,
-    );
-
-    expect(categoryRequest.request.params.get('slug')).toBe('sanakaverse');
-    expect(categoryRequest.request.params.get('_fields')).toBe('id');
-
-    categoryRequest.flush([{ id: 72 }]);
-
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
-    expect(postsRequest.request.params.get('categories')).toBe('72');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postsRequest.request.params.get('categories[terms]')).toBe('72');
+    expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43');
     expect(postsRequest.request.params.get('per_page')).toBe('100');
     expect(postsRequest.request.params.get('orderby')).toBe('date');
     expect(postsRequest.request.params.get('order')).toBe('asc');
@@ -121,13 +121,12 @@ describe('SanakaverseBooksService', () => {
   });
 
   it('should keep the collection empty when its category does not exist yet', () => {
+    editorialPolicy.resolve.mockReturnValue(of({ excludedCategoryIds: [43] }));
     let result: readonly SanakaverseBook[] | undefined;
 
     service.getBooks().subscribe((books) => {
       result = books;
     });
-
-    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
 
     expect(result).toEqual([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);

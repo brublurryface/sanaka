@@ -3,16 +3,16 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, of, switchMap, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
-import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
+import {
+  excludeWordPressCategoryBranches,
+  ResolvedWordPressContentPolicy,
+} from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 import { SanakaverseBook } from '../sanakaverse-book';
 
 interface WordPressRenderedField {
   readonly rendered: string;
-}
-
-interface WordPressCategory {
-  readonly id: number;
 }
 
 interface WordPressBookCover {
@@ -48,7 +48,7 @@ export class SanakaverseBooksService {
   private readonly requestTimeoutMs = 10_000;
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
-  private readonly contentPolicy = inject(SANAKA_WORDPRESS_CONTENT_POLICY);
+  private readonly contentPolicy = inject(WordPressContentPolicyService);
   private readonly wordpressText = inject(WordPressTextService);
 
   /**
@@ -58,41 +58,35 @@ export class SanakaverseBooksService {
    * `sanakaverse_cover` deve entregar a URL e, de preferência, o texto alternativo da capa.
    */
   getBooks(): Observable<readonly SanakaverseBook[]> {
-    const categoryParams = new HttpParams()
-      .set('slug', this.contentPolicy.sanakaverseCategorySlug)
-      .set('per_page', '1')
-      .set('_fields', 'id');
-
-    return this.http
-      .get<readonly WordPressCategory[]>(`${this.apiUrl}/categories`, {
-        params: categoryParams,
-      })
+    return this.contentPolicy
+      .resolve()
       .pipe(
-        switchMap((categories) => {
-          const categoryId = categories[0]?.id;
-
-          if (!categoryId) {
-            return of([]);
-          }
-
-          return this.loadCategoryBooks(categoryId);
-        }),
-        timeout({ first: this.requestTimeoutMs }),
+        switchMap((policy) =>
+          policy.sanakaverseCategoryId === undefined
+            ? of([])
+            : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy),
+        ),
       );
   }
 
-  private loadCategoryBooks(categoryId: number): Observable<readonly SanakaverseBook[]> {
-    const postsParams = new HttpParams()
-      .set('categories', String(categoryId))
-      .set('categories_exclude', this.contentPolicy.excludedCategoryIds.join(','))
-      .set('per_page', '100')
-      .set('orderby', 'date')
-      .set('order', 'asc')
-      .set('_fields', 'id,slug,title,sanakaverse_cover,meta');
-
-    return this.http
-      .get<readonly WordPressBookPost[]>(`${this.apiUrl}/posts`, { params: postsParams })
-      .pipe(map((posts) => posts.map((post) => this.mapBook(post))));
+  private loadCategoryBooks(
+    categoryId: number,
+    policy: ResolvedWordPressContentPolicy,
+  ): Observable<readonly SanakaverseBook[]> {
+    const params = excludeWordPressCategoryBranches(
+      new HttpParams()
+        .set('categories[terms]', String(categoryId))
+        .set('categories[include_children]', 'true')
+        .set('per_page', '100')
+        .set('orderby', 'date')
+        .set('order', 'asc')
+        .set('_fields', 'id,slug,title,sanakaverse_cover,meta'),
+      policy.excludedCategoryIds,
+    );
+    return this.http.get<readonly WordPressBookPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
+      map((posts) => posts.map((post) => this.mapBook(post))),
+      timeout({ first: this.requestTimeoutMs }),
+    );
   }
 
   private mapBook(post: WordPressBookPost): SanakaverseBook {

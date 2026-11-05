@@ -1,9 +1,11 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
-import { Subject, switchMap } from 'rxjs';
+import { Observable, of, Subject, switchMap } from 'rxjs';
 import { vi } from 'vitest';
 
+import { ResolvedWordPressContentPolicy } from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { PostCategory, PostDetail } from '../post';
 import { PostsPage, WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
 
@@ -12,12 +14,20 @@ describe('WordPressPostsService', () => {
   let service: WordPressPostsService;
 
   const apiUrl = 'https://example.com/wp-json/wp/v2';
+  const defaultPolicy: ResolvedWordPressContentPolicy = {
+    excludedCategoryIds: [43],
+    aboutCycleCategoryId: 62,
+    sanakaverseCategoryId: 97,
+  };
+  const editorialPolicy = { resolve: vi.fn<() => Observable<ResolvedWordPressContentPolicy>>() };
 
   beforeEach(() => {
+    editorialPolicy.resolve.mockReturnValue(of(defaultPolicy));
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: WordPressContentPolicyService, useValue: editorialPolicy },
         {
           provide: WORDPRESS_API_URL,
           useValue: apiUrl,
@@ -34,6 +44,7 @@ describe('WordPressPostsService', () => {
   });
 
   it('should expose decoded archive category hierarchy and omit excluded branches', () => {
+    editorialPolicy.resolve.mockReturnValue(of({ ...defaultPolicy, sanakaverseCategoryId: 108 }));
     let result: readonly PostCategory[] | undefined;
     service.getArchiveCategories().subscribe((categories) => {
       result = categories;
@@ -77,7 +88,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.get('search')).toBe('medo');
     expect(postsRequest.request.params.get('categories')).toBe('45');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
+    expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43,97');
     expect(postsRequest.request.params.get('tags')).toBe('9');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postsRequest.request.params.get('_fields')).toContain('featured_media');
@@ -167,7 +178,7 @@ describe('WordPressPostsService', () => {
     expect(postsRequest.request.params.get('per_page')).toBe('20');
     expect(postsRequest.request.params.has('search')).toBe(false);
     expect(postsRequest.request.params.has('categories')).toBe(false);
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
+    expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43,97');
     expect(postsRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
 
     postsRequest.flush(
@@ -216,55 +227,71 @@ describe('WordPressPostsService', () => {
     });
   });
 
-  it('should not render Sanakaverse volumes if WordPress recreates the category with another ID', () => {
+  it('should exclude migrated volumes before WordPress counts and paginates the archive', () => {
+    editorialPolicy.resolve.mockReturnValue(of({ ...defaultPolicy, sanakaverseCategoryId: 108 }));
     let result: PostsPage | undefined;
-
-    service.getPosts().subscribe((postsPage) => {
-      result = postsPage;
+    const origin = Array.from({ length: 20 }, (_, index) => ({
+      id: index + 1,
+      slug: `publicacao-${index + 1}`,
+      date: '2026-10-09T12:00:00',
+      title: { rendered: `Publicacao ${index + 1}` },
+      excerpt: { rendered: '<p>Resumo.</p>' },
+      featured_media: 0,
+      categories: index < 15 ? [45] : [108],
+    }));
+    service.getPosts().subscribe((page) => {
+      result = page;
     });
-
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
-
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
-
-    postsRequest.flush(
-      [
-        {
-          id: 1,
-          slug: 'publicacao-sanaka',
-          date: '2026-10-09T12:00:00',
-          title: { rendered: 'Publicação Sanaka' },
-          excerpt: { rendered: '<p>Permanece no arquivo.</p>' },
-          featured_media: 0,
-          categories: [45],
-        },
-        {
-          id: 2,
-          slug: 'volume-sanakaverse',
-          date: '2026-10-09T13:00:00',
-          title: { rendered: 'Volume do Sanakaverse' },
-          excerpt: { rendered: '<p>Deve ficar somente na biblioteca.</p>' },
-          featured_media: 0,
-          categories: [108],
-        },
-      ],
-      {
-        headers: {
-          'X-WP-Total': '2',
-          'X-WP-TotalPages': '1',
-        },
-      },
+    const excluded = (postsRequest.request.params.get('categories_exclude[terms]') ?? '')
+      .split(',')
+      .map(Number);
+    // Simula o WordPress aplicando o filtro recebido antes de contar e paginar.
+    const filteredAtOrigin = origin.filter(
+      (post) => !post.categories.some((id) => excluded.includes(id)),
     );
-
+    postsRequest.flush(filteredAtOrigin, {
+      headers: { 'X-WP-Total': String(filteredAtOrigin.length), 'X-WP-TotalPages': '1' },
+    });
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
       .flush([
+        { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 },
         { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
       ]);
-
-    expect(result?.posts.map((post) => post.slug)).toEqual(['publicacao-sanaka']);
+    expect(result?.posts).toHaveLength(15);
+    expect(result?.total).toBe(15);
+    expect(result?.totalPages).toBe(1);
+    expect(excluded).toContain(108);
+    expect(excluded).not.toContain(97);
   });
+
+  it.each(['categorySlug', 'tagSlug'] as const)(
+    'should return an empty archive without a post query when %s no longer exists',
+    (filter) => {
+      let result: PostsPage | undefined;
+      service.getPosts({ [filter]: 'apagada' }).subscribe((page) => {
+        result = page;
+      });
+      httpTesting
+        .match(
+          (request) => request.url === `${apiUrl}/categories` || request.url === `${apiUrl}/tags`,
+        )
+        .forEach((request) => request.flush([]));
+      const posts = httpTesting.match((request) => request.url === `${apiUrl}/posts`);
+      posts.forEach((request) =>
+        request.flush([], { headers: { 'X-WP-Total': '0', 'X-WP-TotalPages': '0' } }),
+      );
+      httpTesting
+        .match((request) => request.url === `${apiUrl}/categories`)
+        .forEach((request) => request.flush([]));
+      expect(result?.posts).toEqual([]);
+      expect(result?.total).toBe(0);
+      expect(result?.totalPages).toBe(0);
+      expect(posts).toHaveLength(0);
+    },
+  );
 
   it('should limit perPage to the WordPress maximum of 100', () => {
     service.getPosts({ perPage: 500 }).subscribe();
@@ -302,7 +329,7 @@ describe('WordPressPostsService', () => {
     const postsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
 
     expect(postsRequest.request.params.get('categories')).toBe('46');
-    expect(postsRequest.request.params.get('categories_exclude')).toBe('43,97');
+    expect(postsRequest.request.params.get('categories_exclude[terms]')).toBe('43,97');
     expect(postsRequest.request.params.get('tags')).toBe('12');
 
     postsRequest.flush([], {
@@ -325,7 +352,7 @@ describe('WordPressPostsService', () => {
       (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'voce',
     );
 
-    expect(postRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postRequest.request.params.get('categories_exclude[terms]')).toBe('43');
     expect(postRequest.request.params.get('_embed')).toBe('wp:featuredmedia');
     expect(postRequest.request.params.get('_fields')).toContain('_embedded');
     expect(postRequest.request.params.get('_fields')).toContain('sanaka_character_slug');
@@ -389,7 +416,7 @@ describe('WordPressPostsService', () => {
     expect(adjacentRequests).toHaveLength(2);
     expect(
       adjacentRequests.every(
-        (request) => request.request.params.get('categories_exclude') === '43,97',
+        (request) => request.request.params.get('categories_exclude[terms]') === '43,97',
       ),
     ).toBe(true);
 
@@ -434,7 +461,7 @@ describe('WordPressPostsService', () => {
       (request) => request.url === `${apiUrl}/posts` && request.params.get('slug') === 'mors',
     );
 
-    expect(postRequest.request.params.get('categories_exclude')).toBe('43');
+    expect(postRequest.request.params.get('categories_exclude[terms]')).toBe('43');
 
     postRequest.flush([
       {
@@ -465,8 +492,8 @@ describe('WordPressPostsService', () => {
     expect(
       adjacentRequests.every(
         (request) =>
-          request.request.params.get('categories') === '97' &&
-          request.request.params.get('categories_exclude') === '43',
+          request.request.params.get('categories[terms]') === '97' &&
+          request.request.params.get('categories_exclude[terms]') === '43',
       ),
     ).toBe(true);
 
@@ -655,7 +682,7 @@ describe('WordPressPostsService', () => {
 
     it('should reject a WoD post even if the upstream response ignores the exclusion filter', () => {
       const result = watchDetail();
-      expect(result.request.request.params.get('categories_exclude')).toBe('43');
+      expect(result.request.request.params.get('categories_exclude[terms]')).toBe('43');
       result.request.flush([{ ...post, categories: [43, 97] }]);
       finishPendingTaxonomies();
       const navigation = httpTesting.match(

@@ -1,9 +1,10 @@
 import { HttpClient, HttpParams } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, timeout } from 'rxjs';
+import { map, Observable, of, switchMap, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
-import { SANAKA_WORDPRESS_CONTENT_POLICY } from '../../../core/wordpress/wordpress-content-policy';
+import { excludeWordPressCategoryBranches } from '../../../core/wordpress/wordpress-content-policy';
+import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 
 export interface AboutCyclePost {
@@ -48,29 +49,29 @@ export class AboutCyclesService {
   private readonly requestTimeoutMs = 10_000;
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
-  private readonly contentPolicy = inject(SANAKA_WORDPRESS_CONTENT_POLICY);
+  private readonly contentPolicy = inject(WordPressContentPolicyService);
   private readonly wordpressText = inject(WordPressTextService);
 
-  /**
-   * Carrega os nove fragmentos autobiográficos diretamente pela política editorial.
-   *
-   * O ID fica centralizado porque pertence à instalação atual do WordPress e deve ser revisto
-   * somente em uma eventual migração das taxonomias.
-   */
+  /** Preserva os nove fragmentos e sua ordem; resolve a categoria pelo slug editorial. */
   getCycles(): Observable<readonly AboutCyclePost[]> {
-    const postsParams = new HttpParams()
-      .set('categories', String(this.contentPolicy.aboutCycleCategoryId))
-      .set('per_page', '9')
-      .set('_fields', 'id,slug,title,excerpt,hover_text,meta');
-
-    return this.http
-      .get<readonly WordPressCyclePost[]>(`${this.apiUrl}/posts`, {
-        params: postsParams,
-      })
-      .pipe(
-        map((posts) => this.normalizeCycles(posts)),
-        timeout({ first: this.requestTimeoutMs }),
-      );
+    return this.contentPolicy.resolve().pipe(
+      switchMap((policy) => {
+        if (policy.aboutCycleCategoryId === undefined) return of([]);
+        const params = excludeWordPressCategoryBranches(
+          new HttpParams()
+            .set('categories', String(policy.aboutCycleCategoryId))
+            .set('per_page', '9')
+            .set('_fields', 'id,slug,title,excerpt,hover_text,meta'),
+          policy.excludedCategoryIds,
+        );
+        return this.http
+          .get<readonly WordPressCyclePost[]>(`${this.apiUrl}/posts`, { params })
+          .pipe(
+            map((posts) => this.normalizeCycles(posts)),
+            timeout({ first: this.requestTimeoutMs }),
+          );
+      }),
+    );
   }
 
   private normalizeCycles(posts: readonly WordPressCyclePost[]): readonly AboutCyclePost[] {

@@ -279,6 +279,13 @@ describe('PostDetailPage', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const httpTesting = TestBed.inject(HttpTestingController);
     httpTesting
+      .expectOne((request) => request.url === `${apiUrl}/categories` && request.params.has('slug'))
+      .flush([
+        { id: 43, slug: 'romance' },
+        { id: 62, slug: 'sobre' },
+        { id: 97, slug: 'sanakaverse' },
+      ]);
+    httpTesting
       .expectOne((request) => request.params.get('slug') === 'voce')
       .flush([
         {
