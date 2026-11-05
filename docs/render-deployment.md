@@ -167,13 +167,13 @@ cópias antigas que algum navegador já tenha guardado com a política anterior.
 banco, arquivos, snippets e contadores. Não criar outra instalação nem duplicar o conteúdo.
 O subdomínio já tem HTTPS e um registro A próprio para a Locaweb, independente do domínio público.
 
-| Recurso          | Endereço                                              | Situação                                                                  |
-| ---------------- | ----------------------------------------------------- | ------------------------------------------------------------------------- |
-| Site público     | `https://sanaka.com.br` e `https://www.sanaka.com.br` | Render; `www` redireciona para o domínio principal                         |
-| API editorial    | `https://cms.sanaka.com.br/wp-json/wp/v2`             | Consultada pelo Angular e pelo script de auditoria                        |
-| API de óbolos    | `https://cms.sanaka.com.br/wp-json/sanaka/v1`         | Mesmos contadores da instalação atual                                     |
-| Painel WordPress | `https://cms.sanaka.com.br/wp-admin/`                 | Login no host do CMS                                                       |
-| Mídias           | `https://cms.sanaka.com.br/wp-content/uploads/…`      | Arquivos acessíveis no CMS                                                 |
+| Recurso          | Endereço                                              | Situação                                           |
+| ---------------- | ----------------------------------------------------- | -------------------------------------------------- |
+| Site público     | `https://sanaka.com.br` e `https://www.sanaka.com.br` | Render; `www` redireciona para o domínio principal |
+| API editorial    | `https://cms.sanaka.com.br/wp-json/wp/v2`             | Consultada pelo Angular e pelo script de auditoria |
+| API de óbolos    | `https://cms.sanaka.com.br/wp-json/sanaka/v1`         | Mesmos contadores da instalação atual              |
+| Painel WordPress | `https://cms.sanaka.com.br/wp-admin/`                 | Login no host do CMS                               |
+| Mídias           | `https://cms.sanaka.com.br/wp-content/uploads/…`      | Arquivos acessíveis no CMS                         |
 
 O endereço REST fica em `src/app/core/wordpress/wordpress-api.ts`. Posts, fragmentos do Sobre,
 livros do Sanakaverse e óbolos usam os tokens compartilhados desse arquivo. A troca do hostname
