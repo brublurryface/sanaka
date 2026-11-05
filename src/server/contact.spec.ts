@@ -74,6 +74,19 @@ describe('contact rate-limit regression', () => {
     expect(sendMail).toHaveBeenCalledTimes(1);
   });
 
+  it('does not put addresses, message text or provider details in failure logs', async () => {
+    const log = vi.spyOn(console, 'error').mockImplementation(() => {});
+    try {
+      sendMail.mockRejectedValueOnce(
+        new Error('recipient@example.com password=private message=private'),
+      );
+      expect((await submit()).status).toHaveBeenCalledWith(503);
+      expect(log).toHaveBeenCalledExactlyOnceWith('Contact message delivery failed.');
+    } finally {
+      log.mockRestore();
+    }
+  });
+
   it.each(['name', 'email', 'subject', 'message'] as const)(
     'enforces the shared %s limit even when the browser is bypassed',
     async (field) => {

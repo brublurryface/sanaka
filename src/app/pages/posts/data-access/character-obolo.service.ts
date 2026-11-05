@@ -3,6 +3,7 @@ import { inject, Injectable } from '@angular/core';
 import { map, Observable, timeout } from 'rxjs';
 
 import { WORDPRESS_REST_URL } from '../../../core/wordpress/wordpress-api';
+import { OBOLO_IDEMPOTENCY_ENABLED } from '../../../core/wordpress/obolo-protocol';
 
 interface WordPressOboloResponse {
   readonly characterSlug: string;
@@ -15,6 +16,7 @@ export class CharacterOboloService {
   private readonly requestTimeoutMs = 10_000;
   private readonly http = inject(HttpClient);
   private readonly restUrl = inject(WORDPRESS_REST_URL);
+  private readonly idempotencyEnabled = inject(OBOLO_IDEMPOTENCY_ENABLED);
 
   /** Consulta o total persistido para a personagem. */
   getTotal(characterSlug: string): Observable<number> {
@@ -27,11 +29,16 @@ export class CharacterOboloService {
   }
 
   /** Deposita exatamente um óbolo; o backend não aceita um incremento escolhido pelo cliente. */
-  offer(characterSlug: string): Observable<number> {
-    return this.http.post<WordPressOboloResponse>(this.buildUrl(characterSlug), null).pipe(
-      map((response) => this.readTotal(response, characterSlug)),
-      timeout({ first: this.requestTimeoutMs }),
-    );
+  offer(characterSlug: string, operationId: string): Observable<number> {
+    return this.http
+      .post<WordPressOboloResponse>(this.buildUrl(characterSlug), null, {
+        headers: this.idempotencyEnabled ? { 'Idempotency-Key': operationId } : undefined,
+        transferCache: false,
+      })
+      .pipe(
+        map((response) => this.readTotal(response, characterSlug)),
+        timeout({ first: this.requestTimeoutMs }),
+      );
   }
 
   private buildUrl(characterSlug: string): string {
@@ -41,7 +48,7 @@ export class CharacterOboloService {
   private readTotal(response: WordPressOboloResponse, requestedSlug: string): number {
     if (
       response.characterSlug !== requestedSlug ||
-      !Number.isInteger(response.total) ||
+      !Number.isSafeInteger(response.total) ||
       response.total < 0
     ) {
       throw new Error('Resposta inválida do contador de óbolos.');

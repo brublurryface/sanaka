@@ -3,6 +3,7 @@ import { HttpTestingController, provideHttpClientTesting } from '@angular/common
 import { TestBed } from '@angular/core/testing';
 
 import { WORDPRESS_REST_URL } from '../../../core/wordpress/wordpress-api';
+import { OBOLO_IDEMPOTENCY_ENABLED } from '../../../core/wordpress/obolo-protocol';
 import { CharacterOboloService } from './character-obolo.service';
 
 describe('CharacterOboloService', () => {
@@ -11,21 +12,34 @@ describe('CharacterOboloService', () => {
 
   const restUrl = 'https://example.com/wp-json';
 
-  beforeEach(() => {
+  function configure(enabled = true) {
     TestBed.configureTestingModule({
       providers: [
         provideHttpClient(),
         provideHttpClientTesting(),
+        { provide: OBOLO_IDEMPOTENCY_ENABLED, useValue: enabled },
         { provide: WORDPRESS_REST_URL, useValue: restUrl },
       ],
     });
 
     httpTesting = TestBed.inject(HttpTestingController);
     service = TestBed.inject(CharacterOboloService);
-  });
+  }
+
+  beforeEach(() => configure());
 
   afterEach(() => {
     httpTesting.verify();
+  });
+
+  it('preserves legacy POST until the backend protocol is enabled', () => {
+    TestBed.resetTestingModule();
+    configure(false);
+    service.offer('nandini', '00000000-0000-4000-8000-000000000001').subscribe();
+    const request = httpTesting.expectOne(`${restUrl}/sanaka/v1/obolos/nandini`);
+    expect(request.request.headers.has('Idempotency-Key')).toBe(false);
+    expect(request.request.body).toBeNull();
+    request.flush({ characterSlug: 'nandini', total: 129 });
   });
 
   it('should read the counter associated with the character', () => {
@@ -46,7 +60,7 @@ describe('CharacterOboloService', () => {
   it('should offer exactly one obolo without sending a client-defined increment', () => {
     let total: number | undefined;
 
-    service.offer('nandini').subscribe((value) => {
+    service.offer('nandini', '00000000-0000-4000-8000-000000000001').subscribe((value) => {
       total = value;
     });
 
@@ -54,6 +68,10 @@ describe('CharacterOboloService', () => {
 
     expect(request.request.method).toBe('POST');
     expect(request.request.body).toBeNull();
+    expect(request.request.headers.get('Idempotency-Key')).toBe(
+      '00000000-0000-4000-8000-000000000001',
+    );
+    expect(request.request.transferCache).toBe(false);
     request.flush({ characterSlug: 'nandini', total: 129 });
     expect(total).toBe(129);
   });
@@ -71,6 +89,19 @@ describe('CharacterOboloService', () => {
       .expectOne(`${restUrl}/sanaka/v1/obolos/nandini`)
       .flush({ characterSlug: 'samvit', total: 10 });
 
+    expect(error).toBeInstanceOf(Error);
+  });
+
+  it('rejects totals that cannot be represented safely', () => {
+    let error: unknown;
+    service.getTotal('nandini').subscribe({
+      error: (reason) => {
+        error = reason;
+      },
+    });
+    httpTesting
+      .expectOne(`${restUrl}/sanaka/v1/obolos/nandini`)
+      .flush({ characterSlug: 'nandini', total: Number.MAX_SAFE_INTEGER + 1 });
     expect(error).toBeInstanceOf(Error);
   });
 });

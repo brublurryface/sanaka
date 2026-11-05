@@ -1,7 +1,14 @@
-import { DestroyRef, inject, Injectable, signal } from '@angular/core';
+import { DestroyRef, inject, Injectable, InjectionToken, signal } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 
 import { CharacterOboloService } from '../data-access/character-obolo.service';
+
+export const CREATE_OBOLO_OPERATION_ID = new InjectionToken<() => string>(
+  'CREATE_OBOLO_OPERATION_ID',
+  {
+    factory: () => () => globalThis.crypto.randomUUID(),
+  },
+);
 
 export type OboloInteractionStatus =
   'loading' | 'ready' | 'submitting' | 'success' | 'load-error' | 'offer-error';
@@ -17,12 +24,17 @@ export class CharacterOboloStore {
   private readonly service = inject(CharacterOboloService);
   private readonly destroyRef = inject(DestroyRef);
   private activeCharacterSlug = '';
+  private generation = 0;
+  private operationId?: string;
+  private readonly createOperationId = inject(CREATE_OBOLO_OPERATION_ID);
 
   readonly state = signal<OboloViewState>({ status: 'loading', total: null });
 
   /** Troca o contador ativo quando a rota passa a exibir outra personagem. */
   setCharacter(characterSlug: string | undefined): void {
     if (!characterSlug) {
+      this.generation++;
+      this.operationId = undefined;
       this.activeCharacterSlug = '';
       this.state.set({ status: 'loading', total: null });
       return;
@@ -33,6 +45,8 @@ export class CharacterOboloStore {
     }
 
     this.activeCharacterSlug = characterSlug;
+    this.generation++;
+    this.operationId = undefined;
     this.load();
   }
 
@@ -46,6 +60,7 @@ export class CharacterOboloStore {
   offer(): void {
     const currentState = this.state();
     const requestedSlug = this.activeCharacterSlug;
+    const generation = this.generation;
 
     if (
       !requestedSlug ||
@@ -55,18 +70,24 @@ export class CharacterOboloStore {
       return;
     }
 
+    try {
+      this.operationId ??= this.createOperationId();
+    } catch {
+      this.state.set({ status: 'offer-error', total: currentState.total });
+      return;
+    }
     this.state.set({ status: 'submitting', total: currentState.total });
     this.service
-      .offer(requestedSlug)
+      .offer(requestedSlug, this.operationId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (total) => {
-          if (this.activeCharacterSlug === requestedSlug) {
+          if (this.generation === generation) {
             this.state.set({ status: 'success', total });
           }
         },
         error: () => {
-          if (this.activeCharacterSlug === requestedSlug) {
+          if (this.generation === generation) {
             this.state.set({ status: 'offer-error', total: currentState.total });
           }
         },
@@ -75,6 +96,7 @@ export class CharacterOboloStore {
 
   private load(): void {
     const requestedSlug = this.activeCharacterSlug;
+    const generation = this.generation;
 
     this.state.set({ status: 'loading', total: null });
     this.service
@@ -82,12 +104,12 @@ export class CharacterOboloStore {
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (total) => {
-          if (this.activeCharacterSlug === requestedSlug) {
+          if (this.generation === generation) {
             this.state.set({ status: 'ready', total });
           }
         },
         error: () => {
-          if (this.activeCharacterSlug === requestedSlug) {
+          if (this.generation === generation) {
             this.state.set({ status: 'load-error', total: null });
           }
         },
