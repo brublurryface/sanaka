@@ -1,5 +1,6 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
+import { RouterTestingHarness } from '@angular/router/testing';
 import { provideTransloco, TranslocoLoader, TranslocoService } from '@jsverse/transloco';
 import { Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
@@ -10,9 +11,11 @@ import { PostsStore } from './posts.store';
 import { NewsletterService } from './newsletter-signup/data-access/newsletter.service';
 import {
   PostsPage,
+  PostsPageOutOfRangeError,
   PostsQuery,
   WordPressPostsService,
 } from './data-access/wordpress-posts.service';
+import { POSTS_ROUTES } from './posts.routes';
 
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
@@ -467,6 +470,37 @@ describe('Posts', () => {
     expect(component.posts().map((post) => post.title)).toEqual(posts.map((post) => post.title));
   });
 
+  it('should render a bounded pagination window with accessible current, first and last pages', () => {
+    createComponent(of({ ...firstPage, total: 10_000, totalPages: 500 }));
+    component.setViewMode('paged');
+    component.goToPage(250);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+    const nav = compiled.querySelector('.posts-pagination--paged');
+    expect(nav?.getAttribute('aria-label')).toBe('Paginação das publicações');
+    expect(nav?.querySelectorAll('.posts-pagination__page').length).toBeLessThanOrEqual(7);
+    expect(nav?.querySelectorAll('.posts-pagination__ellipsis')).toHaveLength(2);
+    expect(nav?.querySelectorAll('[aria-current="page"]')).toHaveLength(1);
+    expect(nav?.querySelector('[aria-current="page"]')?.textContent?.trim()).toBe('250');
+    const last = nav?.querySelector<HTMLButtonElement>('[aria-label="Ir para a página 500"]');
+    last?.click();
+    fixture.detectChanges();
+    expect(component.currentPage()).toBe(500);
+    expect(
+      compiled.querySelectorAll<HTMLButtonElement>('.posts-pagination__direction')[1].disabled,
+    ).toBe(true);
+    compiled.querySelector<HTMLButtonElement>('[aria-label="Ir para a página 1"]')?.click();
+    fixture.detectChanges();
+    expect(component.currentPage()).toBe(1);
+    expect(
+      compiled.querySelector<HTMLButtonElement>('.posts-pagination__direction')?.disabled,
+    ).toBe(true);
+    for (const gap of compiled.querySelectorAll('.posts-pagination__ellipsis')) {
+      expect(gap.getAttribute('aria-hidden')).toBe('true');
+      expect(gap.querySelector('button')).toBeNull();
+    }
+  });
+
   function selectFilter(id: string, slug: string): void {
     const select = fixture.nativeElement.querySelector(`#${id}`) as HTMLSelectElement;
     select.value = slug;
@@ -582,5 +616,108 @@ describe('Posts', () => {
     fixture.detectChanges();
     expect(compiled.querySelector<HTMLSelectElement>('#posts-category')?.disabled).toBe(false);
     expect(compiled.querySelector('.posts-filters__feedback')).toBeNull();
+  });
+});
+
+describe('Posts real-router canonicalization', () => {
+  const getPosts = vi.fn<(query?: PostsQuery) => Observable<PostsPage>>();
+  function response(page: number): PostsPage {
+    return {
+      posts: [
+        {
+          id: page,
+          slug: `post-${page}`,
+          title: `Post ${page}`,
+          excerpt: '',
+          publishedAt: '2026-11-04',
+          category: '',
+          categories: [],
+        },
+      ],
+      page,
+      perPage: 20,
+      total: 200,
+      totalPages: 10,
+    };
+  }
+  beforeEach(async () => {
+    getPosts.mockReset().mockImplementation((query) => of(response(query?.page ?? 1)));
+    await TestBed.configureTestingModule({
+      providers: [
+        provideRouter([{ path: 'posts', children: POSTS_ROUTES }]),
+        {
+          provide: WordPressPostsService,
+          useValue: { getPosts, getArchiveCategories: () => of([]) },
+        },
+        {
+          provide: NewsletterService,
+          useValue: { getAvailability: () => of({ available: false }), subscribe: vi.fn() },
+        },
+        provideTransloco({
+          config: {
+            availableLangs: ['pt-BR', 'en'],
+            defaultLang: 'pt-BR',
+            fallbackLang: 'pt-BR',
+            reRenderOnLangChange: true,
+            prodMode: true,
+          },
+          loader: MockTranslocoLoader,
+        }),
+      ],
+    }).compileComponents();
+  });
+
+  it.each(['0', '-1', 'abc', '1e3', '1', '9007199254740992'])(
+    'should settle invalid or noncanonical page %s once and preserve URL filters',
+    async (value) => {
+      const harness = await RouterTestingHarness.create();
+      await harness.navigateByUrl(`/posts/paged/${value}?category=pensamentos&tag=identidade`);
+      await harness.fixture.whenStable();
+      harness.detectChanges();
+      const router = TestBed.inject(Router);
+      expect(router.url.split('?')[0]).toBe('/posts/paged');
+      expect(router.parseUrl(router.url).queryParams).toEqual({
+        category: 'pensamentos',
+        tag: 'identidade',
+      });
+      expect(getPosts).toHaveBeenCalledExactlyOnceWith({
+        page: 1,
+        perPage: 20,
+        search: '',
+        categorySlug: 'pensamentos',
+        tagSlug: 'identidade',
+      });
+      expect(harness.routeNativeElement?.querySelectorAll('app-post-card')).toHaveLength(1);
+    },
+  );
+
+  it('should recover an out-of-range URL once without a navigation loop', async () => {
+    getPosts.mockImplementation((query) =>
+      query?.page === 999999
+        ? throwError(() => new PostsPageOutOfRangeError())
+        : of(response(query?.page ?? 1)),
+    );
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/posts/paged/999999?category=pensamentos&tag=identidade');
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(TestBed.inject(Router).url).toBe('/posts/paged?category=pensamentos&tag=identidade');
+    expect(getPosts.mock.calls.map(([query]) => query?.page)).toEqual([999999, 1]);
+    expect(harness.routeNativeElement?.querySelector('.posts-feedback[role="alert"]')).toBeNull();
+  });
+
+  it('should request only the final page and filter combination during a reused route transition', async () => {
+    const harness = await RouterTestingHarness.create();
+    await harness.navigateByUrl('/posts/paged/4?category=bruna');
+    await harness.navigateByUrl('/posts/paged/2?category=pensamentos&tag=identidade');
+    await harness.fixture.whenStable();
+    harness.detectChanges();
+    expect(TestBed.inject(Router).url).toBe('/posts/paged/2?category=pensamentos&tag=identidade');
+    expect(
+      getPosts.mock.calls.map(([query]) => [query?.page, query?.categorySlug, query?.tagSlug]),
+    ).toEqual([
+      [4, 'bruna', undefined],
+      [2, 'pensamentos', 'identidade'],
+    ]);
   });
 });

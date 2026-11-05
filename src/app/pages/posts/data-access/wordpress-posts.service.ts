@@ -1,4 +1,4 @@
-import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
+import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
 import { SecurityContext, inject, Injectable } from '@angular/core';
 import { DomSanitizer } from '@angular/platform-browser';
 import {
@@ -11,6 +11,7 @@ import {
   shareReplay,
   startWith,
   switchMap,
+  throwError,
   timeout,
 } from 'rxjs';
 
@@ -50,6 +51,14 @@ export interface PostsPage {
   readonly perPage: number;
   readonly total: number;
   readonly totalPages: number;
+}
+
+/** A consulta é válida, mas a coleção já não alcança a página solicitada. */
+export class PostsPageOutOfRangeError extends Error {
+  constructor() {
+    super('A página solicitada está fora do arquivo.');
+    this.name = 'PostsPageOutOfRangeError';
+  }
 }
 
 interface WordPressRenderedField {
@@ -170,10 +179,22 @@ export class WordPressPostsService {
             totalPages: 0,
           });
         return forkJoin({
-          response: this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
-            params: this.buildPostsParams(resolvedQuery, policy),
-            observe: 'response',
-          }),
+          response: this.http
+            .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
+              params: this.buildPostsParams(resolvedQuery, policy),
+              observe: 'response',
+            })
+            .pipe(
+              catchError((error: unknown) =>
+                throwError(() =>
+                  error instanceof HttpErrorResponse &&
+                  error.status === 400 &&
+                  error.error?.code === 'rest_post_invalid_page_number'
+                    ? new PostsPageOutOfRangeError()
+                    : error,
+                ),
+              ),
+            ),
           categories: this.categories$,
         }).pipe(
           map(({ response, categories }) =>

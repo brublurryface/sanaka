@@ -1,9 +1,9 @@
 import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
-import { ActivatedRoute, RouterLink } from '@angular/router';
+import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { combineLatest, debounceTime, distinctUntilChanged, map } from 'rxjs';
+import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
 import { PostCard } from './post-card/post-card';
 import { NewsletterSignup } from './newsletter-signup/newsletter-signup';
@@ -18,6 +18,7 @@ import { PostsStore, PostsViewMode } from './posts.store';
 })
 export class Posts {
   private readonly route = inject(ActivatedRoute);
+  private readonly router = inject(Router);
   private readonly store = inject(PostsStore);
 
   readonly searchControl = new FormControl(this.store.search(), {
@@ -44,16 +45,12 @@ export class Posts {
   readonly hasLoadMoreError = this.store.hasLoadMoreError;
   readonly hasMore = this.store.hasMore;
   readonly pageNumbers = this.store.pageNumbers;
+  readonly paginationItems = this.store.paginationItems;
   readonly viewMode = this.store.viewMode;
   readonly currentPage = this.store.currentPage;
 
   constructor() {
-    this.store.activateRoute(
-      this.route.snapshot.data['view'],
-      this.route.snapshot.paramMap.get('page'),
-      this.route.snapshot.queryParamMap.get('category'),
-      this.route.snapshot.queryParamMap.get('tag'),
-    );
+    this.activateRoute();
 
     effect(() => {
       this.categoryControl.setValue(this.store.selectedRootCategory()?.slug ?? '', {
@@ -82,16 +79,12 @@ export class Posts {
       .pipe(takeUntilDestroyed())
       .subscribe((slug) => this.store.setCategory(slug || this.selectedRootCategory()?.slug || ''));
 
-    combineLatest([this.route.paramMap, this.route.queryParamMap])
-      .pipe(takeUntilDestroyed())
-      .subscribe(([params, queryParams]) =>
-        this.store.activateRoute(
-          this.route.snapshot.data['view'],
-          params.get('page'),
-          queryParams.get('category'),
-          queryParams.get('tag'),
-        ),
-      );
+    this.router.events
+      .pipe(
+        filter((event): event is NavigationEnd => event instanceof NavigationEnd),
+        takeUntilDestroyed(),
+      )
+      .subscribe(() => this.activateRoute());
 
     this.searchControl.valueChanges
       .pipe(
@@ -101,6 +94,15 @@ export class Posts {
         takeUntilDestroyed(),
       )
       .subscribe((search) => this.store.setSearch(search));
+  }
+
+  private activateRoute(): void {
+    this.store.activateRoute(
+      this.route.snapshot.data['view'],
+      this.route.snapshot.paramMap.get('page'),
+      this.route.snapshot.queryParamMap.get('category'),
+      this.route.snapshot.queryParamMap.get('tag'),
+    );
   }
 
   setViewMode(mode: PostsViewMode): void {
