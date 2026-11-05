@@ -2,7 +2,11 @@ import { createServer } from 'node:http';
 import { setTimeout as delay } from 'node:timers/promises';
 import { pathToFileURL } from 'node:url';
 
-export function createWordPressFixture({ delayMs = 20, archiveSize = 500 } = {}) {
+export function createWordPressFixture({
+  delayMs = 20,
+  archiveSize = 500,
+  largeCovers = false,
+} = {}) {
   const calls = [];
   const state = { enrichmentFailure: false, policyFailure: false };
   const categories = [
@@ -70,8 +74,22 @@ export function createWordPressFixture({ delayMs = 20, archiveSize = 500 } = {})
         status = 503;
         body = { code: 'fixture_unavailable' };
       } else if (slug === 'does-not-exist') body = [];
-      else if (slug) body = [article(1, slug)];
-      else if (
+      else if (slug) {
+        const post = article(1, slug);
+        if (largeCovers) {
+          post.featured_media = 900;
+          post._embedded = {
+            'wp:featuredmedia': [
+              {
+                id: 900,
+                source_url: '/images/samvit/presences/samvit-sesha-blink.png',
+                alt_text: 'Arte animada canônica, sem alteração',
+              },
+            ],
+          };
+        }
+        body = [post];
+      } else if (
         url.searchParams.has('before') ||
         url.searchParams.has('after') ||
         url.searchParams.get('_fields') === 'tags,categories'
@@ -85,6 +103,21 @@ export function createWordPressFixture({ delayMs = 20, archiveSize = 500 } = {})
           (_, i) => article((page - 1) * size + i + 1, `audit-${(page - 1) * size + i + 1}`),
         );
         total = archiveSize;
+        if (
+          url.searchParams.get('categories') === '97' ||
+          url.searchParams.get('categories[terms]') === '97'
+        ) {
+          total = 100;
+          body = Array.from(
+            { length: Math.max(0, Math.min(size, total - (page - 1) * size)) },
+            (_, i) => ({
+              id: 10000 + (page - 1) * size + i,
+              slug: `volume-${(page - 1) * size + i + 1}`,
+              title: { rendered: `Volume ${(page - 1) * size + i + 1}` },
+              sanakaverse_cover: '/images/about/about-cycles-sketch-nine.webp',
+            }),
+          );
+        }
       }
       total ??= Array.isArray(body) ? body.length : 0;
     } else {

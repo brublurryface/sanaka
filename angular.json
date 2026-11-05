@@ -70,6 +70,23 @@
                 }
               ],
               "tsConfig": "experiments/ssr/tsconfig.json"
+            },
+            "performance": {
+              "browser": "experiments/performance/main.ts",
+              "tsConfig": "experiments/performance/tsconfig.json",
+              "server": false,
+              "ssr": false,
+              "outputMode": "static",
+              "assets": [
+                {
+                  "glob": "**/*",
+                  "input": "public"
+                },
+                {
+                  "glob": "**/*",
+                  "input": "experiments/performance/public"
+                }
+              ]
             }
           },
           "defaultConfiguration": "production"
