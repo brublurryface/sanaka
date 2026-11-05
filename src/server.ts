@@ -6,7 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
-import { getStaticCacheControl, HTML_CACHE_CONTROL } from './server/cache-policy';
+import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
 import { contactHandler } from './server/contact';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
@@ -70,7 +70,11 @@ app.use((req, res, next) => {
       // Alterar a própria resposta evita que o Angular sobrescreva o cache ao copiá-la.
       response.headers.set(
         'Cache-Control',
-        res.getHeader('Cache-Control')?.toString() ?? HTML_CACHE_CONTROL,
+        getHtmlCacheControl(
+          response.status,
+          response.headers.get('Cache-Control'),
+          res.getHeader('Cache-Control')?.toString(),
+        ),
       );
       return writeResponseToNodeResponse(response, res);
     })

@@ -40,7 +40,20 @@ describe('WordPressPostsService', () => {
   });
 
   afterEach(() => {
+    vi.useRealTimers();
     httpTesting.verify();
+  });
+
+  it('revalidates the shared category tree after five minutes instead of retaining it forever', () => {
+    vi.useFakeTimers();
+    service.getArchiveCategories().subscribe();
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
+    vi.advanceTimersByTime(299_999);
+    service.getArchiveCategories().subscribe();
+    httpTesting.expectNone((request) => request.url === `${apiUrl}/categories`);
+    vi.advanceTimersByTime(1);
+    service.getArchiveCategories().subscribe();
+    httpTesting.expectOne((request) => request.url === `${apiUrl}/categories`).flush([]);
   });
 
   function finishEmptyTagSuggestions() {

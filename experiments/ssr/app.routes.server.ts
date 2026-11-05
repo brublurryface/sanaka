@@ -1,0 +1,65 @@
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export const serverRoutes: ServerRoute[] = [
+  {
+    path: '',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'posts',
+    renderMode: RenderMode.Client,
+  },
+  { path: 'posts/:slug', renderMode: RenderMode.Server },
+  {
+    path: 'posts/**',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'sobre',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'contato',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'sanakaverse',
+    renderMode: RenderMode.Client,
+  },
+  {
+    path: 'samvit',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'maya',
+    renderMode: RenderMode.Server,
+    status: 301,
+  },
+  {
+    path: 'matrix',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'matrix/components',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'matrix/rest-api',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'matrix/obolos',
+    renderMode: RenderMode.Prerender,
+  },
+  {
+    path: 'matrix/entregas',
+    renderMode: RenderMode.Prerender,
+  },
+  { path: 'matrix/jogo', renderMode: RenderMode.Prerender },
+  { path: 'matrix/padaria', renderMode: RenderMode.Prerender },
+  {
+    path: '**',
+    renderMode: RenderMode.Server,
+    status: 404,
+  },
+];

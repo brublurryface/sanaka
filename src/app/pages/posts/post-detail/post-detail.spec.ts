@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { RESPONSE_INIT } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
@@ -341,10 +342,35 @@ describe('PostDetailPage', () => {
   });
 
   it('should show the not-found state without rendering an article', () => {
+    const response: ResponseInit = {};
+    TestBed.configureTestingModule({ providers: [{ provide: RESPONSE_INIT, useValue: response }] });
     const compiled = createComponent(of(null));
 
     expect(compiled.textContent).toContain('Esta publicação não foi encontrada.');
     expect(compiled.querySelector('.post-reader')).toBeNull();
+    expect(response.status).toBe(404);
+    expect(new Headers(response.headers).get('Cache-Control')).toBe('no-store');
+    expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
+      'noindex, nofollow',
+    );
+  });
+
+  it('returns a temporary 503 without deindexing the article and restores success on retry', () => {
+    const response: ResponseInit = {};
+    TestBed.configureTestingModule({ providers: [{ provide: RESPONSE_INIT, useValue: response }] });
+    createComponent(throwError(() => new Error('offline')));
+    expect(response.status).toBe(503);
+    expect(new Headers(response.headers).get('Cache-Control')).toBe('no-store');
+    expect(new Headers(response.headers).get('Retry-After')).toBe('60');
+    expect(document.querySelector('meta[name="robots"]')?.getAttribute('content')).toBe(
+      'index, follow',
+    );
+    postsService.getPostBySlug.mockReturnValue(of(post));
+    fixture.componentInstance.retry();
+    fixture.detectChanges();
+    expect(response.status).toBe(200);
+    expect(new Headers(response.headers).get('Retry-After')).toBeNull();
+    expect(new Headers(response.headers).get('Cache-Control')).toContain('must-revalidate');
   });
 
   it('should retry after a loading error', () => {

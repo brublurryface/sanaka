@@ -14,3 +14,12 @@ export function getStaticCacheControl(filePath: string): string {
 }
 
 export const HTML_CACHE_CONTROL = REVALIDATED_RESOURCE_CACHE_CONTROL;
+
+/** Erros nunca entram no cache; cabeçalhos específicos do renderizador são preservados. */
+export function getHtmlCacheControl(
+  status: number,
+  rendered?: string | null,
+  middleware?: string,
+): string {
+  return status >= 400 ? 'no-store' : (middleware ?? rendered ?? HTML_CACHE_CONTROL);
+}

@@ -8,11 +8,13 @@ import {
   map,
   Observable,
   of,
-  shareReplay,
+  ReplaySubject,
+  share,
   startWith,
   switchMap,
   throwError,
   timeout,
+  timer,
 } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
@@ -146,9 +148,11 @@ export class WordPressPostsService {
   private readonly sanitizer = inject(DomSanitizer);
 
   private readonly categories$ = this.loadCategories().pipe(
-    shareReplay({
-      bufferSize: 1,
-      refCount: true,
+    share({
+      connector: () => new ReplaySubject<readonly WordPressCategory[]>(1),
+      resetOnError: true,
+      resetOnComplete: () => timer(5 * 60_000),
+      resetOnRefCountZero: true,
     }),
   );
 

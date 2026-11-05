@@ -18,10 +18,12 @@ export class CharacterOboloService {
 
   /** Consulta o total persistido para a personagem. */
   getTotal(characterSlug: string): Observable<number> {
-    return this.http.get<WordPressOboloResponse>(this.buildUrl(characterSlug)).pipe(
-      map((response) => this.readTotal(response, characterSlug)),
-      timeout({ first: this.requestTimeoutMs }),
-    );
+    return this.http
+      .get<WordPressOboloResponse>(this.buildUrl(characterSlug), { transferCache: false })
+      .pipe(
+        map((response) => this.readTotal(response, characterSlug)),
+        timeout({ first: this.requestTimeoutMs }),
+      );
   }
 
   /** Deposita exatamente um óbolo; o backend não aceita um incremento escolhido pelo cliente. */

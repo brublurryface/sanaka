@@ -7,6 +7,7 @@ import {
   computed,
   effect,
   inject,
+  RESPONSE_INIT,
   signal,
 } from '@angular/core';
 import { takeUntilDestroyed, toSignal } from '@angular/core/rxjs-interop';
@@ -44,6 +45,7 @@ export class PostDetailPage {
   private readonly seo = inject(SanakaSeoService);
   private readonly transloco = inject(TranslocoService);
   private readonly document = inject(DOCUMENT);
+  private readonly responseInit = inject(RESPONSE_INIT, { optional: true });
   private readonly requests = new Subject<string>();
   private readonly currentSlug = signal('');
 
@@ -104,6 +106,19 @@ export class PostDetailPage {
       const post = state.status === 'success' ? state.post : null;
       const slug = post?.slug ?? this.currentSlug();
 
+      if (this.responseInit && state.status !== 'loading') {
+        this.responseInit.status =
+          state.status === 'success' ? 200 : state.status === 'not-found' ? 404 : 503;
+        const headers = new Headers(this.responseInit.headers);
+        headers.set(
+          'Cache-Control',
+          state.status === 'success' ? 'public, max-age=0, must-revalidate' : 'no-store',
+        );
+        if (state.status === 'error') headers.set('Retry-After', '60');
+        else headers.delete('Retry-After');
+        this.responseInit.headers = headers;
+      }
+
       this.seo.applyPage({
         pageTitle: post?.title ?? this.defaultTitle(),
         description: post?.excerpt ?? this.defaultDescription(),
@@ -113,7 +128,7 @@ export class PostDetailPage {
         imageUrl: post?.coverImageUrl,
         imageAlt: post?.coverImageAlt,
         publishedAt: post?.publishedAt,
-        indexable: state.status !== 'not-found' && state.status !== 'error',
+        indexable: state.status !== 'not-found',
       });
     });
 
