@@ -82,11 +82,11 @@ A sequência proposta começa pela responsabilidade do backend e depois pela int
 
 A autora escolheu reunir ofertas e personagens. A interface ainda será implementada, acompanhada na [issue #86](https://github.com/brublurryface/sanaka/issues/86).
 
-| Área | Conteúdo previsto |
-| --- | --- |
-| Visão geral | Totais, personagens e uso da capacidade, com acesso às duas áreas. |
-| Ofertas | Totais por personagem e histórico paginado dos recibos. |
-| Personagens e moedas | Personagens do CMS, frente e verso das moedas e suas ofertas. |
+| Área                 | Conteúdo previsto                                                  |
+| -------------------- | ------------------------------------------------------------------ |
+| Visão geral          | Totais, personagens e uso da capacidade, com acesso às duas áreas. |
+| Ofertas              | Totais por personagem e histórico paginado dos recibos.            |
+| Personagens e moedas | Personagens do CMS, frente e verso das moedas e suas ofertas.      |
 
 Selecionar uma personagem abrirá suas ofertas com o filtro aplicado. A primeira interface será de consulta e reaproveitará os dados do CMS. O histórico detalhado terá início nas operações com recibo, preservando os totais anteriores.
 
