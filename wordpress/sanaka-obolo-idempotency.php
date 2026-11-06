@@ -3,9 +3,9 @@
  * Plugin Name: Óbolos de Sanaka
  * Plugin URI: https://github.com/brublurryface/sanaka/tree/main/wordpress
  * Description: Protege as ofertas de óbolos do Projeto Sanaka contra contagens duplicadas e preserva os recibos de cada operação.
- * Version: 1.0.1
+ * Version: 1.0.2
  * Requires PHP: 8.3
- * Author: Bruna Lourenço
+ * Author: Sanaka Bruna
  * Author URI: https://github.com/brublurryface
  * Update URI: https://github.com/brublurryface/sanaka/tree/main/wordpress
  */

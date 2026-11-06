@@ -1,10 +1,10 @@
 # Óbolos de Sanaka
 
-Plugin WordPress do [Projeto Sanaka](https://sanaka.com.br), concebido e desenvolvido por [Bruna Lourenço](https://github.com/brublurryface).
+Plugin WordPress do [Projeto Sanaka](https://sanaka.com.br), concebido e desenvolvido por [Sanaka Bruna](https://github.com/brublurryface).
 
 Uma oferta pode chegar ao servidor e perder sua resposta no caminho de volta. Óbolos de Sanaka registra um recibo para que a repetição dessa mesma operação conserve o resultado, sem acrescentar outro óbolo.
 
-**Versão:** 1.0.1 · **PHP:** 8.3 ou superior · **Banco:** MySQL/MariaDB com InnoDB.
+**Versão:** 1.0.2 · **PHP:** 8.3 ou superior · **Banco:** MySQL/MariaDB com InnoDB.
 
 ## O que está implementado
 
@@ -30,7 +30,7 @@ O recibo conserva o total obtido naquela operação. Outras ofertas podem aument
 
 ## Integração atual
 
-A versão 1.0.1 complementa o snippet #6, que ainda mantém o endpoint público, a validação das personagens e o contador original. Os outros campos públicos do CMS presentes nesse snippet continuam sob sua responsabilidade.
+A versão 1.0.2 complementa o snippet #6, que ainda mantém o endpoint público, a validação das personagens e o contador original. Os outros campos públicos do CMS presentes nesse snippet continuam sob sua responsabilidade.
 
 - Endpoint: `/wp-json/sanaka/v1/obolos/{character_slug}`.
 - Contadores: tabela com sufixo `sanaka_obolos`.
@@ -44,7 +44,7 @@ O código reaproveita as personagens publicadas no WordPress. A lista de persona
 
 Envie o ZIP pelo painel WordPress em **Plugins → Adicionar plugin → Enviar plugin**. Ative o complemento e confira a criação da tabela de recibos, InnoDB, a consulta do contador e o preflight da origem real do Angular.
 
-A atualização de 1.0.0 para 1.0.1 reutiliza o diretório técnico `sanaka-obolo-idempotency`, substituindo a versão instalada. A alteração do nome público preserva a identificação interna do plugin, suas funções e os dados já registrados.
+A atualização das versões 1.0.0 ou 1.0.1 para 1.0.2 reutiliza o diretório técnico `sanaka-obolo-idempotency`, substituindo a versão instalada. A alteração do nome público preserva a identificação interna do plugin, suas funções e os dados já registrados.
 
 O pacote contém o arquivo PHP principal e esta documentação. Os testes destrutivos de CI usam um banco isolado próprio; não devem ser executados no CMS.
 
@@ -78,7 +78,25 @@ Estas funcionalidades ainda não estão implementadas:
 
 A sequência proposta começa pela responsabilidade do backend e depois pela interface de administração.
 
+## Direção do painel da próxima versão
+
+A autora escolheu reunir ofertas e personagens. A interface ainda será implementada, acompanhada na [issue #86](https://github.com/brublurryface/sanaka/issues/86).
+
+| Área                 | Conteúdo previsto                                                  |
+| -------------------- | ------------------------------------------------------------------ |
+| Visão geral          | Totais, personagens e uso da capacidade, com acesso às duas áreas. |
+| Ofertas              | Totais por personagem e histórico paginado dos recibos.            |
+| Personagens e moedas | Personagens do CMS, frente e verso das moedas e suas ofertas.      |
+
+Selecionar uma personagem abrirá suas ofertas com o filtro aplicado. A primeira interface será de consulta e reaproveitará os dados do CMS. O histórico detalhado terá início nas operações com recibo, preservando os totais anteriores.
+
 ## Histórico de versões
+
+### 1.0.2
+
+- Assinatura de autoria corrigida para **Sanaka Bruna**.
+- Direção do painel registrada com ofertas, personagens e moedas.
+- Lógica PHP e dados preservados.
 
 ### 1.0.1
 
