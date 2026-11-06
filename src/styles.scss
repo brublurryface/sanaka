@@ -336,6 +336,23 @@ body {
    ACCESSIBILITY
 ------------------------ */
 
+.visually-hidden {
+  position: absolute;
+
+  width: 1px;
+  height: 1px;
+  padding: 0;
+  margin: -1px;
+
+  overflow: hidden;
+
+  clip: rect(0, 0, 0, 0);
+
+  white-space: nowrap;
+
+  border: 0;
+}
+
 /* Search fields use the accessible custom clear button, not the browser's blue icon. */
 input[type='search']::-webkit-search-cancel-button {
   -webkit-appearance: none;

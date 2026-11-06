@@ -309,7 +309,10 @@ describe('Posts', () => {
 
   it('should keep the newsletter anchor available independently of the WordPress request', () => {
     createComponent(new Subject<PostsPage>());
-    expect(fixture.nativeElement.querySelector('app-newsletter-signup#newsletter')).not.toBeNull();
+    const anchor = (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('#newsletter');
+    expect(anchor?.tagName).toBe('H2');
+    expect(anchor?.tabIndex).toBe(-1);
+    expect(anchor?.closest('section')?.getAttribute('aria-labelledby')).toBe('newsletter');
   });
 
   it('should show a loading state while WordPress is pending', () => {
