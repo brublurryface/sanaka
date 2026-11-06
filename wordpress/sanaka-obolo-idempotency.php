@@ -1,9 +1,13 @@
 <?php
 /**
- * Plugin Name: Sanaka — idempotência dos óbolos
- * Description: Complemento do endpoint existente; instalar antes do frontend com Idempotency-Key.
- * Version: 1.0.0
+ * Plugin Name: Óbolos de Sanaka
+ * Plugin URI: https://github.com/brublurryface/sanaka/tree/main/wordpress
+ * Description: Protege as ofertas de óbolos do Projeto Sanaka contra contagens duplicadas e preserva os recibos de cada operação.
+ * Version: 1.0.1
  * Requires PHP: 8.3
+ * Author: Bruna Lourenço
+ * Author URI: https://github.com/brublurryface
+ * Update URI: https://github.com/brublurryface/sanaka/tree/main/wordpress
  */
 defined('ABSPATH') || exit;
 
