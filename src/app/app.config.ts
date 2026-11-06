@@ -6,6 +6,7 @@ import { provideTransloco } from '@jsverse/transloco';
 import { routes } from './app.routes';
 import { translocoConfig } from './core/i18n/transloco.config';
 import { SanakaTitleStrategy } from './core/navigation/sanaka-title.strategy';
+import { OBOLO_IDEMPOTENCY_ENABLED } from './core/wordpress/obolo-protocol';
 import {
   isPublicWordPressRead,
   WORDPRESS_TRANSFER_HEADERS,
@@ -28,6 +29,7 @@ export const appConfig: ApplicationConfig = {
       }),
     ),
     provideHttpClient(),
+    { provide: OBOLO_IDEMPOTENCY_ENABLED, useValue: true },
     provideTransloco(translocoConfig),
     { provide: TitleStrategy, useClass: SanakaTitleStrategy },
   ],
