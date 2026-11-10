@@ -25,9 +25,10 @@
           <span>{{ 'sanakaverse.hero.title.line1' | transloco }}</span>
           <span>{{ 'sanakaverse.hero.title.line2' | transloco }}</span>
         </h1>
-        <p class="sanakaverse-hero__intro sanaka-atmosphere-copy-shadow">
-          {{ 'sanakaverse.hero.intro' | transloco }}
-        </p>
+        <p
+          class="sanakaverse-hero__intro sanaka-atmosphere-copy-shadow"
+          [innerHTML]="'sanakaverse.hero.intro' | transloco"
+        ></p>
       </div>
     </header>
 

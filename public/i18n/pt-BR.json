@@ -10,20 +10,20 @@
       "samvit": "Saṃvit",
       "about": "Sobre",
       "contact": "Contato",
-      "sanakaverse": "Biblioteca do Sanakaverse",
+      "sanakaverse": "Biblioteca de Sanaka-loka",
       "notFound": "Caminho não encontrado"
     },
     "pageDescriptions": {
-      "home": "Estudos em que o desvendar do ciclo da vida e da morte ganha a presença de uma promotora e de uma advogada que se fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
-      "posts": "Escrituras, estudos e reflexões reunidos em Sanaka. Deguste com a mente, os sentidos e o coração.",
+      "home": "Estudos sobre a realidade e a verdade transcritos numa espécie de banco de dados caótico. Assim como as memórias registradas no seu cérebro, esses estudos podem ser revisitados de diferentes ângulos.",
+      "posts": "Quando o autocompletar para de funcionar. Diálogos como aqueles em sua própria mente: sem um sujeito ou até sem um vocativo específico.",
       "post": "Leia esta publicação no santuário de Sanaka.",
-      "matrix": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento.",
+      "matrix": "A lógica é tão transparente e explicável aqui quanto o processo de desvendar por que uma dúvida incomodou você por um tempo.",
       "matrixComponents": "Envie um valor do componente pai ao filho e acompanhe a resposta que retorna por um evento.",
       "matrixRestApi": "Envie uma requisição real, acompanhe sua resposta e veja uma imagem do universo surgir no portal.",
       "samvit": "Conheça Saṃvit, companheira de Sanaka, e suas diferentes presenças.",
-      "about": "Fragmentos falam de morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
-      "contact": "Encontre Sanaka nas redes ou envie uma mensagem diretamente pelo portal de contato.",
-      "sanakaverse": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
+      "about": "Um quebra-cabeça pessoal que se desvenda sem que o Tempo seja um aliado coerente no processo. Ele é o próprio desafio — assim como a sua origem.",
+      "contact": "Comunicação através da realidade dos sentidos e das sensações: direta como a maioria das interações que você vive no seu dia a dia.",
+      "sanakaverse": "Loka (लोक): mundo, morada, plano de existência ou região do universo. Diferentes personagens: diferentes lokas. Expanda o que você aprendeu até hoje.",
       "notFound": "A rota solicitada não existe, mudou de lugar ou ainda não encontrou forma em Sanaka."
     },
     "navigation": {
@@ -42,7 +42,7 @@
       "about": "Sobre",
       "contact": "Contato",
       "signature": "Estudos entre códigos e presença.",
-      "sanakaverse": "Sanakaverse"
+      "sanakaverse": "Sanaka-loka"
     }
   },
   "common": {
@@ -68,7 +68,7 @@
         "line1": "Quem transcende",
         "line2": "Sanaka?"
       },
-      "intro": "Bruna Lourenço da Silva avisa: áreas que mudam e se transmutam. Atente‑se, pois o que há aqui pode sofrer alterações sem aviso prévio! Fragmentos falam de morte, código, espiritualidade e um nome que ainda não terminou de se revelar.",
+      "intro": "Um quebra-cabeça pessoal que se desvenda sem que o Tempo seja um aliado coerente no processo. Ele é o próprio desafio — assim como a sua origem.",
       "imageAlt": "Saṃvit olha por cima do ombro enquanto dragões de sombra se projetam pelo chão diante de uma passagem luminosa."
     },
     "puzzle": {
@@ -91,18 +91,18 @@
       "eyebrow": "Fragmento selecionado",
       "read": "Ler fragmento inteiro"
     },
-    "destinationsLabel": "Contato e Sanakaverse",
+    "destinationsLabel": "Contato e Sanaka-loka",
     "contact": {
       "eyebrow": "Presença do agora",
       "title": "Contato",
-      "intro": "Redes e uma passagem direta para conversas que pedem outro espaço.",
+      "intro": "Redes e um portal direto para conversas diretas.",
       "status": "Abrir o portal de contato"
     },
     "universe": {
       "eyebrow": "Presença criativa",
-      "title": "Sanakaverse",
-      "intro": "Personagens, símbolos e relações que habitam o universo narrativo de Sanaka.",
-      "status": "Viajar para Sanakaverse"
+      "title": "Sanaka-loka",
+      "intro": "Os mundos que habitam ou interagem em Sanaka.",
+      "status": "Viajar para Sanaka-loka"
     }
   },
   "contact": {
@@ -110,9 +110,9 @@
       "eyebrow": "Contato",
       "title": {
         "line1": "Entre vozes,",
-        "line2": "presenças e caminhos"
+        "line2": "realidades e caminhos"
       },
-      "intro": "Sanaka também se abre ao diálogo. Escolha uma presença nas redes ou envie uma mensagem por este portal.",
+      "intro": "Comunicação através da realidade dos sentidos e das sensações: direta como a maioria das interações que você vive no seu dia a dia.",
       "imageAlt": "Saṃvit e Sarama observam uma nuvem de vozes em uma sala escura iluminada por lanternas e incensos."
     },
     "contentLabel": "Redes e formulário de contato",
@@ -181,19 +181,19 @@
   },
   "sanakaverse": {
     "hero": {
-      "eyebrow": "Sanakaverse",
+      "eyebrow": "Sanaka-loka",
       "title": {
         "line1": "Biblioteca",
         "line2": "entre mundos"
       },
-      "intro": "Livros flutuam onde personagens, símbolos e histórias encontram passagem. Cada capa abre uma presença diferente deste universo.",
+      "intro": "<strong>Loka</strong> (लोक): <em>mundo, morada, plano de existência ou região do universo</em>. Diferentes <strong>personagens</strong>: diferentes <strong>lokas</strong>. Expanda o que você aprendeu até hoje.\nAqui, pensar apenas com o cérebro não irá te ajudar a entender o que encontrará.",
       "imageAlt": "Mors escreve com uma pena dourada em um grande livro enquanto Saṃvit observa, entre livros flutuantes em uma biblioteca cósmica."
     },
     "collection": {
       "eyebrow": "Volumes em órbita",
       "title": "Escolha um livro",
-      "intro": "Quando uma história estiver pronta para entrar na biblioteca, sua capa surgirá aqui. Aproxime-se das capas e conheça o volume que chamar sua atenção.",
-      "ariaLabel": "Livros do Sanakaverse"
+      "intro": "Quando uma história estiver pronta para entrar em Sanaka-loka, sua capa surgirá aqui. Não tenha medo. Talvez os seus amigos “imaginários” sejam úteis como guias para você nesta área.",
+      "ariaLabel": "Livros de Sanaka-loka"
     },
     "book": {
       "open": "Abrir volume",
@@ -307,10 +307,10 @@
         "line2": "integrado pela",
         "line3": "escuridão e a luz."
       },
-      "intro": "Estudos em que o desvendar do ciclo da vida e da morte ganha a presença de uma promotora e de uma advogada que se fundiram para criar uma estudante que se experiencia em cada verdade encontrada.",
+      "intro": "Estudos sobre a realidade e a verdade transcritos numa espécie de banco de dados caótico. Assim como as memórias registradas no seu cérebro, esses estudos podem ser revisitados de diferentes ângulos.",
       "action": {
-        "enter": "Entrar no santuário",
-        "read": "Ler agora"
+        "enter": "Encontrar Saṃvit",
+        "read": "Entrar no santuário"
       },
       "scroll": {
         "ariaLabel": "Rolar para explorar o santuário",
@@ -332,17 +332,23 @@
         },
         "matrix": {
           "label": "Laboratório",
-          "title": "Matrix",
+          "title": "A Matrix",
           "description": "Experimente conceitos de programação e observe o que acontece na interface."
         },
         "samvit": {
           "label": "Presença em IA",
+          "title": "A Saṃvit",
           "description": "Conheça Saṃvit, a protagonista em Sanaka."
         },
         "about": {
           "label": "Sobre",
           "title": "Bruna em Sanaka, Sanaka em Bruna",
           "description": "Comece a entender o Caminho que te trouxe aqui."
+        },
+        "loka": {
+          "label": "Loka",
+          "title": "Os Livros em Sanaka-loka",
+          "description": "Entre em mundos que chamam pelo seu."
         }
       }
     }
@@ -351,9 +357,9 @@
     "header": {
       "eyebrow": "Biblioteca em Sanaka",
       "title": "Publicações do santuário",
-      "intro": "Escrituras, estudos e reflexões reunidos em Sanaka.\nDeguste com a mente, os sentidos e o coração.\nA proposta é a mudança.",
+      "intro": "Quando o autocompletar para de funcionar.\nDiálogos como aqueles em sua própria mente:\nsem um sujeito ou até sem um vocativo específico.",
       "imageAlt": "Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca celestial.",
-      "sanakaverseLink": "Viajar para Sanakaverse"
+      "sanakaverseLink": "Viajar para Sanaka-loka"
     },
     "search": {
       "label": "Buscar nas publicações",
@@ -1188,7 +1194,7 @@
           "line1": "Matrix",
           "line2": "on-line"
         },
-        "intro": "Um acervo de experiências para tocar, observar e compreender o Angular em movimento. Cada circuito transforma um conceito do código em algo que pode ser visto acontecendo.",
+        "intro": "A lógica é tão transparente e explicável aqui quanto o processo de desvendar por que uma dúvida incomodou você por um tempo.",
         "imageAlt": "Saṃvit, de costas e vestida de preto, observa telas de código entre gaṇāḥ luminosos azuis e violetas."
       },
       "list": {

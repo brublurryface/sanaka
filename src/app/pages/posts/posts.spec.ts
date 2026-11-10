@@ -37,7 +37,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             title: 'Publicações do santuário',
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
             imageAlt: 'Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca.',
-            sanakaverseLink: 'Viajar para Sanakaverse',
+            sanakaverseLink: 'Viajar para Sanaka-loka',
           },
           search: {
             label: 'Buscar nas publicações',
@@ -101,7 +101,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             title: 'Sanctuary publications',
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
             imageAlt: 'Saṃvit, Nandinī, and Bhū watch magical books in a library.',
-            sanakaverseLink: 'Travel to Sanakaverse',
+            sanakaverseLink: 'Travel to Sanaka-loka',
           },
           search: {
             label: 'Search publications',
@@ -290,9 +290,9 @@ describe('Posts', () => {
     const compiled = fixture.nativeElement as HTMLElement;
     const link = compiled.querySelector<HTMLAnchorElement>('.posts-header__sanakaverse');
 
-    expect(link?.getAttribute('href')).toBe('/sanakaverse');
+    expect(link?.getAttribute('href')).toBe('/sanaka-loka');
     expect(link?.getAttribute('target')).toBe('_blank');
-    expect(link?.textContent).toContain('Viajar para Sanakaverse');
+    expect(link?.textContent).toContain('Viajar para Sanaka-loka');
   });
 
   it('should present the posts atmosphere as a cinematic image', () => {

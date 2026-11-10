@@ -30,7 +30,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             navigation: 'Navegação do rodapé',
             about: 'Sobre',
             contact: 'Contato',
-            sanakaverse: 'Sanakaverse',
+            sanakaverse: 'Sanaka-loka',
             signature: 'Estudos entre códigos e presença.',
           },
         },
@@ -54,7 +54,7 @@ class MockTranslocoLoader implements TranslocoLoader {
             navigation: 'Footer navigation',
             about: 'About',
             contact: 'Contact',
-            sanakaverse: 'Sanakaverse',
+            sanakaverse: 'Sanaka-loka',
             signature: 'Studies between code and presence.',
           },
         },
@@ -168,11 +168,11 @@ describe('App', () => {
 
     expect(futureDestination?.textContent).toContain('Sobre');
     expect(futureDestination?.textContent).toContain('Contato');
-    expect(futureDestination?.textContent).toContain('Sanakaverse');
+    expect(futureDestination?.textContent).toContain('Sanaka-loka');
     expect(destinationLinks.map((link) => link.getAttribute('href'))).toEqual([
       '/sobre',
       '/contato',
-      '/sanakaverse',
+      '/sanaka-loka',
       '/posts#newsletter',
     ]);
   });
