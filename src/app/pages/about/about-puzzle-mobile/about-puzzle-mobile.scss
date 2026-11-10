@@ -38,7 +38,7 @@
   }
 
   .about-puzzle-mobile__piece + .about-puzzle-mobile__piece {
-    margin-inline-start: calc(var(--piece-size) * -0.2424);
+    margin-inline-start: calc(var(--piece-size) * var(--piece-overlap));
   }
 
   .about-puzzle-mobile__selector {
