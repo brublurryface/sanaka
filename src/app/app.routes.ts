@@ -49,12 +49,17 @@ export const routes: Routes = [
     loadComponent: () => import('./pages/contact/contact').then((m) => m.Contact),
   },
   {
-    path: 'sanakaverse',
+    path: 'sanaka-loka',
     data: {
       titleKey: 'app.pageTitles.sanakaverse',
       descriptionKey: 'app.pageDescriptions.sanakaverse',
     },
     loadComponent: () => import('./pages/sanakaverse/sanakaverse').then((m) => m.Sanakaverse),
+  },
+  {
+    path: 'sanakaverse',
+    pathMatch: 'full',
+    redirectTo: 'sanaka-loka',
   },
   {
     path: '**',

@@ -22,8 +22,13 @@ export const serverRoutes: ServerRoute[] = [
     renderMode: RenderMode.Prerender,
   },
   {
-    path: 'sanakaverse',
+    path: 'sanaka-loka',
     renderMode: RenderMode.Client,
+  },
+  {
+    path: 'sanakaverse',
+    renderMode: RenderMode.Server,
+    status: 301,
   },
   {
     path: 'samvit',

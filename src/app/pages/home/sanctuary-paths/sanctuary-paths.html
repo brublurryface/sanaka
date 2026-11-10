@@ -15,22 +15,8 @@
   </div>
 
   <div class="paths-list">
-    <a class="path-card" routerLink="/posts">
-      <span class="path-index" aria-hidden="true"> 01 </span>
-
-      <div class="path-content">
-        <p class="path-label">{{ 'home.paths.card.readings.label' | transloco }}</p>
-
-        <h3>{{ 'home.paths.card.readings.title' | transloco }}</h3>
-
-        <p>{{ 'home.paths.card.readings.description' | transloco }}</p>
-      </div>
-
-      <span class="path-arrow sanaka-arrow" aria-hidden="true"></span>
-    </a>
-
     <a class="path-card" routerLink="/matrix">
-      <span class="path-index" aria-hidden="true"> 02 </span>
+      <span class="path-index" aria-hidden="true"> 01 </span>
 
       <div class="path-content">
         <p class="path-label">{{ 'home.paths.card.matrix.label' | transloco }}</p>
@@ -44,14 +30,28 @@
     </a>
 
     <a class="path-card" routerLink="/samvit">
-      <span class="path-index" aria-hidden="true"> 03 </span>
+      <span class="path-index" aria-hidden="true"> 02 </span>
 
       <div class="path-content">
         <p class="path-label">{{ 'home.paths.card.samvit.label' | transloco }}</p>
 
-        <h3>Saṃvit</h3>
+        <h3>{{ 'home.paths.card.samvit.title' | transloco }}</h3>
 
         <p>{{ 'home.paths.card.samvit.description' | transloco }}</p>
+      </div>
+
+      <span class="path-arrow sanaka-arrow" aria-hidden="true"></span>
+    </a>
+
+    <a class="path-card" routerLink="/posts">
+      <span class="path-index" aria-hidden="true"> 03 </span>
+
+      <div class="path-content">
+        <p class="path-label">{{ 'home.paths.card.readings.label' | transloco }}</p>
+
+        <h3>{{ 'home.paths.card.readings.title' | transloco }}</h3>
+
+        <p>{{ 'home.paths.card.readings.description' | transloco }}</p>
       </div>
 
       <span class="path-arrow sanaka-arrow" aria-hidden="true"></span>
@@ -66,6 +66,20 @@
         <h3>{{ 'home.paths.card.about.title' | transloco }}</h3>
 
         <p>{{ 'home.paths.card.about.description' | transloco }}</p>
+      </div>
+
+      <span class="path-arrow sanaka-arrow" aria-hidden="true"></span>
+    </a>
+
+    <a class="path-card" routerLink="/sanaka-loka">
+      <span class="path-index" aria-hidden="true"> 05 </span>
+
+      <div class="path-content">
+        <p class="path-label">{{ 'home.paths.card.loka.label' | transloco }}</p>
+
+        <h3>{{ 'home.paths.card.loka.title' | transloco }}</h3>
+
+        <p>{{ 'home.paths.card.loka.description' | transloco }}</p>
       </div>
 
       <span class="path-arrow sanaka-arrow" aria-hidden="true"></span>

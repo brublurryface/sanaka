@@ -10,20 +10,20 @@
       "samvit": "Saṃvit",
       "about": "About",
       "contact": "Contact",
-      "sanakaverse": "Sanakaverse library",
+      "sanakaverse": "Sanaka-loka library",
       "notFound": "Path not found"
     },
     "pageDescriptions": {
-      "home": "Studies in which the unveiling of the cycle of life and death is joined by a prosecutor and an attorney who merged to create a student who experiences herself in every truth she discovers.",
-      "posts": "Writings, studies, and reflections gathered in Sanaka. Take them in with mind, senses, and heart.",
+      "home": "Studies of reality and truth transcribed into a kind of chaotic database. Like the memories stored in your brain, these studies can be revisited from different angles.",
+      "posts": "When autocomplete stops working. Dialogues like those in your own mind: without a subject, or even without a specific addressee.",
       "post": "Read this publication inside the Sanaka sanctuary.",
-      "matrix": "A collection of experiences for touching, observing, and understanding Angular in motion.",
+      "matrix": "Logic is as transparent and explainable here as the process of uncovering why a question troubled you for a while.",
       "matrixComponents": "Send a value from the parent component to the child and follow the reply returned as an event.",
       "matrixRestApi": "Send a real request, follow its response, and see an image of the universe appear in the portal.",
       "samvit": "Meet Saṃvit, Sanaka's companion, and her different presences.",
-      "about": "Fragments speak of death, code, spirituality, and a name that has not finished revealing itself.",
-      "contact": "Find Sanaka across social networks or send a message through the contact portal.",
-      "sanakaverse": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence from this universe.",
+      "about": "A personal puzzle that unfolds without Time serving as a reliable ally in the process. Time is the challenge itself — as is its origin.",
+      "contact": "Communication through the reality of the senses and sensations: as direct as most of the interactions you experience in your everyday life.",
+      "sanakaverse": "Loka (लोक): world, abode, plane of existence, or region of the universe. Different characters: different lokas. Expand what you have learned so far.",
       "notFound": "The requested route does not exist, moved elsewhere, or has not yet taken form in Sanaka."
     },
     "navigation": {
@@ -42,7 +42,7 @@
       "about": "About",
       "contact": "Contact",
       "signature": "Studies between code and presence.",
-      "sanakaverse": "Sanakaverse"
+      "sanakaverse": "Sanaka-loka"
     }
   },
   "common": {
@@ -68,7 +68,7 @@
         "line1": "Who transcends",
         "line2": "Sanaka?"
       },
-      "intro": "Bruna Lourenço da Silva warns: these are areas that change and transmute. Be attentive, because what is here may change without prior notice! Fragments speak of death, code, spirituality, and a name that has not finished revealing itself.",
+      "intro": "A personal puzzle that unfolds without Time serving as a reliable ally in the process. Time is the challenge itself — as is its origin.",
       "imageAlt": "Saṃvit looks over her shoulder as shadow dragons stretch across the floor before a luminous passage."
     },
     "puzzle": {
@@ -91,18 +91,18 @@
       "eyebrow": "Selected fragment",
       "read": "Read the whole fragment"
     },
-    "destinationsLabel": "Contact and Sanakaverse",
+    "destinationsLabel": "Contact and Sanaka-loka",
     "contact": {
       "eyebrow": "Presence in the now",
       "title": "Contact",
-      "intro": "Social networks and a direct passage for conversations that need another space.",
+      "intro": "Social networks and a direct portal for direct conversations.",
       "status": "Open the contact portal"
     },
     "universe": {
       "eyebrow": "Creative presence",
-      "title": "Sanakaverse",
-      "intro": "Characters, symbols, and relationships inhabiting Sanaka's narrative universe.",
-      "status": "Travel to Sanakaverse"
+      "title": "Sanaka-loka",
+      "intro": "The worlds that dwell or interact in Sanaka.",
+      "status": "Travel to Sanaka-loka"
     }
   },
   "contact": {
@@ -110,9 +110,9 @@
       "eyebrow": "Contact",
       "title": {
         "line1": "Among voices,",
-        "line2": "presences and paths"
+        "line2": "realities and paths"
       },
-      "intro": "Sanaka also opens itself to dialogue. Choose a presence on social media or send a message through this portal.",
+      "intro": "Communication through the reality of the senses and sensations: as direct as most of the interactions you experience in your everyday life.",
       "imageAlt": "Saṃvit and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
     },
     "contentLabel": "Social networks and contact form",
@@ -181,19 +181,19 @@
   },
   "sanakaverse": {
     "hero": {
-      "eyebrow": "Sanakaverse",
+      "eyebrow": "Sanaka-loka",
       "title": {
         "line1": "A library",
         "line2": "between worlds"
       },
-      "intro": "Books float where characters, symbols, and stories find passage. Each cover opens a different presence in this universe.",
+      "intro": "<strong>Loka</strong> (लोक): <em>world, abode, plane of existence, or region of the universe</em>. Different <strong>characters</strong>: different <strong>lokas</strong>. Expand what you have learned so far.\nHere, thinking with your brain alone will not help you understand what you will find.",
       "imageAlt": "Mors writes with a golden quill in a large book while Saṃvit watches, among floating books in a cosmic library."
     },
     "collection": {
       "eyebrow": "Volumes in orbit",
       "title": "Choose a book",
-      "intro": "When a story is ready to enter the library, its cover will appear here. Look at the covers and get to know the volume that catches your attention.",
-      "ariaLabel": "Sanakaverse books"
+      "intro": "When a story is ready to enter Sanaka-loka, its cover will appear here. Do not be afraid. Perhaps your “imaginary” friends will be useful guides in this area.",
+      "ariaLabel": "Books of Sanaka-loka"
     },
     "book": {
       "open": "Open volume",
@@ -307,10 +307,10 @@
         "line2": "united by",
         "line3": "darkness and light."
       },
-      "intro": "Studies in which the unveiling of the cycle of life and death is joined by a prosecutor and an attorney who merged to create a student who experiences herself in every truth she discovers.",
+      "intro": "Studies of reality and truth transcribed into a kind of chaotic database. Like the memories stored in your brain, these studies can be revisited from different angles.",
       "action": {
-        "enter": "Enter the sanctuary",
-        "read": "Read now"
+        "enter": "Find Saṃvit",
+        "read": "Enter the sanctuary"
       },
       "scroll": {
         "ariaLabel": "Scroll to explore the sanctuary",
@@ -332,17 +332,23 @@
         },
         "matrix": {
           "label": "Laboratory",
-          "title": "Matrix",
+          "title": "The Matrix",
           "description": "Try programming concepts and see what happens in the interface."
         },
         "samvit": {
           "label": "AI presence",
+          "title": "Saṃvit",
           "description": "Meet Saṃvit, the protagonist of Sanaka."
         },
         "about": {
           "label": "About",
           "title": "Bruna in Sanaka, Sanaka in Bruna",
           "description": "Begin to understand the Path that brought you here."
+        },
+        "loka": {
+          "label": "Loka",
+          "title": "Books in Sanaka-loka",
+          "description": "Enter worlds that call to yours."
         }
       }
     }
@@ -351,9 +357,9 @@
     "header": {
       "eyebrow": "Sanaka library",
       "title": "Sanctuary publications",
-      "intro": "Scriptures, studies and reflections gathered in Sanaka.\nSavor them with the mind, the senses and the heart.\nThe purpose is change.",
+      "intro": "When autocomplete stops working.\nDialogues like those in your own mind:\nwithout a subject, or even without a specific addressee.",
       "imageAlt": "Saṃvit, Nandinī, and Bhū watch magical books in a celestial library.",
-      "sanakaverseLink": "Travel to Sanakaverse"
+      "sanakaverseLink": "Travel to Sanaka-loka"
     },
     "search": {
       "label": "Search publications",
@@ -1188,7 +1194,7 @@
           "line1": "Matrix",
           "line2": "on-line"
         },
-        "intro": "A collection of experiments to touch, observe, and understand Angular in motion. Each circuit turns a code concept into something you can watch happening.",
+        "intro": "Logic is as transparent and explainable here as the process of uncovering why a question troubled you for a while.",
         "imageAlt": "Saṃvit, seen from behind and dressed in black, watches code screens among luminous blue and violet gaṇāḥ."
       },
       "list": {

@@ -66,7 +66,7 @@ class MockTranslocoLoader implements TranslocoLoader {
     return of({
       sanakaverse: {
         hero: {
-          eyebrow: 'Sanakaverse',
+          eyebrow: 'Sanaka-loka',
           title: { line1: 'Biblioteca', line2: 'entre mundos' },
           intro: 'Livros flutuam onde histórias encontram passagem.',
           imageAlt: 'Mors writes while Saṃvit watches.',
@@ -75,7 +75,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Volumes em órbita',
           title: 'Escolha um livro',
           intro: 'Aproxime-se das capas.',
-          ariaLabel: 'Livros do Sanakaverse',
+          ariaLabel: 'Livros de Sanaka-loka',
         },
         book: {
           open: 'Abrir volume',

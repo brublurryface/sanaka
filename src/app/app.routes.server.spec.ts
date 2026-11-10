@@ -3,7 +3,7 @@ import { RenderMode } from '@angular/ssr';
 import { serverRoutes } from './app.routes.server';
 
 describe('serverRoutes', () => {
-  it.each(['posts', 'posts/**', 'sobre', 'sanakaverse'])(
+  it.each(['posts', 'posts/**', 'sobre', 'sanaka-loka'])(
     'should keep WordPress-backed route %s on the client until server data is cached',
     (path) => {
       expect(serverRoutes.find((route) => route.path === path)?.renderMode).toBe(RenderMode.Client);
@@ -32,8 +32,8 @@ describe('serverRoutes', () => {
     expect(wildcardRoute).toMatchObject({ renderMode: RenderMode.Server, status: 404 });
   });
 
-  it('should keep the former companion route available for a permanent redirect', () => {
-    expect(serverRoutes.find((route) => route.path === 'maya')).toMatchObject({
+  it.each(['maya', 'sanakaverse'])('should permanently redirect former route %s', (path) => {
+    expect(serverRoutes.find((route) => route.path === path)).toMatchObject({
       renderMode: RenderMode.Server,
       status: 301,
     });

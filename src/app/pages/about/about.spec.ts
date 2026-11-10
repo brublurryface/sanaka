@@ -58,7 +58,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           eyebrow: 'Fragmento selecionado',
           read: 'Ler fragmento inteiro',
         },
-        destinationsLabel: 'Sobre e Sanakaverse',
+        destinationsLabel: 'Sobre e Sanaka-loka',
         contact: {
           eyebrow: 'Presença do agora',
           title: 'Contato',
@@ -67,9 +67,9 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
         universe: {
           eyebrow: 'Presença criativa',
-          title: 'Sanakaverse',
+          title: 'Sanaka-loka',
           intro: 'Personagens, símbolos e relações que habitam o universo narrativo de Sanaka.',
-          status: 'Viajar para Sanakaverse',
+          status: 'Viajar para Sanaka-loka',
         },
       },
     });
@@ -153,7 +153,7 @@ describe('About', () => {
       '.about-destination--universe a',
     );
 
-    expect(sanakaverseLink?.getAttribute('href')).toBe('/sanakaverse');
+    expect(sanakaverseLink?.getAttribute('href')).toBe('/sanaka-loka');
     expect(sanakaverseLink?.target).toBe('_blank');
     expect(sanakaverseLink?.rel).toBe('noopener');
   });

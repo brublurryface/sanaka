@@ -29,7 +29,13 @@ class MockTranslocoLoader implements TranslocoLoader {
             },
             samvit: {
               label: 'Presence',
+              title: 'Saṃvit',
               description: 'Samvit description.',
+            },
+            loka: {
+              label: 'Loka',
+              title: 'Books in Sanaka-loka',
+              description: 'Enter worlds that call to yours.',
             },
             about: {
               label: 'About',
@@ -76,17 +82,18 @@ describe('SanctuaryPaths', () => {
     expect(section.getAttribute('aria-labelledby')).toBe('paths-title');
   });
 
-  it('should contain the posts, Matrix, Samvit and About links', () => {
+  it('should render the five destination links in the requested order', () => {
     const fixture = TestBed.createComponent(SanctuaryPaths);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
     const links = Array.from(element.querySelectorAll('a'));
 
     expect(links.map((link) => link.getAttribute('href'))).toEqual([
-      '/posts',
       '/matrix',
       '/samvit',
+      '/posts',
       '/sobre',
+      '/sanaka-loka',
     ]);
   });
 });
