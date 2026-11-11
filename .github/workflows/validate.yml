@@ -12,7 +12,10 @@ concurrency:
   cancel-in-progress: true
 
 jobs:
+  obolos:
+    uses: ./.github/workflows/obolo-protocol.yml
   validate:
+    needs: obolos
     name: Validate Sanaka
     runs-on: ubuntu-latest
     timeout-minutes: 20
