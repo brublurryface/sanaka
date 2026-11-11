@@ -3,8 +3,8 @@
  * Real WordPress integration in an isolated CI installation, never the connected CMS.
  * Modes run in separate PHP processes to test loading order and removal of legacy code.
  */
-$root = getenv('SANAKA_TEST_WP_ROOT');
 $runner = getenv('RUNNER_TEMP');
+$root = getenv('SANAKA_TEST_WP_ROOT') ?: $runner . '/sanaka-wordpress';
 if (!$root || !$runner || realpath($root) !== realpath($runner . '/sanaka-wordpress') || !getenv('CI')) {
     throw new RuntimeException('Only the isolated runner WordPress directory is allowed.');
 }

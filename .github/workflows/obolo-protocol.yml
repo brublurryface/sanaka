@@ -17,7 +17,6 @@ jobs:
       SANAKA_TEST_DB_NAME: sanaka_obolo_test
       SANAKA_TEST_DB_USER: root
       SANAKA_TEST_DB_PASSWORD: root
-      SANAKA_TEST_WP_ROOT: ${{ runner.temp }}/sanaka-wordpress
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -34,6 +33,8 @@ jobs:
       - name: Exercise concurrent operations and lost responses
         run: php wordpress/tests/obolo-idempotency.test.php
       - name: Install isolated WordPress matching the CMS version
+        env:
+          SANAKA_TEST_WP_ROOT: ${{ runner.temp }}/sanaka-wordpress
         run: |
           curl --fail --silent --show-error --location https://wordpress.org/wordpress-7.1.4.tar.gz --output "$RUNNER_TEMP/sanaka-wordpress.tar.gz"
           mkdir "$SANAKA_TEST_WP_ROOT"
