@@ -1,110 +1,86 @@
 # Óbolos de Sanaka
 
-Plugin WordPress do [Projeto Sanaka](https://sanaka.com.br), concebido e desenvolvido por [Sanaka Bruna](https://github.com/brublurryface).
+Plugin do [Projeto Sanaka](https://sanaka.com.br), concebido e desenvolvido por [Sanaka Bruna](https://github.com/brublurryface).
 
-Uma oferta pode chegar ao servidor e perder sua resposta no caminho de volta. Óbolos de Sanaka registra um recibo para que a repetição dessa mesma operação conserve o resultado, sem acrescentar outro óbolo.
+Uma oferta pode chegar ao servidor e perder sua resposta no caminho de volta. O plugin grava um recibo para que a repetição da operação conserve o resultado. O painel reúne essas ofertas às personagens e moedas que já existem no CMS.
 
-**Versão:** 1.0.2 · **PHP:** 8.3 ou superior · **Banco:** MySQL/MariaDB com InnoDB.
+**Versão:** 1.1.0 · **PHP:** 8.3+ · **Banco:** MySQL/MariaDB com InnoDB.
 
-## O que está implementado
+## O painel
 
-- Recibo persistente por operação identificada por UUID v4.
-- Incremento do contador e gravação do recibo na mesma transação.
-- Repetição da mesma chave e personagem devolve o recibo original.
-- Reutilização da chave em outra personagem é recusada.
-- Compatibilidade com o endpoint e as solicitações legadas.
-- Liberação do cabeçalho `Idempotency-Key` somente nas rotas de óbolos.
-- Capacidade inicial de 50.000 recibos, configurável por filtro PHP.
-- Testes automatizados com PHP 8.3 e MySQL 8, incluindo concorrência, rollback e perda da confirmação.
+Abra **Óbolos de Sanaka** no menu administrativo ou **Plugins → Óbolos de Sanaka → Abrir painel**.
 
-Essa proteção conserva uma operação durante sua retentativa. Ofertas com identificadores diferentes continuam sendo operações diferentes; não existe regra de uma oferta por pessoa.
+- **Visão geral:** total de óbolos, personagens publicadas, recibos e uso da capacidade.
+- **Ofertas:** recibos por data, filtro de personagem, total atual e paginação.
+- **Personagens e moedas:** nomes, identificadores, anverso/reverso e totais. O link de cada personagem abre suas ofertas; a tela de ofertas mantém um caminho de volta.
+
+O painel é de consulta e exige `manage_options`. Não altera contadores, capacidade, moedas ou publicações. Funciona sem JavaScript; o script apenas anuncia a consulta ao enviar um filtro. Imagens são carregadas sob demanda.
+
+O total preserva ofertas anteriores. **O histórico detalhado cobre somente operações concluídas com recibo desde sua ativação.** Ofertas antigas e chamadas sem chave não geram recibos retroativos.
+
+## Fonte dos dados e consultas
+
+As publicações WordPress de tipo `post`, publicadas e com `sanaka_character_slug` válido, são a fonte das personagens. O plugin reutiliza `sanaka_character_name`, `sanaka_obolo_front` e `sanaka_obolo_back`; não cria outro cadastro.
+
+As consultas usam projeções, paginação no banco de 20 itens e uma consulta em lote para os três metadados da página. Publicações duplicadas para a mesma personagem não multiplicam resultados: a de menor ID é a referência. Corpos de posts e metadados de outros plugins não são carregados. Os recibos têm índices por data/chave e personagem/data/chave para filtros e ordenação estável.
+
+Em WordPress com Abilities API, três consultas administrativas reutilizam a mesma camada: `sanaka-obolos/overview`, `sanaka-obolos/characters` e `sanaka-obolos/receipts`. Todas exigem `manage_options`, validam parâmetros e são somente leitura.
 
 ## Como a oferta é confirmada
 
-1. O Angular atribui uma chave à oferta.
-2. O WordPress verifica a chave e a personagem.
-3. O banco grava o incremento e seu recibo na mesma transação.
-4. Uma retentativa com a mesma chave recupera o recibo já registrado.
+1. O Angular atribui uma chave UUID v4 à oferta.
+2. O WordPress valida a chave e a personagem.
+3. O banco grava o incremento e o recibo na mesma transação.
+4. Uma retentativa com a mesma chave devolve o recibo original.
 
-O recibo conserva o total obtido naquela operação. Outras ofertas podem aumentar o contador depois; a consulta GET é a fonte do total atual.
+Reutilizar a chave em outra personagem retorna conflito. Operações com chaves diferentes são ofertas diferentes; não há regra de uma oferta por pessoa. O recibo conserva o total confirmado naquela operação, enquanto a consulta GET informa o total atual.
 
-## Integração atual
-
-A versão 1.0.2 complementa o snippet #6, que ainda mantém o endpoint público, a validação das personagens e o contador original. Os outros campos públicos do CMS presentes nesse snippet continuam sob sua responsabilidade.
-
-- Endpoint: `/wp-json/sanaka/v1/obolos/{character_slug}`.
+- Endpoint preservado: `/wp-json/sanaka/v1/obolos/{character_slug}`.
 - Contadores: tabela com sufixo `sanaka_obolos`.
 - Recibos: tabela com sufixo `sanaka_obolo_operations`.
-- Prefixo das tabelas: o configurado na instalação WordPress.
-- Cliente Angular: provider `OBOLO_IDEMPOTENCY_ENABLED` habilitado após a conferência do plugin no CMS.
+- Prefixo: o configurado na instalação.
+- Cabeçalho `Idempotency-Key`: permitido por CORS somente nas rotas de óbolos.
+- Requisições antigas sem chave continuam compatíveis.
 
-O código reaproveita as personagens publicadas no WordPress. A lista de personagens não é duplicada no plugin.
+O plugin 1.1.0 assume o endpoint, as personagens e os campos de óbolos anteriormente mantidos pelo snippet #6. Também funciona enquanto o snippet antigo ainda está ativo, para permitir uma atualização em etapas.
 
-## Instalação e atualização
+## Atualização para 1.1.0
 
-Envie o ZIP pelo painel WordPress em **Plugins → Adicionar plugin → Enviar plugin**. Ative o complemento e confira a criação da tabela de recibos, InnoDB, a consulta do contador e o preflight da origem real do Angular.
+1. Preserve um backup de arquivos e banco e registre os totais e recibos atuais.
+2. Envie [obolos-de-sanaka-1.1.0.zip](dist/obolos-de-sanaka-1.1.0.zip) em **Plugins → Adicionar plugin → Enviar plugin**. Confirme a substituição da instalação existente.
+3. Mantenha o diretório técnico `sanaka-obolo-idempotency`. Confira versão, painel, contadores, API e campos públicos **antes** de mexer no snippet.
+4. No Code Snippets, substitua somente o código do snippet #6 pelo conteúdo de [integracao-publica-sem-obolos.php](snippets/integracao-publica-sem-obolos.php), sem a linha inicial `<?php`. Preserve nome, escopo e estado ativo. O snippet continua expondo `hover_text` e `sanakaverse_cover`.
+5. Confira novamente API, totais, moedas, capas e fragmentos. A validação real de oferta/retentativa permanece acompanhada na [#80](https://github.com/brublurryface/sanaka/issues/80).
 
-A atualização das versões 1.0.0 ou 1.0.1 para 1.0.2 reutiliza o diretório técnico `sanaka-obolo-idempotency`, substituindo a versão instalada. A alteração do nome público preserva a identificação interna do plugin, suas funções e os dados já registrados.
+A [cópia anterior do snippet](snippets/integracao-publica-antes-1.1.0.php) registra o código lido no CMS para permitir comparação e reversão. Não desinstale o plugin para atualizar. A atualização não zera tabelas nem altera recibos existentes; acrescenta dois índices.
 
-O pacote contém o arquivo PHP principal e esta documentação. Os testes destrutivos de CI usam um banco isolado próprio; não devem ser executados no CMS.
+O ZIP contém somente o plugin, módulos, assets e esta documentação. Testes e backups de snippets ficam fora do pacote. O arquivo `.zip.sha256` permite conferir sua integridade.
 
-## Armazenamento e capacidade
+## Capacidade e privacidade
 
-Cada recibo armazena o SHA-256 da chave da operação, a personagem, o total confirmado e a data. Essa tabela não armazena nome, e-mail ou IP do visitante.
+Cada recibo armazena o SHA-256 da chave, a personagem, o total confirmado e a data UTC. Não armazena nome, e-mail ou IP do visitante.
 
-O limite inicial é global: 50.000 operações, além de uma linha de controle. O filtro `sanaka_obolo_operation_limit` aceita um inteiro positivo para uma decisão de capacidade. Ao atingir o limite, novas operações retornam indisponibilidade; recibos já concluídos continuam disponíveis.
+O limite inicial global é de 50.000 operações, além da linha interna de controle. O filtro PHP `sanaka_obolo_operation_limit` aceita um inteiro positivo. Ao atingir o limite, novas operações com chave retornam indisponibilidade; retentativas de recibos concluídos continuam funcionando.
 
-Não há expiração automática. Excluir recibos pode fazer uma retentativa antiga ser contabilizada novamente. Qualquer política de retenção deve definir primeiro o prazo de validade das operações.
+Não há expiração ou exclusão automática. Apagar um recibo pode fazer uma retentativa antiga ser contada novamente. Uma futura política de retenção precisa definir antes o prazo de validade das operações.
 
-## Reversão
+## Validação e reversão
 
-Para voltar ao comportamento anterior, desabilite `OBOLO_IDEMPOTENCY_ENABLED` no frontend e publique essa configuração. Preserve o complemento e os recibos existentes.
+O [workflow PHP/MySQL/WordPress](../.github/workflows/obolo-protocol.yml) verifica concorrência, rollback, perda de resposta e compatibilidade; a instalação WordPress isolada verifica ativação sobre dados existentes, convivência/remoção do snippet, REST, campos públicos, permissões, filtros, paginação, projeções, falhas e navegação. Nenhum teste usa o CMS ou envia e-mail.
 
-## Validação e manutenção
+O verificador do pacote compara cada arquivo do ZIP aos fontes e confere CRC e SHA-256. O CI informa os resultados; publicar código não substitui a conferência da instalação ativa.
 
-O workflow [Validate obolo protocol](../.github/workflows/obolo-protocol.yml) executa o lint PHP e os cenários transacionais em MySQL isolado. Os testes Angular verificam a conservação da chave nas retentativas e o tratamento de respostas antigas.
+Para reverter o plugin a 1.0.2 **após a migração**, restaure primeiro o código anterior do snippet #6 e só depois reinstale o pacote antigo. Preserve tabelas e recibos. Sem o snippet original, a versão 1.0.2 não possui o endpoint completo.
 
-A documentação operacional detalhada está em [Idempotência dos óbolos](../docs/architecture/obolo-idempotency.md). Instalação e ativação são acompanhadas na [issue #80](https://github.com/brublurryface/sanaka/issues/80).
+A implementação e suas decisões estão descritas no [estudo de caso](../docs/architecture/obolos-de-sanaka-panel.md). A implantação é acompanhada na [#86](https://github.com/brublurryface/sanaka/issues/86).
 
-## Próximas evoluções propostas
+## Evoluções
 
-Estas funcionalidades ainda não estão implementadas:
+Configuração administrativa de capacidade, exportação e edição de personagens exigem outro desenho de permissões e validação; não fazem parte da interface de consulta.
 
-1. **Centralizar o domínio dos óbolos:** migrar do snippet somente as funções e os campos relacionados aos óbolos, preservando a API e os dados existentes.
-2. **Painel de consulta:** mostrar totais por personagem, uso da capacidade, versão e situação da integração. Consultas e históricos devem ser paginados no banco e restritos a quem tiver permissão administrativa.
-3. **Configuração operacional:** permitir ajustar a capacidade com validação e avisos de uso, sem apagar recibos ou redefinir contadores.
-4. **Exportação administrativa:** consultar e exportar totais e recibos com filtros, limites e permissões.
-5. **Apresentação do projeto:** documentar as decisões de arquitetura, as falhas simuladas e as evidências de testes como estudo de caso do portfólio.
+## Histórico
 
-A sequência proposta começa pela responsabilidade do backend e depois pela interface de administração.
-
-## Direção do painel da próxima versão
-
-A autora escolheu reunir ofertas e personagens. A interface ainda será implementada, acompanhada na [issue #86](https://github.com/brublurryface/sanaka/issues/86).
-
-| Área                 | Conteúdo previsto                                                  |
-| -------------------- | ------------------------------------------------------------------ |
-| Visão geral          | Totais, personagens e uso da capacidade, com acesso às duas áreas. |
-| Ofertas              | Totais por personagem e histórico paginado dos recibos.            |
-| Personagens e moedas | Personagens do CMS, frente e verso das moedas e suas ofertas.      |
-
-Selecionar uma personagem abrirá suas ofertas com o filtro aplicado. A primeira interface será de consulta e reaproveitará os dados do CMS. O histórico detalhado terá início nas operações com recibo, preservando os totais anteriores.
-
-## Histórico de versões
-
-### 1.0.2
-
-- Assinatura de autoria corrigida para **Sanaka Bruna**.
-- Direção do painel registrada com ofertas, personagens e moedas.
-- Lógica PHP e dados preservados.
-
-### 1.0.1
-
-- Nome público **Óbolos de Sanaka**.
-- Identificação de autoria, página do plugin e endereço próprio de atualização.
-- Descrição voltada à finalidade do plugin e documentação própria.
-- Lógica transacional e contrato da API preservados.
-
-### 1.0.0
-
-- Primeira entrega do complemento de idempotência, com recibos persistentes e integração ao endpoint existente.
+- **1.1.0:** domínio centralizado, painel de consulta, consultas paginadas, índices e integração de leitura com Abilities API.
+- **1.0.2:** autoria Sanaka Bruna e direção do painel.
+- **1.0.1:** nome Óbolos de Sanaka, identidade de autoria e página do plugin.
+- **1.0.0:** complemento de idempotência e recibos persistentes.

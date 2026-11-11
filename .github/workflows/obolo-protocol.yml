@@ -12,7 +12,7 @@ permissions:
 
 jobs:
   protocol:
-    name: PHP and MySQL idempotency
+    name: PHP, MySQL and WordPress integration
     runs-on: ubuntu-24.04
     timeout-minutes: 10
     env:
@@ -20,6 +20,7 @@ jobs:
       SANAKA_TEST_DB_NAME: sanaka_obolo_test
       SANAKA_TEST_DB_USER: root
       SANAKA_TEST_DB_PASSWORD: root
+      SANAKA_TEST_WP_ROOT: ${{ runner.temp }}/sanaka-wordpress
     steps:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
@@ -28,11 +29,26 @@ jobs:
         run: |
           php --version
           php -r 'exit(PHP_VERSION_ID >= 80300 && extension_loaded("mysqli") ? 0 : 1);'
-          php -l wordpress/sanaka-obolo-idempotency.php
-          php -l wordpress/tests/obolo-idempotency.test.php
-      - name: Start isolated runner database
+          find wordpress -name '*.php' -print0 | xargs -0 -n1 php -l
+      - name: Start isolated runner databases
         run: |
           sudo systemctl start mysql.service
-          mysql --host=127.0.0.1 --user=root --password=root --execute='CREATE DATABASE sanaka_obolo_test CHARACTER SET utf8mb4;'
+          mysql --host=127.0.0.1 --user=root --password=root --execute='CREATE DATABASE sanaka_obolo_test CHARACTER SET utf8mb4; CREATE DATABASE sanaka_wordpress_test CHARACTER SET utf8mb4;'
       - name: Exercise concurrent operations and lost responses
         run: php wordpress/tests/obolo-idempotency.test.php
+      - name: Install isolated WordPress matching the CMS version
+        run: |
+          curl --fail --silent --show-error --location https://wordpress.org/wordpress-7.1.4.tar.gz --output "$RUNNER_TEMP/sanaka-wordpress.tar.gz"
+          mkdir "$SANAKA_TEST_WP_ROOT"
+          tar -xzf "$RUNNER_TEMP/sanaka-wordpress.tar.gz" -C "$SANAKA_TEST_WP_ROOT" --strip-components=1
+          php wordpress/tests/wordpress-integration.test.php setup
+      - name: Verify coexistence with the active legacy snippet
+        env:
+          SANAKA_TEST_SNIPPET: ${{ github.workspace }}/wordpress/snippets/integracao-publica-antes-1.1.0.php
+        run: php wordpress/tests/wordpress-integration.test.php legacy
+      - name: Verify standalone plugin and retained public fields
+        env:
+          SANAKA_TEST_SNIPPET: ${{ github.workspace }}/wordpress/snippets/integracao-publica-sem-obolos.php
+        run: php wordpress/tests/wordpress-integration.test.php standalone
+      - name: Verify installable package matches the source
+        run: python3 wordpress/tests/verify-package.py

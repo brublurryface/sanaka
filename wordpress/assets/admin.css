@@ -1,0 +1,215 @@
+.sanaka-obolos {
+  --obolo-gold: #e7ca82;
+  --obolo-text: #f2ede2;
+  --obolo-muted: #c9c1af;
+  max-width: 1280px;
+  margin-top: 24px;
+  background: #10151b;
+  color: var(--obolo-text);
+  border: 1px solid #4a4332;
+  border-radius: 8px;
+  overflow: hidden;
+  font-size: 14px;
+}
+.sanaka-obolos * {
+  box-sizing: border-box;
+}
+.sanaka-obolos h1,
+.sanaka-obolos h2,
+.sanaka-obolos h3 {
+  color: var(--obolo-text);
+}
+.sanaka-obolos p {
+  font-size: inherit;
+  line-height: 1.7;
+}
+.sanaka-obolos a {
+  color: var(--obolo-gold);
+  text-underline-offset: 4px;
+}
+.sanaka-obolos :focus-visible {
+  outline: 3px solid var(--obolo-gold);
+  outline-offset: 4px;
+}
+.sanaka-obolos__header {
+  padding: 32px;
+  background: linear-gradient(120deg, #211f19, #10151b);
+}
+.sanaka-obolos__header > span {
+  color: var(--obolo-gold);
+  font-family: Georgia, serif;
+  letter-spacing: 0.25em;
+}
+.sanaka-obolos__header h1 {
+  font-family: Georgia, serif;
+  font-size: clamp(24px, 4vw, 36px);
+  line-height: 1.3;
+  padding: 12px 0 0;
+}
+.sanaka-obolos__header small {
+  color: var(--obolo-muted);
+}
+.sanaka-obolos__tabs {
+  display: flex;
+  flex-wrap: wrap;
+  border-block: 1px solid #4a4332;
+}
+.sanaka-obolos__tabs a {
+  padding: 16px 24px;
+  text-decoration: none;
+  border-bottom: 3px solid transparent;
+}
+.sanaka-obolos__tabs a[aria-current] {
+  border-bottom-color: var(--obolo-gold);
+  background: #24251e;
+}
+.sanaka-obolos__content {
+  padding: 28px 32px;
+}
+.sanaka-obolos__stats,
+.sanaka-obolos__characters {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(min(100%, 280px), 1fr));
+  gap: 20px;
+}
+.sanaka-obolos__stat,
+.sanaka-obolos__character,
+.sanaka-obolos__capacity {
+  padding: 24px;
+  border: 1px solid #4a4332;
+  border-radius: 6px;
+  background: #181e25;
+}
+.sanaka-obolos__stat span {
+  display: block;
+  color: var(--obolo-muted);
+}
+.sanaka-obolos__stat strong {
+  display: block;
+  margin-top: 12px;
+  font-family: Georgia, serif;
+  font-size: 36px;
+  color: var(--obolo-gold);
+}
+.sanaka-obolos__capacity {
+  margin-top: 20px;
+}
+.sanaka-obolos meter {
+  display: block;
+  width: 100%;
+  max-width: 560px;
+  height: 20px;
+}
+.sanaka-obolos__note,
+.sanaka-obolos__notice,
+.sanaka-obolos__empty {
+  padding: 16px 20px;
+  border-left: 3px solid var(--obolo-gold);
+  background: #22251f;
+  color: var(--obolo-muted);
+}
+.sanaka-obolos__filter {
+  margin-block: 24px;
+}
+.sanaka-obolos__filter label {
+  display: block;
+  margin-bottom: 8px;
+  font-weight: 600;
+}
+.sanaka-obolos__filter > div {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 12px;
+}
+.sanaka-obolos__filter input {
+  width: min(100%, 360px);
+  min-height: 42px;
+  border: 1px solid #8c7b4c;
+  background: #10151b;
+  color: var(--obolo-text);
+}
+.sanaka-obolos__filter button {
+  min-height: 42px;
+  padding: 8px 20px;
+  border: 1px solid var(--obolo-gold);
+  border-radius: 3px;
+  background: #26271f;
+  color: var(--obolo-gold);
+  cursor: pointer;
+}
+.sanaka-obolos__filter[aria-busy='true'] button {
+  opacity: 0.7;
+}
+.sanaka-obolos__loading:not(:empty) {
+  display: block;
+  margin-top: 12px;
+}
+.sanaka-obolos__table {
+  overflow-x: auto;
+}
+.sanaka-obolos table {
+  width: 100%;
+  border-collapse: collapse;
+  text-align: left;
+}
+.sanaka-obolos th,
+.sanaka-obolos td {
+  padding: 16px 12px;
+  border-bottom: 1px solid #4a4332;
+  white-space: nowrap;
+}
+.sanaka-obolos th {
+  color: var(--obolo-gold);
+}
+.sanaka-obolos code {
+  background: #222a32;
+  color: var(--obolo-muted);
+  overflow-wrap: anywhere;
+}
+.sanaka-obolos__pagination {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: center;
+  gap: 20px;
+  margin-top: 24px;
+  color: var(--obolo-muted);
+}
+.sanaka-obolos__coins {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+  margin-top: 20px;
+}
+.sanaka-obolos__coins figure {
+  margin: 0;
+  text-align: center;
+  color: var(--obolo-muted);
+}
+.sanaka-obolos__coins img,
+.sanaka-obolos__coin-empty {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  width: 100%;
+  height: auto;
+  aspect-ratio: 1;
+  object-fit: contain;
+  background: #10151b;
+  border-radius: 50%;
+}
+.sanaka-obolos__coin-empty {
+  padding: 12px;
+}
+.sanaka-obolos__coins figcaption {
+  margin-top: 8px;
+}
+@media (max-width: 600px) {
+  .sanaka-obolos__header,
+  .sanaka-obolos__content {
+    padding: 20px 16px;
+  }
+  .sanaka-obolos__tabs a {
+    padding: 14px 16px;
+  }
+}

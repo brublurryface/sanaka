@@ -72,7 +72,7 @@ $options = ($argv[1] ?? '') === 'worker' ? ['sanaka_obolo_operations_version' =>
 function get_option($key) { global $options; return $options[$key] ?? false; }
 function update_option($key, $value, $autoload): void { global $options; $options[$key] = $value; }
 function current_time($format, $gmt): string { return gmdate('Y-m-d H:i:s'); }
-function sanaka_obolos_character_exists($slug): bool { return in_array($slug, ['nandini', 'samvit'], true); }
+function get_posts($args): array { return in_array($args['meta_value'], ['nandini', 'samvit'], true) ? [1] : []; }
 function rest_ensure_response($data): TestResponse { return new TestResponse($data); }
 function add_action(...$args): void {}
 function add_filter(...$args): void {}
