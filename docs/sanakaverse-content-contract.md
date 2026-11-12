@@ -1,20 +1,20 @@
-# Contrato de conteúdo do Sanakaverse
+# Contrato de conteúdo de Sanaka-loka
 
-Este documento define como um livro entra na biblioteca do Sanakaverse sem misturar a capa do
+Este documento define como um livro entra na biblioteca de Sanaka-loka sem misturar a capa do
 volume com a imagem destacada da publicação.
 
 ## Como publicar um volume
 
 1. Criar ou editar a publicação correspondente no WordPress.
-2. Associá-la à categoria **Sanakaverse**, cujo slug deve permanecer `sanakaverse`.
+2. Associá-la à categoria **Sanaka-loka**, com o slug `sanaka-loka`.
 3. Manter a imagem destacada como a composição horizontal usada no cabeçalho do post.
-4. Selecionar a composição quadrada no campo próprio **Capa do Sanakaverse**.
+4. Selecionar a composição quadrada no campo próprio da capa do volume.
 
 Quando a publicação estiver pública, a aplicação a transforma automaticamente em um livro e o
 link interno abre `/posts/:slug` em uma nova aba.
 
 O volume não aparece no catálogo, nas buscas nem nos filtros de `/posts`. A rota direta permanece
-disponível para que a leitura seja aberta exclusivamente a partir do Sanakaverse.
+disponível para que a leitura seja aberta exclusivamente a partir de Sanaka-loka.
 
 ## Campo da capa
 
@@ -55,9 +55,10 @@ representado dentro da arte uma anatomia única.
 
 - Publicações da categoria Romance/WoD continuam excluídas mesmo que recebam outra categoria por
   engano.
-- Publicações da categoria Sanakaverse pertencem somente à coleção de livros e não ao catálogo
+- Publicações da categoria Sanaka-loka pertencem somente à coleção de livros e não ao catálogo
   editorial de Posts.
-- A ausência da categoria `sanakaverse` representa uma biblioteca ainda vazia, não uma falha.
+- A ausência da categoria `sanaka-loka` é uma falha de configuração recuperável, com nova tentativa.
+  Uma consulta bem-sucedida sem publicações mostra o estado vazio explicitamente.
 - A categoria e a exclusão de Romance/WoD usam IDs resolvidos pelos slugs no CMS, incluindo as
   subcategorias. Falha na resolução da fronteira WoD interrompe a consulta em vez de retirar a
   exclusão.

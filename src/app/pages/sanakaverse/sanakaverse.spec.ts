@@ -83,6 +83,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           unrevealed: 'Capa ainda não revelada',
         },
         loading: 'Alinhando os livros às estrelas…',
+        empty: 'Nenhum livro publicado em Sanaka-loka no momento.',
         error: {
           title: 'A órbita se desfez.',
           retry: 'Tentar reunir os volumes',
@@ -124,6 +125,47 @@ describe('Sanakaverse', () => {
     }).compileComponents();
 
     fixture = TestBed.createComponent(Sanakaverse);
+  });
+
+  it('should show Śabala only until the initial collection request completes', () => {
+    const pending = new Subject<SanakaverseBooksPage>();
+    booksService.getBooks.mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-page-loading')?.getAttribute('data-variant')).toBe('sabala');
+    expect(compiled.querySelector('.sanakaverse-grid')).toBeNull();
+
+    pending.next(bookPage());
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(4);
+  });
+
+  it('should remove Śabala when the collection request fails', () => {
+    const pending = new Subject<SanakaverseBooksPage>();
+    booksService.getBooks.mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    pending.error(new Error('offline'));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('.sanakaverse-feedback--error button')).not.toBeNull();
+  });
+
+  it('should show an explicit empty state for a successfully loaded empty collection', () => {
+    booksService.getBooks.mockReturnValueOnce(of(bookPage(1, 0)));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('.sanakaverse-feedback[role="status"]')?.textContent).toContain(
+      'Nenhum livro publicado em Sanaka-loka',
+    );
+    expect(compiled.querySelector('.sanakaverse-grid')).toBeNull();
   });
 
   it('should render WordPress volumes as square covers that open internal posts in new tabs', () => {
@@ -222,11 +264,18 @@ describe('Sanakaverse', () => {
     expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(12);
     expect(compiled.querySelector('.sanakaverse-grid')?.getAttribute('aria-busy')).toBe('true');
     expect(button?.disabled).toBe(true);
+    expect(
+      compiled
+        .querySelector('app-loading-indicator')
+        ?.classList.contains('loading-indicator--compact'),
+    ).toBe(true);
+    expect(compiled.querySelectorAll('.sanakaverse-pagination [role="status"]')).toHaveLength(1);
     pending.next(bookPage(2, 101));
     pending.complete();
     fixture.detectChanges();
     expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(24);
     expect(button?.disabled).toBe(false);
+    expect(compiled.querySelector('app-loading-indicator')).toBeNull();
   });
 
   it('should retry the failed next page without losing or duplicating previous books', () => {

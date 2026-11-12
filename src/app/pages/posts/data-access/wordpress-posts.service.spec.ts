@@ -78,7 +78,7 @@ describe('WordPressPostsService', () => {
       { id: 109, name: 'Privado', slug: 'privado', parent: 43 },
       { id: 111, name: 'Volume', slug: 'volume', parent: 110 },
       { id: 110, name: 'Coleção', slug: 'colecao', parent: 108 },
-      { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+      { id: 108, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     ]);
     expect(result).toEqual([
       { id: 41, name: 'Bruna', slug: 'bruna', parentId: 0 },
@@ -159,7 +159,7 @@ describe('WordPressPostsService', () => {
     categoriesRequest.flush([
       { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
       { id: 45, name: 'Pensamentos &amp; Ensaios', slug: 'pensamentos', parent: 41 },
-      { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+      { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     ]);
 
     expect(result).toEqual({
@@ -224,7 +224,7 @@ describe('WordPressPostsService', () => {
 
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
-      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
+      .flush([{ id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 }]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
 
     expect(result).toEqual({
@@ -279,7 +279,7 @@ describe('WordPressPostsService', () => {
       .flush([
         { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 },
-        { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+        { id: 108, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
       ]);
     expect(result?.posts).toHaveLength(15);
     expect(result?.total).toBe(15);
@@ -330,7 +330,7 @@ describe('WordPressPostsService', () => {
 
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
-      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
+      .flush([{ id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 }]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/media`);
   });
 
@@ -341,7 +341,7 @@ describe('WordPressPostsService', () => {
       .expectOne((request) => request.url === `${apiUrl}/categories`)
       .flush([
         { id: 46, name: 'De Preto', slug: 'de-preto', parent: 41 },
-        { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+        { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
       ]);
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/tags`)
@@ -457,7 +457,7 @@ describe('WordPressPostsService', () => {
         { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
         { id: 43, name: 'Romance', slug: 'romance', parent: 41 },
         { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
-        { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+        { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
       ]);
     const tagsRequest = httpTesting.expectOne((request) => request.url === `${apiUrl}/tags`);
     expect(tagsRequest.request.params.get('per_page')).toBe('100');
@@ -553,7 +553,7 @@ describe('WordPressPostsService', () => {
 
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
-      .flush([{ id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 }]);
+      .flush([{ id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 }]);
     finishEmptyTagSuggestions();
     httpTesting.expectNone((request) => request.url === `${apiUrl}/tags`);
 
@@ -590,7 +590,7 @@ describe('WordPressPostsService', () => {
     const categories = [
       { id: 41, name: 'Bruna', slug: 'bruna', parent: 0 },
       { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 41 },
-      { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+      { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     ];
     const tags = [{ id: 8, name: 'Identidade', slug: 'identidade' }];
 

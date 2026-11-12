@@ -12,6 +12,17 @@ main {
   flex: 1 0 auto;
 }
 
+:host(.app--loading) {
+  height: 100dvh;
+  overflow: clip;
+}
+
+:host(.app--loading) > .app-header,
+:host(.app--loading) > main,
+:host(.app--loading) > .app-footer {
+  visibility: hidden;
+}
+
 .app-header {
   position: sticky;
   top: 0;

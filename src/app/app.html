@@ -1,4 +1,16 @@
-<header class="app-header">
+@if (pageLoading.current(); as loading) {
+  <app-loading-indicator
+    [variant]="loading.variant"
+    [label]="loading.labelKey | transloco"
+    [fullPage]="true"
+  />
+}
+
+<header
+  class="app-header"
+  [inert]="pageLoading.current() !== null"
+  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
+>
   <mat-toolbar>
     <a class="brand" routerLink="/" aria-label="Sanaka">
       <span>S</span>
@@ -72,11 +84,19 @@
   </mat-toolbar>
 </header>
 
-<main>
+<main
+  [inert]="pageLoading.current() !== null"
+  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
+  [attr.aria-busy]="pageLoading.current() ? 'true' : null"
+>
   <router-outlet />
 </main>
 
-<footer class="app-footer">
+<footer
+  class="app-footer"
+  [inert]="pageLoading.current() !== null"
+  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
+>
   <div class="app-footer__light" aria-hidden="true"></div>
 
   <div class="app-footer__content">
