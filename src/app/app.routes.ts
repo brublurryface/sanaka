@@ -13,6 +13,7 @@ export const routes: Routes = [
   },
   {
     path: 'posts',
+    data: { initialLoading: true },
     loadChildren: () => import('./pages/posts/posts.routes').then((m) => m.POSTS_ROUTES),
   },
   {
@@ -36,6 +37,7 @@ export const routes: Routes = [
     path: 'sobre',
     data: {
       titleKey: 'app.pageTitles.about',
+      initialLoading: true,
       descriptionKey: 'app.pageDescriptions.about',
     },
     loadComponent: () => import('./pages/about/about').then((m) => m.About),
@@ -52,6 +54,7 @@ export const routes: Routes = [
     path: 'sanaka-loka',
     data: {
       titleKey: 'app.pageTitles.sanakaverse',
+      initialLoading: true,
       descriptionKey: 'app.pageDescriptions.sanakaverse',
     },
     loadComponent: () => import('./pages/sanakaverse/sanakaverse').then((m) => m.Sanakaverse),

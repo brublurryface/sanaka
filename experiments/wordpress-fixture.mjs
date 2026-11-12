@@ -12,7 +12,7 @@ export function createWordPressFixture({
   const categories = [
     { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
     { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
-    { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+    { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     { id: 45, name: 'Estudos', slug: 'estudos', parent: 0 },
   ];
   const article = (id = 1, slug = 'audit-article') => ({

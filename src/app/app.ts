@@ -3,6 +3,8 @@ import { MatToolbarModule } from '@angular/material/toolbar';
 import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { PageLoadingState } from './core/navigation/page-loading-state';
+import { LoadingIndicator } from './shared/loading-indicator/loading-indicator';
 import {
   LanguagePreferenceService,
   type SupportedLanguage,
@@ -10,11 +12,20 @@ import {
 
 @Component({
   selector: 'app-root',
-  imports: [RouterOutlet, RouterLink, RouterLinkActive, MatToolbarModule, TranslocoPipe],
+  imports: [
+    RouterOutlet,
+    RouterLink,
+    RouterLinkActive,
+    MatToolbarModule,
+    TranslocoPipe,
+    LoadingIndicator,
+  ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
+  host: { '[class.app--loading]': 'pageLoading.active()' },
 })
 export class App {
+  protected readonly pageLoading = inject(PageLoadingState);
   private readonly languagePreference = inject(LanguagePreferenceService);
 
   constructor() {

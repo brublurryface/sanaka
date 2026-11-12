@@ -208,6 +208,7 @@
       "retry": "Tentar novamente"
     },
     "loading": "Alinhando os livros às estrelas…",
+    "empty": "Nenhum livro publicado em Sanaka-loka no momento.",
     "error": {
       "title": "A órbita dos livros se desfez por um instante.",
       "retry": "Tentar reunir os volumes"

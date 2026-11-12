@@ -16,7 +16,7 @@ export interface ResolvedWordPressContentPolicy {
 }
 
 /**
- * Romance pertence ao WoD, Sobre reúne os fragmentos autobiográficos e Sanakaverse identifica
+ * Romance pertence ao WoD, Sobre reúne os fragmentos autobiográficos e Sanaka-loka identifica
  * sua coleção por slugs estáveis. Os IDs exigidos pela REST API são resolvidos no CMS.
  */
 export const SANAKA_WORDPRESS_CONTENT_POLICY = new InjectionToken<WordPressContentPolicy>(
@@ -25,7 +25,7 @@ export const SANAKA_WORDPRESS_CONTENT_POLICY = new InjectionToken<WordPressConte
     factory: () => ({
       excludedCategorySlugs: ['romance'],
       aboutCycleCategorySlug: 'sobre',
-      sanakaverseCategorySlug: 'sanakaverse',
+      sanakaverseCategorySlug: 'sanaka-loka',
     }),
   },
 );

@@ -42,15 +42,7 @@
       </div>
 
       @if (isLoading()) {
-        <div class="sanakaverse-feedback sanakaverse-feedback--loading" role="status">
-          <div class="sanakaverse-loading-books" aria-hidden="true">
-            <span></span>
-            <span></span>
-            <span></span>
-            <span></span>
-          </div>
-          <p>{{ 'sanakaverse.loading' | transloco }}</p>
-        </div>
+        <app-page-loading variant="sabala" labelKey="sanakaverse.loading" />
       } @else if (hasError()) {
         <div class="sanakaverse-feedback sanakaverse-feedback--error" role="alert">
           <p>{{ 'sanakaverse.error.title' | transloco }}</p>
@@ -102,12 +94,19 @@
           }
         </ol>
         <div class="sanakaverse-pagination">
-          <p role="status">
+          <p [attr.role]="isLoadingMore() ? null : 'status'">
             {{
               'sanakaverse.pagination.progress'
                 | transloco: { shown: books().length, total: total() }
             }}
           </p>
+          @if (isLoadingMore()) {
+            <app-loading-indicator
+              variant="sabala"
+              [compact]="true"
+              [label]="'sanakaverse.pagination.loading' | transloco"
+            />
+          }
           @if (hasLoadMoreError()) {
             <p role="alert">{{ 'sanakaverse.pagination.error' | transloco }}</p>
           }
@@ -129,6 +128,8 @@
             </button>
           }
         </div>
+      } @else {
+        <p class="sanakaverse-feedback" role="status">{{ 'sanakaverse.empty' | transloco }}</p>
       }
     </section>
   </div>

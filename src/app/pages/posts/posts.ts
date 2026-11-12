@@ -1,16 +1,33 @@
-import { ChangeDetectionStrategy, Component, effect, inject } from '@angular/core';
+import {
+  ChangeDetectionStrategy,
+  Component,
+  computed,
+  effect,
+  inject,
+  signal,
+} from '@angular/core';
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormControl, ReactiveFormsModule } from '@angular/forms';
 import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { LoadingIndicator } from '../../shared/loading-indicator/loading-indicator';
+import { PageLoading } from '../../shared/loading-indicator/page-loading';
 import { PostCard } from './post-card/post-card';
 import { NewsletterSignup } from './newsletter-signup/newsletter-signup';
 import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, PostCard, NewsletterSignup, TranslocoPipe],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    PostCard,
+    NewsletterSignup,
+    TranslocoPipe,
+    LoadingIndicator,
+    PageLoading,
+  ],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',
@@ -48,9 +65,17 @@ export class Posts {
   readonly paginationItems = this.store.paginationItems;
   readonly viewMode = this.store.viewMode;
   readonly currentPage = this.store.currentPage;
+  private readonly initialLoadComplete = signal(false);
+  readonly isInitialLoading = computed(
+    () => !this.initialLoadComplete() && (this.isLoading() || this.isLoadingCategories()),
+  );
 
   constructor() {
     this.activateRoute();
+
+    effect(() => {
+      if (!this.isLoading() && !this.isLoadingCategories()) this.initialLoadComplete.set(true);
+    });
 
     effect(() => {
       this.categoryControl.setValue(this.store.selectedRootCategory()?.slug ?? '', {
