@@ -27,7 +27,7 @@ describe('Post tags on demand', () => {
     { id: 45, name: 'Estudos', slug: 'estudos', parent: 41 },
     { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
     { id: 44, name: 'WoD', slug: 'wod', parent: 43 },
-    { id: 97, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+    { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     { id: 98, name: 'Subcoleção', slug: 'subcolecao', parent: 97 },
   ];
   const tag = (id: number) => ({ id, name: `Tag ${id}`, slug: `tag-${id}` });

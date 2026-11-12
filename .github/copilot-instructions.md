@@ -36,6 +36,9 @@
 
 ## Workflow
 
+- Keep branch names in English, with a purpose prefix: `feat/`, `fix/`, `refactor/`, `docs/`, or `chore/`.
+- Use a short, descriptive scope after the prefix; do not add tool or assistant names such as `codex/`.
+- Keep one active pull request for the same delivery. Link and close a superseded proposal only after its replacement is ready; preserve review history.
 - Read relevant files before editing them.
 - Keep changes strictly inside the requested scope.
 - Preserve unrelated code.

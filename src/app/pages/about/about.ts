@@ -4,13 +4,14 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
+import { PageLoading } from '../../shared/loading-indicator/page-loading';
 import { ABOUT_PUZZLE_PIECE_PATHS } from './about-puzzle.geometry';
 import { AboutPuzzleMobile } from './about-puzzle-mobile/about-puzzle-mobile';
 import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
 
 @Component({
   selector: 'app-about',
-  imports: [RouterLink, TranslocoPipe, AboutPuzzleMobile],
+  imports: [RouterLink, TranslocoPipe, AboutPuzzleMobile, PageLoading],
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })

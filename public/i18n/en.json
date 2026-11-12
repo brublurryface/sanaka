@@ -209,6 +209,7 @@
       "retry": "Try again"
     },
     "loading": "Aligning the books with the stars…",
+    "empty": "No books are currently published in Sanaka-loka.",
     "error": {
       "title": "The books' orbit came apart for a moment.",
       "retry": "Gather the volumes again"

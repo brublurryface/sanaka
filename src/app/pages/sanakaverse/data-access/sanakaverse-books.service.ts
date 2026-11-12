@@ -1,6 +1,6 @@
 import { HttpClient, HttpParams, HttpResponse } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { map, Observable, of, switchMap, timeout } from 'rxjs';
+import { map, Observable, switchMap, throwError, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import {
@@ -50,7 +50,7 @@ export interface SanakaverseBooksPage {
   readonly totalPages: number;
 }
 
-/** Consulta apenas os posts publicados como volumes do Sanakaverse. */
+/** Consulta apenas os posts publicados como volumes de Sanaka-loka. */
 @Injectable({ providedIn: 'root' })
 export class SanakaverseBooksService {
   private readonly requestTimeoutMs = 10_000;
@@ -68,19 +68,15 @@ export class SanakaverseBooksService {
    */
   getBooks(page = 1): Observable<SanakaverseBooksPage> {
     const requestedPage = Number.isSafeInteger(page) && page > 0 ? page : 1;
-    return this.contentPolicy.resolve().pipe(
-      switchMap((policy) =>
-        policy.sanakaverseCategoryId === undefined
-          ? of({
-              books: [],
-              page: requestedPage,
-              perPage: this.pageSize,
-              total: 0,
-              totalPages: 0,
-            })
-          : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy, requestedPage),
-      ),
-    );
+    return this.contentPolicy
+      .resolve()
+      .pipe(
+        switchMap((policy) =>
+          policy.sanakaverseCategoryId === undefined
+            ? throwError(() => new Error('Categoria editorial de Sanaka-loka ausente.'))
+            : this.loadCategoryBooks(policy.sanakaverseCategoryId, policy, requestedPage),
+        ),
+      );
   }
 
   private loadCategoryBooks(

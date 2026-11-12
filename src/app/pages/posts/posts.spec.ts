@@ -1,3 +1,5 @@
+import { PageLoadingState } from '../../core/navigation/page-loading-state';
+
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter, Router } from '@angular/router';
 import { RouterTestingHarness } from '@angular/router/testing';
@@ -316,13 +318,31 @@ describe('Posts', () => {
   });
 
   it('should show a loading state while WordPress is pending', () => {
-    createComponent(new Subject<PostsPage>());
+    const pending = new Subject<PostsPage>();
+    createComponent(pending);
 
     const compiled = fixture.nativeElement as HTMLElement;
 
-    expect(compiled.querySelector('.posts-feedback')?.textContent?.trim()).toBe(
-      'Carregando publicações...',
-    );
+    expect(TestBed.inject(PageLoadingState).current()?.labelKey).toBe('posts.loading');
+    expect(compiled.querySelector('app-page-loading')?.getAttribute('data-variant')).toBe('vasuki');
+
+    pending.next(firstPage);
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('app-post-card')).not.toBeNull();
+  });
+
+  it('should replace Vāsuki with the error and retry action after a pending request fails', () => {
+    const pending = new Subject<PostsPage>();
+    createComponent(pending);
+    pending.error(new Error('offline'));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('.posts-feedback[role="alert"] button')).not.toBeNull();
   });
 
   it('should show an error and load the posts after retrying', () => {

@@ -1,17 +1,29 @@
+import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
-import { provideRouter, Router } from '@angular/router';
+import { NavigationStart, provideRouter, Router } from '@angular/router';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of } from 'rxjs';
+import { filter, firstValueFrom, of, Subject } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
 
 import { App } from './app';
 import { routes } from './app.routes';
 import { LanguagePreferenceService } from './core/i18n/language-preference.service';
+import { PageLoadingState } from './core/navigation/page-loading-state';
+import {
+  WordPressPostsService,
+  PostsPage,
+} from './pages/posts/data-access/wordpress-posts.service';
+import { NewsletterService } from './pages/posts/newsletter-signup/data-access/newsletter.service';
+import { PostCategory } from './pages/posts/post';
+
+@Component({ template: 'Ready' })
+class ReadyPage {}
 
 class MockTranslocoLoader implements TranslocoLoader {
   getTranslation(lang: string) {
     const translations = {
       'pt-BR': {
+        posts: { loading: 'Carregando publicações...' },
         newsletter: { footerLink: 'Newsletter' },
         app: {
           title: 'Sanaka',
@@ -36,6 +48,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         },
       },
       en: {
+        posts: { loading: 'Loading publications...' },
         newsletter: { footerLink: 'Newsletter' },
         app: {
           title: 'Sanaka',
@@ -121,6 +134,132 @@ describe('App', () => {
     expect(flame?.getAttribute('src')).toBe('/images/brand/flame-mark.webp');
     expect(flame?.getAttribute('alt')).toBe('');
     expect(flame?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it('should expose only the full-page loader until both posts and categories are ready', async () => {
+    const posts = new Subject<PostsPage>();
+    const categories = new Subject<readonly PostCategory[]>();
+    TestBed.overrideProvider(WordPressPostsService, {
+      useValue: { getPosts: () => posts, getArchiveCategories: () => categories },
+    });
+    TestBed.overrideProvider(NewsletterService, {
+      useValue: { getAvailability: () => of({ available: false }) },
+    });
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await TestBed.inject(Router).navigateByUrl('/posts');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const host = fixture.nativeElement as HTMLElement;
+
+    expect(host.querySelectorAll('app-loading-indicator')).toHaveLength(1);
+    expect(host.querySelector('.loading-indicator--full-page')?.getAttribute('data-variant')).toBe(
+      'vasuki',
+    );
+    expect(host.querySelector('.app-header')?.getAttribute('aria-hidden')).toBe('true');
+    expect(host.querySelector('main')?.getAttribute('aria-hidden')).toBe('true');
+    expect(host.querySelector('.app-footer')?.getAttribute('aria-hidden')).toBe('true');
+    expect(host.querySelector<HTMLElement>('.app-header')?.inert).toBe(true);
+    expect(host.querySelector<HTMLElement>('main')?.inert).toBe(true);
+    expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('hidden');
+    expect(host.querySelector('.loading-label')?.textContent).toBe('Carregando publicações...');
+
+    posts.next({ posts: [], page: 1, perPage: 20, total: 0, totalPages: 0 });
+    posts.complete();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(host.querySelector('.loading-indicator--full-page')).not.toBeNull();
+
+    categories.next([]);
+    categories.complete();
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(host.querySelector('app-loading-indicator')).toBeNull();
+    expect(TestBed.inject(PageLoadingState).current()).toBeNull();
+    expect(host.querySelector('.app-header')?.getAttribute('aria-hidden')).toBeNull();
+    expect(host.querySelector<HTMLElement>('main')?.inert).toBe(false);
+    expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('');
+  });
+
+  it('should hide the shell before a lazy page can register its loading request', async () => {
+    let finishLoading!: (page: typeof ReadyPage) => void;
+    const page = new Promise<typeof ReadyPage>((resolve) => (finishLoading = resolve));
+    const router = TestBed.inject(Router);
+    router.resetConfig([
+      { path: 'waiting', data: { initialLoading: true }, loadComponent: () => page },
+    ]);
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const started = firstValueFrom(
+      router.events.pipe(filter((event) => event instanceof NavigationStart)),
+    );
+
+    const navigation = router.navigateByUrl('/waiting');
+    await started;
+    fixture.detectChanges();
+    const host = fixture.nativeElement as HTMLElement;
+    const state = TestBed.inject(PageLoadingState);
+    expect(state.current()).toBeNull();
+    expect(state.active()).toBe(true);
+    for (const element of host.querySelectorAll<HTMLElement>('.app-header, main, .app-footer')) {
+      expect(element.style.visibility).toBe('hidden');
+      expect(element.inert).toBe(true);
+      expect(element.getAttribute('aria-hidden')).toBe('true');
+    }
+
+    // A cached or immediately ready page must also release the navigation hold.
+    finishLoading(ReadyPage);
+    await navigation;
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(state.active()).toBe(false);
+    expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('');
+    expect(host.querySelector<HTMLElement>('.app-footer')?.inert).toBe(false);
+  });
+
+  it('should restore the shell when navigation to a loading page is cancelled', async () => {
+    const router = TestBed.inject(Router);
+    router.resetConfig([
+      {
+        path: 'waiting',
+        data: { initialLoading: true },
+        component: ReadyPage,
+        canActivate: [() => false],
+      },
+    ]);
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    expect(await router.navigateByUrl('/waiting')).toBe(false);
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(TestBed.inject(PageLoadingState).active()).toBe(false);
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector<HTMLElement>('.app-footer')?.inert,
+    ).toBe(false);
+  });
+
+  it('should restore navigation when leaving a page whose data is still pending', async () => {
+    TestBed.overrideProvider(WordPressPostsService, {
+      useValue: { getPosts: () => new Subject<PostsPage>(), getArchiveCategories: () => of([]) },
+    });
+    TestBed.overrideProvider(NewsletterService, {
+      useValue: { getAvailability: () => of({ available: false }) },
+    });
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    const router = TestBed.inject(Router);
+    await router.navigateByUrl('/posts');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(TestBed.inject(PageLoadingState).current()?.variant).toBe('vasuki');
+
+    await router.navigateByUrl('/');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    expect(TestBed.inject(PageLoadingState).current()).toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('app-loading-indicator'),
+    ).toBeNull();
   });
 
   it('should render the main navigation links', () => {

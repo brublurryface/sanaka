@@ -15,7 +15,7 @@ describe('WordPress editorial policy', () => {
   const categories = [
     { id: 201, name: 'Romance', slug: 'romance', parent: 0 },
     { id: 208, name: 'Sobre', slug: 'sobre', parent: 0 },
-    { id: 108, name: 'Sanakaverse', slug: 'sanakaverse', parent: 0 },
+    { id: 108, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
     { id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 },
     { id: 900, name: 'WoD filho', slug: 'wod-filho', parent: 201 },
     { id: 901, name: 'Volumes', slug: 'volumes', parent: 108 },
@@ -78,7 +78,7 @@ describe('WordPress editorial policy', () => {
     expect(request.request.params.get('slug')?.split(',')).toEqual([
       'romance',
       'sobre',
-      'sanakaverse',
+      'sanaka-loka',
     ]);
     expect(request.request.params.get('_fields')).toBe('id,slug');
     expect(result.next).toHaveBeenCalledExactlyOnceWith({
@@ -192,20 +192,40 @@ describe('WordPress editorial policy', () => {
       httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
     },
   );
-  it('should keep books and cycles empty when only their optional categories are absent', () => {
+  it('should report a missing library category instead of pretending the collection is empty', () => {
     const books = watch(TestBed.inject(SanakaverseBooksService).getBooks());
     const cycles = watch(TestBed.inject(AboutCyclesService).getCycles());
     respondPolicy(categories.filter((category) => category.slug === 'romance'));
-    expect(books.next).toHaveBeenCalledExactlyOnceWith({
-      books: [],
-      page: 1,
-      perPage: 12,
-      total: 0,
-      totalPages: 0,
-    });
+    expect(books.next).not.toHaveBeenCalled();
+    expect(books.error).toHaveBeenCalledOnce();
     expect(cycles.next).toHaveBeenCalledExactlyOnceWith([]);
     httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
   });
+  it('should load all four books from the renamed Sanaka-loka category using its current ID', () => {
+    const result = watch(TestBed.inject(SanakaverseBooksService).getBooks());
+    respondPolicy([
+      categories[0],
+      categories[1],
+      { id: 97, name: 'Sanaka-loka', slug: 'sanaka-loka', parent: 0 },
+    ]);
+    const request = httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`);
+    expect(request.request.params.get('categories[terms]')).toBe('97');
+    const books = ['Mors', 'Nandinī', 'Nemi', 'Ākāśa'];
+    request.flush(
+      books.map((title, index) => ({
+        id: index + 1,
+        slug: `book-${index + 1}`,
+        title: { rendered: title },
+        sanakaverse_cover: `https://example.com/book-${index + 1}.webp`,
+      })),
+      { headers: { 'X-WP-Total': '4', 'X-WP-TotalPages': '1' } },
+    );
+
+    expect(result.error).not.toHaveBeenCalled();
+    expect(result.next.mock.calls[0][0].books.map((book) => book.title)).toEqual(books);
+    expect(result.next.mock.calls[0][0].total).toBe(4);
+  });
+
   it('should send resolved exclusions before pagination and preserve the filtered headers', () => {
     const result = watch(
       TestBed.inject(WordPressPostsService).getPosts({ page: 2, perPage: 5, search: 'vida' }),
@@ -339,7 +359,7 @@ describe('WordPress editorial policy', () => {
       expect(result.next.mock.calls[0][0]).toHaveLength(count - 2);
       expect(
         result.next.mock.calls[0][0].some(
-          (category) => category.slug === 'sanakaverse' || category.slug === 'romance',
+          (category) => category.slug === 'sanaka-loka' || category.slug === 'romance',
         ),
       ).toBe(false);
     },

@@ -134,15 +134,16 @@ describe('SanakaverseBooksService', () => {
     expect(result).toMatchObject({ page: 1, perPage: 12, total: 4, totalPages: 1 });
   });
 
-  it('should keep the collection empty when its category does not exist yet', () => {
+  it('should report a missing category so the page can offer retry instead of going blank', () => {
     editorialPolicy.resolve.mockReturnValue(of({ excludedCategoryIds: [43] }));
-    let result: SanakaverseBooksPage | undefined;
+    const next = vi.fn();
+    const error = vi.fn();
+    service.getBooks().subscribe({ next, error });
 
-    service.getBooks().subscribe((books) => {
-      result = books;
-    });
-
-    expect(result).toEqual({ books: [], page: 1, perPage: 12, total: 0, totalPages: 0 });
+    expect(next).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(
+      expect.objectContaining({ message: 'Categoria editorial de Sanaka-loka ausente.' }),
+    );
     httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
   });
 

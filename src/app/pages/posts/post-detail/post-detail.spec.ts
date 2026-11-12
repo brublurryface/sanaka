@@ -1,3 +1,5 @@
+import { PageLoadingState } from '../../../core/navigation/page-loading-state';
+
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { ComponentFixture, TestBed } from '@angular/core/testing';
@@ -5,7 +7,7 @@ import { RESPONSE_INIT } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { PostDetail } from '../post';
@@ -147,6 +149,34 @@ describe('PostDetailPage', () => {
     return fixture.nativeElement as HTMLElement;
   }
 
+  it('should show Maṇināga only until the article request completes', () => {
+    const pending = new Subject<PostDetail | null>();
+    const compiled = createComponent(pending);
+
+    expect(compiled.querySelector('app-page-loading')?.getAttribute('data-variant')).toBe(
+      'maninaga',
+    );
+    expect(TestBed.inject(PageLoadingState).current()?.labelKey).toBe('posts.detail.loading');
+    expect(compiled.querySelector('.post-reader')).toBeNull();
+
+    pending.next(post);
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('VOCÊ');
+  });
+
+  it('should remove Maṇināga when an article request fails', () => {
+    const pending = new Subject<PostDetail | null>();
+    const compiled = createComponent(pending);
+    pending.error(new Error('offline'));
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-page-loading')).toBeNull();
+    expect(compiled.querySelector('.post-detail__feedback[role="alert"] button')).not.toBeNull();
+  });
+
   it('should render the complete publication, taxonomy and navigation', () => {
     const compiled = createComponent();
 
@@ -287,7 +317,7 @@ describe('PostDetailPage', () => {
       .flush([
         { id: 43, slug: 'romance' },
         { id: 62, slug: 'sobre' },
-        { id: 97, slug: 'sanakaverse' },
+        { id: 97, slug: 'sanaka-loka' },
       ]);
     httpTesting
       .expectOne((request) => request.params.get('slug') === 'voce')
