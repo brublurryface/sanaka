@@ -34,7 +34,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         posts: {
           header: {
             eyebrow: 'Arquivo',
-            title: 'Publicações do santuário',
+            title: { start: 'Publicações do', accent: 'santuário.' },
             intro: 'Escrituras, estudos e reflexões reunidos no Sanaka.',
             imageAlt: 'Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca.',
             sanakaverseLink: 'Viajar para Sanaka-loka',
@@ -98,7 +98,7 @@ class MockTranslocoLoader implements TranslocoLoader {
         posts: {
           header: {
             eyebrow: 'Archive',
-            title: 'Sanctuary publications',
+            title: { start: 'Publications from the', accent: 'sanctuary.' },
             intro: 'Scriptures, studies and reflections gathered in Sanaka.',
             imageAlt: 'Saṃvit, Nandinī, and Bhū watch magical books in a library.',
             sanakaverseLink: 'Travel to Sanaka-loka',
@@ -469,7 +469,7 @@ describe('Posts', () => {
     fixture.detectChanges();
     await fixture.whenStable();
 
-    expect(fixture.nativeElement.textContent).toContain('Sanctuary publications');
+    expect(fixture.nativeElement.textContent).toContain('Publications from the sanctuary.');
     expect(component.posts().map((post) => post.title)).toEqual(posts.map((post) => post.title));
   });
 

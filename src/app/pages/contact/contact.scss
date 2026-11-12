@@ -25,7 +25,7 @@
   letter-spacing: var(--sanaka-type-page-title-spacing);
 }
 
-.contact-hero h1 span {
+.contact-hero h1 > span {
   display: block;
 
   white-space: nowrap;
