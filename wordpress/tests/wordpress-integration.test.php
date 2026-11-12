@@ -145,6 +145,7 @@ verify($fields['hover_text'] === 'Hover preservado' && $fields['sanakaverse_cove
 verify($fields['sanaka_character_slug'] === 'nandini' && $fields['sanaka_obolo_back'] === 'https://example.invalid/back.png', 'Character metadata contract changed.');
 
 $characters = sanaka_obolo_admin_characters(1);
+verify(!is_wp_error($characters), 'Character query failed: ' . $wpdb->last_error . ' | ' . $wpdb->last_query);
 verify($characters['total'] === 25 && count($characters['items']) === 20 && $characters['pages'] === 2, 'Character pagination or deduplication failed.');
 verify(sanaka_obolo_admin_characters(999)['page'] === 2 && count(sanaka_obolo_admin_characters(999)['items']) === 5, 'Last page was not clamped.');
 verify(sanaka_obolo_admin_characters(1, 'Presença 25')['total'] === 1, 'Custom character name search failed.');
