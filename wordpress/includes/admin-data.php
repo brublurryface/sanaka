@@ -168,11 +168,12 @@ function sanaka_obolo_admin_character_rows(string $where, array $values, int $li
     $source = sanaka_obolo_admin_character_source($where);
     $totals = sanaka_obolo_totals_table();
     // One canonical published post per character; duplicates cannot inflate pagination.
+    // ASCII identifiers compare as bytes across legacy table collations; leave the indexed totals column untouched.
     $rows = sanaka_obolo_admin_sql(
         "SELECT p.ID, p.post_title, c.character_slug, COALESCE(t.total, 0) AS total
          FROM (SELECT MIN(p.ID) AS ID, m.meta_value AS character_slug {$source} GROUP BY m.meta_value) c
          JOIN {$wpdb->posts} p ON p.ID = c.ID
-         LEFT JOIN {$totals} t ON t.character_slug = c.character_slug
+         LEFT JOIN {$totals} t ON t.character_slug = BINARY c.character_slug
          ORDER BY p.post_title ASC, p.ID ASC, c.character_slug ASC LIMIT %d OFFSET %d",
         [...$values, $limit, $offset]
     );

@@ -98,7 +98,7 @@ if ($mode === 'setup') {
     }
     $totals = $wpdb->prefix . 'sanaka_obolos';
     $operations = $wpdb->prefix . 'sanaka_obolo_operations';
-    verify($wpdb->query("CREATE TABLE {$totals} (character_slug varchar(100) NOT NULL PRIMARY KEY, total bigint unsigned NOT NULL DEFAULT 0, updated_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4") !== false, 'Totals fixture failed.');
+    verify($wpdb->query("CREATE TABLE {$totals} (character_slug varchar(100) NOT NULL PRIMARY KEY, total bigint unsigned NOT NULL DEFAULT 0, updated_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci") !== false, 'Totals fixture failed.');
     verify($wpdb->query("CREATE TABLE {$operations} (operation_key char(64) NOT NULL PRIMARY KEY, character_slug varchar(100) NOT NULL, completed_total bigint unsigned DEFAULT NULL, created_at datetime NOT NULL) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4") !== false, 'Receipt fixture failed.');
     $wpdb->insert($totals, ['character_slug' => 'nandini', 'total' => 7, 'updated_at' => '2026-01-01 00:00:00']);
     $wpdb->insert($operations, ['operation_key' => 'capacity', 'character_slug' => '', 'completed_total' => 1, 'created_at' => '2026-01-01 00:00:00']);
@@ -147,6 +147,7 @@ verify($fields['sanaka_character_slug'] === 'nandini' && $fields['sanaka_obolo_b
 $characters = sanaka_obolo_admin_characters(1);
 verify(!is_wp_error($characters), 'Character query failed: ' . $wpdb->last_error . ' | ' . $wpdb->last_query);
 verify($characters['total'] === 25 && count($characters['items']) === 20 && $characters['pages'] === 2, 'Character pagination or deduplication failed.');
+verify($characters['items'][0]['slug'] === 'nandini' && $characters['items'][0]['total'] === request_obolo('GET', 'nandini')->get_data()['total'], 'Character total was lost across table collations.');
 verify(sanaka_obolo_admin_characters(999)['page'] === 2 && count(sanaka_obolo_admin_characters(999)['items']) === 5, 'Last page was not clamped.');
 verify(sanaka_obolo_admin_characters(1, 'Presença 25')['total'] === 1, 'Custom character name search failed.');
 verify(sanaka_obolo_admin_characters(1, '%')['total'] === 0, 'LIKE wildcard was not escaped.');
