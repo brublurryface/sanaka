@@ -1,0 +1,213 @@
+:host {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 1rem;
+
+  color: var(--sanaka-ivory-muted);
+  text-align: center;
+}
+
+.loading-stage {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+
+  width: min(100%, 22.9375rem);
+  aspect-ratio: var(--artwork-ratio);
+}
+
+.loading-artwork {
+  position: absolute;
+  z-index: 2;
+  inset: 0;
+}
+
+.loading-artwork img {
+  display: block;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+
+.loading-label {
+  margin: 0;
+}
+
+.snake-word {
+  position: absolute;
+  z-index: 1;
+  top: 41.49%;
+  left: 4.63%;
+
+  color: #ceb073;
+  font-family: Georgia, serif;
+  font-size: 7.2cqw;
+  line-height: 1;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  animation: snake-word-reveal 4s linear infinite;
+}
+
+.loading-stage[data-kind='footprints'] {
+  width: min(100%, 40rem);
+}
+
+.loading-stage[data-kind='music'] {
+  width: min(100%, 42rem);
+  aspect-ratio: 896 / 520;
+}
+
+[data-kind='music'] .loading-artwork {
+  inset: auto auto 3.85% 24.33%;
+  width: 51.34%;
+  aspect-ratio: 1;
+}
+
+.music-waves {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  overflow: visible;
+}
+
+.music-wave {
+  transform-origin: center;
+  stroke: #dabe89;
+  stroke-width: 2;
+  opacity: 0.55;
+
+  animation: music-wave 3s ease-in-out infinite alternate;
+}
+
+.music-wave--second {
+  stroke: #a7c4d1;
+  animation-delay: -1.5s;
+  animation-direction: alternate-reverse;
+}
+
+.music-word-track {
+  position: absolute;
+  z-index: 1;
+  inset: 0;
+  overflow: hidden;
+}
+
+.music-word {
+  position: absolute;
+  top: 35%;
+  left: 0;
+
+  width: max-content;
+  color: #dabe89;
+  font-family: Georgia, serif;
+  font-size: 10cqw;
+  line-height: 1.3;
+  letter-spacing: 0.04em;
+  white-space: nowrap;
+
+  animation: music-word-pass 12s linear infinite;
+}
+
+.music-letter {
+  display: inline-block;
+  animation: music-letter-dance 1.5s ease-in-out infinite;
+}
+
+.music-note {
+  position: absolute;
+  z-index: 1;
+  font-family: Georgia, serif;
+  font-size: 6cqw;
+  line-height: 1;
+  animation: music-note-sway 3s ease-in-out infinite;
+}
+
+.loading-stage:not(.loading-stage--ready) {
+  .snake-word,
+  .music-word,
+  .music-letter,
+  .music-wave,
+  .music-note {
+    visibility: hidden;
+    animation-play-state: paused;
+  }
+}
+
+:host(.loading-indicator--compact) {
+  width: min(100%, 18rem);
+  gap: 0.5rem;
+  font-size: 0.9rem;
+}
+
+@keyframes snake-word-reveal {
+  0%,
+  8% {
+    clip-path: inset(0 100% 0 0);
+  }
+  85%,
+  100% {
+    clip-path: inset(0);
+  }
+}
+
+@keyframes music-word-pass {
+  from {
+    left: 0;
+    transform: translateX(-100%);
+  }
+  to {
+    left: 100%;
+    transform: translateX(0);
+  }
+}
+
+@keyframes music-letter-dance {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-3deg);
+  }
+  50% {
+    transform: translateY(-0.08em) rotate(3deg);
+  }
+}
+
+@keyframes music-wave {
+  from {
+    transform: translateY(-6px) scaleY(0.94);
+  }
+  to {
+    transform: translateY(6px) scaleY(1.06);
+  }
+}
+
+@keyframes music-note-sway {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-8deg);
+  }
+  50% {
+    transform: translateY(-0.18em) rotate(8deg);
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .snake-word,
+  .music-word,
+  .music-letter,
+  .music-wave,
+  .music-note {
+    animation: none;
+  }
+
+  .snake-word {
+    clip-path: none;
+  }
+
+  .music-word {
+    left: 50%;
+    transform: translateX(-50%);
+  }
+}

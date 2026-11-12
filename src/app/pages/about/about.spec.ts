@@ -1,7 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of, throwError } from 'rxjs';
+import { of, Subject, throwError } from 'rxjs';
 
 import { About } from './about';
 import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
@@ -262,6 +262,40 @@ describe('About', () => {
       expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
       expect(compiled.querySelectorAll('.about-puzzle-mobile__image--active')).toHaveLength(1);
     }
+  });
+
+  it('should show Saṃvit only until the puzzle request completes', () => {
+    const pending = new Subject<readonly AboutCyclePost[]>();
+    cyclesService.getCycles.mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-loading-indicator')?.getAttribute('data-variant')).toBe(
+      'samvit',
+    );
+    expect(compiled.querySelector('.loading-label')?.textContent).toBe(
+      'Reunindo fragmentos de Sanaka',
+    );
+    expect(compiled.querySelector('.about-puzzle__board')).toBeNull();
+
+    pending.next(cycles);
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-loading-indicator')).toBeNull();
+    expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(9);
+  });
+
+  it('should remove Saṃvit on request failure and keep retry available', () => {
+    const pending = new Subject<readonly AboutCyclePost[]>();
+    cyclesService.getCycles.mockReturnValueOnce(pending);
+    fixture.detectChanges();
+    pending.error(new Error('offline'));
+    fixture.detectChanges();
+    const compiled = fixture.nativeElement as HTMLElement;
+
+    expect(compiled.querySelector('app-loading-indicator')).toBeNull();
+    expect(compiled.querySelector('.about-feedback--error button')).not.toBeNull();
   });
 
   it('should show a retry action when WordPress cannot load the cycles', () => {

@@ -15,6 +15,7 @@ import { ActivatedRoute, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 import { catchError, distinctUntilChanged, map, of, startWith, Subject, switchMap } from 'rxjs';
 
+import { LoadingIndicator } from '../../../shared/loading-indicator/loading-indicator';
 import { PostDetail } from '../post';
 import { SanakaSeoService } from '../../../core/navigation/sanaka-seo.service';
 import { WordPressPostsService } from '../data-access/wordpress-posts.service';
@@ -30,7 +31,7 @@ type PostDetailState =
 
 @Component({
   selector: 'app-post-detail',
-  imports: [RouterLink, TranslocoPipe, SanakaOboloWidget, SanakaOboloDialog],
+  imports: [RouterLink, TranslocoPipe, SanakaOboloWidget, SanakaOboloDialog, LoadingIndicator],
   templateUrl: './post-detail.html',
   styleUrl: './post-detail.scss',
   changeDetection: ChangeDetectionStrategy.OnPush,

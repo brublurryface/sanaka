@@ -165,7 +165,11 @@
     <h2 id="posts-list-title" class="visually-hidden">{{ 'posts.list.title' | transloco }}</h2>
 
     @if (isLoading()) {
-      <p class="posts-feedback" role="status">{{ 'posts.loading' | transloco }}</p>
+      <app-loading-indicator
+        class="posts-feedback"
+        variant="vasuki"
+        [label]="'posts.loading' | transloco"
+      />
     } @else if (hasError()) {
       <div class="posts-feedback" role="alert">
         <p>{{ 'posts.error.message' | transloco }}</p>

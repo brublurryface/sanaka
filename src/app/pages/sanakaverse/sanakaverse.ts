@@ -4,12 +4,13 @@ import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
+import { LoadingIndicator } from '../../shared/loading-indicator/loading-indicator';
 import { SanakaverseBooksService } from './data-access/sanakaverse-books.service';
 import { SanakaverseBook } from './sanakaverse-book';
 
 @Component({
   selector: 'app-sanakaverse',
-  imports: [RouterLink, TranslocoPipe],
+  imports: [RouterLink, TranslocoPipe, LoadingIndicator],
   templateUrl: './sanakaverse.html',
   styleUrl: './sanakaverse.scss',
 })

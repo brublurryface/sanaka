@@ -1,7 +1,11 @@
 <main class="post-detail">
   @switch (state().status) {
     @case ('loading') {
-      <p class="post-detail__feedback" role="status">{{ 'posts.detail.loading' | transloco }}</p>
+      <app-loading-indicator
+        class="post-detail__feedback"
+        variant="maninaga"
+        [label]="'posts.detail.loading' | transloco"
+      />
     }
     @case ('error') {
       <div class="post-detail__feedback" role="alert">

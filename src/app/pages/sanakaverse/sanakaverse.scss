@@ -327,22 +327,6 @@
   cursor: wait;
 }
 
-.sanakaverse-loading-books {
-  width: min(100%, 44rem);
-  display: grid;
-  grid-template-columns: repeat(4, minmax(0, 1fr));
-  gap: 1.25rem;
-}
-
-.sanakaverse-loading-books span {
-  display: block;
-
-  aspect-ratio: 1;
-
-  border: 1px solid rgba(237, 201, 120, 0.18);
-  background: linear-gradient(135deg, rgba(123, 82, 180, 0.1), rgba(29, 36, 48, 0.46));
-}
-
 @media (max-width: 1000px) {
   .sanakaverse-grid {
     grid-template-columns: repeat(3, minmax(0, 1fr));
@@ -362,10 +346,6 @@
 
   .sanakaverse-book__caption strong {
     font-size: 1.3rem;
-  }
-
-  .sanakaverse-loading-books {
-    grid-template-columns: repeat(2, minmax(0, 1fr));
   }
 }
 

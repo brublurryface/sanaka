@@ -5,7 +5,7 @@ import { RESPONSE_INIT } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
-import { Observable, of, throwError } from 'rxjs';
+import { Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { PostDetail } from '../post';
@@ -146,6 +146,34 @@ describe('PostDetailPage', () => {
     fixture.detectChanges();
     return fixture.nativeElement as HTMLElement;
   }
+
+  it('should show Maṇināga only until the article request completes', () => {
+    const pending = new Subject<PostDetail | null>();
+    const compiled = createComponent(pending);
+
+    expect(compiled.querySelector('app-loading-indicator')?.getAttribute('data-variant')).toBe(
+      'maninaga',
+    );
+    expect(compiled.querySelector('.loading-label')?.textContent).toBe('Abrindo a publicação...');
+    expect(compiled.querySelector('.post-reader')).toBeNull();
+
+    pending.next(post);
+    pending.complete();
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-loading-indicator')).toBeNull();
+    expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('VOCÊ');
+  });
+
+  it('should remove Maṇināga when an article request fails', () => {
+    const pending = new Subject<PostDetail | null>();
+    const compiled = createComponent(pending);
+    pending.error(new Error('offline'));
+    fixture.detectChanges();
+
+    expect(compiled.querySelector('app-loading-indicator')).toBeNull();
+    expect(compiled.querySelector('.post-detail__feedback[role="alert"] button')).not.toBeNull();
+  });
 
   it('should render the complete publication, taxonomy and navigation', () => {
     const compiled = createComponent();

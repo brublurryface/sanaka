@@ -5,12 +5,20 @@ import { ActivatedRoute, NavigationEnd, Router, RouterLink } from '@angular/rout
 import { TranslocoPipe } from '@jsverse/transloco';
 import { debounceTime, distinctUntilChanged, filter, map } from 'rxjs';
 
+import { LoadingIndicator } from '../../shared/loading-indicator/loading-indicator';
 import { PostCard } from './post-card/post-card';
 import { NewsletterSignup } from './newsletter-signup/newsletter-signup';
 import { PostsStore, PostsViewMode } from './posts.store';
 
 @Component({
-  imports: [ReactiveFormsModule, RouterLink, PostCard, NewsletterSignup, TranslocoPipe],
+  imports: [
+    ReactiveFormsModule,
+    RouterLink,
+    PostCard,
+    NewsletterSignup,
+    TranslocoPipe,
+    LoadingIndicator,
+  ],
   selector: 'app-posts',
   styleUrl: './posts.scss',
   templateUrl: './posts.html',

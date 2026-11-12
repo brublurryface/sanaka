@@ -46,7 +46,11 @@
   </header>
 
   @if (isLoading()) {
-    <p class="about-feedback" role="status">{{ 'about.puzzle.loading' | transloco }}</p>
+    <app-loading-indicator
+      class="about-loading"
+      variant="samvit"
+      [label]="'about.puzzle.loading' | transloco"
+    />
   } @else if (hasError()) {
     <div class="about-feedback about-feedback--error" role="alert">
       <p>{{ 'about.puzzle.error' | transloco }}</p>
