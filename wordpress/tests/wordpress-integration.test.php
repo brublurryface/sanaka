@@ -23,7 +23,7 @@ if ($mode === 'setup') {
     foreach (['AUTH_KEY', 'SECURE_AUTH_KEY', 'LOGGED_IN_KEY', 'NONCE_KEY', 'AUTH_SALT', 'SECURE_AUTH_SALT', 'LOGGED_IN_SALT', 'NONCE_SALT'] as $key) {
         $config .= 'define(' . var_export($key, true) . ', ' . var_export(bin2hex(random_bytes(32)), true) . ");\n";
     }
-    $config .= "define('ABSPATH', __DIR__ . '/');\nrequire_once ABSPATH . 'wp-settings.php';\n";
+    $config .= "if (!defined('ABSPATH')) { define('ABSPATH', __DIR__ . '/'); }\nrequire_once ABSPATH . 'wp-settings.php';\n";
     file_put_contents($root . '/wp-config.php', $config);
     file_put_contents($root . '/wp-content/mu-plugins/sanaka-fixture.php', "<?php\nadd_filter('pre_wp_mail', '__return_true');\n\$fixture = getenv('SANAKA_TEST_SNIPPET');\nif (\$fixture && is_file(\$fixture)) { require \$fixture; }\n");
     $source = new RecursiveIteratorIterator(new RecursiveDirectoryIterator($repository, FilesystemIterator::SKIP_DOTS));
@@ -42,7 +42,6 @@ define('WP_ADMIN', true);
 require $root . '/wp-load.php';
 require_once ABSPATH . 'wp-admin/includes/upgrade.php';
 require_once ABSPATH . 'wp-admin/includes/plugin.php';
-require_once ABSPATH . 'wp-admin/includes/menu.php';
 global $wpdb;
 if (DB_NAME !== 'sanaka_wordpress_test' || DB_HOST !== '127.0.0.1' || $wpdb->prefix !== 'wp_integration_') {
     throw new RuntimeException('Refusing to use a non-test database.');
