@@ -18,7 +18,8 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withInMemoryScrolling({
-        anchorScrolling: 'enabled',
+        // PageAnchorNavigation waits for the full-page loading state to finish.
+        anchorScrolling: 'disabled',
         scrollPositionRestoration: 'top',
       }),
     ),

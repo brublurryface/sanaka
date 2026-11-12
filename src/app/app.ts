@@ -4,6 +4,7 @@ import { RouterLink, RouterLinkActive, RouterOutlet } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { PageLoadingState } from './core/navigation/page-loading-state';
+import { PageAnchorNavigation } from './core/navigation/page-anchor-navigation';
 import { LoadingIndicator } from './shared/loading-indicator/loading-indicator';
 import {
   LanguagePreferenceService,
@@ -29,6 +30,7 @@ export class App {
   private readonly languagePreference = inject(LanguagePreferenceService);
 
   constructor() {
+    inject(PageAnchorNavigation);
     afterNextRender(() => {
       this.languagePreference.initialize();
     });
