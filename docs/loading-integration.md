@@ -19,6 +19,12 @@ conteúdo parcial e rodapé ficam invisíveis, inertes e fora da árvore acessí
 até o término. O registro pertence à página e é liberado no sucesso, erro ou
 navegação para outro destino; uma requisição antiga não libera outra atual.
 
+Nas rotas com espera inicial, a raiz oculta a estrutura desde a primeira
+renderização no cliente e o início da navegação, antes de carregar o módulo da
+página. O bloqueio passa para a requisição de dados depois da renderização do
+destino, sem expor o rodapé entre as etapas. Navegações canceladas, falhas e
+páginas imediatamente prontas também liberam esse bloqueio.
+
 Em `/posts`, a primeira apresentação aguarda publicações **e categorias**.
 Buscas, filtros e paginação posteriores não reiniciam o bloqueio da tela inteira.
 O conteúdo já carregado continua disponível durante solicitações adicionais.
@@ -76,7 +82,8 @@ aprovado; uma futura otimização exige aprovação visual própria.
 ## Validação
 
 Os testes cobrem a seleção das artes e dos posters, a mensagem acessível,
-a espera conjunta por publicações e categorias, cancelamento ao navegar,
+a espera conjunta por publicações e categorias, proteção antes do módulo lazy,
+liberação com dados em cache e cancelamento ao navegar,
 liberação no erro, conservação dos livros na paginação, categoria editorial
 renomeada e distinção entre coleção vazia e configuração ausente.
 

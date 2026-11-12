@@ -1,9 +1,12 @@
 import { TestBed } from '@angular/core/testing';
+import { provideRouter } from '@angular/router';
 
 import { PageLoadingState } from '../../core/navigation/page-loading-state';
 import { PageLoading } from './page-loading';
 
 describe('PageLoading', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: [provideRouter([])] }));
+
   it('should release the page on teardown and replace its request when the variant changes', () => {
     const fixture = TestBed.createComponent(PageLoading);
     fixture.componentRef.setInput('variant', 'vasuki');

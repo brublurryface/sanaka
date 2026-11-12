@@ -1,8 +1,28 @@
+import { Location } from '@angular/common';
+import { PLATFORM_ID } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
+import { provideRouter, Router } from '@angular/router';
 
 import { PageLoadingState } from './page-loading-state';
 
 describe('PageLoadingState', () => {
+  beforeEach(() => TestBed.configureTestingModule({ providers: [provideRouter([])] }));
+
+  it('should hide the initial client shell before the first navigation starts', () => {
+    const router = TestBed.inject(Router);
+    router.resetConfig([{ path: 'waiting', data: { initialLoading: true }, children: [] }]);
+    TestBed.inject(Location).go('/waiting?source=direct');
+
+    const state = TestBed.inject(PageLoadingState);
+    expect(state.current()).toBeNull();
+    expect(state.active()).toBe(true);
+  });
+
+  it('should not leave a navigation hold in server-rendered HTML', () => {
+    TestBed.overrideProvider(PLATFORM_ID, { useValue: 'server' });
+    expect(TestBed.inject(PageLoadingState).active()).toBe(false);
+  });
+
   it('should remain busy for the current page when an older request is cancelled', () => {
     const state = TestBed.inject(PageLoadingState);
     const finishPosts = state.begin({ variant: 'vasuki', labelKey: 'posts.loading' });

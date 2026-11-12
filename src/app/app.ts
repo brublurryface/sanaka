@@ -22,7 +22,7 @@ import {
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',
-  host: { '[class.app--loading]': 'pageLoading.current() !== null' },
+  host: { '[class.app--loading]': 'pageLoading.active()' },
 })
 export class App {
   protected readonly pageLoading = inject(PageLoadingState);

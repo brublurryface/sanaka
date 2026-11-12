@@ -8,8 +8,9 @@
 
 <header
   class="app-header"
-  [inert]="pageLoading.current() !== null"
-  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
+  [inert]="pageLoading.active()"
+  [attr.aria-hidden]="pageLoading.active() ? 'true' : null"
+  [style.visibility]="pageLoading.active() ? 'hidden' : null"
 >
   <mat-toolbar>
     <a class="brand" routerLink="/" aria-label="Sanaka">
@@ -85,17 +86,19 @@
 </header>
 
 <main
-  [inert]="pageLoading.current() !== null"
-  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
-  [attr.aria-busy]="pageLoading.current() ? 'true' : null"
+  [inert]="pageLoading.active()"
+  [attr.aria-hidden]="pageLoading.active() ? 'true' : null"
+  [attr.aria-busy]="pageLoading.active() ? 'true' : null"
+  [style.visibility]="pageLoading.active() ? 'hidden' : null"
 >
   <router-outlet />
 </main>
 
 <footer
   class="app-footer"
-  [inert]="pageLoading.current() !== null"
-  [attr.aria-hidden]="pageLoading.current() ? 'true' : null"
+  [inert]="pageLoading.active()"
+  [attr.aria-hidden]="pageLoading.active() ? 'true' : null"
+  [style.visibility]="pageLoading.active() ? 'hidden' : null"
 >
   <div class="app-footer__light" aria-hidden="true"></div>
 
