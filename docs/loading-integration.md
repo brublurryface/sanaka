@@ -1,16 +1,21 @@
 # Loadings de Sanaka
 
+Em 13/11/2026, Śabala passou a usar o protótipo **Hysteria** recuperado: nove
+linhas FFT, duas ornamentais, nove notas e LOADING dançante, com os gráficos
+originais preservados. A integração e a comparação com a referência estão em
+[sabala-hysteria-loading.md](sabala-hysteria-loading.md).
+
 Os oito ativos foram publicados pela autora no commit
 [`2e72191`](https://github.com/brublurryface/sanaka/commit/2e72191b45dee334e30459eb091e6b8fea7aa86c),
 na branch `loading-creatures`. A integração reutiliza esses objetos Git sem
 redesenhar, converter, redimensionar ou reenviar imagens.
 
-| Rota           | Estado                                  | Variante       |
-| -------------- | --------------------------------------- | -------------- |
-| `/posts`       | Requisição inicial da listagem          | Vāsuki V3      |
-| `/posts/:slug` | `state().status === 'loading'`          | Maṇināga V3    |
-| `/sanaka-loka` | Requisição inicial e paginação compacta | Śabala Rock V4 |
-| `/sobre`       | Requisição dos ciclos do quebra-cabeças | Saṃvit V17     |
+| Rota           | Estado                                  | Variante        |
+| -------------- | --------------------------------------- | --------------- |
+| `/posts`       | Requisição inicial da listagem          | Vāsuki V3       |
+| `/posts/:slug` | `state().status === 'loading'`          | Maṇināga V3     |
+| `/sanaka-loka` | Requisição inicial e paginação compacta | Śabala Hysteria |
+| `/sobre`       | Requisição dos ciclos do quebra-cabeças | Saṃvit V17      |
 
 `src/app/shared/loading-indicator/loading-artwork.ts` centraliza os caminhos e as
 proporções. `PageLoading` registra a requisição inicial em `PageLoadingState`;
@@ -31,14 +36,15 @@ O conteúdo já carregado continua disponível durante solicitações adicionais
 As mensagens de carregamento ficam exclusivamente disponíveis a leitores de
 tela; a palavra LOADING que integra as composições permanece decorativa.
 
-O palco das serpentes pode ocupar até 1120 px; os palcos de Śabala e Saṃvit,
-até 1200 px. O viewport disponível limita ambos os eixos, preservando os arquivos
+O palco das serpentes pode ocupar até 1120 px; o de Śabala, 896 px; e o de Saṃvit,
+1200 px. O viewport disponível limita ambos os eixos, preservando os arquivos
 inteiros em desktop, mobile e orientação horizontal. As notas, as camadas e os
 tempos das composições permanecem os mesmos. Saṃvit não recebe a palavra LOADING.
 
-O `<picture>` usa a animação somente com `prefers-reduced-motion: no-preference`;
-no modo reduzido, usa o poster e desativa os movimentos CSS. A região de status
-é única, com texto Transloco em português e inglês e ilustrações decorativas.
+Nas variantes de serpentes e Saṃvit, o `<picture>` usa a animação somente com
+`prefers-reduced-motion: no-preference`; no modo reduzido, usa o poster e desativa
+os movimentos CSS. Śabala aplica essa preferência dentro do documento recuperado.
+A mensagem externa de status usa Transloco em português e inglês.
 Não há espera mínima, timer artificial ou dependência de novas bibliotecas.
 
 A categoria editorial passa a usar o slug **sanaka-loka**, resolvendo seu ID no
