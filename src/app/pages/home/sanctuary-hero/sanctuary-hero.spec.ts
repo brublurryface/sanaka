@@ -18,8 +18,8 @@ class MockTranslocoLoader implements TranslocoLoader {
           },
           intro: 'Hero intro text.',
           action: {
-            enter: 'Enter',
-            read: 'Read',
+            enter: 'Find Saṃvit',
+            read: 'Enter the sanctuary',
           },
           scroll: {
             ariaLabel: 'Scroll aria label',
@@ -77,14 +77,15 @@ describe('SanctuaryHero', () => {
     );
   });
 
-  it('should contain the destination links', () => {
+  it('should present sanctuary entry before finding Samvit, with the correct destinations', () => {
     const fixture = TestBed.createComponent(SanctuaryHero);
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
-    const links = Array.from(element.querySelectorAll('a'));
+    const links = Array.from(element.querySelectorAll('.hero-actions a'));
 
-    expect(links.map((link) => link.getAttribute('href'))).toContain('/samvit');
-    expect(links.map((link) => link.getAttribute('href'))).toContain('/posts');
+    expect(links.map((link) => link.getAttribute('href'))).toEqual(['/posts', '/samvit']);
+    expect(links[0].textContent).toContain('Enter the sanctuary');
+    expect(links[1].textContent).toContain('Find Saṃvit');
   });
 
   it('should contain the scroll link and Samvit image alt text', () => {
