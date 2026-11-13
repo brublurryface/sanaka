@@ -1204,7 +1204,10 @@
       },
       "list": {
         "eyebrow": "Open circuits",
-        "title": "Choose an experiment",
+        "title": {
+          "line1": "Choose",
+          "line2": "an experiment."
+        },
         "intro": "Each page explores a question I had while studying. You interact with the example, follow the interface reaction, and then visit the code responsible for the movement."
       },
       "available": {

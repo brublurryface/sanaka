@@ -1204,7 +1204,10 @@
       },
       "list": {
         "eyebrow": "Circuitos abertos",
-        "title": "Escolha uma experiência",
+        "title": {
+          "line1": "Escolha",
+          "line2": "uma experiência."
+        },
         "intro": "Cada página investiga uma dúvida que eu tive enquanto estudava. Você interfere no exemplo, acompanha a reação da interface e depois visita o código responsável pelo movimento."
       },
       "available": {
