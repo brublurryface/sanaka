@@ -270,12 +270,16 @@ describe('Sanakaverse', () => {
         ?.classList.contains('loading-indicator--compact'),
     ).toBe(true);
     expect(compiled.querySelectorAll('.sanakaverse-pagination [role="status"]')).toHaveLength(1);
+    const frame = compiled.querySelector('iframe');
+    expect(frame?.getAttribute('src')).toBe('/loadings/sabala/hysteria/index.html');
     pending.next(bookPage(2, 101));
     pending.complete();
     fixture.detectChanges();
     expect(compiled.querySelectorAll('.sanakaverse-book')).toHaveLength(24);
     expect(button?.disabled).toBe(false);
     expect(compiled.querySelector('app-loading-indicator')).toBeNull();
+    expect(compiled.querySelector('iframe')).toBeNull();
+    expect(frame?.isConnected).toBe(false);
   });
 
   it('should retry the failed next page without losing or duplicating previous books', () => {

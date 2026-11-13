@@ -1,53 +1,38 @@
 @if (artwork(); as art) {
-  <div
-    class="loading-stage"
-    [class.loading-stage--ready]="artworkReady()"
-    [attr.data-kind]="art.kind"
-    [style.--artwork-ratio]="art.width + ' / ' + art.height"
-    aria-hidden="true"
-  >
-    @if (art.kind === 'snake') {
-      <span class="snake-word">LOADING...</span>
-    } @else if (art.kind === 'music') {
-      <svg class="music-waves" viewBox="0 0 896 520" fill="none" focusable="false">
-        <path class="music-wave" d="M20 250 C150 125 260 375 448 250 S730 125 876 250" />
-        <path
-          class="music-wave music-wave--second"
-          d="M20 285 C150 410 260 160 448 285 S730 410 876 285"
-        />
-      </svg>
-      <div class="music-word-track">
-        <span class="music-word">
-          @for (letter of letters; track $index) {
-            <span class="music-letter" [style.animation-delay.s]="$index * -0.12">{{
-              letter
-            }}</span>
-          }
-        </span>
-      </div>
-      @for (note of notes; track $index) {
-        <span
-          class="music-note"
-          [style.left.%]="note.x"
-          [style.top.%]="note.y"
-          [style.color]="note.color"
-          [style.animation-delay.s]="note.delay"
-          >{{ note.symbol }}</span
-        >
+  @if (art.kind === 'music') {
+    <iframe
+      class="loading-stage loading-stage--embed"
+      data-kind="music"
+      src="/loadings/sabala/hysteria/index.html"
+      [title]="'Śabala — ' + label()"
+      loading="eager"
+      sandbox="allow-scripts allow-same-origin"
+      tabindex="-1"
+    ></iframe>
+  } @else {
+    <div
+      class="loading-stage"
+      [class.loading-stage--ready]="artworkReady()"
+      [attr.data-kind]="art.kind"
+      [style.--artwork-ratio]="art.width + ' / ' + art.height"
+      aria-hidden="true"
+    >
+      @if (art.kind === 'snake') {
+        <span class="snake-word">LOADING...</span>
       }
-    }
-    <picture class="loading-artwork">
-      <source media="(prefers-reduced-motion: no-preference)" [srcset]="art.animated" />
-      <img
-        [src]="art.poster"
-        [width]="art.width"
-        [height]="art.height"
-        alt=""
-        decoding="async"
-        (load)="startDecoration()"
-        (error)="hideFailedArtwork()"
-      />
-    </picture>
-  </div>
+      <picture class="loading-artwork">
+        <source media="(prefers-reduced-motion: no-preference)" [srcset]="art.animated" />
+        <img
+          [src]="art.poster"
+          [width]="art.width"
+          [height]="art.height"
+          alt=""
+          decoding="async"
+          (load)="startDecoration()"
+          (error)="hideFailedArtwork()"
+        />
+      </picture>
+    </div>
+  }
 }
 <p class="loading-label">{{ label() }}</p>

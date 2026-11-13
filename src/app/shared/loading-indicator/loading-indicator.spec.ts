@@ -21,7 +21,6 @@ describe('LoadingIndicator', () => {
   it.each([
     ['vasuki', 'apng', 734, 188],
     ['maninaga', 'webp', 734, 188],
-    ['sabala', 'webp', 460, 460],
     ['samvit', 'webp', 1500, 760],
   ] as const)(
     'should select only %s with a static, SSR-safe reduced-motion fallback',
@@ -61,20 +60,24 @@ describe('LoadingIndicator', () => {
     },
   );
 
-  it('should decorate Śabala with one whole word, two waves and nine differently colored notes', () => {
+  it('should isolate the recovered Śabala prototype in an eagerly loaded, named sandbox', () => {
     const host = render('sabala');
-    const notes = [...host.querySelectorAll<HTMLElement>('.music-note')];
+    const frame = host.querySelector('iframe');
 
-    expect(host.querySelectorAll('.music-word-track')).toHaveLength(1);
-    expect(host.querySelectorAll('.music-word')).toHaveLength(1);
-    expect(
-      [...host.querySelectorAll('.music-letter')].map((letter) => letter.textContent).join(''),
-    ).toBe('LOADING...');
-    expect(host.querySelectorAll('.music-wave')).toHaveLength(2);
-    expect(notes).toHaveLength(9);
-    expect(new Set(notes.map((note) => note.style.color)).size).toBe(9);
-    expect(new Set(notes.map((note) => `${note.style.left},${note.style.top}`)).size).toBe(9);
+    expect(frame?.getAttribute('src')).toBe('/loadings/sabala/hysteria/index.html');
+    expect(frame?.title).toBe('Śabala — Reunindo fragmentos de Sanaka');
+    expect(frame?.getAttribute('loading')).toBe('eager');
+    expect(frame?.getAttribute('sandbox')).toBe('allow-scripts allow-same-origin');
+    expect(frame?.closest('[aria-hidden="true"]')).toBeNull();
+    expect(host.querySelectorAll('iframe')).toHaveLength(1);
+    expect(host.querySelector('picture')).toBeNull();
+    expect(host.querySelector('canvas, svg, .music-word, .music-note')).toBeNull();
     expect(host.querySelector('audio')).toBeNull();
+    expect(host.getAttribute('role')).toBe('status');
+
+    render('vasuki');
+    expect(frame?.isConnected).toBe(false);
+    expect(host.querySelector('iframe')).toBeNull();
   });
 
   it('should leave Saṃvit and her footprints entirely inside the approved image', () => {
@@ -119,5 +122,6 @@ describe('LoadingIndicator', () => {
 
     expect(host.classList.contains('loading-indicator--compact')).toBe(true);
     expect(host.querySelector('.loading-label')?.textContent).toBe('Loading books…');
+    expect(host.querySelector('iframe')?.title).toBe('Śabala — Loading books…');
   });
 });
