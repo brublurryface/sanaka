@@ -20,7 +20,11 @@ class MockTranslocoLoader implements TranslocoLoader {
             intro: 'Choose an experiment.',
             imageAlt: 'Saṃvit in the Matrix laboratory.',
           },
-          list: { eyebrow: 'Open circuits', title: 'Experiments', intro: 'Choose one.' },
+          list: {
+            eyebrow: 'Open circuits',
+            title: { line1: 'Choose', line2: 'an experiment.' },
+            intro: 'Choose one.',
+          },
           available: {
             status: 'Available',
             title: 'Components in conversation',

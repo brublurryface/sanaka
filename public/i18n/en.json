@@ -68,7 +68,7 @@
         "line1": "Who transcends",
         "line2": "Sanaka?"
       },
-      "intro": "A personal puzzle that unfolds without Time serving as a reliable ally in the process. Time is the challenge itself — as is its origin.",
+      "intro": "A personal puzzle that unfolds without Time\nserving as a reliable ally in the process. Time is the challenge itself...\n...as is its origin.",
       "imageAlt": "Saṃvit looks over her shoulder as shadow dragons stretch across the floor before a luminous passage."
     },
     "puzzle": {
@@ -110,7 +110,8 @@
       "eyebrow": "Contact",
       "title": {
         "line1": "Among voices,",
-        "line2": "realities and paths"
+        "line2": "realities",
+        "accent": "and paths."
       },
       "intro": "Communication through the reality of the senses and sensations: as direct as most of the interactions you experience in your everyday life.",
       "imageAlt": "Saṃvit and Sarama observe a cloud of voices in a dark room lit by lanterns and incense."
@@ -184,9 +185,9 @@
       "eyebrow": "Sanaka-loka",
       "title": {
         "line1": "A library",
-        "line2": "between worlds"
+        "line2": "between worlds."
       },
-      "intro": "<strong>Loka</strong> (लोक): <em>world, abode, plane of existence, or region of the universe</em>. Different <strong>characters</strong>: different <strong>lokas</strong>. Expand what you have learned so far.\nHere, thinking with your brain alone will not help you understand what you will find.",
+      "intro": "<strong>Loka</strong> (लोक): <em>world, abode, plane of existence, or region of the universe</em>.\nDifferent <strong>characters</strong>: different <strong>lokas</strong>.\nExpand what you have learned so far.\nHere, thinking with your brain alone will not help you understand what\nyou will find.",
       "imageAlt": "Mors writes with a golden quill in a large book while Saṃvit watches, among floating books in a cosmic library."
     },
     "collection": {
@@ -357,7 +358,10 @@
   "posts": {
     "header": {
       "eyebrow": "Sanaka library",
-      "title": "Sanctuary publications",
+      "title": {
+        "start": "Publications from the",
+        "accent": "sanctuary."
+      },
       "intro": "When autocomplete stops working.\nDialogues like those in your own mind:\nwithout a subject, or even without a specific addressee.",
       "imageAlt": "Saṃvit, Nandinī, and Bhū watch magical books in a celestial library.",
       "sanakaverseLink": "Travel to Sanaka-loka"
@@ -1200,7 +1204,10 @@
       },
       "list": {
         "eyebrow": "Open circuits",
-        "title": "Choose an experiment",
+        "title": {
+          "line1": "Choose",
+          "line2": "an experiment."
+        },
         "intro": "Each page explores a question I had while studying. You interact with the example, follow the interface reaction, and then visit the code responsible for the movement."
       },
       "available": {
