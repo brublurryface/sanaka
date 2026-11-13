@@ -68,7 +68,7 @@
         "line1": "Quem transcende",
         "line2": "Sanaka?"
       },
-      "intro": "Um quebra-cabeça pessoal que se desvenda sem que o Tempo seja um aliado coerente no processo. Ele é o próprio desafio — assim como a sua origem.",
+      "intro": "Um quebra-cabeça pessoal que se desvenda sem que o Tempo\nseja um aliado coerente no processo. Ele é o próprio desafio...\n...assim como a sua origem.",
       "imageAlt": "Saṃvit olha por cima do ombro enquanto dragões de sombra se projetam pelo chão diante de uma passagem luminosa."
     },
     "puzzle": {
@@ -110,7 +110,8 @@
       "eyebrow": "Contato",
       "title": {
         "line1": "Entre vozes,",
-        "line2": "realidades e caminhos"
+        "line2": "realidades",
+        "accent": "e caminhos."
       },
       "intro": "Comunicação através da realidade dos sentidos e das sensações: direta como a maioria das interações que você vive no seu dia a dia.",
       "imageAlt": "Saṃvit e Sarama observam uma nuvem de vozes em uma sala escura iluminada por lanternas e incensos."
@@ -184,9 +185,9 @@
       "eyebrow": "Sanaka-loka",
       "title": {
         "line1": "Biblioteca",
-        "line2": "entre mundos"
+        "line2": "entre mundos."
       },
-      "intro": "<strong>Loka</strong> (लोक): <em>mundo, morada, plano de existência ou região do universo</em>. Diferentes <strong>personagens</strong>: diferentes <strong>lokas</strong>. Expanda o que você aprendeu até hoje.\nAqui, pensar apenas com o cérebro não irá te ajudar a entender o que encontrará.",
+      "intro": "<strong>Loka</strong> (लोक): <em>mundo, morada, plano de existência ou região do universo</em>.\nDiferentes <strong>personagens</strong>: diferentes <strong>lokas</strong>.\nExpanda o que você aprendeu até hoje.\nAqui, pensar apenas com o cérebro não irá te ajudar a entender o que\nencontrará.",
       "imageAlt": "Mors escreve com uma pena dourada em um grande livro enquanto Saṃvit observa, entre livros flutuantes em uma biblioteca cósmica."
     },
     "collection": {
@@ -357,7 +358,10 @@
   "posts": {
     "header": {
       "eyebrow": "Biblioteca em Sanaka",
-      "title": "Publicações do santuário",
+      "title": {
+        "start": "Publicações do",
+        "accent": "santuário."
+      },
       "intro": "Quando o autocompletar para de funcionar.\nDiálogos como aqueles em sua própria mente:\nsem um sujeito ou até sem um vocativo específico.",
       "imageAlt": "Saṃvit, Nandinī e Bhū observam livros mágicos em uma biblioteca celestial.",
       "sanakaverseLink": "Viajar para Sanaka-loka"
@@ -1200,7 +1204,10 @@
       },
       "list": {
         "eyebrow": "Circuitos abertos",
-        "title": "Escolha uma experiência",
+        "title": {
+          "line1": "Escolha",
+          "line2": "uma experiência."
+        },
         "intro": "Cada página investiga uma dúvida que eu tive enquanto estudava. Você interfere no exemplo, acompanha a reação da interface e depois visita o código responsável pelo movimento."
       },
       "available": {
