@@ -106,7 +106,18 @@
         "test": {
           "builder": "@angular/build:unit-test",
           "options": {
-            "exclude": ["src/server/**/*.spec.ts"]
+            "exclude": ["src/server/**/*.spec.ts", "src/app/**/*.browser.spec.ts"]
+          },
+          "configurations": {
+            "browser-security": {
+              "browsers": ["ChromiumHeadless"],
+              "include": [
+                "src/app/core/wordpress/wordpress-text.service.spec.ts",
+                "src/app/core/wordpress/wordpress-text.browser.spec.ts"
+              ],
+              "exclude": ["src/server/**/*.spec.ts"],
+              "runnerConfig": "vitest.browser-security.config.ts"
+            }
           }
         }
       }
