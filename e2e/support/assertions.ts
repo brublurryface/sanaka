@@ -40,14 +40,25 @@ export async function expectNativeScroll(
   });
   await link.click();
   await expect(page).toHaveURL(new RegExp(`#${targetId}$`));
-  await expect
-    .poll(() =>
-      page.locator(`#${targetId}`).evaluate((element) => {
-        const margin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
-        return Math.abs(element.getBoundingClientRect().top - margin);
-      }),
-    )
-    .toBeLessThan(3);
+  try {
+    await expect
+      .poll(() =>
+        page.locator(`#${targetId}`).evaluate((element) => {
+          const margin = parseFloat(getComputedStyle(element).scrollMarginTop) || 0;
+          return Math.abs(element.getBoundingClientRect().top - margin);
+        }),
+      )
+      .toBeLessThan(3);
+  } catch (cause) {
+    const diagnostic = await page.evaluate(() => ({
+      y: window.scrollY,
+      history: window.history.state,
+      probe: window.sanakaBrowserProbe,
+    }));
+    throw new Error(`Native anchor did not reach ${targetId}: ${JSON.stringify(diagnostic)}`, {
+      cause,
+    });
+  }
   const result = await page.evaluate(() => ({
     to: window.scrollY,
     positions: window.sanakaBrowserProbe.scrollPositions,

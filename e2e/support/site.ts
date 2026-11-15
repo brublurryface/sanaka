@@ -180,6 +180,7 @@ declare global {
       loadingFrames: number;
       exposedShell: string[];
       scrollPositions: number[];
+      navigationEvents: { type: string; y: number; navigationId?: number }[];
     };
   }
 }
@@ -198,6 +199,7 @@ export const test = base.extend<{ site: Site }>({
           loadingFrames: 0,
           exposedShell: [] as string[],
           scrollPositions: [] as number[],
+          navigationEvents: [] as { type: string; y: number; navigationId?: number }[],
         };
         window.sanakaBrowserProbe = probe;
         const inspect = () => {
@@ -223,6 +225,16 @@ export const test = base.extend<{ site: Site }>({
         window.addEventListener('scroll', () => {
           if (probe.scrollPositions.length < 500) probe.scrollPositions.push(window.scrollY);
         });
+        for (const type of ['popstate', 'hashchange', 'scrollend']) {
+          window.addEventListener(type, () => {
+            if (probe.navigationEvents.length < 30)
+              probe.navigationEvents.push({
+                type,
+                y: window.scrollY,
+                navigationId: window.history.state?.navigationId,
+              });
+          });
+        }
       });
       try {
         await use(site);

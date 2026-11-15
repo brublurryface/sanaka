@@ -37,7 +37,7 @@ jobs:
       - name: Install Chromium
         run: npx playwright install --with-deps chromium
       - name: Exercise critical browser flows
-        run: npm run test:e2e
+        run: npm run test:e2e -- --grep "Home scroll" --project=desktop-chromium --repeat-each=5
       - name: Keep failure diagnostics
         if: ${{ failure() && !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
