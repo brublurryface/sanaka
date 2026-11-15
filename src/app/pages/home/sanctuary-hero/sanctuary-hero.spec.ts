@@ -93,7 +93,7 @@ describe('SanctuaryHero', () => {
     fixture.detectChanges();
     const element = fixture.nativeElement as HTMLElement;
 
-    expect(element.querySelector('a[href="#sanctuary-paths"]')).toBeTruthy();
+    expect(element.querySelector('a[href="/#sanctuary-paths"]')).toBeTruthy();
     expect(element.querySelector('img')?.getAttribute('alt')).toBe('Saṃvit');
   });
 });

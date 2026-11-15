@@ -25,6 +25,8 @@ O runner inicia o build em `127.0.0.1:4300`, espera `/api/health` e encerra o pr
 
 ## Isolamento e diagnósticos
 
+Na primeira execução, a regressão identificou que o link nativo da Home podia emitir `popstate` e ser interpretado como navegação de histórico: o fragmento aparecia na URL, mas a restauração do roteador interrompia a rolagem. O link agora usa `RouterLink` com `fragment`, passando pelo `PageAnchorNavigation` existente, assim como a Newsletter. A rolagem continua usando a API nativa e o CSS aprovado; não foi introduzida duração própria.
+
 Cada teste recebe contexto de navegador e fixtures novos. As respostas reproduzem as categorias editoriais obrigatórias `romance`, `sobre` e `sanaka-loka`, a árvore de categorias e os cabeçalhos de paginação do WordPress. As esperas são controladas por respostas que o teste libera, sem `waitForTimeout`, dependência do CMS ou alteração do estado interno Angular.
 
 O navegador intercepta WordPress e disponibilidade da Newsletter. Escritas HTTP e serviços externos não previstos são bloqueados e fazem o teste falhar. Fontes externas usam fallback local; as imagens e animações locais permanecem as do repositório. Nenhuma oferta, inscrição ou mensagem real é enviada.
