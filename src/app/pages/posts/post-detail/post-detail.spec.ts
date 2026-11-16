@@ -182,9 +182,11 @@ describe('PostDetailPage', () => {
 
     expect(postsService.getPostBySlug).toHaveBeenCalledWith('voce');
     expect(compiled.querySelector('h1')?.textContent?.trim()).toBe('VOCÊ');
+    expect(compiled.querySelector('h1')?.getAttribute('lang')).toBe('pt-BR');
     expect(compiled.querySelector('.post-reader__content')?.textContent?.trim()).toBe(
       'Quem é você?',
     );
+    expect(compiled.querySelector('.post-reader__content')?.getAttribute('lang')).toBe('pt-BR');
     expect(compiled.querySelector('.post-reader__categories')?.textContent).toContain(
       'Pensamentos',
     );
@@ -215,6 +217,10 @@ describe('PostDetailPage', () => {
       'https://example.com/voce.jpg',
     );
     expect(compiled.querySelectorAll('.post-detail__adjacent a')).toHaveLength(2);
+    for (const title of compiled.querySelectorAll('.post-detail__adjacent strong')) {
+      expect(title.getAttribute('lang')).toBe('pt-BR');
+    }
+    expect(compiled.querySelector('.post-detail__art img')?.getAttribute('lang')).toBe('pt-BR');
     expect(oboloService.getTotal).toHaveBeenCalledWith('nandini');
     expect(compiled.querySelector('.post-reader__obolo--desktop')?.textContent).toContain(
       'Óbolo de Nandinī',

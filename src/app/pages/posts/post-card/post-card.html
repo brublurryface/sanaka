@@ -10,6 +10,7 @@
       <img
         [src]="post().coverImageUrl"
         [alt]="post().coverImageAlt ?? ''"
+        [attr.lang]="contentLanguage"
         loading="lazy"
         decoding="async"
       />
@@ -37,13 +38,13 @@
       </time>
     </div>
 
-    <h2 class="post-card__title">
+    <h2 class="post-card__title" [attr.lang]="contentLanguage">
       <a [routerLink]="['/posts', post().slug]" target="_blank" rel="noopener">
         {{ post().title }}
       </a>
     </h2>
 
-    <p class="post-card__excerpt">
+    <p class="post-card__excerpt" [attr.lang]="contentLanguage">
       {{ post().excerpt }}
     </p>
   </div>

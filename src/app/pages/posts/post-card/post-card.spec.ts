@@ -171,6 +171,12 @@ describe('PostCard', () => {
     expect(text).toContain('Aug');
     expect(text).toContain('28');
     expect(text).toContain('2026');
+    expect(compiled.querySelector('.post-card__title')?.getAttribute('lang')).toBe('pt-BR');
+    expect(compiled.querySelector('.post-card__excerpt')?.getAttribute('lang')).toBe('pt-BR');
+    expect(compiled.querySelector('.post-card__title')?.textContent).toContain(post.title);
+    expect(compiled.querySelector('.post-card__category a')?.getAttribute('aria-label')).toBe(
+      'Browse publications in Bruna',
+    );
   });
 
   it('should render the cover image when coverImageUrl is provided', () => {
@@ -180,6 +186,7 @@ describe('PostCard', () => {
     expect(image).toBeTruthy();
     expect(image?.getAttribute('src')).toBe('/images/home/hero.jpg');
     expect(image?.getAttribute('alt')).toBe('Pessoa meditando em silêncio');
+    expect(image?.getAttribute('lang')).toBe('pt-BR');
     expect(image?.getAttribute('loading')).toBe('lazy');
     expect(image?.getAttribute('decoding')).toBe('async');
   });

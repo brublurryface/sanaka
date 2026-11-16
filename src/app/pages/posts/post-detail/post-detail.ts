@@ -18,6 +18,7 @@ import { catchError, distinctUntilChanged, map, of, startWith, Subject, switchMa
 import { PageLoading } from '../../../shared/loading-indicator/page-loading';
 import { PostDetail } from '../post';
 import { SanakaSeoService } from '../../../core/navigation/sanaka-seo.service';
+import { SANAKA_WORDPRESS_CONTENT_LANGUAGE } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressPostsService } from '../data-access/wordpress-posts.service';
 import { CharacterOboloStore } from './character-obolo.store';
 import { SanakaOboloDialog } from './sanaka-obolo-dialog/sanaka-obolo-dialog';
@@ -62,6 +63,7 @@ export class PostDetailPage {
   });
 
   readonly readingProgress = signal(0);
+  readonly contentLanguage = inject(SANAKA_WORDPRESS_CONTENT_LANGUAGE);
   readonly oboloState = this.oboloStore.state;
 
   readonly state = toSignal(

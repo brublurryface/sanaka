@@ -1,6 +1,12 @@
 import { HttpParams } from '@angular/common/http';
 import { InjectionToken } from '@angular/core';
 
+/** O CMS publica em português, independentemente do idioma escolhido para a interface. */
+export const SANAKA_WORDPRESS_CONTENT_LANGUAGE = new InjectionToken<string>(
+  'SANAKA_WORDPRESS_CONTENT_LANGUAGE',
+  { factory: () => 'pt-BR' },
+);
+
 /** Regras editoriais que delimitam o conteúdo público de Sanaka no WordPress compartilhado. */
 export interface WordPressContentPolicy {
   readonly excludedCategorySlugs: readonly string[];

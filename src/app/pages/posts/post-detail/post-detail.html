@@ -1,4 +1,4 @@
-<main class="post-detail">
+<div class="post-detail">
   @switch (state().status) {
     @case ('loading') {
       <app-page-loading variant="maninaga" labelKey="posts.detail.loading" />
@@ -18,7 +18,11 @@
     @case ('success') {
       @if (post(); as currentPost) {
         <figure class="post-detail__art">
-          <img [src]="currentPost.coverImageUrl" [alt]="currentPost.coverImageAlt ?? ''" />
+          <img
+            [src]="currentPost.coverImageUrl"
+            [alt]="currentPost.coverImageAlt ?? ''"
+            [attr.lang]="contentLanguage"
+          />
         </figure>
 
         <div class="post-detail__threshold">
@@ -59,7 +63,7 @@
                 </nav>
               }
 
-              <h1 id="post-title">{{ currentPost.title }}</h1>
+              <h1 id="post-title" [attr.lang]="contentLanguage">{{ currentPost.title }}</h1>
 
               <div class="post-reader__meta">
                 <time [attr.datetime]="currentPost.publishedAt">{{ formattedPublishedAt() }}</time>
@@ -87,7 +91,11 @@
               </div>
             </header>
 
-            <div class="post-reader__content" [innerHTML]="currentPost.contentHtml"></div>
+            <div
+              class="post-reader__content"
+              [attr.lang]="contentLanguage"
+              [innerHTML]="currentPost.contentHtml"
+            ></div>
           </article>
 
           <aside class="post-reader__taxonomy">
@@ -197,7 +205,7 @@
             @if (currentPost.previous; as previous) {
               <a [routerLink]="['/posts', previous.slug]" target="_blank" rel="noopener">
                 <span>{{ 'posts.detail.previous' | transloco }}</span>
-                <strong>← {{ previous.title }}</strong>
+                <strong [attr.lang]="contentLanguage">← {{ previous.title }}</strong>
               </a>
             } @else {
               <span></span>
@@ -211,7 +219,7 @@
                 rel="noopener"
               >
                 <span>{{ 'posts.detail.next' | transloco }}</span>
-                <strong>{{ next.title }} →</strong>
+                <strong [attr.lang]="contentLanguage">{{ next.title }} →</strong>
               </a>
             }
           </nav>
@@ -219,4 +227,4 @@
       }
     }
   }
-</main>
+</div>
