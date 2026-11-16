@@ -106,7 +106,10 @@ Verifica os cabeçalhos de Home, Posts, artigo, Sobre, Sanaka-loka, Matrix,
 Contato e arquivos; preserva erro controlado do parser de contato sem SMTP.
 Um script inline sintético gera evento de violação com disposição `report`
 e continua executando, enquanto a interface Angular permanece interativa.
-Um pai de outra origem é recusado no navegador.
+Um pai de outra origem é recusado no navegador. A fixture desse pai recebe
+permissão de acesso à rede local somente no seu contexto e origem de teste,
+para que a verificação alcance a CSP em vez de parar na proteção de loopback.
+A asserção exige o erro de bloqueio da resposta, não uma falha de acesso à rede.
 
 Śabala é testado na mesma origem com movimento normal e reduzido:
 imagem aprovada decodificada, LOADING, nove notas, duas linhas ornamentais,

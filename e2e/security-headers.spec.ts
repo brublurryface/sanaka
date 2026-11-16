@@ -117,9 +117,11 @@ for (const reducedMotion of [false, true]) {
   });
 }
 
-test('blocks a different origin from framing Śabala', async ({ page, request, baseURL }) => {
+test('blocks cross-origin framing of Śabala', async ({ page, request, baseURL, context }) => {
   const parent = new URL('/cross-origin-frame-test', baseURL);
   parent.port = String(Number(parent.port) + 1);
+  // The fulfilled parent has no server address space; permit its controlled loopback request.
+  await context.grantPermissions(['local-network-access'], { origin: parent.origin });
   const renderer = new URL('/loadings/sabala/hysteria/index.html', baseURL).href;
   const response = await request.get(renderer);
   expect(response.status()).toBe(200);
