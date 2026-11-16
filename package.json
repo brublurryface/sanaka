@@ -19,7 +19,9 @@
     "matrix:source:sync": "node scripts/matrix-study-source.mjs",
     "matrix:source:check": "node scripts/matrix-study-source.mjs --check",
     "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run test:server && npm run test:coverage && npm run duplication:check && npm run build",
-    "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs"
+    "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:types": "tsc --project tsconfig.e2e.json"
   },
   "private": true,
   "engines": {
@@ -48,6 +50,7 @@
     "@angular/cli": "^22.2.6",
     "@angular/compiler-cli": "^22.2.4",
     "@angular/platform-browser-dynamic": "^22.2.4",
+    "@playwright/test": "^1.65.1",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "@types/nodemailer": "^8.0.2",
