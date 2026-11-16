@@ -24,6 +24,8 @@ export async function expectShell(page: Page, visible: boolean): Promise<void> {
 export async function expectReady(page: Page): Promise<void> {
   await expect(fullPageLoading(page)).toHaveCount(0);
   await expectShell(page, true);
+  await expect(page.getByRole('main')).toHaveCount(1);
+  await expect(page.locator('main, [role="main"]')).toHaveCount(1);
 }
 
 /** Observe the browser's own scrolling, without replacing scrollIntoView or setting a duration. */

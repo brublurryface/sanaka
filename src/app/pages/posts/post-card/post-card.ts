@@ -5,6 +5,7 @@ import { Router, RouterLink } from '@angular/router';
 import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
 
 import { Post } from '../post';
+import { SANAKA_WORDPRESS_CONTENT_LANGUAGE } from '../../../core/wordpress/wordpress-content-policy';
 
 @Component({
   imports: [RouterLink, TranslocoPipe],
@@ -19,6 +20,7 @@ export class PostCard {
   private readonly transloco = inject(TranslocoService);
 
   readonly post = input.required<Post>();
+  readonly contentLanguage = inject(SANAKA_WORDPRESS_CONTENT_LANGUAGE);
 
   private readonly activeLanguage = toSignal(this.transloco.langChanges$, {
     initialValue: this.transloco.getActiveLang(),
