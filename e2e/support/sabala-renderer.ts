@@ -6,7 +6,10 @@ const rendererPath = '/loadings/sabala/hysteria/index.html';
 const rendererSelector = `app-root > app-loading-indicator iframe[src="${rendererPath}"]`;
 
 /** Waits for the recovered renderer to show its artwork and paint a functional frame. */
-export async function expectSabalaReady(page: Page): Promise<void> {
+export async function expectSabalaReady(
+  page: Page,
+  { reducedMotion = false }: { reducedMotion?: boolean } = {},
+): Promise<void> {
   await expect(page.locator(rendererSelector)).toBeVisible();
   const frame = page.frameLocator(rendererSelector);
   const artwork = frame.locator('img.sabala:visible');
@@ -20,6 +23,8 @@ export async function expectSabalaReady(page: Page): Promise<void> {
   await expect(frame.locator('.note')).toHaveCount(9);
   await expect(frame.locator('.lines .line')).toHaveCount(2);
 
+  // The original renderer deliberately clears the spectrum when motion is reduced.
+  await expect(frame.locator('.note').first()).toHaveCSS('animation-name', 'none');
   const spectrum = frame.locator('canvas#audio-spectrum');
   await expect(spectrum).toBeVisible();
   await expect
@@ -33,7 +38,7 @@ export async function expectSabalaReady(page: Page): Promise<void> {
         );
       }),
     )
-    .toBe(true);
+    .toBe(!reducedMotion);
 }
 
 /** Removing the node must also dispose of the iframe's browsing context and animation loop. */

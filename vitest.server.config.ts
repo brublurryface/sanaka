@@ -13,6 +13,8 @@ export default defineConfig({
         'src/server/contact-router.ts',
         'src/server/request-rate-limit.ts',
         'src/server/cache-policy.ts',
+        'src/server/security-headers.ts',
+        'src/server/csp-reports.ts',
         'src/server/runtime-options.ts',
         'src/server/http-request-log.ts',
         'src/server/legacy-wordpress-redirects.ts',

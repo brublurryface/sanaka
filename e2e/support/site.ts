@@ -4,6 +4,7 @@ import { article, books, categories, cycles } from '../fixtures/wordpress';
 
 type Reply = Parameters<Route['fulfill']>[0];
 export type RequestKind =
+  | 'csp'
   | 'policy'
   | 'categories'
   | 'archive'
@@ -99,6 +100,16 @@ class Site {
     await context.route('**/*', async (route) => {
       const request = route.request();
       const url = new URL(request.url());
+      if (
+        url.origin === origin &&
+        url.pathname === '/api/security/csp-reports' &&
+        request.method() === 'POST'
+      ) {
+        // Telemetry is also fulfilled locally; this does not permit application writes.
+        this.counts.set('csp', this.count('csp') + 1);
+        await route.fulfill({ status: 204 });
+        return;
+      }
       if (request.method() !== 'GET') {
         this.unexpectedRequests.push(`${request.method()} ${url.origin}${url.pathname}`);
         await route.abort('blockedbyclient');

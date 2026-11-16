@@ -8,10 +8,12 @@ import express from 'express';
 import { join } from 'node:path';
 import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
 import { createContactRouter } from './server/contact-router';
+import { createCspReportRouter } from './server/csp-reports';
 import { createHttpRequestLog } from './server/http-request-log';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
 import { readRuntimeOptions } from './server/runtime-options';
+import { CSP_REPORT_PATH, securityResponseHeaders } from './server/security-headers';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
@@ -22,6 +24,7 @@ const angularApp = new AngularNodeAppEngine({ allowedHosts: runtimeOptions.allow
 app.disable('x-powered-by');
 app.set('trust proxy', runtimeOptions.trustProxyHops);
 app.use(createHttpRequestLog());
+app.use(securityResponseHeaders);
 
 if (runtimeOptions.noIndex) {
   app.use((_request, response, next) => {
@@ -38,6 +41,7 @@ app.use('/api', (_request, response, next) => {
 // Verifica o processo sem chamar SMTP, Brevo ou WordPress a cada sondagem do Render.
 app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 
+app.use(CSP_REPORT_PATH, createCspReportRouter());
 app.use('/api/contact', createContactRouter());
 app.use('/api/newsletter', createNewsletterRouter());
 
