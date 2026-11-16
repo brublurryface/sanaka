@@ -35,3 +35,7 @@ jobs:
         run: npm ci
       - name: Validate source, tests, coverage and build
         run: npm run check
+      - name: Install Chromium for security regressions
+        run: npx playwright install --with-deps chromium
+      - name: Verify HTML conversion in Chromium
+        run: npm run test:browser:security

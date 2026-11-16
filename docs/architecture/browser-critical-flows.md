@@ -17,6 +17,7 @@ O runner inicia o build em `127.0.0.1:4300`, espera `/api/health` e encerra o pr
 ## Cenários
 
 - Loading inicial das quatro páginas: Posts, artigo, Sobre e Sanaka-loka. A arte precisa carregar; header, conteúdo e footer permanecem ocultos e inertes. Um observador de frames detecta exposição do shell enquanto o loading está presente.
+- Śabala usa o iframe original de Hysteria: os testes aguardam a imagem carregada e o primeiro frame desenhado no canvas, conferem LOADING, nove notas e duas linhas ornamentais e verificam a remoção do contexto do iframe ao terminar ou abandonar a página.
 - Posts aguardam a árvore de categorias, mesmo com a resposta das publicações disponível.
 - Voltar à Home durante uma espera remove o loading e impede que a resposta atrasada restaure a página abandonada.
 - Erro temporário de artigo e arquivo exige retentativa explícita e recupera o conteúdo sem duplicá-lo. Artigo inexistente oferece retorno ao arquivo.
@@ -33,6 +34,6 @@ O navegador intercepta WordPress e disponibilidade da Newsletter. Escritas HTTP 
 
 Erros não tratados da aplicação também reprovam o teste. Não há retentativa automática da suíte para esconder instabilidade. Em falha, o CI guarda trace, captura e console do navegador por três dias; são dados sintéticos de teste. Os relatórios gerados ficam fora do Git.
 
-As verificações de um único `main` e idioma editorial pertencem à entrega de acessibilidade seguinte. O teste específico do iframe de Śabala será acrescentado quando a PR #100 for incorporada; esta suíte verifica o loading disponível na revisão testada, sem importar essa implementação pendente.
+As verificações de um único `main` e idioma editorial pertencem à entrega de acessibilidade seguinte. A suíte inclui a integração de Śabala incorporada pela PR #100 e convive com a regressão de segurança do conversor HTML da PR #101, executada pelo workflow `Validate Sanaka`.
 
 Referências: [boas práticas do Playwright](https://playwright.dev/docs/best-practices), [respostas simuladas](https://playwright.dev/docs/mock) e [servidor do runner](https://playwright.dev/docs/test-webserver).

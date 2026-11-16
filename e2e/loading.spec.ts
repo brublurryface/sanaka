@@ -1,6 +1,7 @@
 import { article } from './fixtures/wordpress';
 import { expect, test, type RequestKind } from './support/site';
 import { expectReady, expectShell, fullPageLoading } from './support/assertions';
+import { expectSabalaReady, expectSabalaRemoved } from './support/sabala-renderer';
 
 const routes: readonly { path: string; kind: RequestKind; variant: string; content: string }[] = [
   { path: '/posts', kind: 'archive', variant: 'vasuki', content: article.title.rendered },
@@ -23,13 +24,17 @@ for (const route of routes) {
     await expect(loading).toBeVisible();
     await expect(loading).toHaveAttribute('data-variant', route.variant);
     await expectShell(page, false);
-    await expect
-      .poll(() =>
-        loading
-          .locator('img')
-          .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
-      )
-      .toBe(true);
+    if (route.variant === 'sabala') {
+      await expectSabalaReady(page);
+    } else {
+      await expect
+        .poll(() =>
+          loading
+            .locator('img')
+            .evaluate((image: HTMLImageElement) => image.complete && image.naturalWidth > 0),
+        )
+        .toBe(true);
+    }
     await expect
       .poll(() => page.evaluate(() => window.sanakaBrowserProbe.loadingFrames))
       .toBeGreaterThan(1);
@@ -38,6 +43,7 @@ for (const route of routes) {
     await expectReady(page);
     if (route.kind === 'books') {
       await expect(page.getByRole('link', { name: new RegExp(route.content) })).toBeVisible();
+      await expectSabalaRemoved(page);
     } else {
       await expect(page.getByRole('heading', { name: route.content, exact: true })).toBeVisible();
     }
@@ -72,6 +78,7 @@ for (const route of routes.filter((item) => item.kind !== 'article')) {
     await page.locator(`app-sanctuary-paths a[href="${route.path}"]`).click();
     await pending.requested;
     await expect(fullPageLoading(page)).toBeVisible();
+    if (route.variant === 'sabala') await expectSabalaReady(page);
     await page.goBack();
     await expect(page).toHaveURL('/');
     await expectReady(page);
@@ -79,5 +86,6 @@ for (const route of routes.filter((item) => item.kind !== 'article')) {
     await expect(page.locator('app-sanctuary-hero h1')).toBeVisible();
     await expect(fullPageLoading(page)).toHaveCount(0);
     await expect(page.getByText(route.content, { exact: true })).toHaveCount(0);
+    if (route.variant === 'sabala') await expectSabalaRemoved(page);
   });
 }

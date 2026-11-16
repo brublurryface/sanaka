@@ -8,8 +8,7 @@
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false",
-    "test:e2e": "playwright test",
-    "test:e2e:types": "tsc --project tsconfig.e2e.json",
+    "test:browser:security": "ng test --configuration=browser-security --watch=false",
     "test:server": "vitest run --config vitest.server.config.ts --coverage",
     "test:coverage": "ng test --watch=false --coverage --coverage-include=src/app/**/*.ts --coverage-exclude=src/app/**/*.routes.ts --coverage-reporters=text-summary --coverage-reporters=json-summary && node scripts/check-coverage.mjs",
     "duplication:check": "jscpd src/app --format typescript --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",
@@ -20,7 +19,9 @@
     "matrix:source:sync": "node scripts/matrix-study-source.mjs",
     "matrix:source:check": "node scripts/matrix-study-source.mjs --check",
     "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run test:server && npm run test:coverage && npm run duplication:check && npm run build",
-    "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs"
+    "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs",
+    "test:e2e": "playwright test",
+    "test:e2e:types": "tsc --project tsconfig.e2e.json"
   },
   "private": true,
   "engines": {
@@ -53,9 +54,11 @@
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
     "@types/nodemailer": "^8.0.2",
+    "@vitest/browser-playwright": "^4.1.12",
     "@vitest/coverage-v8": "^4.1.12",
     "jscpd": "^5.3.0",
     "jsdom": "^28.0.0",
+    "playwright": "^1.65.1",
     "prettier": "^3.8.1",
     "typescript": "~6.0.2",
     "vitest": "^4.1.12"
