@@ -1,0 +1,28 @@
+
+:root{--sanaka-gold-soft:#dabe89;--sanaka-loader-bg:#111817}
+*{box-sizing:border-box}
+body{margin:0;padding:28px 14px;background:#111817;color:#e8dfcd;font-family:Georgia,"Times New Roman",serif}
+h1{font-weight:500;font-size:1.25rem;max-width:900px;margin:0 auto 20px}
+p{max-width:900px;margin:16px auto;font:14px/1.65 system-ui,sans-serif;color:#c0c5be}
+.stage{position:relative;width:min(100%,896px);aspect-ratio:896/520;margin:auto;background:var(--sanaka-loader-bg);overflow:hidden;isolation:isolate;container-type:inline-size;border-radius:14px}
+.lines{position:absolute;inset:0;z-index:0;pointer-events:none}
+.line{position:absolute;left:4.5%;width:91%;height:8px;border-top:1px solid #cbb07d80;border-radius:100%;animation:music-line 1.5s ease-in-out infinite;opacity:.65}
+.line.a{top:39%}.line.b{top:48%;animation-delay:-.42s}
+@keyframes music-line{0%,100%{transform:translateY(0) skewY(0deg)}50%{transform:translateY(-5px) skewY(.35deg)}}
+.word{position:absolute;z-index:1;left:0;top:39.4%;display:inline-flex;align-items:baseline;white-space:nowrap;color:var(--sanaka-gold-soft);font-family:Georgia,"Times New Roman",serif;font-size:clamp(2rem,6.1cqw,3.44rem);font-weight:500;line-height:1;letter-spacing:.04em;animation:word-run 12s linear infinite;will-change:transform}
+.word .letter{display:inline-block;animation:letter-rock 1.5s ease-in-out infinite;animation-delay:calc(var(--i)*-.13s)}
+@keyframes word-run{from{transform:translateX(calc(-100% - 32px))}to{transform:translateX(calc(100cqw + 36px))}}
+@keyframes letter-rock{0%,100%{translate:0 0}20%{translate:0 -12px}45%{translate:0 4px}67%{translate:0 -9px}84%{translate:0 8px}}
+.note{position:absolute;left:var(--px);top:var(--py);z-index:1;display:block;font:normal clamp(1.5rem,4.6cqw,2.7rem)/1 "DejaVu Sans",Arial,sans-serif;color:var(--c);opacity:.95;animation:note-dance 3s ease-in-out infinite;animation-delay:var(--delay);pointer-events:none}
+@keyframes note-dance{0%,100%{transform:translateY(0) rotate(-7deg)}25%{transform:translateY(-12px) rotate(6deg)}50%{transform:translateY(-2px) rotate(-4deg)}75%{transform:translateY(10px) rotate(8deg)}}
+.sabala{position:absolute;left:calc((100% - 51.339%)/2);top:4.8077%;width:51.339%;height:auto;z-index:2;display:block;pointer-events:none;user-select:none}
+.sabala.still{display:none}
+@media(prefers-reduced-motion:reduce){.sabala.animated{display:none}.sabala.still{display:block}.word{animation:none;transform:translateX(7cqw)}.word .letter,.note,.line{animation:none}.word{top:43%;font-size:clamp(1.5rem,4cqw,2.25rem)}}
+
+.audio-spectrum{position:absolute;inset:0;width:100%;height:100%;z-index:0;pointer-events:none}
+.note{transform-origin:center center}
+
+
+/* Ajustes de integração, sem mudar os efeitos originais. */
+html,body { margin:0; padding:0; background:transparent; width:100%; height:100%; overflow:hidden; }
+.stage { width:min(100%,896px); margin:0 auto; background:transparent; border-radius:0; }
