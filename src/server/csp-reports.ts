@@ -118,13 +118,14 @@ export function createCspReportRouter({
     },
     (request, response) => {
       const body: unknown = request.body;
-      const reports = Array.isArray(body)
-        ? body.slice(0, 10).flatMap((item: unknown) =>
-            record(item) && item['type'] === 'csp-violation' ? [item['body']] : [],
-          )
-        : record(body)
-          ? [body['csp-report']]
-          : [];
+      const reports: unknown[] = [];
+      if (Array.isArray(body)) {
+        for (const item of body.slice(0, 10)) {
+          if (record(item) && item['type'] === 'csp-violation') reports.push(item['body']);
+        }
+      } else if (record(body)) {
+        reports.push(body['csp-report']);
+      }
       for (const report of reports) {
         const summary = summarize(report);
         if (!summary) continue;

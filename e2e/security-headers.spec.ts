@@ -95,10 +95,7 @@ test('observes an inline script violation while keeping Angular interactive', as
 });
 
 for (const reducedMotion of [false, true]) {
-  test(`allows original Śabala with reduced motion ${reducedMotion}`, async ({
-    page,
-    site,
-  }) => {
+  test(`allows original Śabala with reduced motion ${reducedMotion}`, async ({ page, site }) => {
     await page.emulateMedia({ reducedMotion: reducedMotion ? 'reduce' : 'no-preference' });
     const books = site.holdNext('books');
     const frameResponse = page.waitForResponse(
@@ -120,25 +117,26 @@ for (const reducedMotion of [false, true]) {
   });
 }
 
-test('rejects framing from a different origin in the browser', async ({ page, baseURL }) => {
+test('blocks a different origin from framing Śabala', async ({ page, request, baseURL }) => {
   const parent = new URL('/cross-origin-frame-test', baseURL);
-  parent.hostname = 'localhost';
+  parent.port = String(Number(parent.port) + 1);
   const renderer = new URL('/loadings/sabala/hysteria/index.html', baseURL).href;
+  const response = await request.get(renderer);
+  expect(response.status()).toBe(200);
+  expectHeaders(response);
   await page.route(parent.href, async (route) =>
     route.fulfill({
       contentType: 'text/html',
-      body: `<!doctype html><title>Controlled parent</title><iframe src="${renderer}"></iframe>`,
+      body: `<!doctype html><title>Controlled parent</title><link rel="icon" href="data:,"><iframe src="${renderer}"></iframe>`,
     }),
   );
-  const blocked = page.waitForEvent('console', {
-    predicate: (message) => /frame-ancestors|X-Frame-Options/iu.test(message.text()),
+  // Chromium can reject a frame before Playwright emits a response event.
+  const blocked = page.waitForEvent('requestfailed', {
+    predicate: (entry) => entry.url() === renderer,
+    timeout: 8_000,
   });
-  const response = page.waitForResponse(
-    (entry) => new URL(entry.url()).pathname === '/loadings/sabala/hysteria/index.html',
-  );
   await page.goto(parent.href);
-  expect((await response).status()).toBe(200);
-  expect((await blocked).text()).toMatch(/blocked|refused/iu);
+  expect((await blocked).failure()?.errorText).toBe('net::ERR_BLOCKED_BY_RESPONSE');
   await expect(page.frameLocator('iframe').locator('.stage')).toHaveCount(0);
 });
 
