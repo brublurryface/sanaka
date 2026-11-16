@@ -15,6 +15,7 @@ import {
 } from './pages/posts/data-access/wordpress-posts.service';
 import { NewsletterService } from './pages/posts/newsletter-signup/data-access/newsletter.service';
 import { PostCategory } from './pages/posts/post';
+import { SanakaverseBooksService } from './pages/sanakaverse/data-access/sanakaverse-books.service';
 
 @Component({ template: 'Ready' })
 class ReadyPage {}
@@ -134,6 +135,72 @@ describe('App', () => {
     expect(flame?.getAttribute('src')).toBe('/images/brand/flame-mark.webp');
     expect(flame?.getAttribute('alt')).toBe('');
     expect(flame?.getAttribute('aria-hidden')).toBe('true');
+  });
+
+  it.each(['success', 'empty', 'error'])(
+    'should dispose the Hysteria frame and restore the shell after Sanaka-loka %s',
+    async (outcome) => {
+      const pending = new Subject();
+      TestBed.overrideProvider(SanakaverseBooksService, {
+        useValue: { getBooks: () => pending },
+      });
+      const fixture = TestBed.createComponent(App);
+      fixture.detectChanges();
+      await TestBed.inject(Router).navigateByUrl('/sanaka-loka');
+      fixture.detectChanges();
+      await fixture.whenStable();
+      const host = fixture.nativeElement as HTMLElement;
+      const frame = host.querySelector('iframe');
+
+      expect(frame?.getAttribute('src')).toBe('/loadings/sabala/hysteria/index.html');
+      expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('hidden');
+
+      if (outcome === 'error') pending.error(new Error('offline'));
+      else {
+        pending.next({
+          books: outcome === 'empty' ? [] : [{ id: 1, slug: 'mors', title: 'Mors' }],
+          page: 1,
+          perPage: 12,
+          total: outcome === 'empty' ? 0 : 1,
+          totalPages: outcome === 'empty' ? 0 : 1,
+        });
+        pending.complete();
+      }
+      fixture.detectChanges();
+      await fixture.whenStable();
+
+      expect(host.querySelector('iframe')).toBeNull();
+      expect(frame?.isConnected).toBe(false);
+      expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('');
+      expect(host.querySelector('.app-footer')?.getAttribute('aria-hidden')).toBeNull();
+    },
+  );
+
+  it('should dispose Hysteria and cancel the pending books request when leaving Sanaka-loka', async () => {
+    const pending = new Subject();
+    TestBed.overrideProvider(SanakaverseBooksService, {
+      useValue: { getBooks: () => pending },
+    });
+    const router = TestBed.inject(Router);
+    router.resetConfig([...routes, { path: 'ready', component: ReadyPage }]);
+    const fixture = TestBed.createComponent(App);
+    fixture.detectChanges();
+    await router.navigateByUrl('/sanaka-loka');
+    fixture.detectChanges();
+    await fixture.whenStable();
+    const host = fixture.nativeElement as HTMLElement;
+    const frame = host.querySelector('iframe');
+    expect(frame).not.toBeNull();
+    expect(pending.observed).toBe(true);
+
+    await router.navigateByUrl('/ready');
+    fixture.detectChanges();
+    await fixture.whenStable();
+
+    expect(pending.observed).toBe(false);
+    expect(host.querySelector('iframe')).toBeNull();
+    expect(frame?.isConnected).toBe(false);
+    expect(host.querySelector<HTMLElement>('.app-footer')?.style.visibility).toBe('');
   });
 
   it('should expose only the full-page loader until both posts and categories are ready', async () => {
