@@ -3,12 +3,13 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
+import { TimeoutError } from 'rxjs';
 
 import { CONTACT_SOCIAL_LINKS } from './contact-social-links';
 import { ContactService } from './data-access/contact.service';
 import { CONTACT_LIMITS } from '../../../shared/contact';
 
-type ContactStatus = 'idle' | 'sending' | 'success' | 'rate-limited' | 'error';
+type ContactStatus = 'idle' | 'sending' | 'success' | 'rate-limited' | 'unconfirmed' | 'error';
 
 @Component({
   selector: 'app-contact',
@@ -48,17 +49,27 @@ export class Contact {
       .send(this.form.getRawValue())
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
-        next: ({ delivered }) => {
+        next: ({ delivered, reason }) => {
           if (!delivered) {
-            this.status.set('error');
+            this.status.set(reason === 'unconfirmed' ? 'unconfirmed' : 'error');
             return;
           }
 
           this.form.reset();
           this.status.set('success');
         },
-        error: (error: HttpErrorResponse) => {
-          this.status.set(error.status === 429 ? 'rate-limited' : 'error');
+        error: (error: unknown) => {
+          if (error instanceof HttpErrorResponse && error.status === 429) {
+            this.status.set('rate-limited');
+          } else if (
+            error instanceof TimeoutError ||
+            (error instanceof HttpErrorResponse &&
+              (error.status === 0 || error.status === 504 || error.error?.reason === 'unconfirmed'))
+          ) {
+            this.status.set('unconfirmed');
+          } else {
+            this.status.set('error');
+          }
         },
       });
   }

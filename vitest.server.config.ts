@@ -9,6 +9,8 @@ export default defineConfig({
       provider: 'v8',
       include: [
         'src/server/newsletter.ts',
+        'src/server/contact.ts',
+        'src/server/contact-router.ts',
         'src/server/request-rate-limit.ts',
         'src/server/cache-policy.ts',
         'src/server/runtime-options.ts',

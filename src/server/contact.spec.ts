@@ -3,8 +3,9 @@ import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 import { CONTACT_LIMITS, ContactMessage } from '../shared/contact';
 
 const sendMail = vi.hoisted(() => vi.fn());
+const createTransport = vi.hoisted(() => vi.fn());
 vi.mock('nodemailer', () => ({
-  default: { createTransport: () => ({ sendMail }) },
+  default: { createTransport },
 }));
 
 describe('contact rate-limit regression', () => {
@@ -13,6 +14,7 @@ describe('contact rate-limit regression', () => {
   beforeEach(async () => {
     vi.resetModules();
     sendMail.mockReset().mockResolvedValue({});
+    createTransport.mockReset().mockReturnValue({ sendMail });
     vi.stubEnv('SMTP_HOST', 'smtp.example.com');
     vi.stubEnv('SMTP_USER', 'sender@example.com');
     vi.stubEnv('SMTP_PASS', 'fake-test-password');
@@ -98,6 +100,52 @@ describe('contact rate-limit regression', () => {
       expect((await submit('', { [field]: text(limit) })).status).toHaveBeenCalledWith(200);
       expect((await submit('', { [field]: text(limit + 1) })).status).toHaveBeenCalledWith(400);
       expect(sendMail).toHaveBeenCalledOnce();
+    },
+  );
+
+  it('sets phase limits, caches the transport and gives each send its own cancellation signal', async () => {
+    await submit();
+    await submit();
+    expect(createTransport).toHaveBeenCalledOnce();
+    expect(createTransport).toHaveBeenCalledWith(
+      expect.objectContaining({
+        connectionTimeout: 10_000,
+        greetingTimeout: 5_000,
+        socketTimeout: 10_000,
+      }),
+    );
+    const [first, second] = sendMail.mock.calls.map(([message]) => message.signal);
+    expect(first).toBeInstanceOf(AbortSignal);
+    expect(second).toBeInstanceOf(AbortSignal);
+    expect(first).not.toBe(second);
+    expect(first.aborted).toBe(false);
+  });
+
+  it('preserves the default recipient, empty subject and invalid-port fallback', async () => {
+    vi.stubEnv('CONTACT_TO_EMAIL', '');
+    vi.stubEnv('SMTP_PORT', 'invalid');
+    await submit('', { subject: '' });
+    expect(createTransport).toHaveBeenCalledWith(expect.objectContaining({ port: 465 }));
+    expect(sendMail).toHaveBeenCalledWith(
+      expect.objectContaining({
+        to: 'sanaka@sanaka.com.br',
+        subject: '[Sanaka] Nova mensagem',
+        text: expect.stringContaining('Assunto: Sem assunto'),
+      }),
+    );
+  });
+
+  it.each([undefined, null, 'text', 42])(
+    'rejects a non-object payload before accessing request metadata',
+    async (body) => {
+      const response = { status: vi.fn().mockReturnThis(), json: vi.fn() };
+      await handler(
+        { is: () => true, body } as unknown as Request,
+        response as unknown as Response,
+        vi.fn(),
+      );
+      expect(response.status).toHaveBeenCalledWith(400);
+      expect(sendMail).not.toHaveBeenCalled();
     },
   );
 });

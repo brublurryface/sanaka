@@ -152,6 +152,7 @@
       "success": "Sua mensagem foi enviada.",
       "rateLimited": "Muitas mensagens chegaram em pouco tempo. Aguarde alguns minutos antes de tentar novamente.",
       "error": "O portal não conseguiu entregar a mensagem agora. Você ainda pode escrever para sanaka@sanaka.com.br.",
+      "unconfirmed": "Não foi possível confirmar a entrega. Sua mensagem pode ter sido enviada. Aguarde antes de tentar novamente.",
       "errors": {
         "name": "Informe o seu nome.",
         "email": "Informe um e-mail válido.",

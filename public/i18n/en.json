@@ -152,6 +152,7 @@
       "success": "Your message was sent.",
       "rateLimited": "Too many messages arrived in a short time. Wait a few minutes before trying again.",
       "error": "The portal could not deliver the message right now. You can still write to sanaka@sanaka.com.br.",
+      "unconfirmed": "We couldn't confirm delivery. Your message may have been sent. Please wait before trying again.",
       "errors": {
         "name": "Enter your name.",
         "email": "Enter a valid email address.",
