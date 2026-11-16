@@ -1,6 +1,7 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
+import { HttpErrorResponse } from '@angular/common/http';
 import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of } from 'rxjs';
+import { of, Subject, throwError, TimeoutError } from 'rxjs';
 
 import { Contact } from './contact';
 import { ContactService } from './data-access/contact.service';
@@ -53,6 +54,7 @@ class MockTranslocoLoader implements TranslocoLoader {
           success: 'A mensagem atravessou o portal.',
           rateLimited: 'Aguarde antes de tentar novamente.',
           error: 'A mensagem não pôde ser entregue.',
+          unconfirmed: 'Não foi possível confirmar a entrega. Sua mensagem pode ter sido enviada.',
           errors: {
             name: 'Informe o seu nome.',
             email: 'Informe um e-mail válido.',
@@ -169,6 +171,81 @@ describe('Contact', () => {
       expect(contactService.send).toHaveBeenCalledOnce();
     },
   );
+
+  function submitValidMessage(): HTMLElement {
+    const compiled = fixture.nativeElement as HTMLElement;
+    setInputValue(compiled, '[formControlName="name"]', 'Reader');
+    setInputValue(compiled, '[formControlName="email"]', 'reader@example.test');
+    setInputValue(compiled, '[formControlName="message"]', 'Keep this message.');
+    compiled.querySelector('form')?.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    return compiled;
+  }
+
+  it.each([
+    { name: 'client deadline', error: new TimeoutError() },
+    { name: 'network interruption', error: new HttpErrorResponse({ status: 0 }) },
+    { name: 'SMTP deadline', error: new HttpErrorResponse({ status: 504 }) },
+    {
+      name: 'lost SMTP reply',
+      error: new HttpErrorResponse({ status: 503, error: { reason: 'unconfirmed' } }),
+    },
+  ])('keeps the message and ends the pending state for $name', ({ error }) => {
+    contactService.send.mockReturnValue(throwError(() => error));
+    const compiled = submitValidMessage();
+    expect(compiled.querySelector('.contact-message__status')?.textContent).toContain(
+      'Sua mensagem pode ter sido enviada.',
+    );
+    expect(compiled.querySelector<HTMLTextAreaElement>('[formControlName="message"]')?.value).toBe(
+      'Keep this message.',
+    );
+    expect(compiled.querySelector<HTMLButtonElement>('button[type="submit"]')?.disabled).toBe(
+      false,
+    );
+    expect(contactService.send).toHaveBeenCalledOnce();
+  });
+
+  it('blocks duplicate submission while pending and clears the form only after success', () => {
+    const pending = new Subject<{ delivered: boolean }>();
+    contactService.send.mockReturnValue(pending);
+    const compiled = submitValidMessage();
+    compiled.querySelector('form')?.dispatchEvent(new Event('submit'));
+    fixture.detectChanges();
+    expect(compiled.querySelector<HTMLButtonElement>('button[type="submit"]')?.disabled).toBe(true);
+    expect(contactService.send).toHaveBeenCalledOnce();
+    pending.next({ delivered: true });
+    pending.complete();
+    fixture.detectChanges();
+    expect(compiled.querySelector<HTMLTextAreaElement>('[formControlName="message"]')?.value).toBe(
+      '',
+    );
+    expect(compiled.querySelector('.contact-message__status')?.textContent).toContain(
+      'A mensagem atravessou o portal.',
+    );
+  });
+
+  it.each([
+    { status: 429, expected: 'Aguarde antes de tentar novamente.' },
+    { status: 400, expected: 'A mensagem não pôde ser entregue.' },
+    { status: 503, expected: 'A mensagem não pôde ser entregue.' },
+  ])('preserves known failure feedback for HTTP $status', ({ status, expected }) => {
+    contactService.send.mockReturnValue(throwError(() => new HttpErrorResponse({ status })));
+    expect(submitValidMessage().querySelector('.contact-message__status')?.textContent).toContain(
+      expected,
+    );
+    expect(contactService.send).toHaveBeenCalledOnce();
+  });
+
+  it('does not reset a form when a successful HTTP response reports no delivery', () => {
+    contactService.send.mockReturnValue(of({ delivered: false }));
+    const compiled = submitValidMessage();
+    expect(compiled.querySelector('.contact-message__status')?.textContent).toContain(
+      'A mensagem não pôde ser entregue.',
+    );
+    expect(compiled.querySelector<HTMLTextAreaElement>('[formControlName="message"]')?.value).toBe(
+      'Keep this message.',
+    );
+  });
 });
 
 function setInputValue(compiled: HTMLElement, selector: string, value: string): void {

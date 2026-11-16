@@ -7,7 +7,7 @@ import {
 import express from 'express';
 import { join } from 'node:path';
 import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
-import { contactHandler } from './server/contact';
+import { createContactRouter } from './server/contact-router';
 import { createHttpRequestLog } from './server/http-request-log';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
@@ -38,8 +38,7 @@ app.use('/api', (_request, response, next) => {
 // Verifica o processo sem chamar SMTP, Brevo ou WordPress a cada sondagem do Render.
 app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
 
-app.use('/api/contact', express.json({ limit: '16kb' }));
-app.post('/api/contact', contactHandler);
+app.use('/api/contact', createContactRouter());
 app.use('/api/newsletter', createNewsletterRouter());
 
 // Os links do WordPress continuam válidos quando o domínio público passar para o Render.

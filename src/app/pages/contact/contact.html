@@ -150,6 +150,8 @@
           <p class="contact-message__status--success">{{ 'contact.form.success' | transloco }}</p>
         } @else if (status() === 'rate-limited') {
           <p class="contact-message__status--error">{{ 'contact.form.rateLimited' | transloco }}</p>
+        } @else if (status() === 'unconfirmed') {
+          <p class="contact-message__status--error">{{ 'contact.form.unconfirmed' | transloco }}</p>
         } @else if (status() === 'error') {
           <p class="contact-message__status--error">{{ 'contact.form.error' | transloco }}</p>
         }
