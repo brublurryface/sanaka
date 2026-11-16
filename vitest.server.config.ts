@@ -12,6 +12,7 @@ export default defineConfig({
         'src/server/request-rate-limit.ts',
         'src/server/cache-policy.ts',
         'src/server/runtime-options.ts',
+        'src/server/http-request-log.ts',
         'src/server/legacy-wordpress-redirects.ts',
       ],
       reportsDirectory: 'coverage/server',

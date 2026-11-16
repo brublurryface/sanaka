@@ -8,6 +8,7 @@ import express from 'express';
 import { join } from 'node:path';
 import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
 import { contactHandler } from './server/contact';
+import { createHttpRequestLog } from './server/http-request-log';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
 import { readRuntimeOptions } from './server/runtime-options';
@@ -20,6 +21,7 @@ const angularApp = new AngularNodeAppEngine({ allowedHosts: runtimeOptions.allow
 
 app.disable('x-powered-by');
 app.set('trust proxy', runtimeOptions.trustProxyHops);
+app.use(createHttpRequestLog());
 
 if (runtimeOptions.noIndex) {
   app.use((_request, response, next) => {
