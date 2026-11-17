@@ -9,37 +9,24 @@ import {
 } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
+import {
+  assertWordPressIdentities,
+  isWordPressRecord,
+  wordPressArray,
+  wordPressCountHeader,
+  wordPressIdentity,
+  wordPressPostReference,
+  wordPressRecord,
+  WordPressContractError,
+  type WordPressRenderedField,
+} from '../../../core/wordpress/wordpress-response';
 import { SanakaverseBook } from '../sanakaverse-book';
-
-interface WordPressRenderedField {
-  readonly rendered: string;
-}
-
-interface WordPressBookCover {
-  readonly source_url?: string;
-  readonly url?: string;
-  readonly rendered?: string;
-  readonly value?: string | readonly string[];
-  readonly alt_text?: string;
-  readonly alt?: string;
-}
-
-type WordPressBookCoverField = string | WordPressBookCover | readonly WordPressBookCoverField[];
-
-function isCoverFieldList(
-  cover: WordPressBookCoverField,
-): cover is readonly WordPressBookCoverField[] {
-  return Array.isArray(cover);
-}
 
 interface WordPressBookPost {
   readonly id: number;
   readonly slug: string;
   readonly title: WordPressRenderedField;
-  readonly sanakaverse_cover?: WordPressBookCoverField;
-  readonly meta?: {
-    readonly sanakaverse_cover?: WordPressBookCoverField;
-  };
+  readonly cover: unknown;
 }
 
 export interface SanakaverseBooksPage {
@@ -95,35 +82,34 @@ export class SanakaverseBooksService {
         .set('_fields', 'id,slug,title,sanakaverse_cover,meta'),
       policy.excludedCategoryIds,
     );
-    return this.http
-      .get<readonly WordPressBookPost[]>(`${this.apiUrl}/posts`, { params, observe: 'response' })
-      .pipe(
-        map((response) => this.mapPage(response, page)),
-        timeout({ first: this.requestTimeoutMs }),
-      );
+    return this.http.get<unknown>(`${this.apiUrl}/posts`, { params, observe: 'response' }).pipe(
+      map((response) => this.mapPage(response, page)),
+      timeout({ first: this.requestTimeoutMs }),
+    );
   }
 
-  private mapPage(
-    response: HttpResponse<readonly WordPressBookPost[]>,
-    page: number,
-  ): SanakaverseBooksPage {
-    const posts = response.body ?? [];
-    const count = (name: string): number => {
-      const value = response.headers.get(name);
-      const parsed = Number(value);
-      if (value === null || value.trim() === '' || !Number.isSafeInteger(parsed) || parsed < 0)
-        throw new Error('Paginação dos livros indisponível ou inválida.');
-      return parsed;
-    };
-    const total = count('X-WP-Total');
-    const totalPages = count('X-WP-TotalPages');
+  private mapPage(response: HttpResponse<unknown>, page: number): SanakaverseBooksPage {
+    const posts = wordPressArray(response.body).map((entry) => {
+      const item = wordPressRecord(entry);
+      const meta = item['meta'];
+      return {
+        ...wordPressIdentity(item),
+        ...wordPressPostReference(item),
+        cover:
+          item['sanakaverse_cover'] ??
+          (isWordPressRecord(meta) ? meta['sanakaverse_cover'] : undefined),
+      };
+    });
+    assertWordPressIdentities(posts);
+    const total = wordPressCountHeader(response.headers.get('X-WP-Total'));
+    const totalPages = wordPressCountHeader(response.headers.get('X-WP-TotalPages'));
     const expectedSize = Math.min(this.pageSize, Math.max(0, total - (page - 1) * this.pageSize));
     if (
       totalPages !== Math.ceil(total / this.pageSize) ||
       posts.length !== expectedSize ||
       (totalPages > 0 && page > totalPages)
     )
-      throw new Error('O WordPress retornou uma página de livros incoerente.');
+      throw new WordPressContractError('O WordPress retornou uma página de livros incoerente.');
     return {
       books: posts.map((post) => this.mapBook(post)),
       page,
@@ -134,7 +120,7 @@ export class SanakaverseBooksService {
   }
 
   private mapBook(post: WordPressBookPost): SanakaverseBook {
-    const cover = post.sanakaverse_cover ?? post.meta?.sanakaverse_cover;
+    const cover = post.cover;
 
     return {
       id: post.id,
@@ -145,30 +131,27 @@ export class SanakaverseBooksService {
     };
   }
 
-  private readCoverUrl(cover: WordPressBookCoverField | undefined): string | undefined {
-    if (cover && isCoverFieldList(cover)) {
-      return cover.map((entry) => this.readCoverUrl(entry)).find(Boolean);
+  private readCoverUrl(cover: unknown, depth = 0): string | undefined {
+    if (depth > 8) return undefined;
+    if (Array.isArray(cover)) {
+      return cover.map((entry: unknown) => this.readCoverUrl(entry, depth + 1)).find(Boolean);
     }
-
-    if (!cover || typeof cover === 'string') {
-      return cover?.trim() || undefined;
-    }
-
-    const value = Array.isArray(cover.value) ? cover.value[0] : cover.value;
-    const url = cover.source_url ?? cover.url ?? cover.rendered ?? value;
-
-    return url?.trim() || undefined;
+    if (typeof cover === 'string') return cover.trim() || undefined;
+    if (!isWordPressRecord(cover)) return undefined;
+    const value = Array.isArray(cover['value']) ? cover['value'][0] : cover['value'];
+    return [cover['source_url'], cover['url'], cover['rendered'], value]
+      .find((entry): entry is string => typeof entry === 'string' && !!entry.trim())
+      ?.trim();
   }
 
-  private readCoverAlt(cover: WordPressBookCoverField | undefined): string | undefined {
-    if (cover && isCoverFieldList(cover)) {
-      return cover.map((entry) => this.readCoverAlt(entry)).find(Boolean);
+  private readCoverAlt(cover: unknown, depth = 0): string | undefined {
+    if (depth > 8) return undefined;
+    if (Array.isArray(cover)) {
+      return cover.map((entry: unknown) => this.readCoverAlt(entry, depth + 1)).find(Boolean);
     }
-
-    if (!cover || typeof cover === 'string') {
-      return undefined;
-    }
-
-    return (cover.alt_text ?? cover.alt)?.trim() || undefined;
+    if (!isWordPressRecord(cover)) return undefined;
+    return [cover['alt_text'], cover['alt']]
+      .find((entry): entry is string => typeof entry === 'string' && !!entry.trim())
+      ?.trim();
   }
 }

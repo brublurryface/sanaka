@@ -8,6 +8,7 @@ import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { AboutCyclePost, AboutCyclesService } from './about-cycles.service';
+import { WordPressContractError } from '../../../core/wordpress/wordpress-response';
 
 describe('AboutCyclesService', () => {
   let httpTesting: HttpTestingController;
@@ -144,5 +145,42 @@ describe('AboutCyclesService', () => {
     httpTesting.expectOne((request) => request.url === `${apiUrl}/posts`).flush([]);
 
     expect(result).toEqual([]);
+  });
+
+  it.each([
+    null,
+    {},
+    'bad',
+    [null],
+    [{ id: '1', slug: 'cycle', title: { rendered: 'I' } }],
+    [{ id: 1, slug: 'cycle', title: { rendered: 'I' }, excerpt: { rendered: false } }],
+  ])('reports an invalid mandatory cycle contract without inventing a fragment (%#)', (body) => {
+    const next = vi.fn();
+    const error = vi.fn();
+    service.getCycles().subscribe({ next, error });
+    httpTesting.expectOne((request) => request.url.endsWith('/posts')).flush(body);
+    expect(next).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+  });
+  it('keeps the excerpt and a valid meta hover when optional top-level metadata is malformed', () => {
+    const next = vi.fn();
+    service.getCycles().subscribe({ next });
+    httpTesting
+      .expectOne((request) => request.url.endsWith('/posts'))
+      .flush([
+        {
+          id: 1,
+          slug: 'cycle',
+          title: { rendered: 'I — Fragmento' },
+          excerpt: { rendered: '<p>Preservado.</p>' },
+          hover_text: { rendered: 42 },
+          meta: { hover_text: 'Prévia aprovada.' },
+        },
+      ]);
+    expect(next.mock.calls[0][0][0]).toMatchObject({
+      slug: 'cycle',
+      excerpt: 'Preservado.',
+      hoverText: 'Prévia aprovada.',
+    });
   });
 });

@@ -8,6 +8,7 @@ import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress
 
 import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { SanakaverseBooksPage, SanakaverseBooksService } from './sanakaverse-books.service';
+import { WordPressContractError } from '../../../core/wordpress/wordpress-response';
 
 describe('SanakaverseBooksService', () => {
   let httpTesting: HttpTestingController;
@@ -223,5 +224,69 @@ describe('SanakaverseBooksService', () => {
     vi.advanceTimersByTime(10_001);
     expect(request.cancelled).toBe(true);
     expect(error).toHaveBeenCalledWith(expect.objectContaining({ name: 'TimeoutError' }));
+  });
+
+  it.each([
+    null,
+    {},
+    'bad',
+    [null],
+    [{ id: '1', slug: 'book', title: { rendered: 'Book' } }],
+    [{ id: 1, slug: 'book', title: { rendered: null } }],
+  ])('rejects malformed essential book data without fabricating a catalog (%#)', (body) => {
+    const next = vi.fn();
+    const error = vi.fn();
+    service.getBooks().subscribe({ next, error });
+    httpTesting
+      .expectOne((request) => request.url.endsWith('/posts'))
+      .flush(body, { headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' } });
+    expect(next).not.toHaveBeenCalled();
+    expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+  });
+  it.each([
+    42,
+    false,
+    { url: 42, alt: {} },
+    { value: [false], alt_text: [] },
+    [[[[[[[[[[['/too-deep.png']]]]]]]]]]],
+  ])(
+    'keeps a valid book with the existing missing-cover fallback for unusable metadata (%#)',
+    (sanakaverse_cover) => {
+      const next = vi.fn();
+      service.getBooks().subscribe({ next });
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/posts'))
+        .flush([{ id: 1, slug: 'book', title: { rendered: 'Book' }, sanakaverse_cover }], {
+          headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' },
+        });
+      expect(next.mock.calls[0][0].books[0]).toEqual({
+        id: 1,
+        slug: 'book',
+        title: 'Book',
+        coverImageUrl: undefined,
+        coverImageAlt: undefined,
+      });
+    },
+  );
+  it('keeps a dedicated cover represented by valid nested metadata', () => {
+    const next = vi.fn();
+    service.getBooks().subscribe({ next });
+    httpTesting
+      .expectOne((request) => request.url.endsWith('/posts'))
+      .flush(
+        [
+          {
+            id: 1,
+            slug: 'book',
+            title: { rendered: 'Book' },
+            sanakaverse_cover: [null, [{ value: ['/approved.png'], alt: 'Capa aprovada' }]],
+          },
+        ],
+        { headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' } },
+      );
+    expect(next.mock.calls[0][0].books[0]).toMatchObject({
+      coverImageUrl: '/approved.png',
+      coverImageAlt: 'Capa aprovada',
+    });
   });
 });

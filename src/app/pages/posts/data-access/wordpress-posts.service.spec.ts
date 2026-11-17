@@ -8,6 +8,7 @@ import { ResolvedWordPressContentPolicy } from '../../../core/wordpress/wordpres
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { PostCategory, PostDetail } from '../post';
 import { PostsPage, WORDPRESS_API_URL, WordPressPostsService } from './wordpress-posts.service';
+import { WordPressContractError } from '../../../core/wordpress/wordpress-response';
 
 describe('WordPressPostsService', () => {
   let httpTesting: HttpTestingController;
@@ -953,5 +954,105 @@ describe('WordPressPostsService', () => {
       .forEach((request) => request.flush([]));
 
     expect(coverImageUrl).toBe('/images/posts/posts-atmosphere-desktop.webp');
+  });
+
+  describe('untrusted successful responses', () => {
+    const valid = {
+      id: 91,
+      slug: 'contract-test',
+      date: '2026-11-01T12:00:00',
+      title: { rendered: 'Leitura preservada' },
+      excerpt: { rendered: 'Resumo' },
+      content: { rendered: '<p>Texto preservado.</p>' },
+      categories: [10],
+      featured_media: 0,
+    };
+    it.each([null, {}, 'bad', [null], [{ ...valid, id: '91' }], [{ ...valid, title: [] }]])(
+      'surfaces an invalid archive as a contract error and allows a fresh retry (%#)',
+      (body) => {
+        const next = vi.fn();
+        const error = vi.fn();
+        service.getPosts().subscribe({ next, error });
+        httpTesting.expectOne((request) => request.url.endsWith('/categories')).flush([]);
+        httpTesting
+          .expectOne((request) => request.url.endsWith('/posts'))
+          .flush(body, { headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' } });
+        expect(next).not.toHaveBeenCalled();
+        expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+        const retried = vi.fn();
+        service.getPosts().subscribe({ next: retried });
+        httpTesting
+          .expectOne((request) => request.url.endsWith('/posts'))
+          .flush([valid], { headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' } });
+        expect(retried.mock.calls[0][0].posts[0].slug).toBe('contract-test');
+      },
+    );
+    it.each([
+      null,
+      {},
+      [null],
+      [{ ...valid, content: { rendered: 42 } }],
+      [{ ...valid, slug: 'other' }],
+    ])(
+      'does not turn malformed article data into not-found or a successful reader (%#)',
+      (body) => {
+        const next = vi.fn();
+        const error = vi.fn();
+        service.getPostBySlug('contract-test').subscribe({ next, error });
+        httpTesting
+          .expectOne((request) => request.params.get('slug') === 'contract-test')
+          .flush(body);
+        expect(next).not.toHaveBeenCalled();
+        expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+        httpTesting.expectNone(
+          (request) => request.url.endsWith('/categories') || request.url.endsWith('/tags'),
+        );
+      },
+    );
+    it('keeps a valid article when optional taxonomy JSON violates its contract', () => {
+      const values: (PostDetail | null)[] = [];
+      const error = vi.fn();
+      service
+        .getPostBySlug('contract-test')
+        .subscribe({ next: (value) => values.push(value), error });
+      httpTesting
+        .expectOne((request) => request.params.has('slug'))
+        .flush([{ ...valid, tags: [3] }]);
+      httpTesting.expectOne((request) => request.url.endsWith('/categories')).flush({});
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/tags'))
+        .flush({}, { headers: tagHeaders });
+      expect(error).not.toHaveBeenCalled();
+      expect(values.at(-1)).toMatchObject({
+        slug: 'contract-test',
+        contentHtml: '<p>Texto preservado.</p>',
+        categories: [],
+        tags: [],
+      });
+    });
+    it('rejects cyclic categories and retries a later valid tree instead of caching the failure', () => {
+      const error = vi.fn();
+      service.getArchiveCategories().subscribe({ error });
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/categories'))
+        .flush([
+          { id: 10, slug: 'a', name: 'A', parent: 11 },
+          { id: 11, slug: 'b', name: 'B', parent: 10 },
+        ]);
+      expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+      const next = vi.fn();
+      service.getArchiveCategories().subscribe({ next });
+      httpTesting.expectOne((request) => request.url.endsWith('/categories')).flush([]);
+      expect(next).toHaveBeenCalledWith([]);
+    });
+    it('rejects an empty page with positive totals rather than displaying a false empty state', () => {
+      const error = vi.fn();
+      service.getPosts().subscribe({ error });
+      httpTesting.expectOne((request) => request.url.endsWith('/categories')).flush([]);
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/posts'))
+        .flush([], { headers: { 'X-WP-Total': '1', 'X-WP-TotalPages': '1' } });
+      expect(error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+    });
   });
 });
