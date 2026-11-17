@@ -7,6 +7,7 @@ import { vi } from 'vitest';
 import { NASA_IMAGES_API_URL, NasaImagesService } from './nasa-images.service';
 import { ImageSearchResult } from '../rest-api.models';
 import { NASA_QUERY_MAX_LENGTH } from '../nasa-query';
+import { NasaContractError } from './nasa-images-response';
 
 const previewUrl = 'https://images-assets.nasa.gov/image/test-nebula/test-nebula~thumb.jpg';
 
@@ -324,4 +325,23 @@ describe('NasaImagesService', () => {
     expect(receivedError).toBeInstanceOf(TimeoutError);
     expect(request.cancelled).toBe(true);
   });
+
+  it.each([
+    null,
+    {},
+    { collection: { items: {} } },
+    { collection: { items: [], metadata: { total_hits: '0' } } },
+  ])(
+    'propagates an HTTP 200 contract error instead of reporting no search results (%#)',
+    (body) => {
+      const next = vi.fn();
+      const error = vi.fn();
+      service.searchImages('nebula').subscribe({ next, error });
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/search'))
+        .flush(body, { status: 200, statusText: 'OK' });
+      expect(next).not.toHaveBeenCalled();
+      expect(error).toHaveBeenCalledWith(expect.any(NasaContractError));
+    },
+  );
 });

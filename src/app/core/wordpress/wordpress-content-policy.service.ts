@@ -3,15 +3,11 @@ import { inject, Injectable } from '@angular/core';
 import { defer, finalize, map, Observable, of, shareReplay, tap, timeout } from 'rxjs';
 
 import { WORDPRESS_API_URL } from './wordpress-api';
+import { parseWordPressEditorialCategories, WordPressContractError } from './wordpress-response';
 import {
   ResolvedWordPressContentPolicy,
   SANAKA_WORDPRESS_CONTENT_POLICY,
 } from './wordpress-content-policy';
-
-interface WordPressEditorialCategory {
-  readonly id: number;
-  readonly slug: string;
-}
 
 /** Compartilha a resolução editorial entre Posts, Sobre e a biblioteca. */
 @Injectable({ providedIn: 'root' })
@@ -62,29 +58,26 @@ export class WordPressContentPolicyService {
       .set('slug', slugs.join(','))
       .set('per_page', '100')
       .set('_fields', 'id,slug');
-    return this.http
-      .get<readonly WordPressEditorialCategory[]>(`${this.apiUrl}/categories`, { params })
-      .pipe(
-        timeout({ first: this.requestTimeoutMs }),
-        map((categories) => {
-          const idFor = (slug: string): number | undefined => {
-            const category = categories.find((item) => item.slug === slug);
-            if (category && (!Number.isInteger(category.id) || category.id <= 0))
-              throw new Error(`Categoria editorial inválida: ${slug}.`);
-            return category?.id;
-          };
-          const excludedCategoryIds = this.policy.excludedCategorySlugs.map((slug) => {
-            const id = idFor(slug);
-            if (id === undefined)
-              throw new Error(`Categoria editorial obrigatória ausente: ${slug}.`);
-            return id;
-          });
-          return {
-            excludedCategoryIds,
-            aboutCycleCategoryId: idFor(this.policy.aboutCycleCategorySlug),
-            sanakaverseCategoryId: idFor(this.policy.sanakaverseCategorySlug),
-          };
-        }),
-      );
+    return this.http.get<unknown>(`${this.apiUrl}/categories`, { params }).pipe(
+      timeout({ first: this.requestTimeoutMs }),
+      map(parseWordPressEditorialCategories),
+      map((categories) => {
+        const idFor = (slug: string): number | undefined => {
+          const category = categories.find((item) => item.slug === slug);
+          return category?.id;
+        };
+        const excludedCategoryIds = this.policy.excludedCategorySlugs.map((slug) => {
+          const id = idFor(slug);
+          if (id === undefined)
+            throw new WordPressContractError(`Categoria editorial obrigatória ausente: ${slug}.`);
+          return id;
+        });
+        return {
+          excludedCategoryIds,
+          aboutCycleCategoryId: idFor(this.policy.aboutCycleCategorySlug),
+          sanakaverseCategoryId: idFor(this.policy.sanakaverseCategorySlug),
+        };
+      }),
+    );
   }
 }

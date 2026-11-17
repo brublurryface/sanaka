@@ -6,6 +6,15 @@ import { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 import { excludeWordPressCategoryBranches } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
+import {
+  assertWordPressIdentities,
+  isWordPressRecord,
+  wordPressArray,
+  wordPressIdentity,
+  wordPressRecord,
+  wordPressRenderedField,
+  WordPressContractError,
+} from '../../../core/wordpress/wordpress-response';
 
 export interface AboutCyclePost {
   readonly id: number;
@@ -14,21 +23,6 @@ export interface AboutCyclePost {
   readonly hoverText: string;
   readonly excerpt: string;
   readonly order: number;
-}
-
-interface WordPressRenderedField {
-  readonly rendered: string;
-}
-
-interface WordPressCyclePost {
-  readonly id: number;
-  readonly slug: string;
-  readonly title: WordPressRenderedField;
-  readonly excerpt: WordPressRenderedField;
-  readonly hover_text?: string | WordPressRenderedField;
-  readonly meta?: {
-    readonly hover_text?: string | WordPressRenderedField;
-  };
 }
 
 const ROMAN_CYCLE_ORDER = new Map<string, number>([
@@ -64,31 +58,37 @@ export class AboutCyclesService {
             .set('_fields', 'id,slug,title,excerpt,hover_text,meta'),
           policy.excludedCategoryIds,
         );
-        return this.http
-          .get<readonly WordPressCyclePost[]>(`${this.apiUrl}/posts`, { params })
-          .pipe(
-            map((posts) => this.normalizeCycles(posts)),
-            timeout({ first: this.requestTimeoutMs }),
-          );
+        return this.http.get<unknown>(`${this.apiUrl}/posts`, { params }).pipe(
+          map((posts) => this.normalizeCycles(posts)),
+          timeout({ first: this.requestTimeoutMs }),
+        );
       }),
     );
   }
 
-  private normalizeCycles(posts: readonly WordPressCyclePost[]): readonly AboutCyclePost[] {
-    return posts
-      .map((post) => {
-        const title = this.wordpressText.toText(post.title.rendered);
+  private normalizeCycles(body: unknown): readonly AboutCyclePost[] {
+    const posts = wordPressArray(body);
+    if (posts.length > 9) throw new WordPressContractError();
+    const cycles = posts
+      .map((entry) => {
+        const post = wordPressRecord(entry);
+        const title = this.wordpressText.toText(wordPressRenderedField(post['title']).rendered);
+        const meta = post['meta'];
 
         return {
-          id: post.id,
-          slug: post.slug,
+          ...wordPressIdentity(post),
           title,
-          hoverText: this.readRenderedText(post.hover_text ?? post.meta?.hover_text),
-          excerpt: this.wordpressText.toText(post.excerpt.rendered),
+          hoverText:
+            this.readRenderedText(post['hover_text']) ??
+            this.readRenderedText(isWordPressRecord(meta) ? meta['hover_text'] : undefined) ??
+            '',
+          excerpt: this.wordpressText.toText(wordPressRenderedField(post['excerpt']).rendered),
           order: this.readCycleOrder(title),
         };
       })
       .sort((first, second) => first.order - second.order);
+    assertWordPressIdentities(cycles);
+    return cycles;
   }
 
   private readCycleOrder(title: string): number {
@@ -96,11 +96,10 @@ export class AboutCyclesService {
     return ROMAN_CYCLE_ORDER.get(romanNumeral ?? '') ?? Number.MAX_SAFE_INTEGER;
   }
 
-  private readRenderedText(value: string | WordPressRenderedField | undefined): string {
-    if (!value) {
-      return '';
-    }
-
-    return this.wordpressText.toText(typeof value === 'string' ? value : value.rendered);
+  private readRenderedText(value: unknown): string | undefined {
+    if (typeof value === 'string') return this.wordpressText.toText(value);
+    return isWordPressRecord(value) && typeof value['rendered'] === 'string'
+      ? this.wordpressText.toText(value['rendered'])
+      : undefined;
   }
 }

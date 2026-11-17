@@ -26,6 +26,21 @@ import {
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
 import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
 import {
+  assertWordPressCategoryTree,
+  parseWordPressCategories,
+  parseWordPressPosts,
+  parseWordPressTagContexts,
+  parseWordPressTags,
+  wordPressArray,
+  wordPressCountHeader,
+  wordPressPostReference,
+  WordPressContractError,
+  type WordPressCategory,
+  type WordPressMedia,
+  type WordPressPost,
+  type WordPressTag,
+} from '../../../core/wordpress/wordpress-response';
+import {
   CharacterObolo,
   Post,
   PostCategory,
@@ -64,57 +79,6 @@ export class PostsPageOutOfRangeError extends Error {
   }
 }
 
-interface WordPressRenderedField {
-  readonly rendered: string;
-}
-
-interface WordPressPost {
-  readonly id: number;
-  readonly slug: string;
-  readonly date: string;
-  readonly title: WordPressRenderedField;
-  readonly excerpt: WordPressRenderedField;
-  readonly content?: WordPressRenderedField;
-  readonly featured_media: number;
-  readonly categories: readonly number[];
-  readonly tags?: readonly number[];
-  readonly sanaka_character_slug?: string;
-  readonly sanaka_character_name?: string;
-  readonly sanaka_obolo_front?: string;
-  readonly sanaka_obolo_back?: string;
-  readonly _embedded?: WordPressEmbeddedResources;
-}
-
-interface WordPressEmbeddedResources {
-  readonly 'wp:featuredmedia'?: readonly WordPressMedia[];
-}
-
-interface WordPressCategory {
-  readonly id: number;
-  readonly name: string;
-  readonly slug: string;
-  readonly parent: number;
-}
-
-interface WordPressTag {
-  readonly id: number;
-  readonly name: string;
-  readonly slug: string;
-}
-
-interface WordPressMedia {
-  readonly id: number;
-  readonly source_url: string;
-  readonly alt_text: string;
-  readonly media_details?: {
-    readonly sizes?: Readonly<Record<string, WordPressMediaSize>>;
-  };
-}
-
-interface WordPressMediaSize {
-  readonly source_url: string;
-}
-
 interface NormalizedPostsQuery {
   readonly page: number;
   readonly perPage: number;
@@ -128,8 +92,7 @@ interface NormalizedPostsQuery {
 /**
  * Adaptador HTTP responsável por consultar e normalizar o acervo mantido no WordPress.
  *
- * Os DTOs externos permanecem privados para impedir que detalhes da API atravessem a fronteira
- * de `data-access`.
+ * Os contratos externos são validados antes de converter os dados para os modelos da feature.
  */
 @Injectable({
   providedIn: 'root',
@@ -148,6 +111,10 @@ export class WordPressPostsService {
   private readonly sanitizer = inject(DomSanitizer);
 
   private readonly categories$ = this.loadCategories().pipe(
+    map((categories) => {
+      assertWordPressCategoryTree(categories);
+      return categories;
+    }),
     share({
       connector: () => new ReplaySubject<readonly WordPressCategory[]>(1),
       resetOnError: true,
@@ -180,7 +147,7 @@ export class WordPressPostsService {
           });
         return forkJoin({
           response: this.http
-            .get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, {
+            .get<unknown>(`${this.apiUrl}/posts`, {
               params: this.buildPostsParams(resolvedQuery, policy),
               observe: 'response',
             })
@@ -244,9 +211,14 @@ export class WordPressPostsService {
       policy.excludedCategoryIds,
     );
 
-    return this.http.get<readonly WordPressPost[]>(`${this.apiUrl}/posts`, { params }).pipe(
+    return this.http.get<unknown>(`${this.apiUrl}/posts`, { params }).pipe(
       timeout({ first: this.requestTimeoutMs }),
+      map((body) => parseWordPressPosts(body, true)),
       switchMap((posts) => {
+        if (posts.length > 1 || (posts[0] && posts[0].slug !== slug))
+          throw new WordPressContractError(
+            'O WordPress retornou outro artigo para o slug solicitado.',
+          );
         const post = posts[0];
 
         if (!post || post.categories.some((id) => policy.excludedCategoryIds.includes(id))) {
@@ -330,13 +302,16 @@ export class WordPressPostsService {
       query.tagId || !query.tagSlug
         ? of(query.tagId)
         : this.http
-            .get<readonly WordPressTag[]>(`${this.apiUrl}/tags`, {
+            .get<unknown>(`${this.apiUrl}/tags`, {
               params: new HttpParams()
                 .set('slug', query.tagSlug)
                 .set('per_page', '1')
                 .set('_fields', 'id,name,slug'),
             })
-            .pipe(map((tags) => tags.find((tag) => tag.slug === query.tagSlug)?.id));
+            .pipe(
+              map(parseWordPressTags),
+              map((tags) => tags.find((tag) => tag.slug === query.tagSlug)?.id),
+            );
     return forkJoin({ categoryId: categoryId$, tagId: tagId$ }).pipe(
       map(({ categoryId, tagId }) => {
         if (
@@ -366,20 +341,27 @@ export class WordPressPostsService {
   }
 
   private mapPostsPage(
-    response: HttpResponse<readonly WordPressPost[]>,
+    response: HttpResponse<unknown>,
     query: NormalizedPostsQuery,
     categories: readonly WordPressCategory[],
     policy: ResolvedWordPressContentPolicy,
   ): PostsPage {
-    const posts = response.body ?? [];
+    const posts = parseWordPressPosts(response.body);
     const excludedIds = this.categoryBranchIds(categories, this.archiveExcludedCategoryIds(policy));
     // Um filtro local não pode corrigir os totais de outra coleção.
     if (posts.some((post) => post.categories.some((id) => excludedIds.has(id))))
-      throw new Error('O WordPress retornou publicações fora da coleção editorial consultada.');
+      throw new WordPressContractError(
+        'O WordPress retornou publicações fora da coleção editorial consultada.',
+      );
     const total = this.readCountHeader(response.headers.get('X-WP-Total'));
     const totalPages = this.readCountHeader(response.headers.get('X-WP-TotalPages'));
-    if (total < posts.length || totalPages !== Math.ceil(total / query.perPage))
-      throw new Error('O WordPress retornou totais de paginação incoerentes.');
+    if (
+      total < posts.length ||
+      posts.length > query.perPage ||
+      (total > 0 && (posts.length === 0 || query.page > totalPages)) ||
+      totalPages !== Math.ceil(total / query.perPage)
+    )
+      throw new WordPressContractError('O WordPress retornou totais de paginação incoerentes.');
 
     return {
       posts: this.mapPosts(posts, categories),
@@ -392,7 +374,7 @@ export class WordPressPostsService {
 
   private loadCategories(page = 1): Observable<readonly WordPressCategory[]> {
     return this.http
-      .get<readonly WordPressCategory[]>(`${this.apiUrl}/categories`, {
+      .get<unknown>(`${this.apiUrl}/categories`, {
         params: new HttpParams()
           .set('page', String(page))
           .set('per_page', '100')
@@ -402,14 +384,14 @@ export class WordPressPostsService {
       .pipe(
         timeout({ first: this.requestTimeoutMs }),
         switchMap((response) => {
-          const categories = response.body ?? [];
+          const categories = parseWordPressCategories(response.body);
           const header = response.headers.get('X-WP-TotalPages');
-          const totalPages = Number(header);
-          if (header !== null && (!Number.isInteger(totalPages) || totalPages < 0))
-            throw new Error('Paginação de categorias inválida.');
-          const hasMore = header !== null ? page < totalPages : categories.length === 100;
+          const totalPages = header === null ? undefined : wordPressCountHeader(header);
+          if (categories.length > 100 || (totalPages === 0 && categories.length > 0))
+            throw new WordPressContractError('Paginação de categorias inválida.');
+          const hasMore = totalPages !== undefined ? page < totalPages : categories.length === 100;
           if (hasMore && categories.length === 0)
-            throw new Error('Paginação de categorias incompleta.');
+            throw new WordPressContractError('Paginação de categorias incompleta.');
           return hasMore
             ? this.loadCategories(page + 1).pipe(map((next) => [...categories, ...next]))
             : of(categories);
@@ -420,7 +402,7 @@ export class WordPressPostsService {
   private loadPostTags(post: WordPressPost, page = 1): Observable<readonly WordPressTag[]> {
     if (!post.tags?.length) return of([]);
     return this.http
-      .get<readonly WordPressTag[]>(`${this.apiUrl}/tags`, {
+      .get<unknown>(`${this.apiUrl}/tags`, {
         params: new HttpParams()
           .set('post', String(post.id))
           .set('page', String(page))
@@ -433,14 +415,14 @@ export class WordPressPostsService {
       .pipe(
         timeout({ first: this.requestTimeoutMs }),
         switchMap((response) => {
-          const tags = response.body ?? [];
+          const tags = parseWordPressTags(response.body);
           const total = this.readCountHeader(response.headers.get('X-WP-Total'));
           const totalPages = this.readCountHeader(response.headers.get('X-WP-TotalPages'));
           if (
             totalPages !== Math.ceil(total / 100) ||
             tags.length !== Math.min(100, Math.max(0, total - (page - 1) * 100))
           )
-            throw new Error('Paginação das tags do artigo incoerente.');
+            throw new WordPressContractError('Paginação das tags do artigo incoerente.');
           return page < totalPages
             ? this.loadPostTags(post, page + 1).pipe(map((next) => [...tags, ...next]))
             : of(tags);
@@ -472,10 +454,11 @@ export class WordPressPostsService {
       collection.excludedIds,
     );
     return this.http
-      .get<readonly Pick<WordPressPost, 'tags' | 'categories'>[]>(`${this.apiUrl}/posts`, {
+      .get<unknown>(`${this.apiUrl}/posts`, {
         params,
       })
       .pipe(
+        map(parseWordPressTagContexts),
         switchMap((posts) => {
           const ids = [
             ...new Set(
@@ -492,7 +475,7 @@ export class WordPressPostsService {
             .slice(0, this.tagSuggestionLimit);
           if (!ids.length) return of([]);
           return this.http
-            .get<readonly WordPressTag[]>(`${this.apiUrl}/tags`, {
+            .get<unknown>(`${this.apiUrl}/tags`, {
               params: new HttpParams()
                 .set('include', ids.join(','))
                 .set('per_page', String(this.tagSuggestionLimit))
@@ -500,6 +483,7 @@ export class WordPressPostsService {
                 .set('_fields', 'id,name,slug'),
             })
             .pipe(
+              map(parseWordPressTags),
               map((tags) =>
                 tags.filter((tag) => ids.includes(tag.id)).slice(0, this.tagSuggestionLimit),
               ),
@@ -685,18 +669,21 @@ export class WordPressPostsService {
       params = params
         .set('categories[terms]', collection.categoryIds.join(','))
         .set('categories[include_children]', 'true');
-    return this.http
-      .get<readonly Pick<WordPressPost, 'slug' | 'title'>[]>(`${this.apiUrl}/posts`, { params })
-      .pipe(
-        map((posts) => {
-          const adjacent = posts[0];
-          return adjacent
-            ? { slug: adjacent.slug, title: this.wordpressText.toText(adjacent.title.rendered) }
-            : undefined;
-        }),
-        timeout({ first: this.requestTimeoutMs }),
-        catchError(() => of(undefined)),
-      );
+    return this.http.get<unknown>(`${this.apiUrl}/posts`, { params }).pipe(
+      map((body) => {
+        const posts = wordPressArray(body);
+        if (posts.length > 1) throw new WordPressContractError();
+        return posts.map(wordPressPostReference);
+      }),
+      map((posts) => {
+        const adjacent = posts[0];
+        return adjacent
+          ? { slug: adjacent.slug, title: this.wordpressText.toText(adjacent.title.rendered) }
+          : undefined;
+      }),
+      timeout({ first: this.requestTimeoutMs }),
+      catchError(() => of(undefined)),
+    );
   }
 
   private toPositiveInteger(value: number | undefined, fallback: number): number {
@@ -738,14 +725,6 @@ export class WordPressPostsService {
   }
 
   private readCountHeader(value: string | null): number {
-    const parsedValue = Number(value);
-    if (
-      value === null ||
-      value.trim() === '' ||
-      !Number.isSafeInteger(parsedValue) ||
-      parsedValue < 0
-    )
-      throw new Error('Metadados de paginação do WordPress indisponíveis ou inválidos.');
-    return parsedValue;
+    return wordPressCountHeader(value);
   }
 }

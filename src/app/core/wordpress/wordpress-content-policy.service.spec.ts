@@ -9,6 +9,7 @@ import { WordPressPostsService } from '../../pages/posts/data-access/wordpress-p
 import { SanakaverseBooksService } from '../../pages/sanakaverse/data-access/sanakaverse-books.service';
 import { WORDPRESS_API_URL } from './wordpress-api';
 import { WordPressContentPolicyService } from './wordpress-content-policy.service';
+import { WordPressContractError } from './wordpress-response';
 
 describe('WordPress editorial policy', () => {
   const apiUrl = 'https://example.com/wp-json/wp/v2';
@@ -477,4 +478,28 @@ describe('WordPress editorial policy', () => {
       totalPages: 0,
     });
   });
+
+  it.each([
+    null,
+    {},
+    'bad',
+    [{ id: '201', slug: 'romance' }],
+    [
+      { id: 201, slug: 'romance' },
+      { id: 201, slug: 'sanaka-loka' },
+    ],
+  ])(
+    'fails closed on malformed policy JSON rather than requesting an unfiltered archive (%#)',
+    (body) => {
+      const result = watch(TestBed.inject(WordPressPostsService).getPosts());
+      httpTesting.expectOne((request) => request.params.has('slug')).flush(body);
+      expect(result.next).not.toHaveBeenCalled();
+      expect(result.error).toHaveBeenCalledWith(expect.any(WordPressContractError));
+      httpTesting.expectNone((request) => request.url === `${apiUrl}/posts`);
+      const retry = watch(policyService.resolve());
+      respondPolicy();
+      expect(retry.next).toHaveBeenCalledOnce();
+      expect(retry.next.mock.calls[0][0].excludedCategoryIds).toEqual([201]);
+    },
+  );
 });
