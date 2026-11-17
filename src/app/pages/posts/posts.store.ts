@@ -64,6 +64,8 @@ export class PostsStore {
   private readonly searchTerm = signal('');
   private readonly categorySlug = signal<string | undefined>(undefined);
   private readonly tagSlug = signal<string | undefined>(undefined);
+  private readonly viewModeState = signal<PostsViewMode>('continuous');
+  private readonly currentPageState = signal(1);
   private routeInitialized = false;
 
   private readonly initialState: PostsState = {
@@ -78,8 +80,8 @@ export class PostsStore {
   readonly search = this.searchTerm.asReadonly();
   readonly selectedCategorySlug = this.categorySlug.asReadonly();
   readonly selectedTagSlug = this.tagSlug.asReadonly();
-  readonly viewMode = signal<PostsViewMode>('continuous');
-  readonly currentPage = signal(1);
+  readonly viewMode = this.viewModeState.asReadonly();
+  readonly currentPage = this.currentPageState.asReadonly();
 
   private readonly categoriesState = toSignal(
     this.categoryRequests.pipe(
@@ -185,8 +187,8 @@ export class PostsStore {
           this.searchTerm.set('');
           this.categorySlug.set(undefined);
           this.tagSlug.set(undefined);
-          this.currentPage.set(1);
-          this.viewMode.set('continuous');
+          this.currentPageState.set(1);
+          this.viewModeState.set('continuous');
           this.routeInitialized = false;
         }
       });
@@ -229,7 +231,7 @@ export class PostsStore {
   }
 
   private refreshFilters(): void {
-    this.currentPage.set(1);
+    this.currentPageState.set(1);
     this.navigateTo(this.viewMode(), 1, { scroll: 'manual' });
     this.requests.next(this.createRequest(false));
   }
@@ -272,8 +274,8 @@ export class PostsStore {
       tagSlug === this.tagSlug();
 
     this.routeInitialized = true;
-    this.viewMode.set(mode);
-    this.currentPage.set(page);
+    this.viewModeState.set(mode);
+    this.currentPageState.set(page);
     this.categorySlug.set(categorySlug);
     this.tagSlug.set(tagSlug);
     // Canonicaliza depois de aplicar os filtros recebidos pela URL.
@@ -289,7 +291,7 @@ export class PostsStore {
     }
 
     this.searchTerm.set(search);
-    this.currentPage.set(1);
+    this.currentPageState.set(1);
 
     if (this.viewMode() === 'paged') {
       this.navigateTo('paged', 1, { replaceUrl: true, scroll: 'manual' });
@@ -303,8 +305,8 @@ export class PostsStore {
       return;
     }
 
-    this.viewMode.set(mode);
-    this.currentPage.set(1);
+    this.viewModeState.set(mode);
+    this.currentPageState.set(1);
     this.navigateTo(mode, 1);
     this.requests.next(this.createRequest(false));
   }
@@ -314,7 +316,7 @@ export class PostsStore {
       return;
     }
 
-    this.currentPage.update((page) => page + 1);
+    this.currentPageState.update((page) => page + 1);
     this.requests.next(this.createRequest(true));
   }
 
@@ -329,7 +331,7 @@ export class PostsStore {
       return;
     }
 
-    this.currentPage.set(page);
+    this.currentPageState.set(page);
     this.navigateTo('paged', page);
     this.requests.next(this.createRequest(false));
   }
@@ -372,7 +374,7 @@ export class PostsStore {
 
   private recoverFirstPage(request: PostsRequest, emptyPage?: PostsPage): Observable<PostsEvent> {
     const firstRequest: PostsRequest = { ...request, page: 1, append: false };
-    this.currentPage.set(1);
+    this.currentPageState.set(1);
     this.navigateTo('paged', 1, { replaceUrl: true });
     // A primeira página não satisfaz a condição de recuperação; não há redirecionamento em loop.
     return emptyPage

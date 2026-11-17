@@ -1,0 +1,10 @@
+{
+  "extends": "./tsconfig.json",
+  "compilerOptions": {
+    "noEmit": true,
+    "types": ["node"]
+  },
+  "files": ["scripts/architecture/fixtures/store-contracts.ts"],
+  "include": [],
+  "references": []
+}

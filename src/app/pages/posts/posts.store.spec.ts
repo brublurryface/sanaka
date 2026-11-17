@@ -35,6 +35,29 @@ describe('PostsStore visit filters', () => {
     store = TestBed.inject(PostsStore);
   });
 
+  it('exposes reading signals without public writers while commands update the route and request', () => {
+    for (const state of [store.currentPage, store.viewMode, store.search]) {
+      expect(state).not.toHaveProperty('set');
+      expect(state).not.toHaveProperty('update');
+    }
+
+    store.activateRoute('paged', '2', 'pensamentos');
+    expect(store.currentPage()).toBe(2);
+    expect(store.viewMode()).toBe('paged');
+    store.previousPage();
+    expect(store.currentPage()).toBe(1);
+    expect(router.navigate).toHaveBeenLastCalledWith(['/posts', 'paged'], {
+      replaceUrl: false,
+      queryParams: { category: 'pensamentos', tag: undefined },
+    });
+    expect(service.getPosts).toHaveBeenLastCalledWith({
+      page: 1,
+      perPage: 20,
+      search: '',
+      categorySlug: 'pensamentos',
+    });
+  });
+
   it('should preserve filters through search, page changes and reading-mode changes', () => {
     store.activateRoute('continuous', null, 'pensamentos');
     store.setSearch('presença');

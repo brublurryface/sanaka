@@ -18,7 +18,10 @@
     "audit:dependencies": "npm audit --audit-level=moderate",
     "matrix:source:sync": "node scripts/matrix-study-source.mjs",
     "matrix:source:check": "node scripts/matrix-study-source.mjs --check",
-    "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run test:server && npm run test:coverage && npm run duplication:check && npm run build",
+    "architecture:check": "node scripts/architecture/check.mjs",
+    "test:architecture": "node --test scripts/architecture/check.test.mjs",
+    "test:state-contracts": "tsc --project tsconfig.store-contracts.json",
+    "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:server && npm run test:coverage && npm run duplication:check && npm run build",
     "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs",
     "test:e2e": "playwright test",
     "test:e2e:types": "tsc --project tsconfig.e2e.json"
