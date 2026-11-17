@@ -23,6 +23,16 @@
 - When a manual subscription is necessary, use an Angular-safe teardown strategy such as `takeUntilDestroyed`.
 - Keep external API DTOs separate from Sanaka domain models when their shapes differ.
 - Prefer small, maintainable abstractions over premature architecture.
+- Store signals exposed to consumers must be readonly; mutations go through the store's commands.
+
+## Import boundaries
+
+- `core` and `shared` must not import page features. A page feature must not import another page feature.
+- Application composition may wire features together; features, `core` and `shared` must not import that composition to bypass the boundaries.
+- Browser runtime dependencies must not reach server files, Node builtins, Express, Nodemailer or Angular server packages. Keep shared client/server contracts in `src/shared`.
+- Use explicit `import type` / `export type` for erased contracts. Type-only edges still follow feature boundaries, but are not runtime imports.
+- Use literal module paths so lazy imports remain auditable. Unit tests may integrate features; production code must not import tests.
+- `npm run check` runs import-boundary fixtures and compile-only store contracts. See `docs/architecture-boundaries.md` for scope and limitations.
 
 ## Testing
 

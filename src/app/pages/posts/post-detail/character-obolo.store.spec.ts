@@ -33,6 +33,15 @@ describe('CharacterOboloStore', () => {
     store = TestBed.inject(CharacterOboloStore);
   });
 
+  it('exposes the counter without public writers while character and offer commands still work', () => {
+    expect(store.state).not.toHaveProperty('set');
+    expect(store.state).not.toHaveProperty('update');
+    store.setCharacter('nandini');
+    expect(store.state()).toEqual({ status: 'ready', total: 12 });
+    store.offer();
+    expect(store.state()).toEqual({ status: 'success', total: 13 });
+  });
+
   it('should load a character only once while the same post emits navigation updates', () => {
     store.setCharacter('nandini');
     store.setCharacter('nandini');

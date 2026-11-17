@@ -28,7 +28,8 @@ export class CharacterOboloStore {
   private operationId?: string;
   private readonly createOperationId = inject(CREATE_OBOLO_OPERATION_ID);
 
-  readonly state = signal<OboloViewState>({ status: 'loading', total: null });
+  private readonly viewState = signal<OboloViewState>({ status: 'loading', total: null });
+  readonly state = this.viewState.asReadonly();
 
   /** Troca o contador ativo quando a rota passa a exibir outra personagem. */
   setCharacter(characterSlug: string | undefined): void {
@@ -36,7 +37,7 @@ export class CharacterOboloStore {
       this.generation++;
       this.operationId = undefined;
       this.activeCharacterSlug = '';
-      this.state.set({ status: 'loading', total: null });
+      this.viewState.set({ status: 'loading', total: null });
       return;
     }
 
@@ -73,22 +74,22 @@ export class CharacterOboloStore {
     try {
       this.operationId ??= this.createOperationId();
     } catch {
-      this.state.set({ status: 'offer-error', total: currentState.total });
+      this.viewState.set({ status: 'offer-error', total: currentState.total });
       return;
     }
-    this.state.set({ status: 'submitting', total: currentState.total });
+    this.viewState.set({ status: 'submitting', total: currentState.total });
     this.service
       .offer(requestedSlug, this.operationId)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (total) => {
           if (this.generation === generation) {
-            this.state.set({ status: 'success', total });
+            this.viewState.set({ status: 'success', total });
           }
         },
         error: () => {
           if (this.generation === generation) {
-            this.state.set({ status: 'offer-error', total: currentState.total });
+            this.viewState.set({ status: 'offer-error', total: currentState.total });
           }
         },
       });
@@ -98,19 +99,19 @@ export class CharacterOboloStore {
     const requestedSlug = this.activeCharacterSlug;
     const generation = this.generation;
 
-    this.state.set({ status: 'loading', total: null });
+    this.viewState.set({ status: 'loading', total: null });
     this.service
       .getTotal(requestedSlug)
       .pipe(takeUntilDestroyed(this.destroyRef))
       .subscribe({
         next: (total) => {
           if (this.generation === generation) {
-            this.state.set({ status: 'ready', total });
+            this.viewState.set({ status: 'ready', total });
           }
         },
         error: () => {
           if (this.generation === generation) {
-            this.state.set({ status: 'load-error', total: null });
+            this.viewState.set({ status: 'load-error', total: null });
           }
         },
       });
