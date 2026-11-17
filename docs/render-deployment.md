@@ -268,3 +268,10 @@ Consultadas em 17 e 18/10/2026:
 - [WordPress — migração e mudança de URLs](https://developer.wordpress.org/advanced-administration/upgrade/migrating/)
 - [Contato por SMTP](contact-form-deployment.md)
 - [Newsletter Brevo](newsletter-brevo.md)
+
+## Cabeçalhos de segurança
+
+A política de recursos começa em observação, com coletor limitado na própria origem.
+O enquadramento permite o iframe original de Śabala e restringe ancestrais externos.
+Consultar [política, inventário e validação](security-response-headers.md) antes de alterar
+CSP, Trusted Types ou HSTS.
