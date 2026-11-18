@@ -161,6 +161,25 @@ O cache de um ano foi reservado aos bundles com hash. Imagens e traduções pode
 o nome e ainda receber conteúdo atualizado mediante revalidação HTTP. A mudança não apaga
 cópias antigas que algum navegador já tenha guardado com a política anterior.
 
+## Descoberta de páginas e requisições inválidas
+
+`/robots.txt` é servido pelo Express como texto UTF-8. Em produção, aponta para
+`https://sanaka.com.br/sitemap.xml`. Com `SITE_NOINDEX=true`, omite o sitemap e permite a leitura
+dos cabeçalhos `X-Robots-Tag` nos documentos. A documentação do Google descreve como o rastreador lê
+essa diretiva. [Google Search Central](https://developers.google.com/search/docs/crawling-indexing/block-indexing)
+
+O arquivo `public/sitemap.xml` lista as 13 páginas públicas estáveis com URLs do domínio principal.
+A lista deve acompanhar alterações nessas rotas. O índice legado `/sitemap_index.xml` continua
+encaminhando ao WordPress, que publica URLs do próprio CMS.
+
+A conferência pública de 18/11 verificou que o feed do CMS retorna HTTP 200 com tipo RSS, mas o
+corpo começa em HTML e falha na leitura de XML. `/rss/` continua em 404 até haver um feed válido.
+
+Quando o alvo enviado ao Node inicia com duas barras, o Express responde HTTP 400 com `no-store`
+antes de processar rotas, redirecionamentos ou Angular. A regra se aplica somente ao início do alvo.
+Caminhos comuns inexistentes conservam HTTP 404. Após a publicação, conferir status, tipos de
+conteúdo e o redirecionamento do índice legado pelo domínio público.
+
 ## WordPress na Locaweb
 
 `https://cms.sanaka.com.br` é um apontamento para a instalação WordPress existente, com o mesmo
