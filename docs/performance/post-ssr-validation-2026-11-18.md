@@ -57,8 +57,44 @@ São 100 respostas por modo/concorrência, nos níveis 1, 5 e 20. Não é LCP, I
 de tráfego suportado. Igualar quotas do plano não reproduz hardware, região, compartilhamento da CPU
 ou latência Render–Locaweb. A fixture introduz 20 ms por chamada; não mede a rede do CMS real.
 
-Os resultados restritos e o CI serão registrados após a execução da revisão publicada. Uma medição
-local sem cgroup disponível permanece identificada como `local-unconstrained` e não libera ativação.
+Uma medição local sem cgroup disponível permanece identificada como `local-unconstrained` e não
+libera ativação. O Chromium local não iniciou por restrição de socket do ambiente; os cenários de
+navegador abaixo foram executados no CI.
+
+### Resultado restrito
+
+Medição em 18/11 às 18:30, America/Sao_Paulo, Node 24.22.1. O checkout de CI é `73151d0`, merge de
+`fe9beb7` na base `6f9b268`, sem alterações locais. O JSON completo, incluindo digests da imagem,
+quotas e casos funcionais, está em [dados brutos](data/post-ssr-validation-2026-11-18.json).
+
+| Modo | Concorrência | Respostas | p95 HTML (ms) | CPU (s) | Pico RSS (MiB) | Pico cgroup (MiB) | GETs à fixture |
+| ---- | -----------: | --------: | ------------: | ------: | -------------: | ----------------: | -------------: |
+| CSR  |            1 |       100 |           1,6 |   0,115 |           85,6 |              35,8 |              0 |
+| CSR  |            5 |       100 |          51,6 |   0,069 |           85,7 |              36,0 |              0 |
+| CSR  |           20 |       100 |          59,3 |   0,073 |           86,7 |              37,2 |              0 |
+| SSR  |            1 |       100 |         222,6 |   7,051 |          141,4 |              84,8 |            800 |
+| SSR  |            5 |       100 |         687,4 |   5,884 |          155,2 |              99,0 |            800 |
+| SSR  |           20 |       100 |       2.493,6 |   5,562 |          182,0 |             127,2 |            800 |
+
+Todas as 600 respostas de carga foram 200; os 16 casos funcionais também passaram. O artigo com
+complementos atrasados em 2,5 s foi entregue em aproximadamente 852 ms no SSR. Não houve OOM ou
+warnings inesperados. A fixture recebeu oito GETs por artigo nessa composição: isso é custo de
+leitura medido, não garantia de oito chamadas para qualquer artigo real.
+
+O pico do cgroup é cumulativo até a fase indicada e inclui aquecimento e cenários anteriores. RSS e
+contabilização do cgroup têm escopos diferentes, inclusive páginas compartilhadas; não devem ser
+somados ou tratados como equivalentes. As durações da tabela terminam no recebimento de todo o HTML;
+os tempos dos casos funcionais no JSON incluem também a extração de metadados com JSDOM.
+
+O CI confirmou 850 testes Angular, 264 do servidor, 34 de arquitetura, contratos de escrita, build,
+94 fluxos existentes de navegador, 16 regressões de segurança, integração PHP/MySQL/WordPress e
+os dez novos cenários de hidratação. Execuções da revisão medida:
+[experimento SSR](https://github.com/brublurryface/sanaka/actions/runs/44401966041),
+[validação geral](https://github.com/brublurryface/sanaka/actions/runs/44401965961) e
+[fluxos de navegador](https://github.com/brublurryface/sanaka/actions/runs/44401965823).
+
+O resultado demonstra funcionamento sob as quotas testadas, com aumento de latência sob concorrência.
+Ele não estabelece capacidade de produção ou autoriza ativação; a decisão permanece na seção seguinte.
 
 ## Reprodução
 
