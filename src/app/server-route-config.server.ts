@@ -1,0 +1,73 @@
+import { RenderMode, ServerRoute } from '@angular/ssr';
+
+export function createServerRoutes(renderArticles = false): ServerRoute[] {
+  const article: ServerRoute = { path: 'posts/:slug', renderMode: RenderMode.Server };
+  return [
+    {
+      path: '',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'posts',
+      renderMode: RenderMode.Client,
+    },
+    ...(renderArticles ? [article] : []),
+    {
+      path: 'posts/**',
+      renderMode: RenderMode.Client,
+    },
+    {
+      path: 'sobre',
+      renderMode: RenderMode.Client,
+    },
+    {
+      path: 'contato',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'sanaka-loka',
+      renderMode: RenderMode.Client,
+    },
+    {
+      path: 'sanakaverse',
+      renderMode: RenderMode.Server,
+      status: 301,
+    },
+    {
+      path: 'samvit',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'maya',
+      renderMode: RenderMode.Server,
+      status: 301,
+    },
+    {
+      path: 'matrix',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'matrix/components',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'matrix/rest-api',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'matrix/obolos',
+      renderMode: RenderMode.Prerender,
+    },
+    {
+      path: 'matrix/entregas',
+      renderMode: RenderMode.Prerender,
+    },
+    { path: 'matrix/jogo', renderMode: RenderMode.Prerender },
+    { path: 'matrix/padaria', renderMode: RenderMode.Prerender },
+    {
+      path: '**',
+      renderMode: RenderMode.Server,
+      status: 404,
+    },
+  ];
+}

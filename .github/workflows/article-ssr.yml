@@ -1,0 +1,52 @@
+name: Article SSR experiment
+
+on:
+  pull_request:
+  workflow_dispatch:
+
+permissions:
+  contents: read
+
+concurrency:
+  group: article-ssr-${{ github.event.pull_request.number || github.ref }}
+  cancel-in-progress: true
+
+jobs:
+  experiment:
+    name: Article HTML, hydration and constrained capacity
+    runs-on: ubuntu-24.04
+    timeout-minutes: 15
+    steps:
+      - name: Checkout
+        uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262
+        with:
+          persist-credentials: false
+      - name: Set up Node
+        uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
+        with:
+          node-version: 24.22.1
+          cache: npm
+      - name: Use declared npm version
+        run: npm install --global npm@11.12.1
+      - name: Install locked dependencies
+        run: npm ci
+      - name: Build unchanged production rendering
+        run: npm run build
+      - name: Build fixture-backed article SSR
+        run: npm run build:ssr:experiment
+      - name: Fetch isolated capacity runtime
+        run: docker pull node:24.22.1-bookworm-slim
+      - name: Verify HTML and measure 0.5 CPU with 512 MiB, without swap
+        run: node experiments/ssr/benchmark.mjs "$RUNNER_TEMP/sanaka-article-ssr-capacity.json" --constrained
+      - name: Install Chromium
+        run: npx playwright install --with-deps chromium
+      - name: Verify hydration and recovery in desktop and mobile
+        run: npm run test:ssr:hydration
+      - name: Keep capacity evidence
+        if: ${{ always() }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02
+        with:
+          name: article-ssr-capacity
+          path: ${{ runner.temp }}/sanaka-article-ssr-capacity.json
+          retention-days: 14
+          if-no-files-found: ignore
