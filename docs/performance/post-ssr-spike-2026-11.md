@@ -1,5 +1,9 @@
 # Spike de SSR de artigos — 04/11/2026
 
+Registro histórico. A retomada de 18/11, com isolamento das rotas, hidratação e quotas verificadas,
+está em [Validação do experimento](post-ssr-validation-2026-11-18.md). As medições abaixo não foram
+substituídas nem convertidas em previsão de capacidade do Render.
+
 ## Decisão
 
 Manter `/posts/:slug` em CSR na configuração padrão. A configuração **experimental** `ssr-spike` renderiza somente essa rota no servidor. Ainda falta validar a capacidade em 0,5 CPU/512 MiB e a latência do WordPress a partir do Render; o ambiente local tem cota de 8 CPUs/8 GiB. O limite Node de heap de 384 MiB não é um limite de RSS nem simula o Render.

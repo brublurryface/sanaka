@@ -8,7 +8,13 @@ export function createWordPressFixture({
   largeCovers = false,
 } = {}) {
   const calls = [];
-  const state = { enrichmentFailure: false, policyFailure: false };
+  const state = {
+    enrichmentFailure: false,
+    policyFailure: false,
+    enrichmentDelayMs: 0,
+    articleVersion: 1,
+    unavailableRecovered: false,
+  };
   const categories = [
     { id: 43, name: 'Romance', slug: 'romance', parent: 0 },
     { id: 62, name: 'Sobre', slug: 'sobre', parent: 0 },
@@ -19,7 +25,9 @@ export function createWordPressFixture({
     id,
     slug,
     date: '2026-11-04T12:00:00',
-    title: { rendered: `Artigo de auditoria ${id}` },
+    title: {
+      rendered: `Artigo de auditoria ${id}${state.articleVersion === 1 ? '' : ` v${state.articleVersion}`}`,
+    },
     excerpt: { rendered: '<p>Conteúdo público da fixture local.</p>' },
     content: {
       rendered: '<p>Leitura pública preservada para o teste de HTML inicial.</p>'.repeat(30),
@@ -38,7 +46,19 @@ export function createWordPressFixture({
       res.writeHead(405).end();
       return;
     }
-    await delay(delayMs);
+    const optional =
+      (url.pathname.endsWith('/categories') && !url.searchParams.has('slug')) ||
+      url.pathname.endsWith('/tags') ||
+      (url.pathname.endsWith('/posts') && !url.searchParams.has('slug'));
+    const controller = new AbortController();
+    res.once('close', () => controller.abort());
+    try {
+      await delay(delayMs + (optional ? state.enrichmentDelayMs : 0), undefined, {
+        signal: controller.signal,
+      });
+    } catch {
+      return;
+    }
     let status = 200,
       body,
       total;
@@ -70,12 +90,14 @@ export function createWordPressFixture({
       res.setHeader('Cache-Control', 'no-store');
     } else if (url.pathname.endsWith('/posts')) {
       const slug = url.searchParams.get('slug');
-      if (slug === 'cms-unavailable') {
+      if (slug === 'cms-unavailable' && !state.unavailableRecovered) {
         status = 503;
         body = { code: 'fixture_unavailable' };
-      } else if (slug === 'does-not-exist') body = [];
+      } else if (slug === 'malformed-article') body = { items: [] };
+      else if (slug === 'does-not-exist') body = [];
       else if (slug) {
         const post = article(1, slug);
+        if (slug === 'excluded-article') post.categories = [43];
         if (largeCovers) {
           post.featured_media = 900;
           post._embedded = {

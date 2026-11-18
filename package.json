@@ -5,6 +5,8 @@
     "ng": "ng",
     "start": "ng serve",
     "build": "ng build",
+    "build:ssr:experiment": "ng build --configuration production,ssr-spike --output-path dist/ssr-spike",
+    "test:ssr:hydration": "node experiments/ssr/hydration.mjs",
     "watch": "ng build --watch --configuration development",
     "test": "ng test",
     "test:ci": "ng test --watch=false",
