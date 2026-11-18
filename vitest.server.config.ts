@@ -18,6 +18,8 @@ export default defineConfig({
         'src/server/runtime-options.ts',
         'src/server/http-request-log.ts',
         'src/server/legacy-wordpress-redirects.ts',
+        'src/server/request-target.ts',
+        'src/server/robots.ts',
       ],
       reportsDirectory: 'coverage/server',
       reporter: ['text-summary', 'json-summary'],

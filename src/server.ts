@@ -12,6 +12,8 @@ import { createCspReportRouter } from './server/csp-reports';
 import { createHttpRequestLog } from './server/http-request-log';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
+import { rejectAmbiguousRequestTarget } from './server/request-target';
+import { createRobotsResponse } from './server/robots';
 import { readRuntimeOptions } from './server/runtime-options';
 import { CSP_REPORT_PATH, securityResponseHeaders } from './server/security-headers';
 
@@ -32,6 +34,9 @@ if (runtimeOptions.noIndex) {
     next();
   });
 }
+
+app.use(rejectAmbiguousRequestTarget);
+app.get('/robots.txt', createRobotsResponse(runtimeOptions.noIndex));
 
 app.use('/api', (_request, response, next) => {
   response.setHeader('Cache-Control', 'no-store');

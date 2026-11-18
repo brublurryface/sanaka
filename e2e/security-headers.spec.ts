@@ -41,12 +41,21 @@ test('keeps headers and resource MIME types on the built Angular and Express ser
     ['/loadings/sabala/poster.png', 'image/png'],
     ['/favicon.ico', 'image/'],
     ['/i18n/pt-BR.json', 'application/json'],
+    ['/sitemap.xml', 'xml'],
   ]) {
     const response = await request.get(path);
     expect(response.status()).toBe(200);
     expectHeaders(response);
     expect(response.headers()['content-type']).toContain(mime);
   }
+
+  const robots = await request.get('/robots.txt');
+  expect(robots.status()).toBe(200);
+  expectHeaders(robots);
+  expect(robots.headers()['content-type']).toContain('text/plain');
+  expect(robots.headers()['x-robots-tag']).toBe('noindex, nofollow');
+  expect(await robots.text()).not.toContain('Sitemap:');
+
   const health = await request.get('/api/health');
   expectHeaders(health);
   expect(await health.json()).toEqual({ status: 'ok' });
