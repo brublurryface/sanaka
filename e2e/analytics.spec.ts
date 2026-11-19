@@ -55,7 +55,7 @@ test('keeps the local cookie banner in view while scrolling and remembers the ch
 }) => {
   await page.goto('/');
   const banner = page.locator('#analytics-banner');
-  const preferences = page.getByRole('button', { name: 'Preferências de cookies' });
+  const preferences = page.getByRole('button', { name: 'Preferências de cookies', exact: true });
   const accept = banner.getByRole('button', { name: 'Aceitar análise' });
   const decline = banner.getByRole('button', { name: 'Recusar análise' });
   await expect(banner).toBeInViewport({ ratio: 0.95 });
@@ -89,10 +89,11 @@ test('keeps the local cookie banner in view while scrolling and remembers the ch
   await expect(banner.getByRole('heading', { name: 'Preferências de cookies' })).toBeFocused();
   await expect(accept).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
-  await expect(preferences).toBeFocused();
   await expect(banner).toBeHidden();
+  await expect(preferences).toBeFocused();
   await preferences.click();
   await decline.click();
+  await expect(banner).toBeHidden();
   await expect(preferences).toBeFocused();
   await preferences.click();
   await expect(decline).toHaveAttribute('aria-pressed', 'true');
@@ -160,7 +161,7 @@ test('measures published pages once after consent, filters URL data, and honors 
   await page.getByRole('link', { name: 'Newsletter', exact: true }).click();
   await expect(page).toHaveURL(/\/posts#newsletter$/u);
   await page.getByRole('button', { name: 'EN', exact: true }).click();
-  await expect(page.getByRole('button', { name: 'Cookie preferences' })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cookie preferences', exact: true })).toBeVisible();
   expect(await pageViews(page)).toHaveLength(2);
 
   const books = site.holdNext('books');
@@ -175,7 +176,7 @@ test('measures published pages once after consent, filters URL data, and honors 
   });
   expect(tagLoads()).toBe(1);
 
-  await page.getByRole('button', { name: 'Cookie preferences' }).click();
+  await page.getByRole('button', { name: 'Cookie preferences', exact: true }).click();
   await page.getByRole('button', { name: 'Decline analytics' }).click();
   expect(await page.evaluate((id) => Reflect.get(window, `ga-disable-${id}`), fixtureId)).toBe(
     true,
@@ -199,7 +200,9 @@ test('leaves collection off after an initial refusal', async ({ page, request, b
   await page.goto(`${publicOrigin}/`);
   await page.getByRole('button', { name: 'Recusar análise' }).click();
   await page.reload();
-  await expect(page.getByRole('button', { name: 'Preferências de cookies' })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Preferências de cookies', exact: true }),
+  ).toBeVisible();
   await expect(page.locator('#analytics-banner')).toBeHidden();
   expect(tagLoads()).toBe(0);
   expect(await commands(page)).toEqual([]);
@@ -221,7 +224,9 @@ test('leaves the tag unloaded on an unavailable article, even with saved consent
   site.emptyNext('article');
   await page.goto(`${publicOrigin}/posts/publicacao-indisponivel?token=synthetic`);
   await expect(page.getByRole('status')).toContainText('Esta publicação não foi encontrada.');
-  await expect(page.getByRole('button', { name: 'Preferências de cookies' })).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: 'Preferências de cookies', exact: true }),
+  ).toBeVisible();
   expect(tagLoads()).toBe(0);
   expect(await pageViews(page)).toEqual([]);
   await page.getByRole('link', { name: 'Voltar à biblioteca' }).click();
