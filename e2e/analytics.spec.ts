@@ -47,6 +47,30 @@ async function pageViews(page: Page) {
   );
 }
 
+test('previews the cookie choice on loopback without loading analytics', async ({ page }) => {
+  await page.goto('/');
+  const preferences = page.locator('footer details.analytics-preferences');
+  const summary = preferences.locator('summary');
+  const accept = preferences.getByRole('button', { name: 'Aceitar análise' });
+  const decline = preferences.getByRole('button', { name: 'Recusar análise' });
+  await expect(accept).toBeVisible();
+  await expect(decline).toBeVisible();
+  await accept.click();
+  await expect(summary).toBeFocused();
+
+  await page.reload();
+  await expect(summary).toBeVisible();
+  await expect(preferences).not.toHaveAttribute('open');
+  await summary.click();
+  await expect(accept).toHaveAttribute('aria-pressed', 'true');
+  await decline.click();
+  await summary.click();
+  await expect(decline).toHaveAttribute('aria-pressed', 'true');
+
+  expect(await commands(page)).toEqual([]);
+  expect(await page.evaluate(() => document.cookie)).not.toContain('sanaka_ga');
+});
+
 test('measures published pages once after consent, filters URL data, and honors withdrawal', async ({
   page,
   request,

@@ -11,6 +11,10 @@ Com o Analytics configurado, o rodapé apresenta **Preferências de cookies** e 
 O visitante pode aceitar ou recusar com botões equivalentes e reabrir a escolha pelo mesmo
 controle. O painel cabe no fluxo normal da página e aparece junto ao restante do rodapé.
 
+Para experimentar as preferências no computador, rode `npm start` e vá ao rodapé em
+`http://localhost:4200`. A prévia também funciona em `127.0.0.1`. As escolhas ficam no navegador
+para aquele endereço, sem exigir um ID de medição nem carregar a tag do Google.
+
 O modo básico carrega a tag após aceite explícito. Antes de aceitar, o site consulta apenas sua
 configuração no próprio domínio e a preferência local. A escolha fica registrada no navegador
 por ID de medição. A retirada pausa a tag, expira os cookies de análise com prefixo `sanaka` e
@@ -43,7 +47,7 @@ representam os visitantes que deram aceite e tiveram a tag carregada.
    desativa os sinais de publicidade e configura `send_page_view: false`.
 3. Na revisão aprovada, configurar `SANAKA_GA4_MEASUREMENT_ID` no ambiente do serviço de produção
    e aplicar o deploy conforme o fluxo do Render. Um ID ausente/inválido ou `SITE_NOINDEX=true`
-   deixa a medição desativada. O navegador só inicializa no domínio canônico HTTPS.
+   deixa a medição desativada. A tag só inicializa no domínio canônico HTTPS.
 4. Usar o Tag Assistant em uma visita controlada e conferir o DebugView. Antes do aceite e depois
    da recusa, observar a ausência de carregamento da tag. Com aceite, conferir o evento inicial,
    a navegação para um artigo, as URLs sem parâmetros e a ausência de duplicação após âncora/idioma.

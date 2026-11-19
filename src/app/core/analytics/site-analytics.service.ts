@@ -53,8 +53,15 @@ export class SiteAnalytics {
 
   initialize(): void {
     const browser = this.document.defaultView;
-    if (this.started || browser?.location.origin !== SANAKA_ORIGIN) return;
+    if (this.started || !browser) return;
     this.started = true;
+
+    const { hostname, origin } = browser.location;
+    if (hostname === 'localhost' || hostname === '127.0.0.1') {
+      this.enablePreferences(browser, 'sanaka.analytics.v1.local-preview');
+      return;
+    }
+    if (origin !== SANAKA_ORIGIN) return;
 
     this.http
       .get<unknown>(ANALYTICS_CONFIG_PATH, { transferCache: false })
@@ -67,10 +74,8 @@ export class SiteAnalytics {
               : null;
           if (!id) return;
           this.tag = new GoogleAnalyticsTag(browser, id);
-          this.storageKey = `sanaka.analytics.v1.${id}`;
-          this.applyPreference(this.readPreference());
           if (this.router.lastSuccessfulNavigation()) this.updateView();
-          this.availableState.set(true);
+          this.enablePreferences(browser, `sanaka.analytics.v1.${id}`);
 
           this.router.events
             .pipe(
@@ -78,12 +83,6 @@ export class SiteAnalytics {
               takeUntilDestroyed(this.destroyRef),
             )
             .subscribe(() => this.updateView());
-          fromEvent<StorageEvent>(browser, 'storage')
-            .pipe(
-              filter((event) => event.key === null || event.key === this.storageKey),
-              takeUntilDestroyed(this.destroyRef),
-            )
-            .subscribe(() => this.applyPreference(this.readPreference()));
         },
         error: () => {
           /* A failed config read leaves measurement unavailable. */
@@ -99,6 +98,19 @@ export class SiteAnalytics {
       // Honor the decision during this visit if browser storage is unavailable.
     }
     this.applyPreference(preference);
+  }
+
+  private enablePreferences(browser: Window, storageKey: string): void {
+    this.storageKey = storageKey;
+    this.applyPreference(this.readPreference());
+    this.availableState.set(true);
+
+    fromEvent<StorageEvent>(browser, 'storage')
+      .pipe(
+        filter((event) => event.key === null || event.key === storageKey),
+        takeUntilDestroyed(this.destroyRef),
+      )
+      .subscribe(() => this.applyPreference(this.readPreference()));
   }
 
   private updateView(): void {
