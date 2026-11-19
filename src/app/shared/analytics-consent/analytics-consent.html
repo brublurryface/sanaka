@@ -1,13 +1,34 @@
 @if (analytics.available()) {
-  <details class="analytics-preferences" [open]="analytics.preference() === null" #panel>
-    <summary #summary>{{ 'analytics.preferences' | transloco }}</summary>
-    <p class="analytics-preferences__quote">{{ 'analytics.quote' | transloco }}</p>
-    <p id="analytics-description">{{ 'analytics.description' | transloco }}</p>
-    <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
-      {{ 'analytics.googlePrivacy' | transloco }}
-    </a>
+  <button
+    #trigger
+    type="button"
+    class="analytics-preferences-trigger"
+    [hidden]="analytics.preference() === null"
+    aria-controls="analytics-banner"
+    [attr.aria-expanded]="reviewing()"
+    (click)="togglePreferences(trigger, title)"
+  >
+    {{ 'analytics.preferences' | transloco }}
+  </button>
+
+  <section
+    id="analytics-banner"
+    class="analytics-banner"
+    [class.analytics-banner--reviewing]="reviewing()"
+    [hidden]="analytics.preference() !== null && !reviewing()"
+    aria-labelledby="analytics-title"
+    (keydown.escape)="closePreferences(trigger)"
+  >
+    <div class="analytics-banner__copy">
+      <h2 id="analytics-title" tabindex="-1" #title>{{ 'analytics.preferences' | transloco }}</h2>
+      <p class="analytics-banner__quote">{{ 'analytics.quote' | transloco }}</p>
+      <p id="analytics-description">{{ 'analytics.description' | transloco }}</p>
+      <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
+        {{ 'analytics.googlePrivacy' | transloco }}
+      </a>
+    </div>
     <div
-      class="analytics-preferences__actions"
+      class="analytics-banner__actions"
       role="group"
       aria-describedby="analytics-description"
       [attr.aria-label]="'analytics.preferences' | transloco"
@@ -15,17 +36,27 @@
       <button
         type="button"
         [attr.aria-pressed]="analytics.preference() === 'granted'"
-        (click)="choose('granted', panel, summary)"
+        (click)="choose('granted', trigger)"
       >
         {{ 'analytics.accept' | transloco }}
       </button>
       <button
         type="button"
         [attr.aria-pressed]="analytics.preference() === 'denied'"
-        (click)="choose('denied', panel, summary)"
+        (click)="choose('denied', trigger)"
       >
         {{ 'analytics.decline' | transloco }}
       </button>
     </div>
-  </details>
+    @if (reviewing()) {
+      <button
+        type="button"
+        class="analytics-banner__close"
+        [attr.aria-label]="'analytics.close' | transloco"
+        (click)="closePreferences(trigger)"
+      >
+        <span aria-hidden="true">×</span>
+      </button>
+    }
+  </section>
 }

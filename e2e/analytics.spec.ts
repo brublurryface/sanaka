@@ -1,9 +1,11 @@
 import type { APIRequestContext, Page } from '@playwright/test';
 
 import { article } from './fixtures/wordpress';
-import { expectReady } from './support/assertions';
+import { expectReady, fullPageLoading } from './support/assertions';
 import { expectSabalaReady } from './support/sabala-renderer';
 import { expect, test } from './support/site';
+
+test.use({ storageState: { cookies: [], origins: [] } });
 
 const publicOrigin = 'https://sanaka.com.br';
 const fixtureId = 'G-TEST000001';
@@ -47,25 +49,55 @@ async function pageViews(page: Page) {
   );
 }
 
-test('previews the cookie choice on loopback without loading analytics', async ({ page }) => {
+test('keeps the local cookie banner in view while scrolling and remembers the choice', async ({
+  page,
+  site,
+}) => {
   await page.goto('/');
-  const preferences = page.locator('footer details.analytics-preferences');
-  const summary = preferences.locator('summary');
-  const accept = preferences.getByRole('button', { name: 'Aceitar análise' });
-  const decline = preferences.getByRole('button', { name: 'Recusar análise' });
-  await expect(accept).toBeVisible();
-  await expect(decline).toBeVisible();
+  const banner = page.locator('#analytics-banner');
+  const preferences = page.getByRole('button', { name: 'Preferências de cookies' });
+  const accept = banner.getByRole('button', { name: 'Aceitar análise' });
+  const decline = banner.getByRole('button', { name: 'Recusar análise' });
+  await expect(banner).toBeInViewport({ ratio: 0.95 });
+  await expect(accept).toBeInViewport();
+  await expect(decline).toBeInViewport();
+  const initialPosition = (await banner.boundingBox())!.y;
+  await page.evaluate(() => window.scrollTo({ top: 240, behavior: 'instant' }));
+  await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
+  await expect(banner).toBeInViewport({ ratio: 0.95 });
+  expect((await banner.boundingBox())!.y).toBeCloseTo(initialPosition, 0);
+
+  const archive = site.holdNext('archive');
+  await page.locator('.main-nav').getByRole('link', { name: 'Posts' }).click();
+  await archive.requested;
+  await expect(fullPageLoading(page)).toBeVisible();
+  await expect(banner).toBeHidden();
+  await archive.release();
+  await expectReady(page);
+  await expect(banner).toBeInViewport({ ratio: 0.95 });
+
+  const scrollBeforeChoice = await page.evaluate(() => window.scrollY);
   await accept.click();
-  await expect(summary).toBeFocused();
+  await expect(banner).toBeHidden();
+  expect(await page.evaluate(() => window.scrollY)).toBe(scrollBeforeChoice);
 
   await page.reload();
-  await expect(summary).toBeVisible();
-  await expect(preferences).not.toHaveAttribute('open');
-  await summary.click();
+  await expectReady(page);
+  await expect(preferences).toBeVisible();
+  await expect(banner).toBeHidden();
+  await preferences.click();
+  await expect(banner.getByRole('heading', { name: 'Preferências de cookies' })).toBeFocused();
   await expect(accept).toHaveAttribute('aria-pressed', 'true');
+  await page.keyboard.press('Escape');
+  await expect(preferences).toBeFocused();
+  await expect(banner).toBeHidden();
+  await preferences.click();
   await decline.click();
-  await summary.click();
+  await expect(preferences).toBeFocused();
+  await preferences.click();
   await expect(decline).toHaveAttribute('aria-pressed', 'true');
+  await banner.getByRole('button', { name: 'Fechar preferências de cookies' }).click();
+  await expect(banner).toBeHidden();
 
   expect(await commands(page)).toEqual([]);
   expect(await page.evaluate(() => document.cookie)).not.toContain('sanaka_ga');
@@ -128,7 +160,7 @@ test('measures published pages once after consent, filters URL data, and honors 
   await page.getByRole('link', { name: 'Newsletter', exact: true }).click();
   await expect(page).toHaveURL(/\/posts#newsletter$/u);
   await page.getByRole('button', { name: 'EN', exact: true }).click();
-  await expect(page.getByText('Cookie preferences', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Cookie preferences' })).toBeVisible();
   expect(await pageViews(page)).toHaveLength(2);
 
   const books = site.holdNext('books');
@@ -143,7 +175,7 @@ test('measures published pages once after consent, filters URL data, and honors 
   });
   expect(tagLoads()).toBe(1);
 
-  await page.getByText('Cookie preferences', { exact: true }).click();
+  await page.getByRole('button', { name: 'Cookie preferences' }).click();
   await page.getByRole('button', { name: 'Decline analytics' }).click();
   expect(await page.evaluate((id) => Reflect.get(window, `ga-disable-${id}`), fixtureId)).toBe(
     true,
@@ -167,9 +199,8 @@ test('leaves collection off after an initial refusal', async ({ page, request, b
   await page.goto(`${publicOrigin}/`);
   await page.getByRole('button', { name: 'Recusar análise' }).click();
   await page.reload();
-  const preferences = page.locator('details.analytics-preferences');
-  await expect(preferences).toBeVisible();
-  await expect(preferences).not.toHaveAttribute('open');
+  await expect(page.getByRole('button', { name: 'Preferências de cookies' })).toBeVisible();
+  await expect(page.locator('#analytics-banner')).toBeHidden();
   expect(tagLoads()).toBe(0);
   expect(await commands(page)).toEqual([]);
 });
@@ -190,7 +221,7 @@ test('leaves the tag unloaded on an unavailable article, even with saved consent
   site.emptyNext('article');
   await page.goto(`${publicOrigin}/posts/publicacao-indisponivel?token=synthetic`);
   await expect(page.getByRole('status')).toContainText('Esta publicação não foi encontrada.');
-  await expect(page.getByText('Preferências de cookies', { exact: true })).toBeVisible();
+  await expect(page.getByRole('button', { name: 'Preferências de cookies' })).toBeVisible();
   expect(tagLoads()).toBe(0);
   expect(await pageViews(page)).toEqual([]);
   await page.getByRole('link', { name: 'Voltar à biblioteca' }).click();

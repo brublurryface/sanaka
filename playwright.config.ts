@@ -17,6 +17,16 @@ export default defineConfig({
     baseURL,
     locale: 'pt-BR',
     serviceWorkers: 'block',
+    storageState: {
+      cookies: [],
+      origins: [
+        {
+          origin: baseURL,
+          // Page flows start with a choice made. The consent suite exercises a fresh visit.
+          localStorage: [{ name: 'sanaka.analytics.v1.local-preview', value: 'denied' }],
+        },
+      ],
+    },
     trace: 'retain-on-failure',
     screenshot: 'only-on-failure',
   },

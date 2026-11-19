@@ -5,14 +5,15 @@ medição correspondente. A inspeção do repositório e do HTML público de San
 localizou uma tag Google existente. A existência de uma propriedade na conta do Analytics
 deve ser confirmada no painel da titular.
 
-## Preferência no rodapé
+## Banner de cookies
 
-Com o Analytics configurado, o rodapé apresenta **Preferências de cookies** e a frase da autora.
-O visitante pode aceitar ou recusar com botões equivalentes e reabrir a escolha pelo mesmo
-controle. O painel cabe no fluxo normal da página e aparece junto ao restante do rodapé.
+Com o Analytics configurado, a primeira visita abre um banner fixo no fim da janela com a
+frase da autora e as opções **Aceitar análise** e **Recusar análise**. O banner acompanha a rolagem
+e fica oculto durante o carregamento de tela inteira. Depois da decisão, **Preferências de cookies**
+no rodapé reabre o banner. Fechar as preferências mantém a escolha gravada.
 
-Para experimentar as preferências no computador, rode `npm start` e vá ao rodapé em
-`http://localhost:4200`. A prévia também funciona em `127.0.0.1`. As escolhas ficam no navegador
+Para experimentar o banner no computador, rode `npm start` e abra `http://localhost:4200`.
+A prévia também funciona em `127.0.0.1`. As escolhas ficam no navegador
 para aquele endereço, sem exigir um ID de medição nem carregar a tag do Google.
 
 O modo básico carrega a tag após aceite explícito. Antes de aceitar, o site consulta apenas sua

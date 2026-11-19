@@ -51,7 +51,8 @@
     "description": "Com seu aceite, o Google Analytics usa cookies para medir quais páginas são visitadas e de onde vêm as visitas. Você pode mudar sua escolha por aqui.",
     "googlePrivacy": "Como o Google usa os dados",
     "accept": "Aceitar análise",
-    "decline": "Recusar análise"
+    "decline": "Recusar análise",
+    "close": "Fechar preferências de cookies"
   },
   "common": {
     "actions": {
