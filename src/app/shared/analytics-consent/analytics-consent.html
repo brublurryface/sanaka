@@ -19,44 +19,48 @@
     aria-labelledby="analytics-title"
     (keydown.escape)="closePreferences(trigger)"
   >
-    <div class="analytics-banner__copy">
-      <h2 id="analytics-title" tabindex="-1" #title>{{ 'analytics.preferences' | transloco }}</h2>
-      <p class="analytics-banner__quote">{{ 'analytics.quote' | transloco }}</p>
-      <p id="analytics-description">{{ 'analytics.description' | transloco }}</p>
-      <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
-        {{ 'analytics.googlePrivacy' | transloco }}
-      </a>
+    <div class="analytics-banner__content">
+      <div class="analytics-banner__copy">
+        <h2 id="analytics-title" tabindex="-1" #title>{{ 'analytics.preferences' | transloco }}</h2>
+        <p class="analytics-banner__quote">{{ 'analytics.quote' | transloco }}</p>
+        <p class="analytics-banner__description">
+          <span id="analytics-description">{{ 'analytics.description' | transloco }}</span>
+          <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
+            {{ 'analytics.googlePrivacy' | transloco }}
+          </a>
+        </p>
+      </div>
+      <div
+        class="analytics-banner__actions"
+        role="group"
+        aria-describedby="analytics-description"
+        [attr.aria-label]="'analytics.preferences' | transloco"
+      >
+        <button
+          type="button"
+          [attr.aria-pressed]="analytics.preference() === 'granted'"
+          (click)="choose('granted', trigger)"
+        >
+          {{ 'analytics.accept' | transloco }}
+        </button>
+        <button
+          type="button"
+          [attr.aria-pressed]="analytics.preference() === 'denied'"
+          (click)="choose('denied', trigger)"
+        >
+          {{ 'analytics.decline' | transloco }}
+        </button>
+      </div>
+      @if (reviewing()) {
+        <button
+          type="button"
+          class="analytics-banner__close"
+          [attr.aria-label]="'analytics.close' | transloco"
+          (click)="closePreferences(trigger)"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      }
     </div>
-    <div
-      class="analytics-banner__actions"
-      role="group"
-      aria-describedby="analytics-description"
-      [attr.aria-label]="'analytics.preferences' | transloco"
-    >
-      <button
-        type="button"
-        [attr.aria-pressed]="analytics.preference() === 'granted'"
-        (click)="choose('granted', trigger)"
-      >
-        {{ 'analytics.accept' | transloco }}
-      </button>
-      <button
-        type="button"
-        [attr.aria-pressed]="analytics.preference() === 'denied'"
-        (click)="choose('denied', trigger)"
-      >
-        {{ 'analytics.decline' | transloco }}
-      </button>
-    </div>
-    @if (reviewing()) {
-      <button
-        type="button"
-        class="analytics-banner__close"
-        [attr.aria-label]="'analytics.close' | transloco"
-        (click)="closePreferences(trigger)"
-      >
-        <span aria-hidden="true">×</span>
-      </button>
-    }
   </section>
 }

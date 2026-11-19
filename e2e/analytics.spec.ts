@@ -61,11 +61,18 @@ test('keeps the local cookie banner in view while scrolling and remembers the ch
   await expect(banner).toBeInViewport({ ratio: 0.95 });
   await expect(accept).toBeInViewport();
   await expect(decline).toBeInViewport();
-  const initialPosition = (await banner.boundingBox())!.y;
+  const initialBounds = (await banner.boundingBox())!;
+  const viewport = await page.evaluate(() => ({
+    width: document.documentElement.clientWidth,
+    height: window.innerHeight,
+  }));
+  expect(initialBounds.x).toBeCloseTo(0, 0);
+  expect(initialBounds.width).toBeCloseTo(viewport.width, 0);
+  expect(initialBounds.y + initialBounds.height).toBeCloseTo(viewport.height, 0);
   await page.evaluate(() => window.scrollTo({ top: 240, behavior: 'instant' }));
   await expect.poll(() => page.evaluate(() => window.scrollY)).toBeGreaterThan(0);
   await expect(banner).toBeInViewport({ ratio: 0.95 });
-  expect((await banner.boundingBox())!.y).toBeCloseTo(initialPosition, 0);
+  expect((await banner.boundingBox())!.y).toBeCloseTo(initialBounds.y, 0);
 
   const archive = site.holdNext('archive');
   await page.locator('.main-nav').getByRole('link', { name: 'Posts' }).click();
