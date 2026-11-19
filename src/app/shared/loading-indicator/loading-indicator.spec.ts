@@ -19,12 +19,12 @@ describe('LoadingIndicator', () => {
   }
 
   it.each([
-    ['vasuki', 'apng', 734, 188],
-    ['maninaga', 'webp', 734, 188],
-    ['samvit', 'webp', 1500, 760],
+    ['vasuki', 'apng', 734, 188, 734, 188],
+    ['maninaga', 'apng', 734, 188, 730, 243],
+    ['samvit', 'webp', 1500, 760, 1500, 760],
   ] as const)(
     'should select only %s with a static, SSR-safe reduced-motion fallback',
-    (variant, extension, width, height) => {
+    (variant, extension, width, height, posterWidth, posterHeight) => {
       const host = render(variant);
       const image = host.querySelector('img');
       const source = host.querySelector('source');
@@ -32,9 +32,11 @@ describe('LoadingIndicator', () => {
       expect(host.querySelectorAll('img')).toHaveLength(1);
       expect(source?.getAttribute('srcset')).toBe(`/loadings/${variant}/animated.${extension}`);
       expect(source?.getAttribute('media')).toBe('(prefers-reduced-motion: no-preference)');
+      expect(source?.getAttribute('width')).toBe(String(width));
+      expect(source?.getAttribute('height')).toBe(String(height));
       expect(image?.getAttribute('src')).toBe(`/loadings/${variant}/poster.png`);
-      expect(image?.width).toBe(width);
-      expect(image?.height).toBe(height);
+      expect(image?.width).toBe(posterWidth);
+      expect(image?.height).toBe(posterHeight);
       expect(image?.alt).toBe('');
       expect(host.querySelector('.loading-stage')?.getAttribute('aria-hidden')).toBe('true');
       expect(host.getAttribute('role')).toBe('status');

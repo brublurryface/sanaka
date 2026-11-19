@@ -10,12 +10,12 @@ Os oito ativos foram publicados pela autora no commit
 na branch `loading-creatures`. A integração reutiliza esses objetos Git sem
 redesenhar, converter, redimensionar ou reenviar imagens.
 
-| Rota           | Estado                                  | Variante        |
-| -------------- | --------------------------------------- | --------------- |
-| `/posts`       | Requisição inicial da listagem          | Vāsuki V3       |
-| `/posts/:slug` | `state().status === 'loading'`          | Maṇināga V3     |
-| `/sanaka-loka` | Requisição inicial e paginação compacta | Śabala Hysteria |
-| `/sobre`       | Requisição dos ciclos do quebra-cabeças | Saṃvit V17      |
+| Rota           | Estado                                  | Variante                      |
+| -------------- | --------------------------------------- | ----------------------------- |
+| `/posts`       | Requisição inicial da listagem          | Vāsuki V3                     |
+| `/posts/:slug` | `state().status === 'loading'`          | Maṇināga com piscada revisada |
+| `/sanaka-loka` | Requisição inicial e paginação compacta | Śabala Hysteria               |
+| `/sobre`       | Requisição dos ciclos do quebra-cabeças | Saṃvit V17                    |
 
 `src/app/shared/loading-indicator/loading-artwork.ts` centraliza os caminhos e as
 proporções. `PageLoading` registra a requisição inicial em `PageLoadingState`;
@@ -44,6 +44,10 @@ tempos das composições permanecem os mesmos. Saṃvit não recebe a palavra LO
 Nas variantes de serpentes e Saṃvit, o `<picture>` usa a animação somente com
 `prefers-reduced-motion: no-preference`; no modo reduzido, usa o poster e desativa
 os movimentos CSS. Śabala aplica essa preferência dentro do documento recuperado.
+A revisão de Maṇināga usa o APNG e o pôster publicados pela autora no commit
+[`2591241`](https://github.com/brublurryface/sanaka/commit/25912418278b28f05cdf16def4b2bb673afcf25e).
+O palco acompanha a proporção de 734 × 188 da animação ou de 730 × 243 do pôster
+quando o navegador pede movimento reduzido.
 A mensagem externa de status usa Transloco em português e inglês.
 Não há espera mínima, timer artificial ou dependência de novas bibliotecas.
 
@@ -56,16 +60,16 @@ compatíveis com o contrato do WordPress.
 
 ## Integridade dos ativos
 
-Conferidos localmente contra `sanaka-loadings-manifest.json` fornecido pela autora:
-todos os tamanhos, hashes SHA-256, dimensões e quantidades de quadros coincidem.
+Os ativos da integração inicial foram conferidos contra o manifesto da autora.
+Os valores de Maṇināga abaixo correspondem aos arquivos da revisão da piscada.
 As quatro animações têm alfa real e repetição contínua (`loop = 0`).
 
 | Arquivo em `public/loadings/` | Dimensões  |     Bytes | Quadros |    Ciclo |
 | ----------------------------- | ---------- | --------: | ------: | -------: |
 | `vasuki/animated.apng`        | 734 × 188  | 4.121.085 |      96 | 4.000 ms |
 | `vasuki/poster.png`           | 734 × 188  |    46.152 |       1 |        — |
-| `maninaga/animated.webp`      | 734 × 188  | 1.091.650 |      92 | 4.000 ms |
-| `maninaga/poster.png`         | 734 × 188  |    53.213 |       1 |        — |
+| `maninaga/animated.apng`      | 734 × 188  | 4.343.878 |      92 | 4.000 ms |
+| `maninaga/poster.png`         | 730 × 243  |   160.567 |       1 |        — |
 | `sabala/animated.webp`        | 460 × 460  |   620.768 |      28 | 3.000 ms |
 | `sabala/poster.png`           | 460 × 460  |   242.173 |       1 |        — |
 | `samvit/animated.webp`        | 1500 × 760 | 2.411.260 |      86 | 5.400 ms |
@@ -75,8 +79,8 @@ As quatro animações têm alfa real e repetição contínua (`loop = 0`).
 | ------------------------ | ------------------------------------------------------------------ |
 | `vasuki/animated.apng`   | `b5210cfe02847bae0676e31095d7d276278c2fbc5810bc515791cb4057fa4bbb` |
 | `vasuki/poster.png`      | `9fa04d282b98789f8bef7a8eb20d55d5232a726adece4bdbb16a31c0cbab9910` |
-| `maninaga/animated.webp` | `969124ce0a7d40c2fd47b8ee9f276e5a2446eeed873fcc25f4b78180de0f2038` |
-| `maninaga/poster.png`    | `c94d2d385f34de46876997ae1fcf7efba117c6bdfed4e4bf22475bf1f394ef2b` |
+| `maninaga/animated.apng` | `1a4fc9ceed947efff1ef1c5fd6f343342d18a8a3ffb1fb731e5930deb22740ef` |
+| `maninaga/poster.png`    | `360a0ca0ae558bc3c7c8a229cf0e2d8c05bf75138035b779f93ead8a76d894e6` |
 | `sabala/animated.webp`   | `5579b08e6642614ef08a8747dcf2fa5aa255147227f9365eb5d781355b4b851e` |
 | `sabala/poster.png`      | `88aa2359d49cc6e354aeb37d5069c59bb7bb96b1fb8c61d7933383f27bb2bac8` |
 | `samvit/animated.webp`   | `4d2d845cb5dab93cd995f86f44e783ce54847ffa1af1e3fa74d89dd2644ccb95` |
@@ -99,9 +103,9 @@ ao CMS também deve confirmar os quatro volumes atuais. Registrar os resultados
 e as capturas atualizadas na PR; as capturas da PR #94 mostram a composição
 anterior, com indicadores dentro de seções pequenas.
 
-A emulação de movimento reduzido estava indisponível no navegador gerenciado
-por bloqueio do DevTools. Manter essa limitação explícita enquanto não houver
-conferência visual da preferência; não alterar permissões do navegador.
+O teste de navegador de Maṇināga emula movimento reduzido. Ele verifica o
+arquivo selecionado, as dimensões reais da imagem e o encaixe no viewport
+durante a requisição do artigo.
 
 A entrega de correção usa a branch **fix/loading-experience**, baseada na `main`
 atual, que já inclui os oito ativos publicados pela autora na PR #93. A nova PR

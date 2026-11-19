@@ -10,22 +10,29 @@
       tabindex="-1"
     ></iframe>
   } @else {
+    @let posterSize = art.posterSize ?? art;
     <div
       class="loading-stage"
       [class.loading-stage--ready]="artworkReady()"
       [attr.data-kind]="art.kind"
       [style.--artwork-ratio]="art.width + ' / ' + art.height"
+      [style.--poster-ratio]="posterSize.width + ' / ' + posterSize.height"
       aria-hidden="true"
     >
       @if (art.kind === 'snake') {
         <span class="snake-word">LOADING...</span>
       }
       <picture class="loading-artwork">
-        <source media="(prefers-reduced-motion: no-preference)" [srcset]="art.animated" />
+        <source
+          media="(prefers-reduced-motion: no-preference)"
+          [srcset]="art.animated"
+          [attr.width]="art.width"
+          [attr.height]="art.height"
+        />
         <img
           [src]="art.poster"
-          [width]="art.width"
-          [height]="art.height"
+          [width]="posterSize.width"
+          [height]="posterSize.height"
           alt=""
           decoding="async"
           (load)="startDecoration()"

@@ -9,12 +9,14 @@
 }
 
 .loading-stage {
+  --stage-ratio: var(--artwork-ratio);
+
   position: relative;
   isolation: isolate;
   container-type: inline-size;
 
   width: min(100%, 46rem);
-  aspect-ratio: var(--artwork-ratio);
+  aspect-ratio: var(--stage-ratio);
 }
 
 .loading-artwork {
@@ -94,7 +96,11 @@
 }
 
 :host(.loading-indicator--full-page) .loading-stage {
-  width: min(100%, 70rem, calc((100dvh - 2 * var(--loading-screen-padding)) * 734 / 188));
+  width: min(
+    100%,
+    70rem,
+    calc((100dvh - 2 * var(--loading-screen-padding)) * (var(--stage-ratio)))
+  );
 }
 
 :host(.loading-indicator--full-page) [data-kind='music'] {
@@ -117,6 +123,10 @@
 }
 
 @media (prefers-reduced-motion: reduce) {
+  .loading-stage {
+    --stage-ratio: var(--poster-ratio);
+  }
+
   .snake-word {
     animation: none;
     clip-path: none;
