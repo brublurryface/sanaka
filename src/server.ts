@@ -6,6 +6,7 @@ import {
 } from '@angular/ssr/node';
 import express from 'express';
 import { join } from 'node:path';
+import { analyticsMeasurementId, createAnalyticsConfigResponse } from './server/analytics-config';
 import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
 import { createContactRouter } from './server/contact-router';
 import { createCspReportRouter } from './server/csp-reports';
@@ -15,18 +16,24 @@ import { createNewsletterRouter } from './server/newsletter';
 import { rejectAmbiguousRequestTarget } from './server/request-target';
 import { createRobotsResponse } from './server/robots';
 import { readRuntimeOptions } from './server/runtime-options';
-import { CSP_REPORT_PATH, securityResponseHeaders } from './server/security-headers';
+import {
+  CSP_REPORT_PATH,
+  createSecurityResponseHeaders,
+  securityResponseHeaders,
+} from './server/security-headers';
+import { ANALYTICS_CONFIG_PATH } from './shared/analytics';
 
 const browserDistFolder = join(import.meta.dirname, '../browser');
 
 const app = express();
 const runtimeOptions = readRuntimeOptions();
+const measurementId = analyticsMeasurementId(runtimeOptions.noIndex);
 const angularApp = new AngularNodeAppEngine({ allowedHosts: runtimeOptions.allowedHosts });
 
 app.disable('x-powered-by');
 app.set('trust proxy', runtimeOptions.trustProxyHops);
 app.use(createHttpRequestLog());
-app.use(securityResponseHeaders);
+app.use(measurementId ? createSecurityResponseHeaders(true) : securityResponseHeaders);
 
 if (runtimeOptions.noIndex) {
   app.use((_request, response, next) => {
@@ -45,6 +52,7 @@ app.use('/api', (_request, response, next) => {
 
 // Verifica o processo sem chamar SMTP, Brevo ou WordPress a cada sondagem do Render.
 app.get('/api/health', (_request, response) => response.json({ status: 'ok' }));
+app.get(ANALYTICS_CONFIG_PATH, createAnalyticsConfigResponse(measurementId));
 
 app.use(CSP_REPORT_PATH, createCspReportRouter());
 app.use('/api/contact', createContactRouter());

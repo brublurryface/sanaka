@@ -1,3 +1,4 @@
+import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NavigationStart, provideRouter, Router } from '@angular/router';
@@ -96,6 +97,7 @@ describe('App', () => {
     await TestBed.configureTestingModule({
       imports: [App],
       providers: [
+        provideHttpClient(),
         provideRouter(routes),
         { provide: LanguagePreferenceService, useValue: mockLanguagePreferenceService },
         provideTransloco({

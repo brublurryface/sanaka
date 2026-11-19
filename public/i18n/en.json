@@ -45,6 +45,15 @@
       "sanakaverse": "Sanaka-loka"
     }
   },
+  "analytics": {
+    "preferences": "Cookie preferences",
+    "quote": "Remember, you accepted all the cookies before accepting a physical body, didn't you?",
+    "description": "If you accept, Google Analytics uses cookies to measure which pages are visited and where visits come from. You can change your choice here.",
+    "googlePrivacy": "How Google uses the data",
+    "accept": "Accept analytics",
+    "decline": "Decline analytics",
+    "close": "Close cookie preferences"
+  },
   "common": {
     "actions": {
       "clearSearch": "Clear search",

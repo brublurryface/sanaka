@@ -1,0 +1,65 @@
+@if (analytics.available()) {
+  <button
+    #trigger
+    type="button"
+    class="analytics-preferences-trigger"
+    [hidden]="analytics.preference() === null"
+    aria-controls="analytics-banner"
+    [attr.aria-expanded]="reviewing()"
+    (click)="togglePreferences(trigger, title)"
+  >
+    {{ 'analytics.preferences' | transloco }}
+  </button>
+
+  <section
+    id="analytics-banner"
+    class="analytics-banner"
+    [class.analytics-banner--reviewing]="reviewing()"
+    [hidden]="analytics.preference() !== null && !reviewing()"
+    [attr.aria-label]="'analytics.preferences' | transloco"
+    (keydown.escape)="closePreferences(trigger)"
+  >
+    <div class="analytics-banner__content">
+      <div class="analytics-banner__copy">
+        <h2 tabindex="-1" #title>{{ 'analytics.quote' | transloco }}</h2>
+        <p class="analytics-banner__description">
+          <span id="analytics-description">{{ 'analytics.description' | transloco }}</span>
+          <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
+            {{ 'analytics.googlePrivacy' | transloco }}
+          </a>
+        </p>
+      </div>
+      <div
+        class="analytics-banner__actions"
+        role="group"
+        aria-describedby="analytics-description"
+        [attr.aria-label]="'analytics.preferences' | transloco"
+      >
+        <button
+          type="button"
+          [attr.aria-pressed]="analytics.preference() === 'granted'"
+          (click)="choose('granted', trigger)"
+        >
+          {{ 'analytics.accept' | transloco }}
+        </button>
+        <button
+          type="button"
+          [attr.aria-pressed]="analytics.preference() === 'denied'"
+          (click)="choose('denied', trigger)"
+        >
+          {{ 'analytics.decline' | transloco }}
+        </button>
+      </div>
+      @if (reviewing()) {
+        <button
+          type="button"
+          class="analytics-banner__close"
+          [attr.aria-label]="'analytics.close' | transloco"
+          (click)="closePreferences(trigger)"
+        >
+          <span aria-hidden="true">×</span>
+        </button>
+      }
+    </div>
+  </section>
+}

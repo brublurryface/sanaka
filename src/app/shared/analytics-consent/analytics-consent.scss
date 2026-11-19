@@ -1,0 +1,125 @@
+:host {
+  display: flex;
+  justify-content: center;
+}
+
+.analytics-preferences-trigger {
+  margin-block-start: 0.875rem;
+  padding-inline: 0.75rem;
+  color: var(--sanaka-gold-soft);
+  text-decoration: underline;
+  text-underline-offset: 0.2em;
+}
+
+.analytics-banner {
+  position: fixed;
+  z-index: 110;
+  inset-inline: 0;
+  inset-block-end: 0;
+  max-block-size: calc(100dvh - var(--sanaka-header-height) - 0.5rem);
+  box-sizing: border-box;
+  padding-block: 0.5rem calc(0.5rem + env(safe-area-inset-bottom, 0px));
+  padding-inline: max(
+    clamp(0.75rem, 2.5vw, 2rem),
+    env(safe-area-inset-left, 0px),
+    env(safe-area-inset-right, 0px)
+  );
+  overflow: auto;
+  overscroll-behavior: contain;
+
+  border-top: 1px solid rgba(13, 17, 23, 0.35);
+  background: var(--sanaka-gold-soft);
+  box-shadow: 0 -0.2rem 1rem rgba(0, 0, 0, 0.28);
+  color: var(--sanaka-bg);
+  font-size: 0.875rem;
+  line-height: 1.35;
+}
+
+.analytics-banner__content {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: center;
+  gap: 0.5rem clamp(0.75rem, 2vw, 1.5rem);
+  max-inline-size: 90rem;
+  margin-inline: auto;
+}
+
+.analytics-banner--reviewing .analytics-banner__content {
+  grid-template-columns: minmax(0, 1fr) auto auto;
+}
+
+.analytics-banner__copy h2 {
+  margin: 0;
+  font-size: inherit;
+  font-weight: 700;
+}
+
+.analytics-banner__description {
+  margin: 0.2rem 0 0;
+  font-size: 0.8125rem;
+}
+
+.analytics-banner a {
+  margin-inline-start: 0.35rem;
+  color: inherit;
+  font-weight: 600;
+  text-underline-offset: 0.2em;
+}
+
+.analytics-banner__actions {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 0.5rem;
+}
+
+button {
+  min-block-size: 2.75rem;
+  padding: 0;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  font: inherit;
+  cursor: pointer;
+}
+
+.analytics-banner__actions button {
+  padding: 0.35rem 0.8rem;
+  border: 1px solid currentColor;
+  border-radius: 0.3rem;
+  font-weight: 600;
+}
+
+.analytics-banner__actions button:is(:hover, [aria-pressed='true']),
+.analytics-banner__close:hover {
+  background: rgba(13, 17, 23, 0.12);
+}
+
+.analytics-banner__close {
+  inline-size: 2.75rem;
+  border-radius: 0.3rem;
+  font-size: 1.5rem;
+}
+
+:is(button, a, h2):focus-visible {
+  outline: 2px solid currentColor;
+  outline-offset: 3px;
+}
+
+@media (max-width: 48rem) {
+  .analytics-banner__content {
+    grid-template-columns: minmax(0, 1fr);
+  }
+
+  .analytics-banner--reviewing .analytics-banner__content {
+    grid-template-columns: minmax(0, 1fr) auto;
+  }
+
+  .analytics-banner__actions {
+    grid-column: 1 / -1;
+  }
+
+  .analytics-banner__close {
+    grid-area: 1 / 2;
+    align-self: start;
+  }
+}

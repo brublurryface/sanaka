@@ -8,6 +8,8 @@ export default defineConfig({
     coverage: {
       provider: 'v8',
       include: [
+        'src/server/analytics-config.ts',
+        'src/shared/analytics.ts',
         'src/server/newsletter.ts',
         'src/server/contact.ts',
         'src/server/contact-router.ts',
