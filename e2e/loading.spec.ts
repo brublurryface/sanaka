@@ -51,6 +51,39 @@ for (const route of routes) {
   });
 }
 
+test('fits the revised Maṇināga animation and reduced-motion poster at their own proportions', async ({
+  page,
+  site,
+}) => {
+  const pending = site.holdNext('article');
+  await page.goto(`/posts/${article.slug}`);
+  await pending.requested;
+  const artwork = fullPageLoading(page).locator('img');
+
+  for (const [reducedMotion, filename, width, height] of [
+    ['no-preference', 'animated.apng', 734, 188],
+    ['reduce', 'poster.png', 730, 243],
+  ] as const) {
+    await page.emulateMedia({ reducedMotion });
+    await expect
+      .poll(() =>
+        artwork.evaluate((image: HTMLImageElement) => ({
+          loaded: image.complete,
+          path: image.currentSrc ? new URL(image.currentSrc).pathname : '',
+          width: image.naturalWidth,
+          height: image.naturalHeight,
+        })),
+      )
+      .toEqual({ loaded: true, path: `/loadings/maninaga/${filename}`, width, height });
+    await expect(artwork).toBeInViewport({ ratio: 0.99 });
+    const bounds = (await artwork.boundingBox())!;
+    expect(bounds.width / bounds.height).toBeCloseTo(width / height, 2);
+  }
+
+  await pending.release();
+  await expectReady(page);
+});
+
 test('waits for the category tree even when the posts response has already arrived', async ({
   page,
   site,

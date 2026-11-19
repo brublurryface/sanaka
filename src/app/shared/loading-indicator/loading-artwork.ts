@@ -5,6 +5,7 @@ interface LoadingArtwork {
   readonly poster: string;
   readonly width: number;
   readonly height: number;
+  readonly posterSize?: { readonly width: number; readonly height: number };
   readonly kind: 'snake' | 'music' | 'footprints';
 }
 
@@ -17,10 +18,11 @@ export const LOADING_ARTWORK: Readonly<Record<LoadingVariant, LoadingArtwork>> =
     kind: 'snake',
   },
   maninaga: {
-    animated: '/loadings/maninaga/animated.webp',
+    animated: '/loadings/maninaga/animated.apng',
     poster: '/loadings/maninaga/poster.png',
     width: 734,
     height: 188,
+    posterSize: { width: 730, height: 243 },
     kind: 'snake',
   },
   sabala: {
