@@ -5,6 +5,7 @@ import { TranslocoPipe } from '@jsverse/transloco';
 
 import { PageLoadingState } from './core/navigation/page-loading-state';
 import { PageAnchorNavigation } from './core/navigation/page-anchor-navigation';
+import { AnalyticsConsent } from './shared/analytics-consent/analytics-consent';
 import { LoadingIndicator } from './shared/loading-indicator/loading-indicator';
 import {
   LanguagePreferenceService,
@@ -20,6 +21,7 @@ import {
     MatToolbarModule,
     TranslocoPipe,
     LoadingIndicator,
+    AnalyticsConsent,
   ],
   templateUrl: './app.html',
   styleUrl: './app.scss',

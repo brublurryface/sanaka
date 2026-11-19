@@ -1,0 +1,31 @@
+@if (analytics.available()) {
+  <details class="analytics-preferences" [open]="analytics.preference() === null" #panel>
+    <summary #summary>{{ 'analytics.preferences' | transloco }}</summary>
+    <p class="analytics-preferences__quote">{{ 'analytics.quote' | transloco }}</p>
+    <p id="analytics-description">{{ 'analytics.description' | transloco }}</p>
+    <a href="https://policies.google.com/technologies/partner-sites" rel="noreferrer">
+      {{ 'analytics.googlePrivacy' | transloco }}
+    </a>
+    <div
+      class="analytics-preferences__actions"
+      role="group"
+      aria-describedby="analytics-description"
+      [attr.aria-label]="'analytics.preferences' | transloco"
+    >
+      <button
+        type="button"
+        [attr.aria-pressed]="analytics.preference() === 'granted'"
+        (click)="choose('granted', panel, summary)"
+      >
+        {{ 'analytics.accept' | transloco }}
+      </button>
+      <button
+        type="button"
+        [attr.aria-pressed]="analytics.preference() === 'denied'"
+        (click)="choose('denied', panel, summary)"
+      >
+        {{ 'analytics.decline' | transloco }}
+      </button>
+    </div>
+  </details>
+}

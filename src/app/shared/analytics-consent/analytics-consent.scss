@@ -1,0 +1,51 @@
+.analytics-preferences {
+  width: min(42rem, calc(100% - 3rem));
+  margin: 1.25rem auto 0;
+  padding-block-start: 0.75rem;
+  border-top: 1px solid rgba(237, 201, 120, 0.2);
+  color: var(--sanaka-ivory-muted);
+  font-size: 0.875rem;
+  line-height: 1.55;
+}
+
+summary,
+a {
+  color: var(--sanaka-gold-soft);
+}
+
+summary {
+  width: fit-content;
+  padding-block: 0.45rem;
+  cursor: pointer;
+}
+
+.analytics-preferences__quote {
+  color: var(--sanaka-ivory);
+}
+
+.analytics-preferences__actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 0.75rem;
+  margin-block-start: 1rem;
+}
+
+button {
+  padding: 0.5rem 0.85rem;
+  min-height: 2.75rem;
+  font: inherit;
+  color: var(--sanaka-ivory);
+  background: transparent;
+  border: 1px solid rgba(237, 201, 120, 0.4);
+  cursor: pointer;
+}
+
+button[aria-pressed='true'] {
+  border-color: var(--sanaka-gold-soft);
+  color: var(--sanaka-gold-soft);
+}
+
+:is(summary, button, a):focus-visible {
+  outline: 1px solid var(--sanaka-gold-soft);
+  outline-offset: 3px;
+}

@@ -1,8 +1,8 @@
 import { DOCUMENT } from '@angular/common';
-import { inject, Injectable } from '@angular/core';
+import { inject, Injectable, signal } from '@angular/core';
 import { Meta, Title } from '@angular/platform-browser';
 
-const SANAKA_ORIGIN = 'https://sanaka.com.br';
+export const SANAKA_ORIGIN = 'https://sanaka.com.br';
 const DEFAULT_SOCIAL_IMAGE = `${SANAKA_ORIGIN}/images/home/sanctuary-hero.png`;
 
 export interface SanakaPageSeo {
@@ -23,6 +23,8 @@ export class SanakaSeoService {
   private readonly document = inject(DOCUMENT);
   private readonly meta = inject(Meta);
   private readonly title = inject(Title);
+  private readonly articleLocation = signal<string | null>(null);
+  readonly publicArticleLocation = this.articleLocation.asReadonly();
 
   applyPage(page: SanakaPageSeo): void {
     const documentTitle = this.formatDocumentTitle(page.pageTitle);
@@ -31,6 +33,7 @@ export class SanakaSeoService {
     const language = page.language === 'en' ? 'en' : 'pt-BR';
     const locale = language === 'en' ? 'en_US' : 'pt_BR';
     const type = page.type ?? 'website';
+    this.articleLocation.set(type === 'article' && page.indexable !== false ? canonicalUrl : null);
 
     this.document.documentElement.lang = language;
     this.title.setTitle(documentTitle);
