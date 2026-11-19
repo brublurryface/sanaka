@@ -10,6 +10,8 @@ test.use({ storageState: { cookies: [], origins: [] } });
 const publicOrigin = 'https://sanaka.com.br';
 const fixtureId = 'G-TEST000001';
 const storageKey = `sanaka.analytics.v1.${fixtureId}`;
+const cookieQuote =
+  'Lembre-se que você aceitou todos os cookies antes de aceitar um corpo físico, hein?';
 
 async function isolatedAnalytics(page: Page, request: APIRequestContext, baseURL: string) {
   let tagLoads = 0;
@@ -55,10 +57,15 @@ test('keeps the local cookie banner in view while scrolling and remembers the ch
 }) => {
   await page.goto('/');
   const banner = page.locator('#analytics-banner');
+  const quote = banner.getByRole('heading');
   const preferences = page.getByRole('button', { name: 'Preferências de cookies', exact: true });
   const accept = banner.getByRole('button', { name: 'Aceitar análise' });
   const decline = banner.getByRole('button', { name: 'Recusar análise' });
-  await expect(banner).toBeInViewport({ ratio: 0.95 });
+  await expect(page.getByRole('region', { name: 'Preferências de cookies' })).toBeInViewport({
+    ratio: 0.95,
+  });
+  await expect(quote).toHaveText(cookieQuote);
+  await expect(quote).toHaveCSS('font-weight', '700');
   await expect(accept).toBeInViewport();
   await expect(decline).toBeInViewport();
   const initialBounds = (await banner.boundingBox())!;
@@ -93,7 +100,7 @@ test('keeps the local cookie banner in view while scrolling and remembers the ch
   await expect(preferences).toBeVisible();
   await expect(banner).toBeHidden();
   await preferences.click();
-  await expect(banner.getByRole('heading', { name: 'Preferências de cookies' })).toBeFocused();
+  await expect(quote).toBeFocused();
   await expect(accept).toHaveAttribute('aria-pressed', 'true');
   await page.keyboard.press('Escape');
   await expect(banner).toBeHidden();
@@ -123,11 +130,7 @@ test('measures published pages once after consent, filters URL data, and honors 
   });
   await expectReady(page);
   await expect(page.getByRole('heading', { name: article.title.rendered })).toBeVisible();
-  await expect(
-    page.getByText(
-      'Lembre-se que você aceitou todos os cookies antes de aceitar um corpo físico, hein?',
-    ),
-  ).toBeVisible();
+  await expect(page.getByRole('heading', { name: cookieQuote, exact: true })).toBeVisible();
   const accept = page.getByRole('button', { name: 'Aceitar análise' });
   await expect(accept).toBeVisible();
   await expect(page.getByRole('button', { name: 'Recusar análise' })).toBeVisible();

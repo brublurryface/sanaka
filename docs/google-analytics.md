@@ -8,7 +8,7 @@ deve ser confirmada no painel da titular.
 ## Banner de cookies
 
 Com o Analytics configurado, a primeira visita abre uma faixa dourada fixa de ponta a ponta
-na base da janela, com a frase da autora e as opções **Aceitar análise** e **Recusar análise**.
+na base da janela, com a frase da autora em negrito e as opções **Aceitar análise** e **Recusar análise**.
 O banner acompanha a rolagem e fica oculto durante o carregamento de tela inteira.
 Depois da decisão, **Preferências de cookies**
 no rodapé reabre o banner. Fechar as preferências mantém a escolha gravada.
