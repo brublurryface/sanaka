@@ -35,41 +35,41 @@ async function samplePiece(button: Locator) {
   }, screenshot.toString('base64'));
 }
 
-test('all nine puzzle pieces have a resting mask and a readable selected state', async ({
-  page,
-}) => {
-  await page.emulateMedia({ reducedMotion: 'reduce' });
-  // Both sheets receive the same vivid swatch. Any difference must come from the renderer.
-  await page.route('**/images/about/about-cycles-sketch*.webp', (route) =>
-    route.fulfill({
-      contentType: 'image/svg+xml',
-      body: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#f06030"/></svg>',
-    }),
-  );
-  await page.goto('/sobre');
-  await expectReady(page);
-  const selector = (name: string) => page.getByRole('button', { name, exact: true });
-  await selector(cycles[1].title.rendered).click();
+for (const [index, cycle] of cycles.entries()) {
+  test(`puzzle piece ${index + 1} has a resting mask and a readable selected state`, async ({
+    page,
+    isMobile,
+  }) => {
+    await page.emulateMedia({ reducedMotion: 'reduce' });
+    // Both sheets receive the same vivid swatch. Any difference must come from the renderer.
+    await page.route('**/images/about/about-cycles-sketch*.webp', (route) =>
+      route.fulfill({
+        contentType: 'image/svg+xml',
+        body: '<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100"><rect width="100" height="100" fill="#f06030"/></svg>',
+      }),
+    );
+    await page.goto('/sobre');
+    await expectReady(page);
+    const selector = (name: string) => page.getByRole('button', { name, exact: true });
+    const select = (piece: Locator) => (isMobile ? piece.tap() : piece.click());
+    // The first fragment is already selected when the page opens.
+    if (index === 0) await select(selector(cycles[1].title.rendered));
+    const button = selector(cycle.title.rendered);
+    await button.evaluate((el) =>
+      el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' }),
+    );
+    await expect(button).toHaveAttribute('aria-pressed', 'false');
+    const resting = await samplePiece(button);
+    expect(resting.red).toBeGreaterThan(90);
+    expect(resting.red).toBeLessThan(160);
+    expect(resting.red - resting.blue).toBeLessThan(80);
 
-  for (const cycle of cycles) {
-    await test.step(cycle.title.rendered, async () => {
-      const button = selector(cycle.title.rendered);
-      await button.evaluate((el) =>
-        el.scrollIntoView({ block: 'center', inline: 'center', behavior: 'instant' }),
-      );
-      await expect(button).toHaveAttribute('aria-pressed', 'false');
-      const resting = await samplePiece(button);
-      expect(resting.red).toBeGreaterThan(90);
-      expect(resting.red).toBeLessThan(160);
-      expect(resting.red - resting.blue).toBeLessThan(80);
-
-      await button.click();
-      await expect(button).toHaveAttribute('aria-pressed', 'true');
-      await expect(page.locator('#about-story h2')).toHaveText(cycle.title.rendered);
-      const selected = await samplePiece(button);
-      expect(selected.red).toBeGreaterThan(223);
-      expect(selected.red - selected.green).toBeGreaterThan(125);
-      expect(selected.lowerRed).toBeLessThan(selected.red - 65);
-    });
-  }
-});
+    await select(button);
+    await expect(button).toHaveAttribute('aria-pressed', 'true');
+    await expect(page.locator('#about-story h2')).toHaveText(cycle.title.rendered);
+    const selected = await samplePiece(button);
+    expect(selected.red).toBeGreaterThan(223);
+    expect(selected.red - selected.green).toBeGreaterThan(125);
+    expect(selected.lowerRed).toBeLessThan(selected.red - 65);
+  });
+}
