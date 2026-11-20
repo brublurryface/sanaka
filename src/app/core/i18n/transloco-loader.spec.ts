@@ -5,7 +5,7 @@ import { TestBed } from '@angular/core/testing';
 import { TranslocoHttpLoader } from './transloco-loader';
 
 describe('TranslocoHttpLoader', () => {
-  it('should use a relative translation URL in the browser', () => {
+  it('revalidates translations at the existing relative URL', () => {
     TestBed.configureTestingModule({
       providers: [provideHttpClient(), provideHttpClientTesting()],
     });
@@ -14,7 +14,9 @@ describe('TranslocoHttpLoader', () => {
 
     loader.getTranslation('pt-BR').subscribe();
 
-    http.expectOne('/i18n/pt-BR.json').flush({ app: { title: 'Sanaka' } });
+    const request = http.expectOne('/i18n/pt-BR.json');
+    expect(request.request.cache).toBe('no-cache');
+    request.flush({ app: { title: 'Sanaka' } });
     http.verify();
   });
 });
