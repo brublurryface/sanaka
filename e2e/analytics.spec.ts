@@ -51,6 +51,52 @@ async function pageViews(page: Page) {
   );
 }
 
+for (const language of ['pt-BR', 'en']) {
+  test(`refreshes an older cached ${language} dictionary before presenting cookie choices`, async ({
+    page,
+    request,
+  }) => {
+    const response = await request.get(`/i18n/${language}.json`);
+    expect(response.ok()).toBe(true);
+    const translations = await response.json();
+    const labels = translations.analytics;
+    delete translations.analytics;
+
+    await page.addInitScript(
+      ({ language, translations }) => {
+        localStorage.setItem('sanaka.language', language);
+        const fetch = window.fetch.bind(window);
+        // Model an older dictionary that the browser still considers fresh.
+        window.fetch = (input, options) => {
+          const request = new Request(input, options);
+          if (
+            new URL(request.url).pathname === `/i18n/${language}.json` &&
+            request.cache === 'default'
+          ) {
+            return Promise.resolve(
+              new Response(JSON.stringify(translations), {
+                headers: { 'content-type': 'application/json' },
+              }),
+            );
+          }
+          return fetch(input, options);
+        };
+      },
+      { language, translations },
+    );
+
+    await page.goto('/');
+    const banner = page.getByRole('region', { name: labels.preferences });
+    await expect(banner.getByRole('heading')).toHaveText(labels.quote);
+    await expect(banner.getByRole('button', { name: labels.accept })).toBeVisible();
+    await expect(banner.getByRole('link', { name: labels.googlePrivacy })).toBeVisible();
+    await expect(banner).not.toContainText('analytics.');
+    await banner.getByRole('button', { name: labels.decline }).click();
+    await expect(banner).toBeHidden();
+    expect(await commands(page)).toEqual([]);
+  });
+}
+
 test('keeps the local cookie banner in view while scrolling and remembers the choice', async ({
   page,
   site,
