@@ -165,48 +165,6 @@
   filter: drop-shadow(0 1.6rem 2.4rem rgba(0, 0, 0, 0.36));
 }
 
-.about-puzzle__image {
-  filter: saturate(0.35) brightness(0.78);
-}
-
-.about-puzzle__image--active {
-  filter: none;
-}
-
-.about-puzzle__image--additional.about-puzzle__image--active {
-  filter: saturate(0.78) brightness(0.96);
-}
-
-.about-puzzle__shade {
-  fill: url('#about-puzzle-active-shade');
-  opacity: 0;
-
-  pointer-events: none;
-}
-
-.about-puzzle__shade--active {
-  opacity: 1;
-}
-
-.about-puzzle__outline {
-  fill: none;
-  stroke: rgba(237, 201, 120, 0.62);
-  stroke-linecap: round;
-  stroke-linejoin: round;
-  stroke-width: 1.35;
-
-  pointer-events: none;
-
-  vector-effect: non-scaling-stroke;
-}
-
-.about-puzzle__outline--active {
-  stroke: rgba(255, 220, 139, 0.98);
-  stroke-width: 2.4;
-
-  filter: drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.72));
-}
-
 .about-puzzle__controls {
   position: absolute;
   inset: 4.82%;

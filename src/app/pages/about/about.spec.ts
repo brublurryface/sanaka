@@ -126,11 +126,15 @@ describe('About', () => {
     expect(compiled.querySelectorAll('.about-section-heading h2 span')).toHaveLength(2);
     expect(compiled.querySelectorAll('.about-puzzle__piece')).toHaveLength(9);
     expect(compiled.querySelectorAll('.about-puzzle-mobile__piece')).toHaveLength(9);
-    expect(compiled.querySelectorAll('.about-puzzle__image')).toHaveLength(9);
-    expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
-    expect(compiled.querySelectorAll('.about-puzzle__shade')).toHaveLength(9);
-    expect(compiled.querySelectorAll('.about-puzzle-mobile__shade')).toHaveLength(9);
-    expect(compiled.querySelectorAll('.about-puzzle__outline')).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle__art image')).toHaveLength(9);
+    expect(
+      compiled.querySelectorAll('.about-puzzle__art .about-puzzle__outline--active'),
+    ).toHaveLength(1);
+    expect(compiled.querySelectorAll('.about-puzzle__art .about-puzzle__shade')).toHaveLength(9);
+    expect(
+      compiled.querySelectorAll('.about-puzzle-mobile__art .about-puzzle__shade'),
+    ).toHaveLength(9);
+    expect(compiled.querySelectorAll('.about-puzzle__art .about-puzzle__outline')).toHaveLength(9);
     expect(puzzleImage?.getAttribute('href')).toBe('/images/about/about-cycles-sketch.webp');
     expect(puzzleImage?.getAttribute('x')).toBe('-16');
     expect(puzzleImage?.getAttribute('width')).toBe('332');
@@ -165,7 +169,7 @@ describe('About', () => {
 
     const compiled = fixture.nativeElement as HTMLElement;
 
-    for (const selector of ['.about-puzzle__image', '.about-puzzle-mobile__image']) {
+    for (const selector of ['.about-puzzle__art image', '.about-puzzle-mobile__art image']) {
       const images = compiled.querySelectorAll<SVGImageElement>(selector);
 
       expect(images).toHaveLength(9);
@@ -187,6 +191,36 @@ describe('About', () => {
     }
   });
 
+  it('paints the resting mask and resolves the selected gradient within each visible SVG', () => {
+    fixture.detectChanges();
+    const page = fixture.nativeElement as HTMLElement;
+    const desktop = page.querySelector<SVGSVGElement>('.about-puzzle__art')!;
+    const mobile = page.querySelectorAll<SVGSVGElement>('.about-puzzle-mobile__art');
+    const buttons = page.querySelectorAll<HTMLButtonElement>('.about-puzzle__selector');
+
+    for (const selected of [0, 6, 7, 8]) {
+      buttons[selected].click();
+      fixture.detectChanges();
+      for (let index = 0; index < 9; index++) {
+        for (const [svg, piece] of [
+          [desktop, index],
+          [mobile[index], 0],
+        ] as const) {
+          const mask = svg.querySelectorAll('.about-puzzle__shade')[piece];
+          const fill = mask.getAttribute('fill');
+          if (index === selected) {
+            const gradient = svg.querySelector('linearGradient');
+            expect(gradient?.namespaceURI).toBe('http://www.w3.org/2000/svg');
+            expect(fill).toBe(`url(#${gradient!.id})`);
+          } else {
+            expect(fill).toBe('#000');
+            expect(Number(mask.getAttribute('fill-opacity'))).toBeGreaterThan(0);
+          }
+        }
+      }
+    }
+  });
+
   it('should expose the selected excerpt and its internal publication link', () => {
     fixture.detectChanges();
 
@@ -195,7 +229,7 @@ describe('About', () => {
     const mobileSelectors = compiled.querySelectorAll<HTMLButtonElement>(
       '.about-puzzle-mobile__selector',
     );
-    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
+    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__art image');
 
     selectors[4].click();
     fixture.detectChanges();
@@ -212,8 +246,8 @@ describe('About', () => {
     expect(selectors[4].getAttribute('aria-pressed')).toBe('true');
     expect(selectors[4].getAttribute('aria-label')).toContain('Cycle 5');
     expect(selectors[4].getAttribute('href')).toBeNull();
-    expect(images[0].classList.contains('about-puzzle__image--active')).toBe(false);
-    expect(images[4].classList.contains('about-puzzle__image--active')).toBe(true);
+    expect(images[0].parentElement!.hasAttribute('filter')).toBe(true);
+    expect(images[4].parentElement!.hasAttribute('filter')).toBe(false);
 
     mobileSelectors[2].click();
     fixture.detectChanges();
@@ -233,7 +267,7 @@ describe('About', () => {
     const mobileSelectors = compiled.querySelectorAll<HTMLButtonElement>(
       '.about-puzzle-mobile__selector',
     );
-    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__image');
+    const images = compiled.querySelectorAll<SVGImageElement>('.about-puzzle__art image');
     const mobileArt = compiled.querySelectorAll<SVGElement>('.about-puzzle-mobile__art');
     const viewBoxes = ['-18 182 136 136', '82 182 136 136', '182 182 136 136'];
 
@@ -249,7 +283,7 @@ describe('About', () => {
       );
       expect(selectors[index].getAttribute('aria-pressed')).toBe('true');
       expect(images[index].getAttribute('clip-path')).toBe(`url(#about-puzzle-piece-${order})`);
-      expect(images[index].classList.contains('about-puzzle__image--active')).toBe(true);
+      expect(images[index].parentElement!.hasAttribute('filter')).toBe(false);
       expect(mobileArt[index].getAttribute('viewBox')).toBe(viewBoxes[offset]);
 
       selectors[0].click();
@@ -261,8 +295,12 @@ describe('About', () => {
         `/posts/${slug}`,
       );
       expect(mobileSelectors[index].getAttribute('aria-pressed')).toBe('true');
-      expect(compiled.querySelectorAll('.about-puzzle__image--active')).toHaveLength(1);
-      expect(compiled.querySelectorAll('.about-puzzle-mobile__image--active')).toHaveLength(1);
+      expect(
+        compiled.querySelectorAll('.about-puzzle__art .about-puzzle__outline--active'),
+      ).toHaveLength(1);
+      expect(
+        compiled.querySelectorAll('.about-puzzle-mobile__art .about-puzzle__outline--active'),
+      ).toHaveLength(1);
     }
   });
 

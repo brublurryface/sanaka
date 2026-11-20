@@ -1,0 +1,36 @@
+.about-puzzle__shade {
+  pointer-events: none;
+}
+
+.about-puzzle__outline {
+  fill: none;
+  stroke: rgba(237, 201, 120, 0.62);
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  stroke-width: 1.35;
+
+  pointer-events: none;
+
+  vector-effect: non-scaling-stroke;
+}
+
+.about-puzzle__outline--active {
+  stroke: rgba(255, 220, 139, 0.98);
+  stroke-width: 2.4;
+
+  filter: drop-shadow(0 0 0.55rem rgba(237, 201, 120, 0.72));
+}
+
+@media (max-width: 700px) {
+  .about-puzzle__outline {
+    stroke: rgba(237, 201, 120, 0.72);
+    stroke-width: 1.5;
+  }
+
+  .about-puzzle__outline--active {
+    stroke: rgba(255, 220, 139, 0.98);
+    stroke-width: 2.5;
+
+    filter: drop-shadow(0 0 0.5rem rgba(237, 201, 120, 0.72));
+  }
+}
