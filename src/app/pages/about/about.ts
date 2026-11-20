@@ -5,13 +5,14 @@ import { TranslocoPipe } from '@jsverse/transloco';
 import { finalize } from 'rxjs';
 
 import { PageLoading } from '../../shared/loading-indicator/page-loading';
+import { AboutPuzzleArt } from './about-puzzle-art/about-puzzle-art';
 import { ABOUT_PUZZLE_PIECE_PATHS } from './about-puzzle.geometry';
 import { AboutPuzzleMobile } from './about-puzzle-mobile/about-puzzle-mobile';
 import { AboutCyclePost, AboutCyclesService } from './data-access/about-cycles.service';
 
 @Component({
   selector: 'app-about',
-  imports: [RouterLink, TranslocoPipe, AboutPuzzleMobile, PageLoading],
+  imports: [RouterLink, TranslocoPipe, AboutPuzzleArt, AboutPuzzleMobile, PageLoading],
   templateUrl: './about.html',
   styleUrl: './about.scss',
 })

@@ -36,6 +36,11 @@ export default defineConfig({
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     { name: 'mobile-chromium', use: { ...devices['Pixel 7'], defaultBrowserType: 'chromium' } },
+    {
+      name: 'mobile-webkit',
+      testMatch: '**/puzzle-mask.spec.ts',
+      use: { ...devices['iPhone 13'] },
+    },
   ],
   webServer: {
     command: 'node dist/sanaka/server/server.mjs',

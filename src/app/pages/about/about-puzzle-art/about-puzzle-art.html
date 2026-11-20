@@ -1,0 +1,50 @@
+<svg:defs>
+  <linearGradient [attr.id]="artId() + '-shade'" x1="0" y1="0" x2="0" y2="1">
+    <stop offset="22%" stop-color="#05080d" stop-opacity="0" />
+    <stop offset="52%" stop-color="#05080d" stop-opacity="0.48" />
+    <stop offset="100%" stop-color="#05080d" stop-opacity="0.96" />
+  </linearGradient>
+  <filter [attr.id]="artId() + '-muted'" color-interpolation-filters="sRGB">
+    <feColorMatrix type="saturate" values="0.35" />
+  </filter>
+  @for (cycle of cycles(); track cycle.id) {
+    <clipPath [attr.id]="artId() + '-piece-' + cycle.order" clipPathUnits="userSpaceOnUse">
+      <path [attr.d]="paths()[cycle.order - 1]" />
+    </clipPath>
+  }
+</svg:defs>
+
+@for (cycle of cycles(); track cycle.id) {
+  @let originalSheet = cycle.order <= 6;
+  <svg:g [attr.filter]="selectedCycleId() === cycle.id ? null : 'url(#' + artId() + '-muted)'">
+    <image
+      [attr.clip-path]="'url(#' + artId() + '-piece-' + cycle.order + ')'"
+      [attr.href]="
+        originalSheet
+          ? '/images/about/about-cycles-sketch.webp'
+          : '/images/about/about-cycles-sketch-nine.webp'
+      "
+      x="-16"
+      y="-16"
+      width="332"
+      [attr.height]="originalSheet ? 232 : 332"
+      preserveAspectRatio="none"
+    />
+  </svg:g>
+}
+@for (cycle of cycles(); track cycle.id) {
+  @let selected = selectedCycleId() === cycle.id;
+  <svg:path
+    class="about-puzzle__shade"
+    [attr.d]="paths()[cycle.order - 1]"
+    [attr.fill]="selected ? 'url(#' + artId() + '-shade)' : '#000'"
+    [attr.fill-opacity]="selected ? 1 : 0.22"
+  />
+}
+@for (cycle of cycles(); track cycle.id) {
+  <svg:path
+    class="about-puzzle__outline"
+    [class.about-puzzle__outline--active]="selectedCycleId() === cycle.id"
+    [attr.d]="paths()[cycle.order - 1]"
+  />
+}

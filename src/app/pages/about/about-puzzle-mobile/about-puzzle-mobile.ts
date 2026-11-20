@@ -1,6 +1,7 @@
 import { Component, input, output } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
 
+import { AboutPuzzleArt } from '../about-puzzle-art/about-puzzle-art';
 import {
   ABOUT_PUZZLE_MOBILE_OVERLAP,
   ABOUT_PUZZLE_MOBILE_PIECE_PATHS,
@@ -10,7 +11,7 @@ import { AboutCyclePost } from '../data-access/about-cycles.service';
 
 @Component({
   selector: 'app-about-puzzle-mobile',
-  imports: [TranslocoPipe],
+  imports: [AboutPuzzleArt, TranslocoPipe],
   templateUrl: './about-puzzle-mobile.html',
   styleUrl: './about-puzzle-mobile.scss',
   host: { '[style.--piece-overlap]': 'pieceOverlap' },

@@ -71,45 +71,6 @@
     pointer-events: none;
   }
 
-  .about-puzzle-mobile__image {
-    filter: saturate(0.35) brightness(0.78);
-  }
-
-  .about-puzzle-mobile__image--active {
-    filter: none;
-  }
-
-  .about-puzzle-mobile__image--additional.about-puzzle-mobile__image--active {
-    filter: saturate(0.78) brightness(0.96);
-  }
-
-  .about-puzzle-mobile__outline {
-    fill: none;
-    stroke: rgba(237, 201, 120, 0.72);
-    stroke-linejoin: round;
-    stroke-linecap: round;
-    stroke-width: 1.5;
-
-    vector-effect: non-scaling-stroke;
-  }
-
-  .about-puzzle-mobile__outline--active {
-    stroke: rgba(255, 220, 139, 0.98);
-    stroke-width: 2.5;
-
-    filter: drop-shadow(0 0 0.5rem rgba(237, 201, 120, 0.72));
-  }
-
-  .about-puzzle-mobile__shade {
-    opacity: 0;
-
-    pointer-events: none;
-  }
-
-  .about-puzzle-mobile__shade--active {
-    opacity: 1;
-  }
-
   .about-puzzle-mobile__copy {
     position: absolute;
     inset: 16% 15% 17%;

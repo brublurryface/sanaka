@@ -1,12 +1,12 @@
 # Fluxos críticos em navegador
 
-A suíte Playwright em `e2e/` executa a aplicação Angular de produção pelo servidor Express real. Ela complementa os testes Vitest existentes; não os substitui. O workflow independente `Browser critical flows` executa os cenários em Chromium desktop e em uma viewport de celular com toque.
+A suíte Playwright em `e2e/` executa a aplicação Angular de produção pelo servidor Express real. Ela complementa os testes Vitest existentes; não os substitui. O workflow independente `Browser critical flows` executa os cenários em Chromium desktop e em uma viewport de celular com toque. A regressão da máscara de Sobre também roda em WebKit com o perfil de iPhone 13.
 
 ## Executar
 
 ```sh
 npm ci
-npx playwright install --with-deps chromium
+npx playwright install --with-deps chromium webkit
 npm run test:e2e:types
 npm run build
 npm run test:e2e
@@ -23,6 +23,7 @@ O runner inicia o build em `127.0.0.1:4300`, espera `/api/health` e encerra o pr
 - Erro temporário de artigo e arquivo exige retentativa explícita e recupera o conteúdo sem duplicá-lo. Artigo inexistente oferece retorno ao arquivo.
 - Newsletter pelo footer, fragmento direto, repetição do link e cancelamento da navegação: URL, posição e foco são conferidos depois do loading.
 - Home e quebra-cabeça usam a rolagem nativa aprovada. Os testes observam posições intermediárias com movimento normal e o salto direto solicitado por movimento reduzido, sem impor duração em milissegundos.
+- A máscara é medida nos pixels das nove peças, em repouso e após a seleção. Esse cenário usa uma cor conhecida nas duas folhas de ilustrações para comparar o efeito independentemente da arte.
 - Um único `main` global nas onze rotas cobertas, incluindo o arquivo paginado, o portal REST e a página inexistente. A mesma verificação acompanha os fluxos de erro, retentativa e cancelamento por meio de `expectReady`.
 - A troca PT/EN traduz controles e datas sem mudar o conteúdo português nem repetir consultas ao CMS. Título, corpo e prévia mantêm `lang="pt-BR"`; controles herdam o idioma da interface.
 
@@ -40,7 +41,7 @@ Na primeira execução, a regressão identificou que o link nativo da Home podia
 
 Cada teste recebe contexto de navegador e fixtures novos. As respostas reproduzem as categorias editoriais obrigatórias `romance`, `sobre` e `sanaka-loka`, a árvore de categorias e os cabeçalhos de paginação do WordPress. As esperas são controladas por respostas que o teste libera, sem `waitForTimeout`, dependência do CMS ou alteração do estado interno Angular.
 
-O navegador intercepta WordPress e disponibilidade da Newsletter. Escritas HTTP e serviços externos não previstos são bloqueados e fazem o teste falhar. Fontes externas usam fallback local; as imagens e animações locais permanecem as do repositório. Nenhuma oferta, inscrição ou mensagem real é enviada.
+O navegador intercepta WordPress e disponibilidade da Newsletter. Escritas HTTP e serviços externos não previstos são bloqueados e fazem o teste falhar. Fontes externas usam fallback local; os demais cenários carregam as imagens e animações locais do repositório. Nenhuma oferta, inscrição ou mensagem real é enviada.
 
 Erros não tratados da aplicação também reprovam o teste. Não há retentativa automática da suíte para esconder instabilidade. Em falha, o CI guarda trace, captura e console do navegador por três dias; são dados sintéticos de teste. Os relatórios gerados ficam fora do Git.
 
