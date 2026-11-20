@@ -67,9 +67,12 @@ for (const [index, cycle] of cycles.entries()) {
     await select(button);
     await expect(button).toHaveAttribute('aria-pressed', 'true');
     await expect(page.locator('#about-story h2')).toHaveText(cycle.title.rendered);
-    const selected = await samplePiece(button);
-    expect(selected.red).toBeGreaterThan(223);
-    expect(selected.red - selected.green).toBeGreaterThan(125);
-    expect(selected.lowerRed).toBeLessThan(selected.red - 65);
+    // Native tap highlighting can cover the SVG briefly after aria-pressed changes.
+    await expect(async () => {
+      const selected = await samplePiece(button);
+      expect(selected.red).toBeGreaterThan(223);
+      expect(selected.red - selected.green).toBeGreaterThan(125);
+      expect(selected.lowerRed).toBeLessThan(selected.red - 65);
+    }).toPass({ timeout: 8_000 });
   });
 }
