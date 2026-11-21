@@ -1,4 +1,4 @@
-# Revisão de manutenção Angular do Sanaka
+# Revisão de arquitetura do Sanaka
 
 Revisão examinada `ec99557858356b6d91f5a93c42bebadef1be8400`, após o merge da PR #115. Leitura iniciada em 20/11/2026 e concluída em 21/11/2026. A issue #113 acompanha as correções derivadas desta revisão.
 
@@ -10,7 +10,7 @@ O inventário por AST percorreu 97 arquivos TypeScript de `src/app`, excluindo t
 
 A detecção de cópias usou jscpd, com mínimo de cinco linhas e 50 tokens por bloco, nos formatos TypeScript, markup e SCSS. A leitura manual comparou também código que executa a mesma função com outra estrutura ou nomenclatura.
 
-O escopo cobre manutenção do Angular e suas fronteiras com o servidor. Os testes existentes de segurança, HTTP e SSR entram como evidências dos contratos exercitados. A revisão estática e essas suítes têm alcance limitado sobre execução em dispositivos físicos e qualidade arquitetural.
+O inventário inicial cobre manutenção do Angular e suas fronteiras com o servidor. A ampliação para o sistema inteiro inclui Node, WordPress, banco, integrações, publicação e recuperação. Os testes existentes de segurança, HTTP e SSR entram como evidências dos contratos exercitados. A revisão estática e essas suítes têm alcance limitado sobre execução em dispositivos físicos e qualidade arquitetural.
 
 ## Inventário por área
 
@@ -94,6 +94,47 @@ O roteiro de revisão e o template de PR exigem caminhos examinados, fonte dos e
 O gate automatizado dos três formatos complementa as verificações de tipos, imports, contratos das stores, testes, cobertura e build. Reutilização semântica, coesão e adequação dos comentários continuam exigindo leitura do código.
 
 O `AGENTS.md` da raiz aponta para essas instruções, mantendo uma única fonte para as regras usadas pelos assistentes do repositório.
+
+## Avaliação do Sanaka inteiro
+
+A ampliação de 21/11/2026 inclui aplicação, processo Node, WordPress, banco, integrações e operação. Os pontos abaixo definem investigações e critérios propostos de aceite. Cada resultado precisa registrar revisão, ambiente e evidência. A marcação de uma pendência significa que a evidência correspondente ainda precisa ser produzida ou consultada.
+
+O navegador consome diretamente o CMS e a API NASA. O Node serve a aplicação e as APIs próprias de contato, Newsletter, configuração de analytics e relatórios de segurança. O limite de cada integração precisa permanecer explícito.
+
+```mermaid
+flowchart TD
+  B["Navegador · Angular"] --> S["Render · Node, HTML e arquivos"]
+  B --> W["WordPress · conteúdo e Óbolos"]
+  B --> N["NASA · demonstração REST"]
+  B -->|"após aceite"| G["Google Analytics"]
+  B --> F["Fontes externas"]
+  S --> M["SMTP"]
+  S --> E["Brevo"]
+  W --> D["MySQL · conteúdo e recibos"]
+```
+
+| Área                                   | Evidência inicial e investigação                                                                                                                                                                                                 | Critério proposto de aceite                                                                                                                                                                                                                          |
+| -------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| Limites e dependências                 | O verificador cobre imports entre camadas e alcance do código de servidor. Revisar também dependências circulares internas, contratos públicos e motivos para cada camada.                                                       | Uma alteração de regra ou integração permanece localizada, com consumidores identificados e dependências permitidas.                                                                                                                                 |
+| Componentes e comportamento responsivo | O inventário Angular e os achados anteriores mostram compartilhamento parcial. Investigar componentes equivalentes, responsabilidade da tela, estado por navegação e APIs dos filhos.                                            | Desktop e mobile consomem a mesma regra e o mesmo estado. As variações necessárias têm testes pelos dois pontos de entrada.                                                                                                                          |
+| Contratos e evolução das integrações   | Há adaptadores e validadores em `core/wordpress`, serviços das páginas e `src/shared`. Revisar mudanças de campos, valores opcionais, limites e convivência de versões do CMS e frontend.                                        | Respostas inválidas geram o estado previsto. Edições editoriais, atualizações do plugin e versões suportadas preservam os fluxos de seus consumidores.                                                                                               |
+| Dados e concorrência                   | `wordpress/includes/operations.php` usa transação, chave única, recibo e conferência de InnoDB. Há testes isolados de concorrência e resposta perdida. A capacidade padrão reserva até 50 mil recibos e serializa a alocação.    | Repetir uma operação conserva o resultado. Falhas intermediárias mantêm recibo e contador coerentes. Crescimento, índices, contenção, migração e manutenção têm evidências e procedimento de recuperação.                                            |
+| Falhas e retentativas                  | Contato tem prazos SMTP e estado de confirmação incerta. Newsletter trata indisponibilidade e depende de confirmação. Revisar também erros parciais, respostas atrasadas e cancelamento de navegação no CMS e na NASA.           | A pessoa recebe um estado compreensível e consegue retomar o fluxo. A retentativa conserva a identidade das operações que exigem idempotência.                                                                                                       |
+| Segurança das fronteiras               | A política de scripts está em `Content-Security-Policy-Report-Only`, e a política imposta cobre ancestrais de frames. Revisar sanitização, URLs, permissões administrativas, payloads, dependências e configuração dos proxies.  | Requisitos aplicáveis têm evidência de verificação. A evolução da CSP é testada com Angular, loadings e integrações. Permissões e entradas inválidas são exercitadas nas fronteiras reais.                                                           |
+| Privacidade e consentimento            | O analytics depende do aceite e os logs de erro retiram consultas e segmentos sensíveis. Inventariar também cookies, fontes externas, formulários, destinatários, retenção e serviços que recebem dados.                         | Cada fluxo documenta quais dados atravessam a fronteira e para qual finalidade. Aceitar, recusar e retirar o aceite produzem os efeitos previstos, com confirmação em navegador.                                                                     |
+| HTML, SSR, SEO e cache                 | `createServerRoutes()` mantém artigos em CSR e o SSR editorial em configuração experimental. HTML e traduções revalidam. Arquivos com hash têm cache longo.                                                                      | Cada rota tem estratégia justificada. Artigo válido, inexistente e indisponível entregam conteúdo, metadados e status coerentes no modo adotado. Publicações sucessivas são testadas com uma aba da versão anterior e carregamento tardio de chunks. |
+| Acessibilidade e uso                   | Já há testes de um único `main`, idioma editorial, âncoras e navegação. Investigar teclado, leitor de tela, foco no banner e diálogo, contraste, zoom, reflow, toque e movimento reduzido nos fluxos completos.                  | Os critérios WCAG aplicáveis têm evidência automática ou manual identificada. A aprovação inclui navegação pelos estados de loading, erro e recuperação e conferência em dispositivos relevantes.                                                    |
+| Observabilidade e operação             | O logger registra 404/5xx concluídos com revisão, caminho, tipo de recurso e identificação da requisição. O health check atual verifica o processo. Revisar alertas, disponibilidade das integrações e correlação por revisão.   | Um incidente pode ser localizado e reproduzido por evidência suficiente, com exposição de dados pessoais controlada. Há distinção entre processo saudável, integração degradada, ausência de dados e zero erros observados.                          |
+| Publicação e recuperação               | O roteiro do Render descreve rollback do serviço. A restauração do CMS, dos uploads, dos metadados e dos recibos precisa de comprovação própria. Inventariar configuração e compatibilidade entre releases.                      | Build e pacote do plugin são rastreáveis. Uma recuperação em ambiente isolado demonstra o estado dos dados e a compatibilidade do código restaurado. Registrar tempo e perda de dados observados.                                                    |
+| Capacidade e custo                     | O experimento SSR usa 0,5 CPU e 512 MiB em containers. O limitador Express é local ao processo, e reinícios ou várias instâncias alteram o alcance da contagem.                                                                  | Cenários de uso têm latência, erros, memória, consultas e crescimento medidos. Os limites de cada processo e serviço estão documentados. As decisões preservam as artes aprovadas e explicitam o custo operacional.                                  |
+| Testabilidade e evolução               | CI cobre TypeScript, servidor, PHP/MySQL/WordPress, navegador e experimento SSR, com dados isolados. Revisar também permissões de publicação, atualização de dependências, contratos de versões e remoção de código substituído. | Cada risco relevante tem um teste ou uma verificação manual pertinente, vinculada à mudança. O ambiente de teste reproduz as condições que importam para o fluxo examinado.                                                                          |
+| Documentação e decisões                | O padrão de comentários e as instruções foram reforçados nesta PR. Revisar também decisões sobre renderização, cache, propriedade dos dados, dependências e operação.                                                            | Outra pessoa consegue explicar os fluxos, executar a validação, localizar os consumidores e recuperar o serviço usando documentação coerente com a revisão examinada.                                                                                |
+
+Para segurança, o [OWASP ASVS](https://asvs.owasp.org/) oferece requisitos de desenho e verificação que podem ser selecionados conforme as fronteiras do Sanaka. Para acessibilidade, a [referência WCAG 2.2](https://www.w3.org/WAI/WCAG22/quickref/) permite relacionar critérios e evidências. O [rollback do Render](https://render.com/docs/rollbacks) reaproveita artefatos disponíveis e possui regras próprias para configuração e estado persistente.
+
+A primeira sequência proposta reúne coesão e reutilização, contratos e falhas, dados e recuperação, seguida de segurança, acessibilidade, observabilidade e capacidade. Um defeito confirmado de impacto maior muda essa ordem. A cobertura de testes e a redução de duplicação são evidências parciais dentro dessas áreas.
+
+Esta ampliação resulta de leitura de código e documentação. A revisão da configuração ativa no Render e no CMS, a restauração de backup e as verificações manuais de acessibilidade e dispositivos continuam pendentes. Cada entrega deve atualizar seu critério com o ambiente e a evidência correspondente.
 
 ## Referências e reprodução
 

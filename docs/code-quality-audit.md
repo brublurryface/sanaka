@@ -1,7 +1,7 @@
 # Auditoria de qualidade do código
 
 Este documento registra a auditoria histórica da issue #36. A revisão atual de reutilização,
-responsabilidades e comentários está em [Revisão de manutenção Angular](./architecture/angular-maintainability-review-2026-11.md),
+responsabilidades e comentários está em [Revisão de arquitetura do Sanaka](./architecture/sanaka-architecture-review-2026-11.md),
 com a revisão de código examinada e as pendências da issue #113.
 
 Branch: `chore/36-code-quality-audit`
