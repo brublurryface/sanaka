@@ -30,10 +30,11 @@
 - Before adding a component, class, directive, pipe or CSS rule, search for the same behavior across the application, including different names. Read the candidate implementation and its consumers before choosing where the change belongs.
 - Keep one owner for each shared state, request and business rule. Desktop and mobile presentations must consume that owner. Prefer responsive CSS for layout changes. When separate markup is necessary, share the behavior and validate both presentations.
 - Components coordinate their view and emit user intentions. Review data mapping, validation, persistence, request orchestration and document metadata as separate responsibilities. Extract a responsibility when its consumers or independent changes justify the boundary.
+- Trace a representative interaction between components. Identify the owner of feature state and side effects, the data passed to the view, events raised back to the owner, and state local to the view such as focus. A child can coordinate its own independent feature.
 - Place reusable code at the narrowest scope that contains its actual consumers. Reuse within one feature belongs in that feature. Cross-feature reuse follows the import boundaries below.
 - Every extraction must identify its consumers and remove the superseded implementation. Preserve existing caller contracts and responsive adaptations when moving code.
 - Evaluate a shared template or content projection for repeated markup, a directive for repeated DOM behavior, a pipe or function for repeated transformations and a service/store for shared state or integration. Choose the mechanism from the responsibility being shared.
-- Use file size and duplication reports to guide inspection. Assess the number of independent reasons a class changes and the effects on its callers as part of the review.
+- When size is relevant, count component TypeScript, external template and styles separately, with inline content counted once. Use size to guide inspection and justify extraction by independent reasons to change or a shared contract with identified consumers.
 
 ## Comments and project documentation
 
@@ -55,7 +56,7 @@
 - Use Vitest-compatible APIs and commands.
 - Prefer behavior-focused tests.
 - Do not test cosmetic CSS details unless the behavior itself depends on them.
-- Test accessibility contracts when relevant.
+- For changed interactions, verify the applicable accessibility contracts at their real entry points, including accessible name and state, keyboard and focus, announcements and responsive behavior. Identify which checks ran in a browser and which still require assistive technology or a physical device.
 - When fake timers are used, restore real timers after the test.
 - A failing test does not automatically mean production code is wrong.
 - Before changing production behavior to satisfy a test, determine what the intended product behavior actually is.
