@@ -25,6 +25,22 @@
 - Prefer small, maintainable abstractions over premature architecture.
 - Store signals exposed to consumers must be readonly; mutations go through the store's commands.
 
+## Reuse and component responsibilities
+
+- Before adding a component, class, directive, pipe or CSS rule, search for the same behavior across the application, including different names. Read the candidate implementation and its consumers before choosing where the change belongs.
+- Keep one owner for each shared state, request and business rule. Desktop and mobile presentations must consume that owner. Prefer responsive CSS for layout changes. When separate markup is necessary, share the behavior and validate both presentations.
+- Components coordinate their view and emit user intentions. Review data mapping, validation, persistence, request orchestration and document metadata as separate responsibilities. Extract a responsibility when its consumers or independent changes justify the boundary.
+- Place reusable code at the narrowest scope that contains its actual consumers. Reuse within one feature belongs in that feature. Cross-feature reuse follows the import boundaries below.
+- Every extraction must identify its consumers and remove the superseded implementation. Preserve existing caller contracts and responsive adaptations when moving code.
+- Evaluate a shared template or content projection for repeated markup, a directive for repeated DOM behavior, a pipe or function for repeated transformations and a service/store for shared state or integration. Choose the mechanism from the responsibility being shared.
+- Use file size and duplication reports to guide inspection. Assess the number of independent reasons a class changes and the effects on its callers as part of the review.
+
+## Comments and project documentation
+
+- Follow the Portuguese comments and TSDoc convention in `docs/code-quality-audit.md`. Use `docs/matrix/padroes-didaticos.md` for the additional educational explanations in Matrix study files.
+- Document responsibilities, contracts and decisions that require context, including ownership, cancellation, retry, SSR and side effects. Update those explanations in the change that changes the behavior.
+- Keep code identifiers in English. Keep comments in Portuguese and explain the reason or contract without narrating obvious assignments.
+
 ## Import boundaries
 
 - `core` and `shared` must not import page features. A page feature must not import another page feature.
@@ -60,6 +76,7 @@
 - Do not merge pull requests or delete branches unless explicitly requested. The author performs the merge.
 - Do not use destructive Git commands unless explicitly requested.
 - After making changes, report exactly which files changed and the validation results.
+- For each PR, identify existing implementations inspected, affected consumers, the owner of shared behavior, responsibilities added or moved, and validation of the affected desktop/mobile states. Use the PR template and record pending checks explicitly.
 
 ## Communication
 

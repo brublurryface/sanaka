@@ -37,7 +37,7 @@ export class GoogleAnalyticsTag {
     this.command = gtag;
     this.browser.gtag = gtag;
 
-    // Loaded only after affirmative consent. Advertising remains denied.
+    // O aceite autoriza a análise de visitas. Os recursos de publicidade ficam desativados.
     gtag('consent', 'default', {
       analytics_storage: 'granted',
       ad_storage: 'denied',
@@ -87,7 +87,7 @@ export class GoogleAnalyticsTag {
         }
       }
     } catch {
-      // The tag is still paused when cookie storage is unavailable.
+      // A pausa já foi aplicada mesmo se o navegador impedir o acesso aos cookies.
     }
   }
 

@@ -32,7 +32,7 @@ export const ABOUT_PUZZLE_PIECE_PATHS = Array.from({ length: COLUMNS ** 2 }, (_,
   return piecePath(index, left);
 });
 
-// A single mobile row joins the end of one desktop row to the start of the next.
+// A faixa móvel une o fim de cada linha do tabuleiro ao início da próxima.
 export const ABOUT_PUZZLE_MOBILE_PIECE_PATHS = ABOUT_PUZZLE_PIECE_PATHS.map((_, index) =>
   piecePath(index, index === 0 ? TAB_DEPTH : rightBend(index - 1)),
 );
@@ -43,5 +43,5 @@ export const ABOUT_PUZZLE_MOBILE_VIEW_BOXES = ABOUT_PUZZLE_PIECE_PATHS.map((_, i
   return `${x} ${y} ${MOBILE_VIEW_SIZE} ${MOBILE_VIEW_SIZE}`;
 });
 
-// Overlap the viewBox padding; the visible 100-unit bodies then share an edge.
+// Sobrepõe a margem do viewBox para alinhar as bordas visíveis de 100 unidades.
 export const ABOUT_PUZZLE_MOBILE_OVERLAP = (PIECE_SIZE - MOBILE_VIEW_SIZE) / MOBILE_VIEW_SIZE;
