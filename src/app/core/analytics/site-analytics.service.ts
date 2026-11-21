@@ -95,7 +95,7 @@ export class SiteAnalytics {
     try {
       this.document.defaultView?.localStorage.setItem(this.storageKey, preference);
     } catch {
-      // Honor the decision during this visit if browser storage is unavailable.
+      // A escolha vale nesta visita mesmo se o navegador impedir sua persistência.
     }
     this.applyPreference(preference);
   }

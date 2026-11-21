@@ -14,6 +14,7 @@
     "test:server": "vitest run --config vitest.server.config.ts --coverage",
     "test:coverage": "ng test --watch=false --coverage --coverage-include=src/app/**/*.ts --coverage-exclude=src/app/**/*.routes.ts --coverage-reporters=text-summary --coverage-reporters=json-summary && node scripts/check-coverage.mjs",
     "duplication:check": "jscpd src/app --format typescript --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",
+    "duplication:check:all": "jscpd src/app --format typescript,markup,scss --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",
     "duplication:report": "jscpd src/app --min-lines 5 --min-tokens 50 --ignore **/*.spec.ts --reporters console",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
@@ -23,7 +24,7 @@
     "architecture:check": "node scripts/architecture/check.mjs",
     "test:architecture": "node --test scripts/architecture/check.test.mjs",
     "test:state-contracts": "tsc --project tsconfig.store-contracts.json",
-    "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:server && npm run test:coverage && npm run duplication:check && npm run build",
+    "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:server && npm run test:coverage && npm run duplication:check && npm run duplication:check:all && npm run build",
     "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs",
     "test:e2e": "playwright test",
     "test:e2e:types": "tsc --project tsconfig.e2e.json"

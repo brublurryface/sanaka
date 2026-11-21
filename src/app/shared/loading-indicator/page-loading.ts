@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, effect, inject, input } from '@angu
 import { PageLoadingState } from '../../core/navigation/page-loading-state';
 import { LoadingVariant } from './loading-artwork';
 
-/** Registers the initial request without placing an illustration inside a small page section. */
+/** Registra a consulta inicial para exibir a ilustração pelo loading global da aplicação. */
 @Component({
   selector: 'app-page-loading',
   template: '',

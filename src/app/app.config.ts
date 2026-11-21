@@ -18,7 +18,7 @@ export const appConfig: ApplicationConfig = {
     provideRouter(
       routes,
       withInMemoryScrolling({
-        // PageAnchorNavigation waits for the full-page loading state to finish.
+        // PageAnchorNavigation espera o conteúdo ficar disponível para aplicar a âncora.
         anchorScrolling: 'disabled',
         scrollPositionRestoration: 'top',
       }),

@@ -2,6 +2,7 @@ import { ChangeDetectionStrategy, Component, input } from '@angular/core';
 
 import type { AboutCyclePost } from '../data-access/about-cycles.service';
 
+/** Compartilha recorte, filtro e máscara das peças entre o tabuleiro e a faixa móvel. */
 @Component({
   selector: 'svg[appAboutPuzzleArt]',
   templateUrl: './about-puzzle-art.html',
