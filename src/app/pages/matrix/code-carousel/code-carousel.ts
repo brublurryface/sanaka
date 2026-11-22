@@ -1,6 +1,10 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { CodeExplorerController, CodeExplorerSlide } from '../code-explorer.controller';
+import {
+  MatrixCodeExplorerFrame,
+  MatrixCodeSnippet,
+} from '../code-explorer-frame/code-explorer-frame';
+import { CodeExplorerController, type CodeExplorerSlide } from '../code-explorer.controller';
 
 interface CodeSlide extends CodeExplorerSlide {
   readonly language: 'TypeScript' | 'HTML';
@@ -8,7 +12,7 @@ interface CodeSlide extends CodeExplorerSlide {
 
 @Component({
   selector: 'app-matrix-code-carousel',
-  imports: [TranslocoPipe],
+  imports: [MatrixCodeExplorerFrame, MatrixCodeSnippet, TranslocoPipe],
   templateUrl: './code-carousel.html',
   styleUrl: './code-carousel.scss',
 })
