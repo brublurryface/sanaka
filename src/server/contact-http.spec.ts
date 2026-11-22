@@ -202,7 +202,9 @@ describe('contact HTTP composition', () => {
     const response = await post();
     expect(response.status).toBe(503);
     expect(await response.json()).toEqual({ delivered: false });
-    expect(console.error).toHaveBeenCalledExactlyOnceWith('Contact message delivery failed.');
+    expect(console.error).toHaveBeenCalledExactlyOnceWith(
+      expect.stringContaining('"provider":"smtp"'),
+    );
   });
 });
 
@@ -272,7 +274,9 @@ describe('contact deadlines with an isolated real SMTP socket', () => {
     expect(fixture.stats.beats).toBeGreaterThan(1);
     expect(fixture.stats).toMatchObject({ connections: 1, messages: 1 });
     await expect.poll(fixture.activeConnections).toBe(0);
-    expect(console.error).toHaveBeenCalledExactlyOnceWith('Contact message delivery failed.');
+    expect(console.error).toHaveBeenCalledExactlyOnceWith(
+      expect.stringContaining('"provider":"smtp"'),
+    );
   });
 
   it('does not declare non-delivery when SMTP disconnects after receiving the message', async () => {

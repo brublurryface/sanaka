@@ -19,6 +19,7 @@ export default defineConfig({
         'src/server/csp-reports.ts',
         'src/server/runtime-options.ts',
         'src/server/http-request-log.ts',
+        'src/server/request-log-context.ts',
         'src/server/legacy-wordpress-redirects.ts',
         'src/server/request-target.ts',
         'src/server/robots.ts',

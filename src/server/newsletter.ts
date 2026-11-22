@@ -1,6 +1,7 @@
 import express, { type ErrorRequestHandler, type RequestHandler } from 'express';
 
 import { NEWSLETTER_EMAIL_MAX_LENGTH, type NewsletterSignupRequest } from '../shared/newsletter';
+import { logProviderFailure } from './request-log-context';
 import { createRateLimiter } from './request-rate-limit';
 
 const BREVO_DOI_ENDPOINT = 'https://api.brevo.com/v3/contacts/doubleOptinConfirmation';
@@ -156,7 +157,7 @@ export function createNewsletterRouter(fetcher: typeof fetch = fetch): express.R
       await upstream.body?.cancel();
 
       if (!upstream.ok) {
-        console.error('Newsletter provider rejected a confirmation request.', upstream.status);
+        logProviderFailure(request, 'brevo', upstream.status);
         response.status(upstream.status === 429 ? 429 : 502).json({ accepted: false });
         return;
       }
@@ -164,7 +165,7 @@ export function createNewsletterRouter(fetcher: typeof fetch = fetch): express.R
       // Aceitar o pedido não significa confirmar a assinatura: a pessoa ainda precisa clicar no e-mail.
       response.status(202).json({ accepted: true });
     } catch {
-      console.error('Newsletter confirmation request could not reach the provider.');
+      logProviderFailure(request, 'brevo');
       response.status(502).json({ accepted: false });
     }
   };
