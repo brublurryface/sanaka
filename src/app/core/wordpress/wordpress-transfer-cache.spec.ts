@@ -27,6 +27,23 @@ describe('WordPress transfer cache boundary', () => {
     expect(isPublicWordPressRead(new HttpRequest('GET', url))).toBe(false);
   });
 
+  it('uses only the configured CMS root when the SSR experiment supplies its own', () => {
+    const root = 'https://editorial.example/subsite/wp-json';
+    expect(isPublicWordPressRead(new HttpRequest('GET', root + '/wp/v2/posts'), root)).toBe(true);
+    expect(
+      isPublicWordPressRead(
+        new HttpRequest('GET', 'https://editorial.example/wp-json/wp/v2/posts'),
+        root,
+      ),
+    ).toBe(false);
+    expect(
+      isPublicWordPressRead(
+        new HttpRequest('GET', 'https://cms.sanaka.com.br/wp-json/wp/v2/posts'),
+        root,
+      ),
+    ).toBe(false);
+  });
+
   it('excludes mutations and authenticated requests', () => {
     const url = 'https://cms.sanaka.com.br/wp-json/wp/v2/posts';
     expect(isPublicWordPressRead(new HttpRequest('POST', url, null))).toBe(false);

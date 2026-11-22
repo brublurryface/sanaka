@@ -23,6 +23,11 @@ import {
   ResolvedWordPressContentPolicy,
 } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
+import {
+  archiveExcludedCategoryIds,
+  categoryBranchIds,
+  readingCollection,
+} from './post-collection-policy';
 import { WordPressPostMapper } from './wordpress-post-mapper';
 import {
   assertWordPressCategoryTree,
@@ -165,10 +170,7 @@ export class WordPressPostsService {
   getArchiveCategories(): Observable<readonly PostCategory[]> {
     return forkJoin({ categories: this.categories$, policy: this.contentPolicy.resolve() }).pipe(
       map(({ categories, policy }) => {
-        const excludedIds = this.categoryBranchIds(
-          categories,
-          this.archiveExcludedCategoryIds(policy),
-        );
+        const excludedIds = categoryBranchIds(categories, archiveExcludedCategoryIds(policy));
         return categories
           .filter((category) => !excludedIds.has(category.id))
           .map((category) => ({ ...this.mapper.toTaxonomy(category), parentId: category.parent }));
@@ -215,7 +217,7 @@ export class WordPressPostsService {
         }
 
         const article = this.mapper.articleContent(post);
-        const excludedRoots = this.archiveExcludedCategoryIds(policy);
+        const excludedRoots = archiveExcludedCategoryIds(policy);
         const emptyCategoryDetails = {
           categories: [] as readonly WordPressCategory[],
           previous: undefined,
@@ -262,7 +264,7 @@ export class WordPressPostsService {
               categoryDetails.categories,
               tags,
               exploreTags,
-              this.categoryBranchIds(categoryDetails.categories, excludedRoots),
+              categoryBranchIds(categoryDetails.categories, excludedRoots),
             ),
             previous: categoryDetails.previous,
             next: categoryDetails.next,
@@ -335,7 +337,7 @@ export class WordPressPostsService {
     params = query.search ? params.set('search', query.search) : params;
     params = query.categoryId ? params.set('categories', String(query.categoryId)) : params;
     params = query.tagId ? params.set('tags', String(query.tagId)) : params;
-    return excludeWordPressCategoryBranches(params, this.archiveExcludedCategoryIds(policy));
+    return excludeWordPressCategoryBranches(params, archiveExcludedCategoryIds(policy));
   }
 
   private mapPostsPage(
@@ -345,7 +347,7 @@ export class WordPressPostsService {
     policy: ResolvedWordPressContentPolicy,
   ): PostsPage {
     const posts = parseWordPressPosts(response.body);
-    const excludedIds = this.categoryBranchIds(categories, this.archiveExcludedCategoryIds(policy));
+    const excludedIds = categoryBranchIds(categories, archiveExcludedCategoryIds(policy));
     // Um filtro local não pode corrigir os totais de outra coleção.
     if (posts.some((post) => post.categories.some((id) => excludedIds.has(id))))
       throw new WordPressContractError(
@@ -434,11 +436,11 @@ export class WordPressPostsService {
     categories: readonly WordPressCategory[],
     policy: ResolvedWordPressContentPolicy,
   ): Observable<readonly WordPressTag[]> {
-    const collection = this.readingCollection(post, categories, policy);
+    const collection = readingCollection(post, categories, policy);
     const categoryIds = collection.categoryIds ?? post.categories;
     if (!categoryIds.length) return of([]);
-    const allowed = this.categoryBranchIds(categories, categoryIds);
-    const excluded = this.categoryBranchIds(categories, collection.excludedIds);
+    const allowed = categoryBranchIds(categories, categoryIds);
+    const excluded = categoryBranchIds(categories, collection.excludedIds);
     const selected = new Set(post.tags ?? []);
     const params = excludeWordPressCategoryBranches(
       new HttpParams()
@@ -497,7 +499,7 @@ export class WordPressPostsService {
     policy: ResolvedWordPressContentPolicy,
   ): Observable<PostNavigation | undefined> {
     const isPrevious = direction === 'previous';
-    const collection = this.readingCollection(post, categories, policy);
+    const collection = readingCollection(post, categories, policy);
     let params = excludeWordPressCategoryBranches(
       new HttpParams()
         .set(isPrevious ? 'before' : 'after', post.date)
@@ -529,40 +531,6 @@ export class WordPressPostsService {
 
   private toPositiveInteger(value: number | undefined, fallback: number): number {
     return Number.isInteger(value) && Number(value) > 0 ? Number(value) : fallback;
-  }
-
-  private readingCollection(
-    post: WordPressPost,
-    categories: readonly WordPressCategory[],
-    policy: ResolvedWordPressContentPolicy,
-  ): { readonly categoryIds?: readonly number[]; readonly excludedIds: readonly number[] } {
-    const volumeId = policy.sanakaverseCategoryId;
-    const volumeIds = this.categoryBranchIds(categories, volumeId === undefined ? [] : [volumeId]);
-    const isVolume = volumeId !== undefined && post.categories.some((id) => volumeIds.has(id));
-    return {
-      categoryIds: isVolume ? [volumeId] : undefined,
-      excludedIds: isVolume ? policy.excludedCategoryIds : this.archiveExcludedCategoryIds(policy),
-    };
-  }
-
-  private archiveExcludedCategoryIds(policy: ResolvedWordPressContentPolicy): readonly number[] {
-    return [
-      ...policy.excludedCategoryIds,
-      ...(policy.sanakaverseCategoryId === undefined ? [] : [policy.sanakaverseCategoryId]),
-    ];
-  }
-
-  private categoryBranchIds(
-    categories: readonly WordPressCategory[],
-    roots: readonly number[],
-  ): ReadonlySet<number> {
-    const ids = new Set(roots);
-    let previousSize: number;
-    do {
-      previousSize = ids.size;
-      for (const category of categories) if (ids.has(category.parent)) ids.add(category.id);
-    } while (ids.size !== previousSize);
-    return ids;
   }
 
   private readCountHeader(value: string | null): number {
