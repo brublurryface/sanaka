@@ -90,6 +90,8 @@
         <div class="newsletter__feedback" aria-live="polite">
           @if (status() === 'rate-limited') {
             <p class="newsletter__error">{{ 'newsletter.rateLimited' | transloco }}</p>
+          } @else if (status() === 'unconfirmed') {
+            <p class="newsletter__error">{{ 'newsletter.unconfirmed' | transloco }}</p>
           } @else if (status() === 'error') {
             <p class="newsletter__error">{{ 'newsletter.error' | transloco }}</p>
           }

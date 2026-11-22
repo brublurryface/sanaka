@@ -135,6 +135,27 @@ describe('AboutCyclesService', () => {
     expect(result?.slice(6).map((cycle) => cycle.slug)).toEqual(addedSlugs);
   });
 
+  it.each([['Fragmento sem numeral'], ['X — Fora do tabuleiro'], ['II — Primeiro', 'II — Outro']])(
+    'rejects a collection that cannot map to distinct puzzle slots (%j)',
+    (...titles) => {
+      const error = vi.fn();
+      const next = vi.fn();
+      service.getCycles().subscribe({ next, error });
+      httpTesting
+        .expectOne((request) => request.url.endsWith('/posts'))
+        .flush(
+          titles.map((title, index) => ({
+            id: index + 1,
+            slug: 'fragment-' + index,
+            title: { rendered: title },
+            excerpt: { rendered: 'Texto.' },
+          })),
+        );
+      expect(next).not.toHaveBeenCalled();
+      expect(error).toHaveBeenCalledExactlyOnceWith(expect.any(WordPressContractError));
+    },
+  );
+
   it('should return an empty collection when WordPress has no autobiographical cycles', () => {
     let result: readonly AboutCyclePost[] | undefined;
 

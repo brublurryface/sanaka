@@ -54,7 +54,7 @@ function image(value: unknown): PortalImageViewModel | null {
   };
 }
 
-/** The collection is required; unusable image candidates and optional credits are discarded. */
+/** Exige a coleção e descarta imagens inutilizáveis e créditos opcionais inválidos. */
 export function parseNasaImagesResponse(
   value: unknown,
   requestedId?: string,

@@ -1,4 +1,4 @@
-/** A successful HTTP response did not satisfy the WordPress contract used by Sanaka. */
+/** Indica que a resposta HTTP recebida diverge do contrato WordPress usado pelo Sanaka. */
 export class WordPressContractError extends Error {
   constructor(message = 'Resposta do WordPress incompatível com o contrato esperado.') {
     super(message);
@@ -137,7 +137,7 @@ function media(value: unknown): WordPressMedia | undefined {
   };
 }
 
-/** Reject a malformed mandatory record without changing the page's totals by filtering it out. */
+/** Rejeita o registro obrigatório inválido para preservar a coerência dos totais da página. */
 export function parseWordPressPosts(value: unknown, detail = false): readonly WordPressPost[] {
   const posts = wordPressArray(value).map((entry) => {
     const item = wordPressRecord(entry);
@@ -197,7 +197,7 @@ export function parseWordPressCategories(value: unknown): readonly WordPressCate
   });
 }
 
-/** Missing parents can be absent from a projection; present ancestors must never form a cycle. */
+/** Aceita pais omitidos pela projeção e rejeita ciclos entre os ancestrais presentes. */
 export function assertWordPressCategoryTree(categories: readonly WordPressCategory[]): void {
   assertWordPressIdentities(categories);
   const byId = new Map(categories.map((category) => [category.id, category]));

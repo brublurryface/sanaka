@@ -71,7 +71,7 @@ export class NasaImagesService {
     query: string,
     requestedId?: string,
   ): ImageSearchResult {
-    // HTTP 204 deliberately has no JSON document; a null body on HTTP 200 is invalid.
+    // HTTP 204 aceita corpo vazio. Em HTTP 200, o contrato exige o documento JSON.
     const parsed =
       response.status === 204 && response.body === null
         ? { image: null, total: 0 }

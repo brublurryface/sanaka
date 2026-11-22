@@ -185,6 +185,7 @@
     "pendingConfirmation": "Request received. Check your email to confirm your subscription. You will only receive news after confirming.",
     "rateLimited": "Too many attempts in a short time. Wait a few minutes before trying again.",
     "error": "The confirmation could not be requested right now. Your subscription has not been confirmed. Please try again later.",
+    "unconfirmed": "We couldn't confirm your request. Check your email before trying again.",
     "errors": {
       "email": "Enter a valid email address, up to 254 characters.",
       "consent": "Select this option if you want to subscribe to the newsletter."
