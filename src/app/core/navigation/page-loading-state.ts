@@ -26,7 +26,7 @@ export interface PageLoadingRequest {
   readonly labelKey: string;
 }
 
-/** Keeps the application busy only while a routed page is waiting for its initial data. */
+/** Coordena o loading global enquanto a página aguarda seus dados iniciais. */
 @Injectable({ providedIn: 'root' })
 export class PageLoadingState {
   private readonly router = inject(Router);
@@ -51,7 +51,7 @@ export class PageLoadingState {
         this.navigationId = event.id;
         this.navigationPending.set(this.requiresInitialLoading(event.url));
       } else if (event instanceof NavigationEnd) {
-        // Keep the shell hidden until the routed view has registered its data request.
+        // A página registra sua consulta antes de liberar o cabeçalho, o conteúdo e o rodapé.
         afterNextRender(
           () => {
             if (this.navigationId === event.id) this.navigationPending.set(false);

@@ -5,7 +5,7 @@ import { NavigationSkipped, NavigationStart, Router, Scroll } from '@angular/rou
 
 import { PageLoadingState } from './page-loading-state';
 
-/** Applies route fragments after the page can actually be scrolled and focused. */
+/** Aplica a âncora depois que a página permite rolagem e foco no conteúdo carregado. */
 @Injectable({ providedIn: 'root' })
 export class PageAnchorNavigation {
   private readonly document = inject(DOCUMENT);
@@ -38,7 +38,7 @@ export class PageAnchorNavigation {
         this.pendingAnchor.set(null);
         if (!target) return;
 
-        // Native scrolling respects the target's scroll-margin below the sticky header.
+        // A rolagem nativa usa o scroll-margin do destino para compensar o cabeçalho fixo.
         target.scrollIntoView({ block: 'start', behavior: 'auto' });
         target.focus({ preventScroll: true });
       },

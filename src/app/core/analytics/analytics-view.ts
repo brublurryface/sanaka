@@ -7,7 +7,7 @@ export interface AnalyticsView {
   readonly article: boolean;
 }
 
-/** Projects router configuration and a public post slug, never the full browser URL. */
+/** Projeta a rota e o slug público do artigo para limitar os dados enviados à análise. */
 export function analyticsView(root: ActivatedRouteSnapshot): AnalyticsView | null {
   let route = root;
   while (route.firstChild) route = route.firstChild;
