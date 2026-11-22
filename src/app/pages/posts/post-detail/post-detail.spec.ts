@@ -7,7 +7,7 @@ import { RESPONSE_INIT } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
-import { Observable, of, Subject, throwError } from 'rxjs';
+import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
 
 import { PostDetail } from '../post';
@@ -277,29 +277,48 @@ describe('PostDetailPage', () => {
     expect(oboloService.getTotal).not.toHaveBeenCalled();
   });
 
-  it('should calculate reading progress from the article position in the document', () => {
-    createComponent();
-    const component = fixture.componentInstance;
-    const article = document.getElementById('post-reading-nave');
+  function scrollArticleTo(view: HTMLElement, percent: number): void {
+    const article = view.querySelector<HTMLElement>('#post-reading-nave')!;
+    const height = window.innerHeight + 1000;
+    vi.spyOn(article, 'getBoundingClientRect').mockReturnValue(
+      new DOMRect(0, -percent * 10, 400, height),
+    );
+    Object.defineProperty(article, 'scrollHeight', { configurable: true, value: height });
+    window.dispatchEvent(new Event('scroll'));
+    fixture.detectChanges();
+  }
 
-    vi.spyOn(article!, 'getBoundingClientRect').mockReturnValue({
-      top: -500,
-      bottom: 700,
-      height: 1200,
-      left: 0,
-      right: 0,
-      width: 0,
-      x: 0,
-      y: -500,
-      toJSON: () => ({}),
-    });
-    Object.defineProperty(article, 'scrollHeight', { configurable: true, value: 1200 });
-    Object.defineProperty(window, 'scrollY', { configurable: true, value: 700 });
-    Object.defineProperty(window, 'innerHeight', { configurable: true, value: 700 });
+  it('reports reading progress from the article in the accessible progress bar', () => {
+    const view = createComponent();
+    const progress = view.querySelector('[role="progressbar"]')!;
+    expect(progress.getAttribute('aria-valuenow')).toBe('0');
+    for (const [position, expected] of [
+      [-10, 0],
+      [50, 50],
+      [125, 100],
+    ]) {
+      scrollArticleTo(view, position);
+      expect(progress.getAttribute('aria-valuenow')).toBe(String(expected));
+    }
+  });
 
-    component.updateReadingProgress();
-
-    expect(component.readingProgress()).toBe(100);
+  it('resets progress when the router changes the article in the same page instance', () => {
+    const slugs = new BehaviorSubject(convertToParamMap({ slug: 'voce' }));
+    TestBed.overrideProvider(ActivatedRoute, { useValue: { paramMap: slugs } });
+    postsService.getPostBySlug.mockImplementation((slug) => of({ ...post, slug }));
+    fixture = TestBed.createComponent(PostDetailPage);
+    fixture.detectChanges();
+    const view = fixture.nativeElement as HTMLElement;
+    scrollArticleTo(view, 55);
+    const bar = view.querySelector('[role="progressbar"]')!;
+    expect(bar.getAttribute('aria-valuenow')).toBe('55');
+    slugs.next(convertToParamMap({ slug: 'origem' }));
+    fixture.detectChanges();
+    expect(view.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow')).toBe('0');
+    expect(document.querySelector('link[rel="canonical"]')?.getAttribute('href')).toBe(
+      'https://sanaka.com.br/posts/origem',
+    );
+    slugs.complete();
   });
 
   it('should preserve the article, SEO and obolo when optional HTTP enrichments fail', () => {
@@ -345,7 +364,7 @@ describe('PostDetailPage', () => {
       ]);
     fixture.detectChanges();
     const article = compiled.querySelector('.post-reader__article');
-    fixture.componentInstance.readingProgress.set(33);
+    scrollArticleTo(compiled, 33);
     httpTesting
       .expectOne((request) => request.url === `${apiUrl}/categories`)
       .flush([{ id: 45, name: 'Pensamentos', slug: 'pensamentos', parent: 0 }]);
@@ -370,7 +389,9 @@ describe('PostDetailPage', () => {
       'Quem é você?',
     );
     expect(fixture.componentInstance.state().status).toBe('success');
-    expect(fixture.componentInstance.readingProgress()).toBe(33);
+    expect(compiled.querySelector('[role="progressbar"]')?.getAttribute('aria-valuenow')).toBe(
+      '33',
+    );
     expect(TestBed.inject(Title).getTitle()).toBe('VOCÊ | Sanaka');
     expect(oboloService.getTotal).toHaveBeenCalledExactlyOnceWith('nandini');
     expect(compiled.querySelector('.post-reader__obolo--mobile')?.textContent).toContain(
