@@ -7,7 +7,7 @@ export class TranslocoHttpLoader implements TranslocoLoader {
   private readonly http = inject(HttpClient);
 
   getTranslation(lang: string) {
-    // Revalidate even when the browser still considers an older dictionary fresh.
+    // Revalida o dicionário para obter novas chaves mesmo com uma cópia antiga no cache.
     return this.http.get<Translation>(`/i18n/${lang}.json`, { cache: 'no-cache' });
   }
 }
