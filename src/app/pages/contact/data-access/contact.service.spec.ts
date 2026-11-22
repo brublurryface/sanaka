@@ -44,6 +44,47 @@ describe('ContactService', () => {
     request.flush({ delivered: true });
   });
 
+  it.each([
+    null,
+    {},
+    [],
+    { delivered: 'false' },
+    { delivered: true, reason: 'unconfirmed' },
+    { delivered: false, reason: 'other' },
+  ])('rejects an incompatible success response without repeating the POST (%j)', (body) => {
+    const error = vi.fn();
+    service
+      .send({
+        name: 'Reader',
+        email: 'reader@example.test',
+        subject: '',
+        message: 'Test',
+        website: '',
+      })
+      .subscribe({ error });
+    httpTesting.expectOne('/api/contact').flush(body);
+    expect(error).toHaveBeenCalledOnce();
+    httpTesting.expectNone('/api/contact');
+  });
+
+  it.each([{ delivered: false }, { delivered: false, reason: 'unconfirmed' }])(
+    'preserves an explicit negative reply (%j)',
+    (body) => {
+      const next = vi.fn();
+      service
+        .send({
+          name: 'Reader',
+          email: 'reader@example.test',
+          subject: '',
+          message: 'Test',
+          website: '',
+        })
+        .subscribe(next);
+      httpTesting.expectOne('/api/contact').flush(body);
+      expect(next).toHaveBeenCalledExactlyOnceWith(body);
+    },
+  );
+
   it('cancels an unanswered request at the response deadline without retrying the POST', () => {
     vi.useFakeTimers();
     const error = vi.fn();

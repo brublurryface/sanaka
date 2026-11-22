@@ -54,7 +54,7 @@ export class AboutCyclesService {
         const params = excludeWordPressCategoryBranches(
           new HttpParams()
             .set('categories', String(policy.aboutCycleCategoryId))
-            .set('per_page', '9')
+            .set('per_page', ROMAN_CYCLE_ORDER.size)
             .set('_fields', 'id,slug,title,excerpt,hover_text,meta'),
           policy.excludedCategoryIds,
         );
@@ -68,7 +68,7 @@ export class AboutCyclesService {
 
   private normalizeCycles(body: unknown): readonly AboutCyclePost[] {
     const posts = wordPressArray(body);
-    if (posts.length > 9) throw new WordPressContractError();
+    if (posts.length > ROMAN_CYCLE_ORDER.size) throw new WordPressContractError();
     const cycles = posts
       .map((entry) => {
         const post = wordPressRecord(entry);
@@ -88,12 +88,17 @@ export class AboutCyclesService {
       })
       .sort((first, second) => first.order - second.order);
     assertWordPressIdentities(cycles);
+    if (new Set(cycles.map((cycle) => cycle.order)).size !== cycles.length) {
+      throw new WordPressContractError('Dois fragmentos ocupam a mesma posição no quebra-cabeça.');
+    }
     return cycles;
   }
 
   private readCycleOrder(title: string): number {
-    const romanNumeral = title.match(/^\s*(VIII|VII|VI|IV|IX|III|II|I|V)\b/)?.[1];
-    return ROMAN_CYCLE_ORDER.get(romanNumeral ?? '') ?? Number.MAX_SAFE_INTEGER;
+    const numeral = title.match(/^\s*([IVXLCDM]+)\b/u)?.[1];
+    const order = ROMAN_CYCLE_ORDER.get(numeral ?? '');
+    if (order === undefined) throw new WordPressContractError('Posição do fragmento inválida.');
+    return order;
   }
 
   private readRenderedText(value: unknown): string | undefined {

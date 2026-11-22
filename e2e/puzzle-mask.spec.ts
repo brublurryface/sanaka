@@ -76,3 +76,21 @@ for (const [index, cycle] of cycles.entries()) {
     }).toPass({ timeout: 8_000 });
   });
 }
+
+test('recovers the puzzle after distinct posts claim the same slot', async ({ page, site }) => {
+  const pending = site.holdNext('cycles');
+  await page.goto('/sobre');
+  await pending.requested;
+  await pending.release({ json: [cycles[0], { ...cycles[1], title: cycles[0].title }] });
+  const alert = page.getByRole('alert');
+  await expect(alert).toBeVisible();
+  await expect(
+    page.getByRole('button', { name: cycles[0].title.rendered, exact: true }),
+  ).toHaveCount(0);
+  await alert.getByRole('button').click();
+  await expectReady(page);
+  await expect(
+    page.getByRole('button', { name: cycles[8].title.rendered, exact: true }),
+  ).toBeVisible();
+  expect(site.count('cycles')).toBe(2);
+});

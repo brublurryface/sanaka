@@ -3,7 +3,7 @@ import { ChangeDetectionStrategy, Component, DestroyRef, inject, signal } from '
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { TimeoutError } from 'rxjs';
+import { isUnconfirmedFormError } from '../../core/http/form-response';
 
 import { CONTACT_SOCIAL_LINKS } from './contact-social-links';
 import { ContactService } from './data-access/contact.service';
@@ -62,9 +62,8 @@ export class Contact {
           if (error instanceof HttpErrorResponse && error.status === 429) {
             this.status.set('rate-limited');
           } else if (
-            error instanceof TimeoutError ||
-            (error instanceof HttpErrorResponse &&
-              (error.status === 0 || error.status === 504 || error.error?.reason === 'unconfirmed'))
+            isUnconfirmedFormError(error) ||
+            (error instanceof HttpErrorResponse && error.error?.reason === 'unconfirmed')
           ) {
             this.status.set('unconfirmed');
           } else {

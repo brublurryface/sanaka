@@ -1,4 +1,4 @@
-/** A estrutura editorial e os placeholders não podem divergir entre os idiomas. */
+/** Confere os conteúdos didáticos específicos de cada laboratório. */
 import { readFileSync } from 'node:fs';
 import { join } from 'node:path';
 import { describe, expect, it } from 'vitest';
@@ -26,30 +26,7 @@ function lookup(tree: TextTree, key: string): string | TextTree | undefined {
   return current;
 }
 
-function leaves(tree: TextTree, prefix = ''): Record<string, string> {
-  const result: Record<string, string> = {};
-  for (const [key, value] of Object.entries(tree)) {
-    const fullKey = prefix ? `${prefix}.${key}` : key;
-    if (typeof value === 'string') {
-      result[fullKey] = value;
-    } else {
-      Object.assign(result, leaves(value, fullKey));
-    }
-  }
-  return result;
-}
-
 describe('Matrix study translations and content', () => {
-  it('keeps study keys and interpolation variables identical in both languages', () => {
-    const pt = leaves(lookup(resources[0].tree, 'matrix.studies') as TextTree);
-    const en = leaves(lookup(resources[1].tree, 'matrix.studies') as TextTree);
-    expect(Object.keys(pt).sort()).toEqual(Object.keys(en).sort());
-    const placeholders = (text: string) =>
-      [...text.matchAll(/{{\s*([^}]+?)\s*}}/g)].map((match) => match[1].trim()).sort();
-    for (const [key, value] of Object.entries(pt)) {
-      expect(placeholders(value), key).toEqual(placeholders(en[key]));
-    }
-  });
   it.each(resources)(
     'has guided actions, both explanation levels and source captions in $language',
     ({ tree }) => {

@@ -1,6 +1,7 @@
 import { HttpClient } from '@angular/common/http';
 import { inject, Injectable } from '@angular/core';
-import { Observable, timeout } from 'rxjs';
+import { map, Observable, timeout } from 'rxjs';
+import { assertFormFlag, InvalidFormResponse } from '../../../core/http/form-response';
 import {
   CONTACT_RESPONSE_TIMEOUT_MS,
   ContactMessage,
@@ -14,7 +15,16 @@ export class ContactService {
 
   send(message: ContactMessage): Observable<ContactResponse> {
     return this.http
-      .post<ContactResponse>('/api/contact', message)
-      .pipe(timeout(CONTACT_RESPONSE_TIMEOUT_MS));
+      .post<unknown>('/api/contact', message)
+      .pipe(timeout(CONTACT_RESPONSE_TIMEOUT_MS), map(readContactResponse));
   }
+}
+
+function readContactResponse(body: unknown): ContactResponse {
+  assertFormFlag(body, 'delivered');
+  if (!('reason' in body)) return { delivered: body.delivered };
+  if (!body.delivered && body.reason === 'unconfirmed') {
+    return { delivered: false, reason: 'unconfirmed' };
+  }
+  throw new InvalidFormResponse('Confirmação de entrega incompatível.');
 }
