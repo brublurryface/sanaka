@@ -35,8 +35,9 @@ jobs:
       - name: Install isolated WordPress matching the CMS version
         env:
           SANAKA_TEST_WP_ROOT: ${{ runner.temp }}/sanaka-wordpress
+          SANAKA_TEST_WP_VERSION: '7.1.5'
         run: |
-          curl --fail --silent --show-error --location https://wordpress.org/wordpress-7.1.4.tar.gz --output "$RUNNER_TEMP/sanaka-wordpress.tar.gz"
+          curl --fail --silent --show-error --location "https://wordpress.org/wordpress-${SANAKA_TEST_WP_VERSION}.tar.gz" --output "$RUNNER_TEMP/sanaka-wordpress.tar.gz"
           mkdir "$SANAKA_TEST_WP_ROOT"
           tar -xzf "$RUNNER_TEMP/sanaka-wordpress.tar.gz" -C "$SANAKA_TEST_WP_ROOT" --strip-components=1
           php wordpress/tests/wordpress-integration.test.php setup

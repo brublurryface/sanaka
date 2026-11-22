@@ -71,6 +71,10 @@ function render_panel(string $tab, array $filters = []): string
     }
 }
 if ($mode === 'setup') {
+    $expectedVersion = getenv('SANAKA_TEST_WP_VERSION');
+    if ($expectedVersion !== false) {
+        verify($GLOBALS['wp_version'] === $expectedVersion, 'A versão instalada do WordPress difere da versão configurada para o teste.');
+    }
     verify($wpdb->get_var("SHOW TABLES LIKE 'wp_integration_options'") === null, 'Test installation must start empty.');
     $installed = wp_install('Sanaka integration', 'sanaka-test', 'sanaka@example.invalid', false, '', bin2hex(random_bytes(24)));
     verify(!is_wp_error($installed), 'WordPress installation failed.');

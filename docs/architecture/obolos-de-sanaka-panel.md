@@ -34,7 +34,7 @@ A identidade usa fundo escuro, dourado, tipografia serifada nos destaques e auto
 
 ## Evidências e limites
 
-Os testes transacionais simulam concorrência, rollback e perda da confirmação. A integração roda sobre WordPress 7.1.4 e MySQL isolados, com o snippet anterior e com o reduzido em processos separados. Inclui preservação de dados, contrato REST, campos públicos, permissões, validação, filtros, paginação, ausência de consultas por item e saída escapada.
+Os testes transacionais simulam concorrência, rollback e perda da confirmação. A integração usa WordPress e MySQL isolados, com o snippet anterior e o reduzido em processos separados. A variável `SANAKA_TEST_WP_VERSION` no [workflow de Óbolos](../../.github/workflows/obolo-protocol.yml) define a versão do núcleo. Quando o CMS mudar de versão, atualize esse valor e confira a versão instalada no resultado da etapa de integração. Inclui preservação de dados, contrato REST, campos públicos, permissões, validação, filtros, paginação, ausência de consultas por item e saída escapada.
 
 O CI também compara o pacote de instalação aos arquivos versionados. Os testes não acessam o CMS ativo nem enviam mensagens. Resultados do CI e conferência posterior no CMS são evidências distintas; acompanhar a instalação na #86 e a oferta/retentativa real na #80.
 
