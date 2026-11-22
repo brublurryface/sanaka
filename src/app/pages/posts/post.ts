@@ -44,3 +44,9 @@ export interface PostDetail extends Post {
   readonly previous?: PostNavigation;
   readonly next?: PostNavigation;
 }
+
+export type PostDetailState =
+  | { readonly status: 'loading' }
+  | { readonly status: 'success'; readonly post: PostDetail }
+  | { readonly status: 'not-found' }
+  | { readonly status: 'error' };

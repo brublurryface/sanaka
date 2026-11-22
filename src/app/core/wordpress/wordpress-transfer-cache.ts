@@ -1,11 +1,12 @@
-import { HttpRequest } from '@angular/common/http';
+import type { HttpRequest } from '@angular/common/http';
+import { DEFAULT_WORDPRESS_REST_URL } from './wordpress-api';
 
 export const WORDPRESS_TRANSFER_HEADERS = ['X-WP-Total', 'X-WP-TotalPages'];
 
 /** Só transfere leituras públicas editoriais. Contadores e dados autenticados ficam fora. */
 export function isPublicWordPressRead(
   request: HttpRequest<unknown>,
-  restUrl = 'https://cms.sanaka.com.br/wp-json',
+  restUrl = DEFAULT_WORDPRESS_REST_URL,
 ): boolean {
   if (
     !['GET', 'HEAD'].includes(request.method) ||

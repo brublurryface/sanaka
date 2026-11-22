@@ -1,14 +1,14 @@
 import { Location } from '@angular/common';
-import { ChangeDetectionStrategy, Component, computed, inject, input } from '@angular/core';
-import { toSignal } from '@angular/core/rxjs-interop';
+import { ChangeDetectionStrategy, Component, inject, input } from '@angular/core';
 import { Router, RouterLink } from '@angular/router';
-import { TranslocoPipe, TranslocoService } from '@jsverse/transloco';
+import { TranslocoPipe } from '@jsverse/transloco';
 
-import { Post } from '../post';
+import type { Post } from '../post';
+import { PostDate } from '../post-date';
 import { SANAKA_WORDPRESS_CONTENT_LANGUAGE } from '../../../core/wordpress/wordpress-content-policy';
 
 @Component({
-  imports: [RouterLink, TranslocoPipe],
+  imports: [RouterLink, TranslocoPipe, PostDate],
   selector: 'app-post-card',
   templateUrl: './post-card.html',
   styleUrl: './post-card.scss',
@@ -17,28 +17,9 @@ import { SANAKA_WORDPRESS_CONTENT_LANGUAGE } from '../../../core/wordpress/wordp
 export class PostCard {
   private readonly location = inject(Location);
   private readonly router = inject(Router);
-  private readonly transloco = inject(TranslocoService);
 
   readonly post = input.required<Post>();
   readonly contentLanguage = inject(SANAKA_WORDPRESS_CONTENT_LANGUAGE);
-
-  private readonly activeLanguage = toSignal(this.transloco.langChanges$, {
-    initialValue: this.transloco.getActiveLang(),
-  });
-
-  readonly formattedPublishedAt = computed(() => {
-    const publishedAt = this.post().publishedAt;
-    const [year, month, day] = publishedAt.split('-').map(Number);
-
-    const date = new Date(Date.UTC(year, month - 1, day));
-
-    return new Intl.DateTimeFormat(this.activeLanguage(), {
-      day: '2-digit',
-      month: 'short',
-      year: 'numeric',
-      timeZone: 'UTC',
-    }).format(date);
-  });
 
   categoryHref(slug: string): string {
     const url = this.router.createUrlTree(['/posts'], { queryParams: { category: slug } });
