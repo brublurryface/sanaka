@@ -1,12 +1,16 @@
 import { Component, Input, OnChanges, SimpleChanges } from '@angular/core';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { CodeExplorerController, CodeExplorerSlide } from '../../code-explorer.controller';
+import {
+  MatrixCodeExplorerFrame,
+  MatrixCodeSnippet,
+} from '../../code-explorer-frame/code-explorer-frame';
+import { CodeExplorerController, type CodeExplorerSlide } from '../../code-explorer.controller';
 
 type RestCodeSlide = CodeExplorerSlide;
 
 @Component({
   selector: 'app-rest-code-explorer',
-  imports: [TranslocoPipe],
+  imports: [MatrixCodeExplorerFrame, MatrixCodeSnippet, TranslocoPipe],
   templateUrl: './rest-code-explorer.html',
   styleUrl: './rest-code-explorer.scss',
 })
