@@ -714,6 +714,36 @@ describe('Posts real-router canonicalization', () => {
     },
   );
 
+  it.each([false, true])(
+    'keeps appended pages through a fragment change (pending=%s)',
+    async (pending) => {
+      const second = new Subject<PostsPage>();
+      if (pending)
+        getPosts.mockImplementation((query) => (query?.page === 2 ? second : of(response(1))));
+      const harness = await RouterTestingHarness.create();
+      const page = await harness.navigateByUrl('/posts', Posts);
+      page.loadMore();
+      await harness.navigateByUrl('/posts#newsletter', Posts);
+      if (pending) {
+        second.next(response(2));
+        second.complete();
+      }
+      harness.detectChanges();
+      expect(getPosts.mock.calls.map(([query]) => query?.page)).toEqual([1, 2]);
+      expect(page.posts().map((post) => post.id)).toEqual([1, 2]);
+      expect(page.currentPage()).toBe(2);
+
+      await harness.navigateByUrl('/posts?category=origens', Posts);
+      expect(getPosts).toHaveBeenLastCalledWith({
+        page: 1,
+        perPage: 20,
+        search: '',
+        categorySlug: 'origens',
+      });
+      expect(page.posts().map((post) => post.id)).toEqual([1]);
+    },
+  );
+
   it('should recover an out-of-range URL once without a navigation loop', async () => {
     getPosts.mockImplementation((query) =>
       query?.page === 999999

@@ -1,4 +1,4 @@
-import { cycles } from './fixtures/wordpress';
+import { article, cycles } from './fixtures/wordpress';
 import { expect, test } from './support/site';
 import {
   expectNativeScroll,
@@ -23,6 +23,38 @@ test('reaches and focuses Newsletter from the footer after the loading finishes'
   // Repeating the same route and fragment must still restore focus.
   await page.getByRole('contentinfo').getByRole('link', { name: 'Newsletter' }).click();
   await expectNewsletterDestination(page);
+});
+
+test('keeps both archive pages when the footer opens Newsletter in the same visit', async ({
+  page,
+  site,
+}) => {
+  const records = Array.from({ length: 21 }, (_, index) => ({
+    ...article,
+    id: article.id + index,
+    slug: 'fragment-' + index,
+    title: { rendered: 'Arquivo ' + index },
+  }));
+  const headers = {
+    'Access-Control-Allow-Origin': '*',
+    'Access-Control-Expose-Headers': 'X-WP-Total, X-WP-TotalPages',
+    'X-WP-Total': '21',
+    'X-WP-TotalPages': '2',
+  };
+  const first = site.holdNext('archive');
+  await page.goto('/posts');
+  await first.requested;
+  await first.release({ json: records.slice(0, 20), headers });
+  const next = site.holdNext('archive');
+  await page.getByRole('button', { name: 'Carregar mais', exact: true }).click();
+  await next.requested;
+  await next.release({ json: records.slice(20), headers });
+  const cards = page.locator('app-post-card');
+  await expect(cards).toHaveCount(21);
+  await page.getByRole('contentinfo').getByRole('link', { name: 'Newsletter' }).click();
+  await expectNewsletterDestination(page);
+  await expect(cards).toHaveCount(21);
+  expect(site.count('archive')).toBe(2);
 });
 
 test('honors a direct Newsletter fragment after a delayed response', async ({ page, site }) => {

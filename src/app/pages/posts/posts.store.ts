@@ -4,14 +4,20 @@ import { NavigationEnd, NavigationExtras, Router } from '@angular/router';
 import { catchError, filter, map, Observable, of, scan, startWith, Subject, switchMap } from 'rxjs';
 
 import { Post, PostCategory } from './post';
-import { POSTS_PAGE_SIZE } from './post-query';
+import {
+  POSTS_PAGE_SIZE,
+  normalizeTaxonomySlug,
+  postsPageCommands,
+  readPostsRoute,
+  type PostsViewMode,
+} from './post-query';
 import {
   PostsPage,
   PostsPageOutOfRangeError,
   WordPressPostsService,
 } from './data-access/wordpress-posts.service';
 
-export type PostsViewMode = 'continuous' | 'paged';
+export type { PostsViewMode } from './post-query';
 export type PostsPaginationItem = number | 'start-ellipsis' | 'end-ellipsis';
 
 interface CategoriesState {
@@ -195,7 +201,7 @@ export class PostsStore {
   }
 
   setCategory(slug: string): void {
-    const categorySlug = this.normalizeTaxonomySlug(slug);
+    const categorySlug = normalizeTaxonomySlug(slug);
     if (categorySlug === this.categorySlug()) {
       return;
     }
@@ -255,33 +261,29 @@ export class PostsStore {
     categoryValue: string | null = null,
     tagValue: string | null = null,
   ): void {
-    const mode: PostsViewMode = view === 'paged' ? 'paged' : 'continuous';
-    const parsedPage = Number(pageValue);
-    const hasValidPage =
-      pageValue !== null &&
-      /^\d+$/.test(pageValue) &&
-      Number.isSafeInteger(parsedPage) &&
-      parsedPage > 0;
-    const page = mode === 'paged' && hasValidPage ? parsedPage : 1;
-    const categorySlug = this.normalizeTaxonomySlug(categoryValue);
-    const tagSlug = this.normalizeTaxonomySlug(tagValue);
+    const { mode, page, categorySlug, tagSlug, replacePage } = readPostsRoute(
+      view,
+      pageValue,
+      categoryValue,
+      tagValue,
+    );
 
     const isSameVisit =
       this.routeInitialized &&
       mode === this.viewMode() &&
-      page === this.currentPage() &&
+      (mode === 'continuous' || page === this.currentPage()) &&
       categorySlug === this.categorySlug() &&
       tagSlug === this.tagSlug();
 
-    this.routeInitialized = true;
-    this.viewModeState.set(mode);
-    this.currentPageState.set(page);
-    this.categorySlug.set(categorySlug);
-    this.tagSlug.set(tagSlug);
-    // Canonicaliza depois de aplicar os filtros recebidos pela URL.
-    if (mode === 'paged' && pageValue !== null && (page === 1 || pageValue !== String(page))) {
-      this.navigateTo('paged', page, { replaceUrl: true });
+    if (!isSameVisit) {
+      this.routeInitialized = true;
+      this.viewModeState.set(mode);
+      this.currentPageState.set(page);
+      this.categorySlug.set(categorySlug);
+      this.tagSlug.set(tagSlug);
     }
+    // A primeira página canônica preserva os filtros mesmo quando os dados já foram carregados.
+    if (replacePage) this.navigateTo('paged', page, { replaceUrl: true });
     if (!isSameVisit) this.requests.next(this.createRequest(false));
   }
 
@@ -439,27 +441,16 @@ export class PostsStore {
     page: number,
     options: Pick<NavigationExtras, 'replaceUrl' | 'scroll'> = {},
   ): void {
-    const commands =
-      mode === 'continuous'
-        ? ['/posts']
-        : page === 1
-          ? ['/posts', 'paged']
-          : ['/posts', 'paged', page];
-
     const taxonomyQueryParams = {
       category: this.categorySlug(),
       tag: this.tagSlug(),
     };
 
-    void this.router.navigate(commands, {
+    void this.router.navigate(postsPageCommands(mode, page), {
       replaceUrl: false,
       ...options,
       ...(this.categorySlug() || this.tagSlug() ? { queryParams: taxonomyQueryParams } : {}),
     });
-  }
-
-  private normalizeTaxonomySlug(value: string | null): string | undefined {
-    return value?.trim() || undefined;
   }
 
   private uniquePosts(posts: readonly Post[]): readonly Post[] {
