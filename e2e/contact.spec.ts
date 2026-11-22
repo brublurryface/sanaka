@@ -101,3 +101,20 @@ test('preserves rate-limit feedback without retrying a contact automatically', a
   await expect(page.getByRole('button', { name: 'Enviar mensagem' })).toBeEnabled();
   expect(requests).toBe(1);
 });
+
+test('preserves a message after a malformed delivery receipt', async ({ page, baseURL }) => {
+  let submits = 0;
+  await page.route(new URL('/api/contact', baseURL).href, async (route) => {
+    submits++;
+    await route.fulfill({ json: { delivered: 'false' } });
+  });
+  await fillContact(page);
+  await page.getByRole('button', { name: 'Enviar mensagem' }).click();
+  await expect(page.locator('.contact-message__status')).toContainText(
+    'Sua mensagem pode ter sido enviada.',
+  );
+  await expect(page.getByLabel('Mensagem', { exact: true })).toHaveValue(
+    'A synthetic contact message.',
+  );
+  expect(submits).toBe(1);
+});

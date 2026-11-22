@@ -135,3 +135,42 @@ test('retries a malformed NASA search instead of presenting a false empty result
   await expect(portal.getByRole('heading', { name: 'Imagem NASA de teste' })).toBeVisible();
   expect(searches).toBe(2);
 });
+
+test('keeps newsletter input and consent until the server confirms a request', async ({
+  page,
+  site,
+  baseURL,
+}) => {
+  const availability = site.holdNext('newsletter');
+  await page.goto('/posts#newsletter');
+  await availability.requested;
+  await availability.release({ json: { available: 'false' } });
+  const section = page.locator('app-newsletter-signup');
+  await expect(section.locator('form')).toHaveCount(0);
+
+  const retry = site.holdNext('newsletter');
+  await section.getByRole('button').click();
+  await retry.requested;
+  await retry.release({ json: { available: true } });
+  const email = section.locator('input[type=email]');
+  const consent = section.getByRole('checkbox');
+  await email.fill('reader@example.test');
+  await consent.check();
+  let submits = 0;
+  await page.route(new URL('/api/newsletter', baseURL).href, async (route) => {
+    expect(route.request().method()).toBe('POST');
+    submits++;
+    await route.fulfill({ status: 202, json: { accepted: submits === 1 ? 'false' : true } });
+  });
+  await section.getByRole('button', { name: /Assinar/ }).click();
+  await expect(section.locator('[aria-live]')).toContainText(
+    'Ainda não foi possível confirmar o pedido.',
+  );
+  await expect(email).toHaveValue('reader@example.test');
+  await expect(consent).toBeChecked();
+  expect(submits).toBe(1);
+  await section.getByRole('button', { name: /Assinar/ }).click();
+  await expect(section.getByRole('status')).toContainText('Pedido recebido.');
+  await expect(section.locator('form')).toHaveCount(0);
+  expect(submits).toBe(2);
+});

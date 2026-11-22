@@ -13,6 +13,7 @@ import { FormBuilder, ReactiveFormsModule, Validators } from '@angular/forms';
 import { TranslocoPipe } from '@jsverse/transloco';
 
 import { NEWSLETTER_EMAIL_MAX_LENGTH } from '../../../../shared/newsletter';
+import { isUnconfirmedFormError } from '../../../core/http/form-response';
 import { NewsletterService } from './data-access/newsletter.service';
 
 type NewsletterStatus =
@@ -21,6 +22,7 @@ type NewsletterStatus =
   | 'idle'
   | 'submitting'
   | 'pending-confirmation'
+  | 'unconfirmed'
   | 'rate-limited'
   | 'error';
 
@@ -39,7 +41,7 @@ export class NewsletterSignup {
   protected readonly emailMaxLength = NEWSLETTER_EMAIL_MAX_LENGTH;
   protected readonly status = signal<NewsletterStatus>('checking');
   protected readonly canSubmit = computed(() =>
-    ['idle', 'rate-limited', 'error'].includes(this.status()),
+    ['idle', 'rate-limited', 'unconfirmed', 'error'].includes(this.status()),
   );
 
   // O consentimento começa desmarcado. Enviar o formulário de contato não cadastra ninguém aqui.
@@ -88,9 +90,14 @@ export class NewsletterSignup {
             this.form.reset();
           }
         },
-        error: (error: HttpErrorResponse) => {
+        error: (error: unknown) => {
+          if (isUnconfirmedFormError(error)) {
+            this.status.set('unconfirmed');
+            return;
+          }
+          const status = error instanceof HttpErrorResponse ? error.status : undefined;
           this.status.set(
-            error.status === 429 ? 'rate-limited' : error.status === 503 ? 'unavailable' : 'error',
+            status === 429 ? 'rate-limited' : status === 503 ? 'unavailable' : 'error',
           );
         },
       });

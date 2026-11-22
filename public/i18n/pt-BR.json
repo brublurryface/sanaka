@@ -185,6 +185,7 @@
     "pendingConfirmation": "Pedido recebido. Confira seu e-mail para confirmar a assinatura. Só depois da confirmação você receberá as novidades.",
     "rateLimited": "Muitas tentativas em pouco tempo. Aguarde alguns minutos antes de tentar novamente.",
     "error": "Não foi possível solicitar a confirmação agora. Seu cadastro ainda não foi confirmado. Tente novamente mais tarde.",
+    "unconfirmed": "Ainda não foi possível confirmar o pedido. Confira seu e-mail antes de tentar novamente.",
     "errors": {
       "email": "Informe um e-mail válido, com no máximo 254 caracteres.",
       "consent": "Marque a opção se deseja assinar a newsletter."
