@@ -1,6 +1,5 @@
 import { HttpClient, HttpErrorResponse, HttpParams, HttpResponse } from '@angular/common/http';
-import { SecurityContext, inject, Injectable } from '@angular/core';
-import { DomSanitizer } from '@angular/platform-browser';
+import { inject, Injectable } from '@angular/core';
 import {
   catchError,
   combineLatest,
@@ -24,7 +23,7 @@ import {
   ResolvedWordPressContentPolicy,
 } from '../../../core/wordpress/wordpress-content-policy';
 import { WordPressContentPolicyService } from '../../../core/wordpress/wordpress-content-policy.service';
-import { WordPressTextService } from '../../../core/wordpress/wordpress-text.service';
+import { WordPressPostMapper } from './wordpress-post-mapper';
 import {
   assertWordPressCategoryTree,
   parseWordPressCategories,
@@ -36,18 +35,10 @@ import {
   wordPressPostReference,
   WordPressContractError,
   type WordPressCategory,
-  type WordPressMedia,
   type WordPressPost,
   type WordPressTag,
 } from '../../../core/wordpress/wordpress-response';
-import {
-  CharacterObolo,
-  Post,
-  PostCategory,
-  PostDetail,
-  PostNavigation,
-  PostTaxonomy,
-} from '../post';
+import type { Post, PostCategory, PostDetail, PostNavigation } from '../post';
 
 export { WORDPRESS_API_URL } from '../../../core/wordpress/wordpress-api';
 
@@ -90,7 +81,7 @@ interface NormalizedPostsQuery {
 }
 
 /**
- * Adaptador HTTP responsável por consultar e normalizar o acervo mantido no WordPress.
+ * Coordena as consultas, o cache de categorias e a paginação do acervo no WordPress.
  *
  * Os contratos externos são validados antes de converter os dados para os modelos da feature.
  */
@@ -100,15 +91,13 @@ interface NormalizedPostsQuery {
 export class WordPressPostsService {
   private readonly requestTimeoutMs = 10_000;
   private readonly defaultPerPage = POSTS_PAGE_SIZE;
-  private readonly defaultCoverImageUrl = '/images/posts/posts-atmosphere-desktop.webp';
   private readonly tagSuggestionLimit = 8;
   private readonly tagContextPostLimit = 5;
 
   private readonly http = inject(HttpClient);
   private readonly apiUrl = inject(WORDPRESS_API_URL);
   private readonly contentPolicy = inject(WordPressContentPolicyService);
-  private readonly wordpressText = inject(WordPressTextService);
-  private readonly sanitizer = inject(DomSanitizer);
+  private readonly mapper = inject(WordPressPostMapper);
 
   private readonly categories$ = this.loadCategories().pipe(
     map((categories) => {
@@ -182,7 +171,7 @@ export class WordPressPostsService {
         );
         return categories
           .filter((category) => !excludedIds.has(category.id))
-          .map((category) => ({ ...this.toTaxonomy(category), parentId: category.parent }));
+          .map((category) => ({ ...this.mapper.toTaxonomy(category), parentId: category.parent }));
       }),
       timeout({ first: this.requestTimeoutMs }),
     );
@@ -225,6 +214,8 @@ export class WordPressPostsService {
           return of(null);
         }
 
+        const article = this.mapper.articleContent(post);
+        const excludedRoots = this.archiveExcludedCategoryIds(policy);
         const emptyCategoryDetails = {
           categories: [] as readonly WordPressCategory[],
           previous: undefined,
@@ -265,7 +256,14 @@ export class WordPressPostsService {
           exploreTags: exploreTags$,
         }).pipe(
           map(({ categoryDetails, tags, exploreTags }) => ({
-            ...this.mapPostDetail(post, categoryDetails.categories, tags, exploreTags, policy),
+            ...article,
+            ...this.mapper.articleTaxonomies(
+              post,
+              categoryDetails.categories,
+              tags,
+              exploreTags,
+              this.categoryBranchIds(categoryDetails.categories, excludedRoots),
+            ),
             previous: categoryDetails.previous,
             next: categoryDetails.next,
           })),
@@ -364,7 +362,7 @@ export class WordPressPostsService {
       throw new WordPressContractError('O WordPress retornou totais de paginação incoerentes.');
 
     return {
-      posts: this.mapPosts(posts, categories),
+      posts: posts.map((post) => this.mapper.summary(post, categories)),
       page: query.page,
       perPage: query.perPage,
       total,
@@ -492,161 +490,6 @@ export class WordPressPostsService {
       );
   }
 
-  private mapPosts(
-    posts: readonly WordPressPost[],
-    categories: readonly WordPressCategory[],
-  ): readonly Post[] {
-    return posts.map((post) => this.mapPost(post, categories, this.getFeaturedMedia(post)));
-  }
-
-  private mapPostDetail(
-    post: WordPressPost,
-    categories: readonly WordPressCategory[],
-    tags: readonly WordPressTag[],
-    exploreTags: readonly WordPressTag[],
-    policy: ResolvedWordPressContentPolicy,
-  ): PostDetail {
-    const coverImage = this.getFeaturedMedia(post);
-    const content = post.content?.rendered ?? '';
-    const plainContent = this.wordpressText.toText(content);
-    const mappedCategories = this.mapTaxonomies(post.categories, categories);
-    const selectedCategoryIds = new Set(post.categories);
-    const excludedIds = this.categoryBranchIds(categories, this.archiveExcludedCategoryIds(policy));
-    const selectedTagIds = new Set(post.tags ?? []);
-    const rootCategory = mappedCategories[0];
-    const mappedTags = [...new Map(tags.map((tag) => [tag.id, this.toTaxonomy(tag)])).values()];
-
-    return {
-      ...this.mapPost(post, categories, coverImage, { detail: true }),
-      contentHtml: this.sanitizer.sanitize(SecurityContext.HTML, content) ?? '',
-      categories: mappedCategories,
-      relatedCategories: rootCategory
-        ? categories
-            .filter(
-              (category) =>
-                category.parent === rootCategory.id &&
-                !selectedCategoryIds.has(category.id) &&
-                !excludedIds.has(category.id),
-            )
-            .map((category) => this.toTaxonomy(category))
-        : [],
-      exploreCategories: categories
-        .filter(
-          (category) =>
-            category.parent === 0 &&
-            category.id !== rootCategory?.id &&
-            !excludedIds.has(category.id),
-        )
-        .map((category) => this.toTaxonomy(category)),
-      tags: mappedTags.filter((tag) => selectedTagIds.has(tag.id)),
-      exploreTags: [...new Map(exploreTags.map((tag) => [tag.id, this.toTaxonomy(tag)])).values()],
-      readingMinutes: Math.max(
-        1,
-        Math.ceil(plainContent.split(/\s+/).filter(Boolean).length / 200),
-      ),
-      obolo: this.mapCharacterObolo(post),
-    };
-  }
-
-  /** Só expõe o óbolo quando o conjunto mínimo de metadados está completo no WordPress. */
-  private mapCharacterObolo(post: WordPressPost): CharacterObolo | undefined {
-    const characterSlug = post.sanaka_character_slug?.trim();
-    const characterName = post.sanaka_character_name?.trim();
-    const frontImageUrl = post.sanaka_obolo_front?.trim();
-    const backImageUrl = post.sanaka_obolo_back?.trim();
-
-    if (!characterSlug || !characterName || !frontImageUrl) {
-      return undefined;
-    }
-
-    return {
-      characterSlug,
-      characterName,
-      frontImageUrl,
-      backImageUrl: backImageUrl || undefined,
-    };
-  }
-
-  private mapPost(
-    post: WordPressPost,
-    categories: readonly WordPressCategory[],
-    coverImage?: WordPressMedia,
-    options: { readonly detail: boolean } = { detail: false },
-  ): Post {
-    const mappedCategories = this.mapTaxonomies(post.categories, categories);
-
-    return {
-      id: post.id,
-      slug: post.slug,
-      title: this.wordpressText.toText(post.title.rendered),
-      excerpt: this.wordpressText.toText(post.excerpt.rendered),
-      publishedAt: post.date.slice(0, 10),
-      category: mappedCategories.map((item) => item.name).join(' · '),
-      categories: mappedCategories,
-      coverImageUrl:
-        this.getCoverImageUrl(coverImage, options.detail) ??
-        (options.detail ? this.defaultCoverImageUrl : undefined),
-      coverImageAlt: coverImage?.alt_text ?? (options.detail ? '' : undefined),
-    };
-  }
-
-  private mapTaxonomies(
-    selectedIds: readonly number[],
-    categories: readonly WordPressCategory[],
-  ): readonly PostTaxonomy[] {
-    const categoryById = new Map(categories.map((category) => [category.id, category]));
-    const ordered: WordPressCategory[] = [];
-
-    for (const selectedId of selectedIds) {
-      const lineage: WordPressCategory[] = [];
-      let current = categoryById.get(selectedId);
-
-      while (current) {
-        lineage.unshift(current);
-        current = current.parent > 0 ? categoryById.get(current.parent) : undefined;
-      }
-
-      for (const category of lineage) {
-        if (!ordered.some((item) => item.id === category.id)) {
-          ordered.push(category);
-        }
-      }
-    }
-
-    return ordered.map((category) => this.toTaxonomy(category));
-  }
-
-  private toTaxonomy(item: WordPressCategory | WordPressTag): PostTaxonomy {
-    return {
-      id: item.id,
-      name: this.wordpressText.toText(item.name),
-      slug: item.slug,
-    };
-  }
-
-  private getFeaturedMedia(post: WordPressPost): WordPressMedia | undefined {
-    return post._embedded?.['wp:featuredmedia']?.find((media) => media.id === post.featured_media);
-  }
-
-  private getCoverImageUrl(
-    coverImage: WordPressMedia | undefined,
-    useOriginalImage: boolean,
-  ): string | undefined {
-    if (!coverImage) {
-      return undefined;
-    }
-
-    if (useOriginalImage) {
-      return coverImage.source_url;
-    }
-
-    const sizes = coverImage.media_details?.sizes;
-
-    return (
-      sizes?.['medium_large']?.source_url ?? sizes?.['large']?.source_url ?? coverImage.source_url
-    );
-  }
-
   private getAdjacentPost(
     post: WordPressPost,
     categories: readonly WordPressCategory[],
@@ -677,9 +520,7 @@ export class WordPressPostsService {
       }),
       map((posts) => {
         const adjacent = posts[0];
-        return adjacent
-          ? { slug: adjacent.slug, title: this.wordpressText.toText(adjacent.title.rendered) }
-          : undefined;
+        return adjacent ? this.mapper.navigation(adjacent) : undefined;
       }),
       timeout({ first: this.requestTimeoutMs }),
       catchError(() => of(undefined)),

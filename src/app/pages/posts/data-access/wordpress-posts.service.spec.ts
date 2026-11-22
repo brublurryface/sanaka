@@ -1,6 +1,7 @@
 import { provideHttpClient } from '@angular/common/http';
 import { HttpTestingController, provideHttpClientTesting } from '@angular/common/http/testing';
 import { TestBed } from '@angular/core/testing';
+import { DomSanitizer } from '@angular/platform-browser';
 import { Observable, of, Subject, switchMap } from 'rxjs';
 import { vi } from 'vitest';
 
@@ -42,6 +43,7 @@ describe('WordPressPostsService', () => {
 
   afterEach(() => {
     vi.useRealTimers();
+    vi.restoreAllMocks();
     httpTesting.verify();
   });
 
@@ -408,6 +410,7 @@ describe('WordPressPostsService', () => {
   );
 
   it('should load a complete post with category lineage, tags, media and adjacent posts', () => {
+    const sanitize = vi.spyOn(TestBed.inject(DomSanitizer), 'sanitize');
     let result: PostDetail | null | undefined;
 
     service.getPostBySlug('voce').subscribe((post) => {
@@ -502,6 +505,7 @@ describe('WordPressPostsService', () => {
       .find((request) => request.request.params.has('after'))
       ?.flush([{ slug: 'proxima', title: { rendered: 'Próxima' } }]);
 
+    expect(sanitize).toHaveBeenCalledTimes(1);
     expect(result).toMatchObject({
       slug: 'voce',
       title: 'VOCÊ',
