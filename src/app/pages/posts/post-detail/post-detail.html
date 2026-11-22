@@ -25,7 +25,12 @@
           />
         </figure>
 
-        <div class="post-detail__threshold">
+        <div
+          class="post-detail__threshold"
+          [appReadingProgress]="currentPost.slug"
+          [readingElement]="reader"
+          #reading="readingProgress"
+        >
           <a class="post-detail__back" routerLink="/posts">
             <span aria-hidden="true">←</span>
             {{ 'posts.detail.back' | transloco }}
@@ -35,17 +40,17 @@
             class="post-detail__progress"
             role="progressbar"
             [attr.aria-label]="'posts.detail.progress' | transloco"
-            [attr.aria-valuenow]="readingProgress()"
+            [attr.aria-valuenow]="reading.percent()"
             aria-valuemin="0"
             aria-valuemax="100"
           >
-            <span [style.width.%]="readingProgress()"></span>
+            <span [style.width.%]="reading.percent()"></span>
           </div>
 
-          <span class="post-detail__progress-value">{{ readingProgress() }}%</span>
+          <span class="post-detail__progress-value">{{ reading.percent() }}%</span>
         </div>
 
-        <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title">
+        <section id="post-reading-nave" class="post-reader" aria-labelledby="post-title" #reader>
           <article class="post-reader__article">
             <header class="post-reader__header">
               @if (currentPost.categories.length > 0) {
@@ -66,7 +71,7 @@
               <h1 id="post-title" [attr.lang]="contentLanguage">{{ currentPost.title }}</h1>
 
               <div class="post-reader__meta">
-                <time [attr.datetime]="currentPost.publishedAt">{{ formattedPublishedAt() }}</time>
+                <time [appPostDate]="currentPost.publishedAt" month="long"></time>
                 <span aria-hidden="true">·</span>
                 <span>
                   {{
