@@ -57,6 +57,9 @@ app.get(ANALYTICS_CONFIG_PATH, createAnalyticsConfigResponse(measurementId));
 app.use(CSP_REPORT_PATH, createCspReportRouter());
 app.use('/api/contact', createContactRouter());
 app.use('/api/newsletter', createNewsletterRouter());
+app.use('/api', (_request, response) => {
+  response.status(404).json({ error: 'not_found' });
+});
 
 // Os links do WordPress continuam válidos quando o domínio público passar para o Render.
 app.use(legacyWordPressRedirect);
