@@ -34,6 +34,11 @@ for (const exhibit of [
     await expect(pages).toHaveCount(4);
     await expect(snippets).toHaveCount(4);
     await expect(pages.first()).toHaveAttribute('aria-current', 'true');
+    for (const button of await pages.all()) {
+      const target = await button.boundingBox();
+      expect(target?.width).toBeGreaterThanOrEqual(24);
+      expect(target?.height).toBeGreaterThanOrEqual(24);
+    }
     const initialHeight = await height();
     expect(initialHeight).toBeGreaterThan(0);
     await navigation.first().focus();
