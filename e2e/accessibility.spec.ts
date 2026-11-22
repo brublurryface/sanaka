@@ -36,8 +36,14 @@ test('keeps Portuguese article content separate from the chosen interface langua
   await expectReady(page);
 
   for (const language of [
-    { button: 'EN', tag: 'en', back: 'Back to the library', reading: 'min read' },
-    { button: 'PT', tag: 'pt-BR', back: 'Voltar à biblioteca', reading: 'min de leitura' },
+    { button: 'EN', tag: 'en', back: 'Back to the library', reading: 'min read', month: 'January' },
+    {
+      button: 'PT',
+      tag: 'pt-BR',
+      back: 'Voltar à biblioteca',
+      reading: 'min de leitura',
+      month: 'janeiro',
+    },
   ]) {
     await page.getByRole('button', { name: language.button, exact: true }).click();
     await expect(page.locator('html')).toHaveAttribute('lang', language.tag);
@@ -49,6 +55,8 @@ test('keeps Portuguese article content separate from the chosen interface langua
     );
     await expect(back).toContainText(language.back);
     await expect(metadata).toContainText(language.reading);
+    await expect(metadata.locator('time')).toHaveAttribute('datetime', article.date.slice(0, 10));
+    await expect(metadata.locator('time')).toContainText(language.month);
     for (const control of [back, metadata]) {
       expect(
         await control.evaluate((element) => element.closest('[lang]')?.getAttribute('lang')),
@@ -85,4 +93,32 @@ test('keeps Portuguese previews while translating archive controls and dates', a
     site.count('archive'),
     'Switching the interface language must not refetch the archive.',
   ).toBe(1);
+});
+
+test('updates the accessible reading percentage as the reader scrolls through a long article', async ({
+  page,
+  site,
+}) => {
+  const pending = site.holdNext('article');
+  await page.goto('/posts/' + article.slug);
+  await pending.requested;
+  await pending.release({
+    json: [{ ...article, content: { rendered: article.content.rendered.repeat(60) } }],
+  });
+  await expectReady(page);
+  const progress = page.getByRole('progressbar');
+  await expect(progress).toHaveAttribute('aria-valuenow', '0');
+  const section = page.locator('#post-reading-nave');
+  await expect(async () => {
+    await section.evaluate((reader) => {
+      const distance = reader.scrollHeight - window.innerHeight;
+      if (distance <= 0) throw new Error('O artigo de teste precisa ocupar mais de uma tela.');
+      window.scrollTo({
+        top: window.scrollY + reader.getBoundingClientRect().top + distance / 2,
+        behavior: 'instant',
+      });
+    });
+    await expect(progress).toHaveAttribute('aria-valuenow', '50', { timeout: 1500 });
+  }).toPass({ timeout: 8000 });
+  await expect(page.locator('.post-detail__progress-value')).toHaveText('50%');
 });

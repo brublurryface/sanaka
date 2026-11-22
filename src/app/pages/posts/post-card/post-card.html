@@ -33,9 +33,7 @@
         }
       </span>
 
-      <time [attr.datetime]="post().publishedAt">
-        {{ formattedPublishedAt() }}
-      </time>
+      <time [appPostDate]="post().publishedAt"></time>
     </div>
 
     <h2 class="post-card__title" [attr.lang]="contentLanguage">
