@@ -157,6 +157,17 @@ O teste de saúde verifica apenas a resposta do processo. Não consulta SMTP, Br
 e não envia mensagens. Um `available: true` verifica a configuração local da newsletter,
 não a validade remota da chave. Envios reais devem ser testes expressamente autorizados pela autora.
 
+Os eventos `provider_failure` identificam SMTP ou Brevo. Para encontrar a resposta 5xx
+correspondente, busque `http_response_error` com o mesmo `request_id`. A Brevo também pode
+responder 429, que aparece no registro do provedor. Os eventos descrevem a mesma requisição e
+devem ser contados separadamente. Os corpos, endereços de e-mail e credenciais ficam fora do registro.
+
+Ao receber `SIGTERM`, o processo fecha a porta para novas conexões e dá até 25 segundos
+às requisições em andamento. Se o processo ainda estiver ocupado ao fim desse prazo, encerra
+as conexões e sai com código 1. Uma mensagem já aceita pelo SMTP pode ficar sem confirmação
+no navegador. O servidor não repete o envio. Ao configurar o serviço, mantenha o prazo de
+encerramento da plataforma acima do prazo da aplicação.
+
 O cache de um ano foi reservado aos bundles com hash. Imagens e traduções podem reutilizar
 o nome e ainda receber conteúdo atualizado mediante revalidação HTTP. A mudança não apaga
 cópias antigas que algum navegador já tenha guardado com a política anterior.

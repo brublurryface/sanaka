@@ -61,8 +61,19 @@ test('keeps headers and resource MIME types on the built Angular and Express ser
   expect(await health.json()).toEqual({ status: 'ok' });
   expect(health.headers()['cache-control']).toBe('no-store');
 
+  for (const method of ['GET', 'POST', 'HEAD']) {
+    const api = await request.fetch('/api/missing-resource', { method });
+    expect(api.status()).toBe(404);
+    expectHeaders(api);
+    expect(api.headers()['content-type']).toContain('application/json');
+    expect(api.headers()['cache-control']).toBe('no-store');
+    if (method === 'HEAD') expect(await api.text()).toBe('');
+    else expect(await api.json()).toEqual({ error: 'not_found' });
+  }
+
   const missing = await request.get('/browser-security-missing');
   expect(missing.status()).toBe(404);
+  expect(missing.headers()['content-type']).toContain('text/html');
   expectHeaders(missing);
   expect(missing.headers()['cache-control']).toBe('no-store');
 

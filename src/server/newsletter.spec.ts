@@ -4,6 +4,7 @@ import type { Server } from 'node:http';
 import type { AddressInfo } from 'node:net';
 import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
 
+import { createHttpRequestLog } from './http-request-log';
 import { createNewsletterRouter } from './newsletter';
 
 const validSignup = { email: 'reader@example.com', consent: true, website: '' };
@@ -11,6 +12,7 @@ const validSignup = { email: 'reader@example.com', consent: true, website: '' };
 describe('newsletter HTTP endpoints', () => {
   let server: Server;
   let endpoint: string;
+  const write = vi.fn<(line: string) => void>();
   let fetcher: ReturnType<typeof vi.fn<typeof fetch>>;
 
   beforeEach(async () => {
@@ -25,6 +27,7 @@ describe('newsletter HTTP endpoints', () => {
       .mockImplementation(async () => new Response('{}', { status: 201 }));
 
     const app = express();
+    app.use(createHttpRequestLog({ write }));
     app.use('/api/newsletter', createNewsletterRouter(fetcher));
     server = app.listen(0, '127.0.0.1');
     await once(server, 'listening');
@@ -197,10 +200,14 @@ describe('newsletter HTTP endpoints', () => {
 
       expect(response.status).toBe(502);
       expect(await response.json()).toEqual({ accepted: false });
-      expect(console.error).toHaveBeenCalledWith(
-        'Newsletter provider rejected a confirmation request.',
-        status,
-      );
+      expect(JSON.parse(vi.mocked(console.error).mock.calls[0][0])).toEqual({
+        event: 'provider_failure',
+        level: 'error',
+        provider: 'brevo',
+        request_id: expect.stringMatching(/^[a-f0-9-]{36}$/iu),
+        timestamp: expect.any(String),
+        upstream_status: status,
+      });
     },
   );
 
@@ -218,9 +225,61 @@ describe('newsletter HTTP endpoints', () => {
 
     expect(response.status).toBe(502);
     expect(await response.json()).toEqual({ accepted: false });
-    expect(console.error).toHaveBeenCalledWith(
-      'Newsletter confirmation request could not reach the provider.',
+    expect(JSON.parse(vi.mocked(console.error).mock.calls[0][0])).toEqual({
+      event: 'provider_failure',
+      level: 'error',
+      provider: 'brevo',
+      request_id: expect.stringMatching(/^[a-f0-9-]{36}$/iu),
+      timestamp: expect.any(String),
+    });
+  });
+
+  it('correlates overlapping provider and HTTP failures with their own request IDs', async () => {
+    const renderId = 'a0000000-b001-c002';
+    let release!: (response: Response) => void;
+    let started!: () => void;
+    const waiting = new Promise<void>((resolve) => {
+      started = resolve;
+    });
+    fetcher.mockImplementationOnce(
+      () =>
+        new Promise<Response>((resolve) => {
+          release = resolve;
+          started();
+        }),
     );
+    fetcher.mockResolvedValueOnce(new Response(null, { status: 503 }));
+    const first = fetch(endpoint, {
+      method: 'POST',
+      headers: { 'Content-Type': 'application/json', 'rndr-id': renderId },
+      body: JSON.stringify(validSignup),
+    });
+    await waiting;
+    try {
+      expect((await submit()).status).toBe(502);
+    } finally {
+      release(new Response(null, { status: 401 }));
+    }
+    expect((await first).status).toBe(502);
+    const provider = vi.mocked(console.error).mock.calls.map(([line]) => JSON.parse(line));
+    const http = write.mock.calls.map(([line]) => JSON.parse(line));
+    expect(provider.map((record) => record.upstream_status)).toEqual([503, 401]);
+    expect(provider.map((record) => record.request_id)).toEqual([
+      expect.stringMatching(/^[a-f0-9-]{36}$/iu),
+      renderId,
+    ]);
+    expect(http.map((record) => record.request_id)).toEqual(
+      provider.map((record) => record.request_id),
+    );
+    expect(http.map((record) => record.status)).toEqual([502, 502]);
+  });
+
+  it('delivers the same HTTP result if writing the provider log fails', async () => {
+    vi.mocked(console.error).mockImplementationOnce(() => {
+      throw new Error('log unavailable');
+    });
+    fetcher.mockRejectedValueOnce(new Error('offline'));
+    expect((await submit()).status).toBe(502);
   });
 
   it('accepts a successful provider response with no body', async () => {

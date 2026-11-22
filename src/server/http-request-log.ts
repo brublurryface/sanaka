@@ -1,6 +1,6 @@
 import type { RequestHandler } from 'express';
-import { randomUUID } from 'node:crypto';
 import { performance } from 'node:perf_hooks';
+import { requestIdFor } from './request-log-context';
 
 interface HttpRequestLogOptions {
   readonly revision?: string;
@@ -21,7 +21,6 @@ const METHODS = new Set([
 const SENSITIVE_SEGMENT = /^(?:email|token|password|secret|confirm|reset-password)$/iu;
 const ASSET_PATH =
   /\.(?:m?js|css|map|json|xml|txt|png|apng|jpe?g|webp|svg|ico|gif|avif|woff2?|ttf|otf)$/iu;
-const REQUEST_ID = /^[a-f0-9]{8}(?:-[a-f0-9]{4}){2}(?:-[a-f0-9]{4}-[a-f0-9]{12})?$/iu;
 
 /** Preserva o caminho recebido; não resolve segmentos, muda caixa ou decodifica barras. */
 function logPath(target: string): string {
@@ -69,7 +68,6 @@ export function createHttpRequestLog({
     const started = performance.now();
     const target = request.originalUrl;
     const method = METHODS.has(request.method) ? request.method : 'OTHER';
-    const renderId = request.headers['rndr-id'];
 
     const cleanup = () => {
       response.off('finish', finish);
@@ -91,8 +89,7 @@ export function createHttpRequestLog({
             status,
             resource_type: resourceType(path, response.getHeader('Content-Type')),
             duration_ms: Math.round((performance.now() - started) * 1_000) / 1_000,
-            request_id:
-              typeof renderId === 'string' && REQUEST_ID.test(renderId) ? renderId : randomUUID(),
+            request_id: requestIdFor(request),
             revision,
           }),
         );

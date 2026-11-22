@@ -7,6 +7,7 @@ import {
   ContactResponse,
 } from '../shared/contact';
 
+import { logProviderFailure } from './request-log-context';
 import { createRateLimiter } from './request-rate-limit';
 
 const RATE_LIMIT_WINDOW_MS = 15 * 60 * 1_000;
@@ -153,7 +154,7 @@ export function createContactHandler({
 
       response.status(200).json({ delivered: true });
     } catch (error: unknown) {
-      console.error('Contact message delivery failed.');
+      logProviderFailure(request, 'smtp');
       const code = error && typeof error === 'object' && 'code' in error ? error.code : undefined;
       const timedOut = code === 'EABORT' || code === 'ETIMEDOUT';
       const unconfirmed = timedOut || code === 'ECONNECTION' || code === 'ESOCKET';

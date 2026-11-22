@@ -30,6 +30,7 @@ describe('contact rate-limit regression', () => {
       is: () => 'application/json',
       ip: 'test-ip',
       socket: {},
+      headers: {},
       body: {
         name: 'Reader',
         email: 'reader@example.com',
@@ -83,7 +84,14 @@ describe('contact rate-limit regression', () => {
         new Error('recipient@example.com password=private message=private'),
       );
       expect((await submit()).status).toHaveBeenCalledWith(503);
-      expect(log).toHaveBeenCalledExactlyOnceWith('Contact message delivery failed.');
+      expect(log).toHaveBeenCalledTimes(1);
+      expect(JSON.parse(log.mock.calls[0][0])).toEqual({
+        event: 'provider_failure',
+        level: 'error',
+        provider: 'smtp',
+        request_id: expect.stringMatching(/^[a-f0-9-]{36}$/iu),
+        timestamp: expect.any(String),
+      });
     } finally {
       log.mockRestore();
     }
