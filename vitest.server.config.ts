@@ -18,6 +18,7 @@ export default defineConfig({
         'src/server/security-headers.ts',
         'src/server/csp-reports.ts',
         'src/server/runtime-options.ts',
+        'src/server/graceful-shutdown.ts',
         'src/server/http-request-log.ts',
         'src/server/request-log-context.ts',
         'src/server/legacy-wordpress-redirects.ts',

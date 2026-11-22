@@ -10,6 +10,7 @@ import { analyticsMeasurementId, createAnalyticsConfigResponse } from './server/
 import { getHtmlCacheControl, getStaticCacheControl } from './server/cache-policy';
 import { createContactRouter } from './server/contact-router';
 import { createCspReportRouter } from './server/csp-reports';
+import { installGracefulShutdown } from './server/graceful-shutdown';
 import { createHttpRequestLog } from './server/http-request-log';
 import { legacyWordPressRedirect } from './server/legacy-wordpress-redirects';
 import { createNewsletterRouter } from './server/newsletter';
@@ -108,13 +109,16 @@ app.use((req, res, next) => {
  */
 if (isMainModule(import.meta.url) || process.env['pm_id']) {
   const port = Number(process.env['PORT'] || 4000);
-  app.listen(port, '0.0.0.0', (error) => {
+  const server = app.listen(port, '0.0.0.0', (error) => {
     if (error) {
       throw error;
     }
 
-    console.log(`Node Express server listening on http://localhost:${port}`);
+    const address = server.address();
+    const boundPort = address && typeof address === 'object' ? address.port : port;
+    console.log(`Node Express server listening on http://localhost:${boundPort}`);
   });
+  installGracefulShutdown(server);
 }
 
 /**
