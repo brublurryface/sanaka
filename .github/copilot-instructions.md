@@ -55,6 +55,7 @@
 
 - Use Vitest-compatible APIs and commands.
 - Prefer behavior-focused tests.
+- Follow the [testing strategy and acceptance criteria](../docs/testing-quality.md). Preserve the coverage baseline and explain any intentional change to the measurement scope.
 - Do not test cosmetic CSS details unless the behavior itself depends on them.
 - For changed interactions, verify the applicable accessibility contracts at their real entry points, including accessible name and state, keyboard and focus, announcements and responsive behavior. Identify which checks ran in a browser and which still require assistive technology or a physical device.
 - When fake timers are used, restore real timers after the test.
@@ -63,7 +64,7 @@
 
 ## Workflow
 
-- Keep branch names in English, with a purpose prefix: `feat/`, `fix/`, `refactor/`, `docs/`, or `chore/`.
+- Keep branch names in English, following the purpose prefixes and contribution policy in [CONTRIBUTING.md](../CONTRIBUTING.md).
 - Use a short, descriptive scope after the prefix; do not add tool or assistant names such as `codex/`.
 - Keep one active pull request for the same delivery. Link and close a superseded proposal only after its replacement is ready; preserve review history.
 - Read relevant files before editing them.
