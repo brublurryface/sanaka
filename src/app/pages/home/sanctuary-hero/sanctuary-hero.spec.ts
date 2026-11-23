@@ -106,6 +106,8 @@ describe('SanctuaryHero', () => {
         finishDecode = resolve;
       });
 
+    // Ensure the afterNextRender listener is installed before simulating load.
+    await fixture.whenStable();
     downloaded = true;
     image.dispatchEvent(new Event('load'));
     await new Promise(requestAnimationFrame);
