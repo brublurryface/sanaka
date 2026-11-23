@@ -84,14 +84,22 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     expect([...new Set(paths)]).toEqual([selected]);
 
     if (motion === 'no-preference') {
-      // Com o cenário retido, dois quadros distintos comprovam que a V14 anima no navegador.
-      const first = await art.screenshot({ scale: 'css' });
-      await expect
-        .poll(async () => first.equals(await art.screenshot({ scale: 'css' })))
-        .toBe(false);
+      // A captura da página não espera a estabilidade do próprio <img> animado,
+      // o que bloqueia locator.screenshot em WebKit durante a animação.
+      const viewport = page.viewportSize()!;
+      const clip = {
+        x: Math.max(0, Math.floor(bounds.x)),
+        y: Math.max(0, Math.floor(bounds.y)),
+        width: Math.min(viewport.width - Math.max(0, Math.floor(bounds.x)), Math.floor(bounds.width)),
+        height: Math.min(viewport.height - Math.max(0, Math.floor(bounds.y)), Math.floor(bounds.height)),
+      };
+      const frame = () => page.screenshot({ clip, scale: 'css', animations: 'allow' });
+      const first = await frame();
+      await expect.poll(async () => first.equals(await frame())).toBe(false);
     }
 
-    await page.evaluate(() => document.fonts.ready.then(() => undefined));
+    // A geometria é comparada diretamente, sem depender de document.fonts.ready,
+    // que pode permanecer pendente no WebKit mesmo após a renderização do texto.
     const section = page.locator(hero);
     const layout = () =>
       section.evaluate((el) => [
@@ -115,11 +123,28 @@ test('keeps Saṃvit behind the scene before hydration and skips Nandinī for re
 }) => {
   await page.emulateMedia({ reducedMotion: 'reduce' });
   const paths = observeNandini(page);
-  const entry = await holdFile(page, /\/main-[\w-]+\.js$/u);
+
+  // Delay bootstrap at the document boundary, not through the module-preload
+  // request (which may already be handled by the browser in Chromium/WebKit).
+  // The production server and application code remain untouched.
+  let bootstrapScript = '';
+  await page.route(
+    '**/',
+    async (route) => {
+      const response = await route.fetch();
+      const html = await response.text();
+      const match = html.match(/<script src="(main-[\w-]+\.js)" type="module"><\/script>/u);
+      if (!match) throw new Error('Production HTML does not contain the Angular entry script');
+      bootstrapScript = match[1];
+      await route.fulfill({ response, body: html.replace(match[0], '') });
+    },
+    { times: 1 },
+  );
+
   const held = await holdFile(page, '**' + scenePath);
-  await page.goto('/', { waitUntil: 'commit' });
+  await page.goto('/', { waitUntil: 'domcontentloaded' });
+  expect(bootstrapScript).toMatch(/^main-[\w-]+\.js$/u);
   const scene = await held.promise;
-  const script = await entry.promise;
   await expect(page.locator(hero)).toHaveAttribute('data-scene', 'initial');
   await expect
     .poll(() =>
@@ -131,7 +156,14 @@ test('keeps Saṃvit behind the scene before hydration and skips Nandinī for re
   await page
     .locator('.hero-atmosphere__scene')
     .evaluate((image: HTMLImageElement) => image.decode());
-  await script.continue();
+
+  // Start the unmodified production Angular entry only after the scene decoded.
+  await page.evaluate((src) => {
+    const script = document.createElement('script');
+    script.src = src;
+    script.type = 'module';
+    document.body.append(script);
+  }, bootstrapScript);
   await expect(page.locator(hero)).toHaveAttribute('data-scene', 'ready');
   await expectReady(page);
   await expect(page.locator('.samvit-stage')).toBeVisible();
