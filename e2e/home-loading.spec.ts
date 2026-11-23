@@ -65,10 +65,10 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     await page.emulateMedia({ reducedMotion: motion });
     const paths = observeNandini(page);
     const held = await holdFile(page, '**' + scenePath);
-    const heldAnimation =
-      motion === 'no-preference'
-        ? await holdFile(page, '**/loadings/nandini/animated.webp')
-        : null;
+    let heldAnimation: Awaited<ReturnType<typeof holdFile>> | null = null;
+    if (motion === 'no-preference') {
+      heldAnimation = await holdFile(page, '**/loadings/nandini/animated.webp');
+    }
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const scene = await held.promise;
     const loading = fullPageLoading(page);
@@ -85,7 +85,9 @@ for (const motion of ['no-preference', 'reduce'] as const) {
 
     // The poster must be actually decoded and visible *before* the heavy WebP
     // is released. This prevents a blank loading screen on a slow connection.
-    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(1600);
+    await expect
+      .poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth))
+      .toBe(1600);
     await expect(poster).toBeInViewport({ ratio: 0.99 });
     await expect(poster).toHaveAttribute('fetchpriority', 'high');
     await expect(art).toHaveAttribute('fetchpriority', 'low');
