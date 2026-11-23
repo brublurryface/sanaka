@@ -53,6 +53,7 @@ function observeNandini(page: Page) {
 for (const motion of ['no-preference', 'reduce'] as const) {
   test(`shows only the selected Nandinī for a pending scene with ${motion} motion`, async ({
     page,
+    browserName,
   }) => {
     await page.emulateMedia({ reducedMotion: motion });
     const paths = observeNandini(page);
@@ -84,24 +85,47 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     expect([...new Set(paths)]).toEqual([selected]);
 
     if (motion === 'no-preference') {
-      // A captura da página não espera a estabilidade do próprio <img> animado,
-      // o que bloqueia locator.screenshot em WebKit durante a animação.
-      const viewport = page.viewportSize()!;
-      const clip = {
-        x: Math.max(0, Math.floor(bounds.x)),
-        y: Math.max(0, Math.floor(bounds.y)),
-        width: Math.min(
-          viewport.width - Math.max(0, Math.floor(bounds.x)),
-          Math.floor(bounds.width),
-        ),
-        height: Math.min(
-          viewport.height - Math.max(0, Math.floor(bounds.y)),
-          Math.floor(bounds.height),
-        ),
-      };
-      const frame = () => page.screenshot({ clip, scale: 'css', animations: 'allow' });
-      const first = await frame();
-      await expect.poll(async () => first.equals(await frame())).toBe(false);
+      if (browserName === 'webkit') {
+        // Playwright's WebKit screenshot backend stalls on the animated WebP.
+        // The browser has selected and decoded it above; inspect the served
+        // RIFF frames here while Chromium verifies visual frame progression.
+        const response = await page.request.get(selected);
+        expect(response.ok()).toBe(true);
+        const webp = await response.body();
+        expect(webp.toString('ascii', 0, 4)).toBe('RIFF');
+        expect(webp.toString('ascii', 8, 12)).toBe('WEBP');
+        let frames = 0;
+        let duration = 0;
+        for (let offset = 12; offset + 8 <= webp.length; ) {
+          const chunk = webp.toString('ascii', offset, offset + 4);
+          const size = webp.readUInt32LE(offset + 4);
+          if (chunk === 'ANMF') {
+            frames += 1;
+            duration += webp.readUIntLE(offset + 20, 3);
+          }
+          offset += 8 + size + (size & 1);
+        }
+        expect(frames).toBe(68);
+        expect(duration).toBe(6400);
+      } else {
+        // With the scene held, actual screenshots prove frame progression.
+        const viewport = page.viewportSize()!;
+        const clip = {
+          x: Math.max(0, Math.floor(bounds.x)),
+          y: Math.max(0, Math.floor(bounds.y)),
+          width: Math.min(
+            viewport.width - Math.max(0, Math.floor(bounds.x)),
+            Math.floor(bounds.width),
+          ),
+          height: Math.min(
+            viewport.height - Math.max(0, Math.floor(bounds.y)),
+            Math.floor(bounds.height),
+          ),
+        };
+        const frame = () => page.screenshot({ clip, scale: 'css', animations: 'allow' });
+        const first = await frame();
+        await expect.poll(async () => first.equals(await frame())).toBe(false);
+      }
     }
 
     // A geometria é comparada diretamente, sem depender de document.fonts.ready,
