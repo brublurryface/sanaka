@@ -96,7 +96,8 @@ for (const motion of ['no-preference', 'reduce'] as const) {
         expect(webp.toString('ascii', 8, 12)).toBe('WEBP');
         let frames = 0;
         let duration = 0;
-        for (let offset = 12; offset + 8 <= webp.length; ) {
+        let offset = 12;
+        while (offset + 8 <= webp.length) {
           const chunk = webp.toString('ascii', offset, offset + 4);
           const size = webp.readUInt32LE(offset + 4);
           if (chunk === 'ANMF') {
