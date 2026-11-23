@@ -6,6 +6,7 @@ interface LoadingArtwork {
   readonly width: number;
   readonly height: number;
   readonly posterSize?: { readonly width: number; readonly height: number };
+  readonly posterFirst?: boolean;
   readonly kind: 'snake' | 'music' | 'footprints' | 'dream';
 }
 
@@ -16,6 +17,7 @@ export const LOADING_ARTWORK: Readonly<Record<LoadingVariant, LoadingArtwork>> =
     width: 1600,
     height: 900,
     kind: 'dream',
+    posterFirst: true,
   },
   vasuki: {
     animated: '/loadings/vasuki/animated.apng',
