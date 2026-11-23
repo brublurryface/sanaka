@@ -178,10 +178,7 @@ for (const motion of ['no-preference', 'reduce'] as const) {
   });
 }
 
-
-test('does not request the animated WebP until the visible poster has loaded', async ({
-  page,
-}) => {
+test('does not request the animated WebP until the visible poster has loaded', async ({ page }) => {
   await page.emulateMedia({ reducedMotion: 'no-preference' });
   const paths = observeNandini(page);
   const scene = await holdFile(page, '**' + scenePath);
