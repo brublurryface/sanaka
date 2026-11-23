@@ -91,6 +91,38 @@ describe('SanctuaryHero', () => {
     },
   );
 
+  it('shows the real loading while a downloaded scene is still decoding', async () => {
+    let downloaded = false;
+    vi.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockImplementation(() => downloaded);
+    const fixture = TestBed.createComponent(SanctuaryHero);
+    fixture.detectChanges();
+    const image = (fixture.nativeElement as HTMLElement).querySelector<HTMLImageElement>(
+      '.hero-atmosphere__scene',
+    )!;
+    Object.defineProperty(image, 'naturalWidth', { value: 1672 });
+
+    let finishDecode!: () => void;
+    image.decode = () =>
+      new Promise<void>((resolve) => {
+        finishDecode = resolve;
+      });
+
+    downloaded = true;
+    image.dispatchEvent(new Event('load'));
+    await new Promise(requestAnimationFrame);
+    await fixture.whenStable();
+
+    const loading = TestBed.inject(PageLoadingState);
+    expect(loading.current()?.variant).toBe('nandini');
+    finishDecode();
+    await fixture.whenStable();
+    expect(loading.current()).toBeNull();
+    expect(
+      (fixture.nativeElement as HTMLElement).querySelector('section')?.dataset['scene'],
+    ).toBe('ready');
+    fixture.destroy();
+  });
+
   it('should be created', () => {
     expect(TestBed.createComponent(SanctuaryHero).componentInstance).toBeTruthy();
   });

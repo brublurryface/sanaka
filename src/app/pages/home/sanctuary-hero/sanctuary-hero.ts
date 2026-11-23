@@ -33,13 +33,13 @@ export class SanctuaryHero {
       // O HTML já pode ter carregado o cenário antes da hidratação.
       const image = this.backdrop().nativeElement;
       const cached = image.complete;
-      if (!cached) {
-        // Só solicita a V14 se ainda houver espera no próximo quadro visível.
-        const frame = requestAnimationFrame(() => {
-          if (!image.complete) this.sceneState.set('loading');
-        });
-        destroyRef.onDestroy(() => cancelAnimationFrame(frame));
-      }
+      // Exibe o loading apenas quando a imagem ainda não está pronta para ser
+      // mostrada no próximo quadro, inclusive se o download já terminou
+      // mas a decodificação continua pendente.
+      const frame = requestAnimationFrame(() => {
+        if (this.sceneState() === 'initial') this.sceneState.set('loading');
+      });
+      destroyRef.onDestroy(() => cancelAnimationFrame(frame));
 
       const settled: Observable<unknown> = cached
         ? of(null)
