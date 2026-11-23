@@ -34,7 +34,14 @@ async function holdFile(page: Page, match: string | RegExp) {
           }
         },
       });
-      await released.promise;
+      // A failed assertion closes the page; do not leave an unresolved handler behind.
+      const onClose = () => released.resolve();
+      page.once('close', onClose);
+      try {
+        await released.promise;
+      } finally {
+        page.off('close', onClose);
+      }
     },
     { times: 1 },
   );
@@ -58,6 +65,10 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     await page.emulateMedia({ reducedMotion: motion });
     const paths = observeNandini(page);
     const held = await holdFile(page, '**' + scenePath);
+    const heldAnimation =
+      motion === 'no-preference'
+        ? await holdFile(page, '**/loadings/nandini/animated.webp')
+        : null;
     await page.goto('/', { waitUntil: 'domcontentloaded' });
     const scene = await held.promise;
     const loading = fullPageLoading(page);
@@ -67,9 +78,22 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     await expectShell(page, false);
     await expect(page.locator('.samvit-stage')).toBeHidden();
 
-    const filename = motion === 'reduce' ? 'poster.png' : 'animated.webp';
-    const selected = '/loadings/nandini/' + filename;
-    const art = loading.locator('img');
+    const posterPath = '/loadings/nandini/poster.png';
+    const selected = motion === 'reduce' ? posterPath : '/loadings/nandini/animated.webp';
+    const poster = loading.locator('.loading-artwork__poster');
+    const art = loading.locator('.loading-artwork img');
+
+    // The poster must be actually decoded and visible *before* the heavy WebP
+    // is released. This prevents a blank loading screen on a slow connection.
+    await expect.poll(() => poster.evaluate((image: HTMLImageElement) => image.naturalWidth)).toBe(1600);
+    await expect(poster).toBeInViewport({ ratio: 0.99 });
+    await expect(poster).toHaveAttribute('fetchpriority', 'high');
+    await expect(art).toHaveAttribute('fetchpriority', 'low');
+    if (heldAnimation) {
+      await heldAnimation.promise;
+      await (await heldAnimation.promise).continue();
+    }
+
     await expect
       .poll(() =>
         art.evaluate((image: HTMLImageElement) => [
@@ -82,13 +106,35 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     await expect(art).toBeInViewport({ ratio: 0.99 });
     const bounds = (await art.boundingBox())!;
     expect(bounds.width / bounds.height).toBeCloseTo(16 / 9, 2);
-    expect([...new Set(paths)]).toEqual([selected]);
+    expect([...new Set(paths)]).toEqual(
+      motion === 'reduce' ? [posterPath] : [posterPath, selected],
+    );
 
     if (motion === 'no-preference') {
       if (browserName === 'webkit') {
-        // Playwright's WebKit screenshot backend stalls on the animated WebP.
-        // The browser has selected and decoded it above; inspect the served
-        // RIFF frames here while Chromium verifies visual frame progression.
+        // The WebKit screenshot backend hangs on animated WebP. Sampling frames
+        // through canvas verifies *actual* browser frame progression instead.
+        const canvasFingerprint = () =>
+          art.evaluate((image: HTMLImageElement) => {
+            const canvas = document.createElement('canvas');
+            canvas.width = 128;
+            canvas.height = 72;
+            const context = canvas.getContext('2d', { willReadFrequently: true });
+            if (!context) throw new Error('Canvas 2D is unavailable');
+            context.drawImage(image, 0, 0, canvas.width, canvas.height);
+            const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
+            let hash = 2166136261;
+            for (let index = 0; index < pixels.length; index += 4) {
+              hash = Math.imul(hash ^ pixels[index], 16777619);
+              hash = Math.imul(hash ^ pixels[index + 1], 16777619);
+              hash = Math.imul(hash ^ pixels[index + 2], 16777619);
+            }
+            return hash >>> 0;
+          });
+        const first = await canvasFingerprint();
+        await expect.poll(async () => (await canvasFingerprint()) !== first).toBe(true);
+
+        // Verify that the served file also contains the approved frame count.
         const response = await page.request.get(selected);
         expect(response.ok()).toBe(true);
         const webp = await response.body();
