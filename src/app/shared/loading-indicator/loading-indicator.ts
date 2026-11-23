@@ -24,13 +24,22 @@ export class LoadingIndicator {
 
   private readonly failedVariant = signal<LoadingVariant | null>(null);
   private readonly readyVariant = signal<LoadingVariant | null>(null);
+  private readonly posterSettledVariant = signal<LoadingVariant | null>(null);
   protected readonly artworkReady = computed(() => this.readyVariant() === this.variant());
+  protected readonly posterSettled = computed(() => this.posterSettledVariant() === this.variant());
   protected readonly artwork = computed(() =>
     this.failedVariant() === this.variant() ? null : LOADING_ARTWORK[this.variant()],
   );
 
   protected hideFailedArtwork(): void {
-    this.failedVariant.set(this.variant());
+    // A poster-first illustration remains available when its animated overlay fails.
+    if (!LOADING_ARTWORK[this.variant()].posterFirst) {
+      this.failedVariant.set(this.variant());
+    }
+  }
+
+  protected settlePoster(): void {
+    this.posterSettledVariant.set(this.variant());
   }
 
   protected startDecoration(): void {

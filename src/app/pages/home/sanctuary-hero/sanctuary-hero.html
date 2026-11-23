@@ -1,5 +1,18 @@
-<section class="sanctuary-hero" aria-labelledby="sanctuary-title">
-  <div class="hero-atmosphere" aria-hidden="true"></div>
+@if (sceneState() === 'loading') {
+  <app-page-loading variant="nandini" labelKey="home.loading" />
+}
+<section class="sanctuary-hero" [attr.data-scene]="sceneState()" aria-labelledby="sanctuary-title">
+  <div class="hero-atmosphere" aria-hidden="true">
+    <img
+      #backdrop
+      class="hero-atmosphere__scene"
+      src="/images/home/sanctuary-hero.png"
+      width="1672"
+      height="941"
+      fetchpriority="high"
+      alt=""
+    />
+  </div>
 
   <div class="hero-copy">
     <p class="eyebrow">{{ 'home.hero.eyebrow' | transloco }}</p>

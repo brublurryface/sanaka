@@ -22,23 +22,40 @@
       @if (art.kind === 'snake') {
         <span class="snake-word">LOADING...</span>
       }
-      <picture class="loading-artwork">
-        <source
-          media="(prefers-reduced-motion: no-preference)"
-          [srcset]="art.animated"
-          [attr.width]="art.width"
-          [attr.height]="art.height"
-        />
+      @if (art.posterFirst) {
         <img
+          class="loading-artwork__poster"
           [src]="art.poster"
           [width]="posterSize.width"
           [height]="posterSize.height"
           alt=""
           decoding="async"
-          (load)="startDecoration()"
-          (error)="hideFailedArtwork()"
+          loading="eager"
+          fetchpriority="high"
+          (load)="settlePoster()"
+          (error)="settlePoster()"
         />
-      </picture>
+      }
+      @if (!art.posterFirst || posterSettled()) {
+        <picture class="loading-artwork">
+          <source
+            media="(prefers-reduced-motion: no-preference)"
+            [srcset]="art.animated"
+            [attr.width]="art.width"
+            [attr.height]="art.height"
+          />
+          <img
+            [src]="art.poster"
+            [width]="posterSize.width"
+            [height]="posterSize.height"
+            [attr.fetchpriority]="art.posterFirst ? 'low' : null"
+            alt=""
+            decoding="async"
+            (load)="startDecoration()"
+            (error)="hideFailedArtwork()"
+          />
+        </picture>
+      }
     </div>
   }
 }

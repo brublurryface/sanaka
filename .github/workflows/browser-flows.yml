@@ -14,8 +14,11 @@ concurrency:
 jobs:
   browser:
     name: Production browser flows
-    runs-on: ubuntu-latest
-    timeout-minutes: 15
+    runs-on: ubuntu-24.04
+    # Match the locked Playwright version: preinstalled Chromium, WebKit and OS dependencies.
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
+    timeout-minutes: 20
     steps:
       - name: Checkout
         uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
@@ -34,8 +37,6 @@ jobs:
         run: npm run test:e2e:types
       - name: Build production application
         run: npm run build
-      - name: Install Chromium and WebKit
-        run: npx playwright install --with-deps chromium webkit
       - name: Exercise critical browser flows
         run: npm run test:e2e
       - name: Keep failure diagnostics

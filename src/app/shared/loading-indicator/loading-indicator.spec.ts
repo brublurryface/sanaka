@@ -22,14 +22,21 @@ describe('LoadingIndicator', () => {
     ['vasuki', 'apng', 734, 188, 734, 188],
     ['maninaga', 'apng', 734, 188, 730, 243],
     ['samvit', 'webp', 1500, 760, 1500, 760],
+    ['nandini', 'webp', 1600, 900, 1600, 900],
   ] as const)(
     'should select only %s with a static, SSR-safe reduced-motion fallback',
     (variant, extension, width, height, posterWidth, posterHeight) => {
       const host = render(variant);
-      const image = host.querySelector('img');
+      if (variant === 'nandini') {
+        expect(host.querySelectorAll('img')).toHaveLength(1);
+        expect(host.querySelector('picture')).toBeNull();
+        host.querySelector('.loading-artwork__poster')?.dispatchEvent(new Event('load'));
+        fixture.detectChanges();
+      }
+      const image = host.querySelector('.loading-artwork img') as HTMLImageElement;
       const source = host.querySelector('source');
 
-      expect(host.querySelectorAll('img')).toHaveLength(1);
+      expect(host.querySelectorAll('img')).toHaveLength(variant === 'nandini' ? 2 : 1);
       expect(source?.getAttribute('srcset')).toBe(`/loadings/${variant}/animated.${extension}`);
       expect(source?.getAttribute('media')).toBe('(prefers-reduced-motion: no-preference)');
       expect(source?.getAttribute('width')).toBe(String(width));
@@ -88,6 +95,28 @@ describe('LoadingIndicator', () => {
     expect(host.querySelector('.loading-stage')?.children).toHaveLength(1);
     expect(host.textContent).not.toContain('LOADING');
     expect(host.querySelector('svg')).toBeNull();
+  });
+
+  it('keeps Nandinī poster-first and accessible if the animated overlay fails', () => {
+    const host = render('nandini');
+    const poster = host.querySelector('.loading-artwork__poster') as HTMLImageElement;
+    expect(poster.getAttribute('src')).toBe('/loadings/nandini/poster.png');
+    expect(poster.getAttribute('fetchpriority')).toBe('high');
+    expect(host.querySelector('.loading-artwork')).toBeNull();
+
+    poster.dispatchEvent(new Event('load'));
+    fixture.detectChanges();
+    const animation = host.querySelector('.loading-artwork img') as HTMLImageElement;
+    expect(animation.getAttribute('fetchpriority')).toBe('low');
+    expect(host.querySelector('source')?.getAttribute('srcset')).toBe(
+      '/loadings/nandini/animated.webp',
+    );
+
+    animation.dispatchEvent(new Event('error'));
+    fixture.detectChanges();
+    expect(host.querySelector('.loading-artwork__poster')).toBe(poster);
+    expect(host.querySelector('.loading-artwork')).toBeTruthy();
+    expect(host.querySelector('.loading-label')?.textContent).toContain('Reunindo fragmentos');
   });
 
   it('should start decorations when the image loads, without delaying the data request', () => {

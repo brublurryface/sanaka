@@ -2,7 +2,8 @@ import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
 import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
 import { Observable, of } from 'rxjs';
-import { beforeEach, describe, expect, it } from 'vitest';
+import { afterEach, beforeEach, describe, expect, it, vi } from 'vitest';
+import { PageLoadingState } from '../../../core/navigation/page-loading-state';
 import { SanctuaryHero } from './sanctuary-hero';
 
 class MockTranslocoLoader implements TranslocoLoader {
@@ -51,6 +52,78 @@ describe('SanctuaryHero', () => {
     }).compileComponents();
   });
 
+  afterEach(() => vi.restoreAllMocks());
+
+  it.each(['success', 'error', 'leave'] as const)(
+    'releases the global loading on scene %s, including a late decode',
+    async (result) => {
+      vi.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockReturnValue(false);
+      const fixture = TestBed.createComponent(SanctuaryHero);
+      fixture.detectChanges();
+      const host: HTMLElement = fixture.nativeElement;
+      const image = host.querySelector<HTMLImageElement>('.hero-atmosphere__scene')!;
+      const loading = TestBed.inject(PageLoadingState);
+      await new Promise(requestAnimationFrame);
+      await fixture.whenStable();
+      expect(loading.current()?.variant).toBe('nandini');
+
+      let finishDecode!: () => void;
+      const decoded = new Promise<void>((resolve, reject) => {
+        finishDecode = result === 'error' ? () => reject(new Error('decode')) : resolve;
+      });
+      Object.defineProperty(image, 'naturalWidth', { value: 1672 });
+      image.decode = () => decoded;
+      image.dispatchEvent(new Event('load'));
+      expect(loading.current()?.variant).toBe('nandini');
+      if (result === 'leave') {
+        fixture.destroy();
+        expect(loading.current()).toBeNull();
+      }
+      finishDecode();
+      await decoded.catch(() => undefined);
+      await fixture.whenStable();
+      if (result !== 'leave') {
+        expect(host.querySelector('section')?.dataset['scene']).toBe(
+          result === 'error' ? 'failed' : 'ready',
+        );
+      }
+      expect(loading.current()).toBeNull();
+    },
+  );
+
+  it('shows the real loading while a downloaded scene is still decoding', async () => {
+    let downloaded = false;
+    vi.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockImplementation(() => downloaded);
+    const fixture = TestBed.createComponent(SanctuaryHero);
+    fixture.detectChanges();
+    const host: HTMLElement = fixture.nativeElement;
+    const image = host.querySelector<HTMLImageElement>('.hero-atmosphere__scene')!;
+    Object.defineProperty(image, 'naturalWidth', { value: 1672 });
+
+    let finishDecode!: () => void;
+    image.decode = () =>
+      new Promise<void>((resolve) => {
+        finishDecode = resolve;
+      });
+
+    // Ensure the afterNextRender listener is installed before simulating load.
+    await fixture.whenStable();
+    downloaded = true;
+    image.dispatchEvent(new Event('load'));
+    await new Promise(requestAnimationFrame);
+    await fixture.whenStable();
+
+    const loading = TestBed.inject(PageLoadingState);
+    expect(loading.current()?.variant).toBe('nandini');
+    finishDecode();
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(host.querySelector('section')?.dataset['scene']).toBe('ready');
+      expect(loading.current()).toBeNull();
+    });
+    fixture.destroy();
+  });
+
   it('should be created', () => {
     expect(TestBed.createComponent(SanctuaryHero).componentInstance).toBeTruthy();
   });
@@ -94,6 +167,7 @@ describe('SanctuaryHero', () => {
     const element = fixture.nativeElement as HTMLElement;
 
     expect(element.querySelector('a[href="/#sanctuary-paths"]')).toBeTruthy();
-    expect(element.querySelector('img')?.getAttribute('alt')).toBe('Saṃvit');
+    expect(element.querySelector('.samvit-character')?.getAttribute('alt')).toBe('Saṃvit');
+    expect(element.querySelector('.hero-atmosphere img')?.getAttribute('alt')).toBe('');
   });
 });

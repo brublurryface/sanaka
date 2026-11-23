@@ -37,9 +37,7 @@
   pointer-events: none;
 }
 
-.hero-atmosphere::before {
-  content: '';
-
+.hero-atmosphere__scene {
   position: absolute;
   top: 0;
   left: var(--sanctuary-focus-x);
@@ -49,7 +47,7 @@
   height: 100%;
   aspect-ratio: 1672 / 941;
 
-  background: url('/images/home/sanctuary-hero.png') center / cover no-repeat;
+  object-fit: cover;
 
   /* O centro das escadas está a 72,5% da largura da arte. */
   transform: translateX(-72.5%);
@@ -315,6 +313,13 @@ h1 > span {
 /* -----------------------
    SAṂVIT
 ------------------------ */
+
+/* A marcação pré-renderizada reserva o lugar da Saṃvit antes de o navegador confirmar o cenário. */
+@media (scripting: enabled) {
+  .sanctuary-hero:not([data-scene='ready']) .samvit-stage {
+    visibility: hidden;
+  }
+}
 
 .samvit-stage {
   position: relative;
@@ -673,7 +678,7 @@ h1 > span {
     max-height: none;
   }
 
-  .hero-atmosphere::before {
+  .hero-atmosphere__scene {
     min-width: 182%;
   }
 

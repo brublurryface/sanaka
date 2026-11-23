@@ -42,7 +42,7 @@ export default defineConfig({
     },
     {
       name: 'mobile-webkit',
-      testMatch: '**/puzzle-mask.spec.ts',
+      testMatch: ['**/puzzle-mask.spec.ts', '**/home-loading.spec.ts'],
       use: { ...devices['iPhone 13'] },
     },
   ],
