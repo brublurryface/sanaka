@@ -68,6 +68,8 @@
 - Use a short, descriptive scope after the prefix; do not add tool or assistant names such as `codex/`.
 - Keep one active pull request for the same delivery. Link and close a superseded proposal only after its replacement is ready; preserve review history.
 - Read relevant files before editing them.
+- Run the local preflight defined in CONTRIBUTING.md before publishing when a compatible environment is available. API commits bypass local hooks; explicitly record checks that could not run.
+- When formatting fails in CI, inspect the exact formatting patch before publishing another correction. Never weaken the formatting gate.
 - Keep changes strictly inside the requested scope.
 - Preserve unrelated code.
 - If the user provides complete file contents or an explicit implementation specification, treat that specification as the source of truth unless it conflicts with the current repository.

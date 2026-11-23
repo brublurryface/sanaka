@@ -25,10 +25,15 @@
     "architecture:check": "node scripts/architecture/check.mjs",
     "test:architecture": "node --test scripts/architecture/check.test.mjs",
     "test:state-contracts": "tsc --project tsconfig.store-contracts.json",
-    "check": "npm run audit:dependencies && npm run matrix:source:check && npm run format:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:coverage-policy && npm run test:server && npm run test:coverage && npm run duplication:check && npm run duplication:check:all && npm run build",
+    "check": "npm run format:check && npm run check:static && npm run audit:dependencies && npm run check:tests && npm run check:build",
     "serve:ssr:sanaka": "node dist/sanaka/server/server.mjs",
     "test:e2e": "playwright test",
-    "test:e2e:types": "tsc --project tsconfig.e2e.json"
+    "test:e2e:types": "tsc --project tsconfig.e2e.json",
+    "hooks:install": "node scripts/git-hooks.mjs install",
+    "test:git-policy": "node --test scripts/git-policy.test.mjs",
+    "check:static": "npm run matrix:source:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:coverage-policy && npm run test:git-policy && npm run test:e2e:types",
+    "check:tests": "npm run test:server && npm run test:coverage",
+    "check:build": "npm run duplication:check && npm run duplication:check:all && npm run build"
   },
   "private": true,
   "engines": {

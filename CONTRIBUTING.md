@@ -32,6 +32,24 @@ identificadores em inglês. Exemplo: `test(coverage): reject a coverage regressi
 Separe mudanças com responsabilidades independentes. Uma correção de funcionalidade que
 inclui seu teste de regressão continua sendo uma entrega `fix/`.
 
+## Validação antes do push
+
+Use a versão de Node registrada em `.node-version` e a versão de npm de `package.json`.
+Após `npm ci`, execute `npm run hooks:install` uma vez em cada clone local.
+
+O pre-commit verifica a formatação dos arquivos preparados, sem reescrever o índice.
+O commit-msg verifica a convenção de mensagens. O pre-push verifica a revisão que será
+enviada, exige um checkout limpo e executa `npm run check` antes do envio de branches.
+
+O comando `npm run check` reutiliza as mesmas fases de formatação, análise estática,
+auditoria, testes e build executadas no CI. Para corrigir a formatação, use
+`npm exec -- prettier --write caminho/do/arquivo` e prepare novamente a alteração.
+
+Hooks locais não são executados por commits criados pela API do GitHub. Nesse caso,
+execute as verificações equivalentes antes de publicar, quando houver ambiente compatível.
+Se não houver, mantenha a PR em rascunho e declare a validação pendente. Em falhas de
+formatação, consulte o artefato `formatting-diagnostics` antes de tentar outra correção.
+
 ## Revisão e integração
 
 - Use o [modelo de pull request](.github/pull_request_template.md) e descreva o comportamento,

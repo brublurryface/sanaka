@@ -14,10 +14,11 @@ concurrency:
 jobs:
   obolos:
     uses: ./.github/workflows/obolo-protocol.yml
-  validate:
-    needs: obolos
-    name: Validate Sanaka
-    runs-on: ubuntu-latest
+  source:
+    name: Source quality, tests and build
+    runs-on: ubuntu-24.04
+    container:
+      image: mcr.microsoft.com/playwright:v1.65.1-noble
     timeout-minutes: 20
     steps:
       - name: Checkout
@@ -27,14 +28,39 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020 # v4
         with:
-          node-version: 24.22.1
+          node-version-file: .node-version
           cache: npm
       - name: Use declared npm version
-        run: npm install --global npm@11.12.1
+        run: npm install --global "$(node -p 'require("./package.json").packageManager')"
       - name: Install locked dependencies
         run: npm ci
-      - name: Validate source, tests, coverage and build
-        run: npm run check
+      - name: Check formatting
+        id: formatting
+        run: npm run format:check
+      - name: Check architecture and type contracts
+        run: npm run check:static
+      - name: Audit dependencies
+        run: npm run audit:dependencies
+      - name: Test Angular and server with coverage
+        run: npm run check:tests
+      - name: Check duplication and build production
+        run: npm run check:build
+      - name: Verify HTML conversion in Chromium
+        run: npm run test:browser:security
+      - name: Generate exact formatting diagnostics
+        if: ${{ !cancelled() && steps.formatting.outcome == 'failure' }}
+        run: |
+          npm exec -- prettier --write .
+          git diff --binary -- . > "$RUNNER_TEMP/prettier.patch"
+          git diff --stat
+      - name: Preserve formatting patch
+        if: ${{ !cancelled() && steps.formatting.outcome == 'failure' }}
+        uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
+        with:
+          name: formatting-diagnostics
+          path: ${{ runner.temp }}/prettier.patch
+          retention-days: 7
+          if-no-files-found: error
       - name: Preserve coverage reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@ea165f8d65b6e75b540449e92b4886f43607fa02 # v4
@@ -45,7 +71,18 @@ jobs:
             coverage/server/coverage-summary.json
           retention-days: 14
           if-no-files-found: warn
-      - name: Install Chromium for security regressions
-        run: npx playwright install --with-deps chromium
-      - name: Verify HTML conversion in Chromium
-        run: npm run test:browser:security
+
+  validate:
+    name: Validate Sanaka
+    needs: [source, obolos]
+    if: ${{ always() }}
+    runs-on: ubuntu-24.04
+    timeout-minutes: 2
+    steps:
+      - name: Require both independent validations
+        env:
+          SOURCE_RESULT: ${{ needs.source.result }}
+          OBOLOS_RESULT: ${{ needs.obolos.result }}
+        run: |
+          test "$SOURCE_RESULT" = success
+          test "$OBOLOS_RESULT" = success

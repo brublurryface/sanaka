@@ -60,29 +60,42 @@ A nota de qualidade é uma avaliação de engenharia, não uma métrica oficial 
 consequência automática de cobertura alta. Os seguintes critérios serão avaliados com
 evidências reproduzíveis e sem alteração indevida do comportamento de produção.
 
-- [x] Registrar linha de base e proteger as quatro métricas globais de ambos os escopos.
-- [x] Documentar convenções de contribuição, testes e validação.
-- [ ] Auditar cobertura por arquivo e linhas alteradas, inclusive arquivos novos e
-  módulos de servidor fora da lista atual. Impedir perdas relevantes nos contratos críticos.
-- [ ] Revisar testes unitários e de integração quanto a comportamento, isolamento, fixtures,
-  mocks, cancelamento, erros, limites e asserções que detectem regressões reais.
-- [ ] Ampliar os fluxos críticos em WebKit; avaliar Firefox e executar os fluxos definidos
-  sem remover a cobertura dos dois projetos Chromium existentes.
-- [ ] Automatizar acessibilidade com verificação de violações, teclado, foco e anúncios.
-  Registrar verificações manuais com tecnologia assistiva e dispositivos físicos quando
-  necessárias; uma ferramenta automatizada não comprova conformidade integral.
-- [ ] Definir regressões visuais em ambientes e estados determinísticos, com referências
-  aprovadas e revisão das diferenças. Não atualizar snapshots automaticamente para ocultar
-  uma alteração inesperada.
-- [ ] Medir a capacidade dos testes de detectar defeitos com mutação em regras críticas.
-  Analisar mutantes sobreviventes e estabelecer limites por escopo antes de bloquear o CI.
-- [ ] Definir e medir orçamentos de desempenho (LCP, CLS, tráfego, memória e rede lenta)
-  com condições reproduzíveis e distinguir métricas de laboratório de dados reais.
-- [ ] Auditar o pipeline: versões, dependências, diagnósticos, duração, repetibilidade e
-  isolamento. Preservar a execução completa e documentar limitações.
+Implementados:
+
+- Registrar a linha de base e proteger as quatro métricas globais.
+- Documentar as convenções de contribuição, testes e validação.
+
+Pendentes de auditoria:
+
+- Cobertura por arquivo, linhas alteradas e módulos novos, com proteção dos contratos críticos.
+- Comportamento, isolamento, fixtures, mocks, cancelamento, erros, limites e asserções.
+- Ampliar WebKit e avaliar Firefox, preservando os projetos Chromium existentes.
+- Acessibilidade automatizada, teclado, foco, anúncios e verificações manuais aplicáveis.
+- Regressão visual com referências aprovadas, sem atualizar snapshots para ocultar diferenças.
+- Mutação de regras críticas, análise de sobreviventes e definição de limites por escopo.
+- Orçamentos reproduzíveis de LCP, CLS, tráfego, memória e rede lenta.
+- Confiabilidade do pipeline, diagnósticos, duração, repetibilidade e isolamento.
 
 A conclusão exige validação dos workflows aplicáveis, revisão dos resultados e registro
 de pendências reais. Não se considera uma etapa aprovada apenas porque foi planejada.
+
+## Prevenção de falhas de entrega
+
+O protocolo local está em [CONTRIBUTING.md](../CONTRIBUTING.md). As fases do comando de
+validação são compartilhadas com o CI. A validação do código e a integração WordPress
+podem executar em paralelo; o check Validate Sanaka exige o sucesso de ambas.
+
+A versão de Node vem de `.node-version` e a versão de npm vem de `package.json`.
+O job de validação usa a imagem Playwright com navegadores pré-instalados, já adotada
+pelos fluxos críticos. As versões do Playwright e da imagem devem permanecer compatíveis.
+
+Uma falha de formatação gera um patch como artefato, sem alterar o repositório remoto.
+A proteção da main deve exigir os checks de validação, navegador e SSR. A consulta
+completa às regras administrativas ficou indisponível para a integração.
+
+A auditoria de regras ESLint e de qualidade de templates continua pendente. O TypeScript
+estrito, os templates estritos, a análise arquitetural e a duplicação já são verificados.
+Não introduzir outra ferramenta sem identificar lacunas concretas.
 
 ## Limitações conhecidas da linha de base
 

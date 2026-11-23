@@ -24,10 +24,10 @@ jobs:
       - name: Set up Node
         uses: actions/setup-node@49933ea5288caeca8642d1e84afbd3f7d6820020
         with:
-          node-version: 24.22.1
+          node-version-file: .node-version
           cache: npm
       - name: Use declared npm version
-        run: npm install --global npm@11.12.1
+        run: npm install --global "$(node -p 'require("./package.json").packageManager')"
       - name: Install locked dependencies
         run: npm ci
       - name: Build unchanged production rendering

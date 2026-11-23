@@ -5,3 +5,6 @@
 *.jpeg binary
 *.png binary
 *.webp binary
+
+# Git hooks must remain executable by the POSIX shell on Windows.
+/.githooks/* text eol=lf
