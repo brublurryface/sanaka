@@ -7,8 +7,37 @@ const scenePath = '/images/home/sanctuary-hero.png';
 const hero = '.sanctuary-hero';
 
 async function holdFile(page: Page, match: string | RegExp) {
-  const pending = deferred<Route>();
-  await page.route(match, (route) => pending.resolve(route), { times: 1 });
+  const pending = deferred<{
+    continue: () => Promise<void>;
+    abort: (errorCode?: Parameters<Route['abort']>[0]) => Promise<void>;
+  }>();
+
+  await page.route(
+    match,
+    async (route) => {
+      // Keep the handler alive until the test explicitly settles the request.
+      // Otherwise Playwright falls through to the context-wide route handler.
+      const released = deferred<void>();
+      pending.resolve({
+        continue: async () => {
+          try {
+            await route.continue();
+          } finally {
+            released.resolve();
+          }
+        },
+        abort: async (errorCode) => {
+          try {
+            await route.abort(errorCode);
+          } finally {
+            released.resolve();
+          }
+        },
+      });
+      await released.promise;
+    },
+    { times: 1 },
+  );
   return pending;
 }
 
