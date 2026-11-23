@@ -22,6 +22,7 @@ describe('LoadingIndicator', () => {
     ['vasuki', 'apng', 734, 188, 734, 188],
     ['maninaga', 'apng', 734, 188, 730, 243],
     ['samvit', 'webp', 1500, 760, 1500, 760],
+    ['nandini', 'webp', 1600, 900, 1600, 900],
   ] as const)(
     'should select only %s with a static, SSR-safe reduced-motion fallback',
     (variant, extension, width, height, posterWidth, posterHeight) => {

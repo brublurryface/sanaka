@@ -1,4 +1,4 @@
-export type LoadingVariant = 'vasuki' | 'maninaga' | 'sabala' | 'samvit';
+export type LoadingVariant = 'vasuki' | 'maninaga' | 'sabala' | 'samvit' | 'nandini';
 
 interface LoadingArtwork {
   readonly animated: string;
@@ -6,10 +6,17 @@ interface LoadingArtwork {
   readonly width: number;
   readonly height: number;
   readonly posterSize?: { readonly width: number; readonly height: number };
-  readonly kind: 'snake' | 'music' | 'footprints';
+  readonly kind: 'snake' | 'music' | 'footprints' | 'dream';
 }
 
 export const LOADING_ARTWORK: Readonly<Record<LoadingVariant, LoadingArtwork>> = {
+  nandini: {
+    animated: '/loadings/nandini/animated.webp',
+    poster: '/loadings/nandini/poster.png',
+    width: 1600,
+    height: 900,
+    kind: 'dream',
+  },
   vasuki: {
     animated: '/loadings/vasuki/animated.apng',
     poster: '/loadings/vasuki/poster.png',
