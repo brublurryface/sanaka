@@ -112,30 +112,10 @@ for (const motion of ['no-preference', 'reduce'] as const) {
     );
 
     if (motion === 'no-preference') {
-      // Read the browser's decoded frame, not screenshot stability: screenshot
-      // waits for animation layout in WebKit and can stall indefinitely.
-      const frameFingerprint = () =>
-        art.evaluate((image: HTMLImageElement) => {
-          const canvas = document.createElement('canvas');
-          canvas.width = 128;
-          canvas.height = 72;
-          const context = canvas.getContext('2d', { willReadFrequently: true });
-          if (!context) throw new Error('Canvas 2D is unavailable');
-          context.drawImage(image, 0, 0, canvas.width, canvas.height);
-          const pixels = context.getImageData(0, 0, canvas.width, canvas.height).data;
-          let hash = 2166136261;
-          for (let index = 0; index < pixels.length; index += 4) {
-            hash = Math.imul(hash ^ pixels[index], 16777619);
-            hash = Math.imul(hash ^ pixels[index + 1], 16777619);
-            hash = Math.imul(hash ^ pixels[index + 2], 16777619);
-          }
-          return hash >>> 0;
-        });
-      const first = await frameFingerprint();
-      await expect.poll(frameFingerprint).not.toBe(first);
-
       if (browserName === 'webkit') {
-        // Validate the source animation metadata separately from rendering.
+        // WebKit's screenshot API stalls on this animated WebP. Verify the
+        // selected resource and its actual dimensions above, then validate
+        // the animation container without claiming to sample painted frames.
         const response = await page.request.get(selected);
         expect(response.ok()).toBe(true);
         const webp = await response.body();
@@ -155,6 +135,25 @@ for (const motion of ['no-preference', 'reduce'] as const) {
         }
         expect(frames).toBe(68);
         expect(duration).toBe(6400);
+      } else {
+        // Compare frames painted in Chromium: canvas.drawImage() reads a
+        // stable frame from this WebP and cannot establish animation motion.
+        const viewport = page.viewportSize()!;
+        const clip = {
+          x: Math.max(0, Math.floor(bounds.x)),
+          y: Math.max(0, Math.floor(bounds.y)),
+          width: Math.min(
+            viewport.width - Math.max(0, Math.floor(bounds.x)),
+            Math.floor(bounds.width),
+          ),
+          height: Math.min(
+            viewport.height - Math.max(0, Math.floor(bounds.y)),
+            Math.floor(bounds.height),
+          ),
+        };
+        const frame = () => page.screenshot({ clip, scale: 'css', animations: 'allow' });
+        const first = await frame();
+        await expect.poll(async () => first.equals(await frame())).toBe(false);
       }
     }
 
