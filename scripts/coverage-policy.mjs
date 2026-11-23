@@ -1,24 +1,33 @@
-// Os limites preservam os valores observados na PR #123, sem arredondá-los para baixo.
+// Contadores V8 observados no commit c386702 da PR #123.
 export const coveragePolicy = {
   angular: {
     report: 'sanaka',
-    minimum: { statements: 94.19, branches: 92.71, functions: 94.65, lines: 94.29 },
+    baseline: {
+      statements: { covered: 2452, total: 2603 },
+      branches: { covered: 1705, total: 1839 },
+      functions: { covered: 673, total: 711 },
+      lines: { covered: 2050, total: 2174 },
+    },
   },
   server: {
     report: 'server',
-    minimum: { statements: 99.75, branches: 98.65, functions: 100, lines: 99.73 },
+    baseline: {
+      statements: { covered: 400, total: 401 },
+      branches: { covered: 368, total: 373 },
+      functions: { covered: 67, total: 67 },
+      lines: { covered: 370, total: 371 },
+    },
   },
 };
 
-/** Compara os contadores reais; um relatório ausente ou inválido não pode aprovar a entrega. */
+/** Compara proporções exatas; o percentual arredondado não determina a aprovação. */
 export function evaluateCoverage(summary, target) {
   if (!Object.hasOwn(coveragePolicy, target)) {
     throw new Error(`Escopo de cobertura desconhecido: ${target}`);
   }
 
-  return Object.entries(coveragePolicy[target].minimum).map(([metric, minimum]) => {
-    const entry = summary?.total?.[metric];
-    const { covered, total } = entry ?? {};
+  return Object.entries(coveragePolicy[target].baseline).map(([metric, baseline]) => {
+    const { covered, total } = summary?.total?.[metric] ?? {};
 
     if (
       !Number.isSafeInteger(total) ||
@@ -32,9 +41,10 @@ export function evaluateCoverage(summary, target) {
 
     return {
       metric,
-      minimum,
-      actual: (covered / total) * 100,
-      passed: covered * 10000 >= Math.round(minimum * 100) * total,
+      baseline,
+      covered,
+      total,
+      passed: BigInt(covered) * BigInt(baseline.total) >= BigInt(baseline.covered) * BigInt(total),
     };
   });
 }

@@ -5,11 +5,47 @@ import type { AddressInfo } from 'node:net';
 import { afterAll, beforeAll, describe, expect, it } from 'vitest';
 
 import {
+  LEGACY_CONTACT_PAGE_ID,
+  LEGACY_SANAKA_POSTS,
+  LEGACY_WORDPRESS_PAGES,
+} from './legacy-wordpress-data';
+import {
   legacyWordPressRedirect,
   resolveLegacyWordPressRedirect,
 } from './legacy-wordpress-redirects';
 
 describe('legacy WordPress addresses', () => {
+  it('preserves unique public addresses, IDs and Angular post destinations', () => {
+    const ids = LEGACY_SANAKA_POSTS.map(({ id }) => id);
+    const paths = LEGACY_SANAKA_POSTS.map(({ path }) => path);
+    const slugs = paths.map((path) => path.split('/').at(-1));
+    expect(new Set(ids).size).toBe(ids.length);
+    expect(new Set(paths).size).toBe(paths.length);
+    expect(new Set(slugs).size).toBe(slugs.length);
+    expect(ids).not.toContain(LEGACY_CONTACT_PAGE_ID);
+    expect(new Set(LEGACY_WORDPRESS_PAGES).size).toBe(LEGACY_WORDPRESS_PAGES.length);
+  });
+
+  it.each(LEGACY_SANAKA_POSTS)('resolves both public addresses for $path', ({ id, path }) => {
+    expect(path).toMatch(/^\/\d{4}\/(?:0[1-9]|1[0-2])\/[a-z0-9-]+$/u);
+    const location = `/posts/${path.split('/').at(-1)}`;
+    expect(resolveLegacyWordPressRedirect('GET', `${path}/?ref=legacy`)).toEqual({
+      status: 301,
+      location: `${location}?ref=legacy`,
+    });
+    expect(resolveLegacyWordPressRedirect('GET', `/?p=${id}&ref=legacy`)).toEqual({
+      status: 301,
+      location: `${location}?ref=legacy`,
+    });
+  });
+
+  it.each(LEGACY_WORDPRESS_PAGES)('preserves legacy CMS page %s', (path) => {
+    expect(resolveLegacyWordPressRedirect('GET', `${path}/?ref=legacy`)).toEqual({
+      status: 301,
+      location: `https://cms.sanaka.com.br${path}/?ref=legacy`,
+    });
+  });
+
   it.each([
     ['/2026/10/akasha/', '/posts/akasha'],
     ['/2026/10/vii-aplicacao', '/posts/vii-aplicacao'],

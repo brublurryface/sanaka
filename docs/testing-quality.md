@@ -4,20 +4,17 @@
 
 A PR #123, no commit `c386702`, registrou a seguinte linha de base:
 
-| Verificação               | Resultado     |
-| ------------------------- | ------------- |
-| Angular / Vitest          | 880 aprovados |
-| Servidor / Vitest         | 281 aprovados |
-| Playwright                | 175 aprovados |
-| Hidratação de artigos SSR | 10 aprovados  |
-| Segurança em Chromium     | 16 aprovados  |
+- Angular / Vitest: 880 testes aprovados.
+- Servidor / Vitest: 281 testes aprovados.
+- Playwright: 175 testes aprovados.
+- Hidratação de artigos SSR: 10 verificações aprovadas.
+- Segurança em Chromium: 16 testes aprovados.
 
-| Métrica      | Angular | Servidor |
-| ------------ | ------: | -------: |
-| Instruções   |  94,19% |   99,75% |
-| Ramificações |  92,71% |   98,65% |
-| Funções      |  94,65% |     100% |
-| Linhas       |  94,29% |   99,73% |
+Cobertura Angular (instruções, ramificações, funções e linhas): 2452/2603 (94,19%),
+1705/1839 (92,71%), 673/711 (94,65%) e 2050/2174 (94,29%).
+
+Cobertura do servidor, na mesma ordem: 400/401 (99,75%), 368/373 (98,65%), 67/67
+(100%) e 370/371 (99,73%).
 
 Evidências: [Validate Sanaka](https://github.com/brublurryface/sanaka/actions/runs/45255856396),
 [Browser critical flows](https://github.com/brublurryface/sanaka/actions/runs/45255853047)
@@ -31,13 +28,31 @@ representam cobertura de todos os arquivos, templates, estilos ou do código Wor
 ## Contratos de qualidade
 
 A política de cobertura em `scripts/coverage-policy.mjs` usa os contadores dos relatórios
-V8 e preserva os limites acima para Angular e servidor. Os dois comandos de cobertura
+V8 e preserva as proporções exatas acima para Angular e servidor, sem depender de
+percentuais arredondados. Os dois comandos de cobertura
 utilizam o mesmo verificador. A própria política recebe testes automatizados, incluindo
-casos de regressão individual, relatório inválido e escopo desconhecido.
+casos de regressão individual, proporções equivalentes, relatório inválido e escopo desconhecido.
 
 Os relatórios por arquivo são preservados no workflow de validação. Uma regressão deve
 ser investigada; alterar o limite ou excluir arquivos exige uma justificativa explícita
 na revisão. Elevar um limite exige evidência de cobertura efetivamente atingida.
+
+## Auditoria do escopo do servidor
+
+O inventário de `src/server` e `src/shared` identificou 16 módulos incluídos no relatório
+unitário e três exclusões explícitas:
+
+- `src/server/legacy-wordpress-data.ts`: inventário declarativo de URLs e IDs. Os destinos
+  são exercitados pelo resolvedor de redirecionamentos.
+- `src/shared/contact.ts` e `src/shared/newsletter.ts`: constantes e contratos
+  compartilhados, exercitados pelos consumidores de contato e newsletter.
+- `src/server.ts`: composição Express e Angular, fora dos diretórios acima, exercitada
+  pelo servidor de produção nos testes E2E de cabeçalhos, rotas, APIs e encerramento.
+
+A verificação de inventário rejeita módulos TypeScript novos em `src/server` e
+`src/shared` que não apareçam no relatório, salvo exclusões explícitas. Arquivos de teste
+e declarações de tipos não entram nessa medição. A auditoria por arquivo no Angular e
+a proteção de linhas alteradas ainda dependem da análise dos relatórios detalhados.
 
 ## Critérios para a auditoria completa
 
