@@ -7,45 +7,44 @@ const scenePath = '/images/home/sanctuary-hero.png';
 const hero = '.sanctuary-hero';
 
 async function holdFile(page: Page, match: string | RegExp) {
-  const pending = deferred<{
+  type Disposition =
+    | { readonly action: 'continue' }
+    | { readonly action: 'abort'; readonly errorCode?: Parameters<Route['abort']>[0] };
+  const requested = deferred<{
     continue: () => Promise<void>;
     abort: (errorCode?: Parameters<Route['abort']>[0]) => Promise<void>;
   }>();
+  const disposition = deferred<Disposition>();
+  const firstSettled = deferred<void>();
+  let firstRequest: Route | null = null;
 
-  await page.route(
-    match,
-    async (route) => {
-      // Keep the handler alive until the test explicitly settles the request.
-      // Otherwise Playwright falls through to the context-wide route handler.
-      const released = deferred<void>();
-      pending.resolve({
+  // Keep *all* matching requests behind one gate. A times:1 handler can
+  // release a second image request, falsely completing the backdrop early.
+  page.once('close', () => disposition.resolve({ action: 'abort', errorCode: 'failed' }));
+  await page.route(match, async (route) => {
+    if (!firstRequest) {
+      firstRequest = route;
+      requested.resolve({
         continue: async () => {
-          try {
-            await route.continue();
-          } finally {
-            released.resolve();
-          }
+          disposition.resolve({ action: 'continue' });
+          await firstSettled.promise;
         },
         abort: async (errorCode) => {
-          try {
-            await route.abort(errorCode);
-          } finally {
-            released.resolve();
-          }
+          disposition.resolve({ action: 'abort', errorCode });
+          await firstSettled.promise;
         },
       });
-      // A failed assertion closes the page; do not leave an unresolved handler behind.
-      const onClose = () => released.resolve();
-      page.once('close', onClose);
-      try {
-        await released.promise;
-      } finally {
-        page.off('close', onClose);
-      }
-    },
-    { times: 1 },
-  );
-  return pending;
+    }
+    const release = await disposition.promise;
+    try {
+      if (page.isClosed()) return;
+      if (release.action === 'continue') await route.continue();
+      else await route.abort(release.errorCode);
+    } finally {
+      if (route === firstRequest) firstSettled.resolve();
+    }
+  });
+  return requested;
 }
 
 function observeNandini(page: Page) {

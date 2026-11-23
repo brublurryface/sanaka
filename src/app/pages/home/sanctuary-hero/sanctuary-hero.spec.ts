@@ -116,9 +116,11 @@ describe('SanctuaryHero', () => {
     const loading = TestBed.inject(PageLoadingState);
     expect(loading.current()?.variant).toBe('nandini');
     finishDecode();
-    await fixture.whenStable();
-    expect(loading.current()).toBeNull();
-    expect(host.querySelector('section')?.dataset['scene']).toBe('ready');
+    await vi.waitFor(() => {
+      fixture.detectChanges();
+      expect(host.querySelector('section')?.dataset['scene']).toBe('ready');
+      expect(loading.current()).toBeNull();
+    });
     fixture.destroy();
   });
 

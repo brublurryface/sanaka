@@ -27,15 +27,16 @@ describe('LoadingIndicator', () => {
     'should select only %s with a static, SSR-safe reduced-motion fallback',
     (variant, extension, width, height, posterWidth, posterHeight) => {
       const host = render(variant);
+      if (variant === 'nandini') {
+        expect(host.querySelectorAll('img')).toHaveLength(1);
+        expect(host.querySelector('picture')).toBeNull();
+        host.querySelector('.loading-artwork__poster')?.dispatchEvent(new Event('load'));
+        fixture.detectChanges();
+      }
       const image = host.querySelector('.loading-artwork img') as HTMLImageElement;
       const source = host.querySelector('source');
 
       expect(host.querySelectorAll('img')).toHaveLength(variant === 'nandini' ? 2 : 1);
-      if (variant === 'nandini') {
-        expect(source?.getAttribute('srcset')).toBeNull();
-        host.querySelector('.loading-artwork__poster')?.dispatchEvent(new Event('load'));
-        fixture.detectChanges();
-      }
       expect(source?.getAttribute('srcset')).toBe(`/loadings/${variant}/animated.${extension}`);
       expect(source?.getAttribute('media')).toBe('(prefers-reduced-motion: no-preference)');
       expect(source?.getAttribute('width')).toBe(String(width));
@@ -99,17 +100,17 @@ describe('LoadingIndicator', () => {
   it('keeps Nandinī poster-first and accessible if the animated overlay fails', () => {
     const host = render('nandini');
     const poster = host.querySelector('.loading-artwork__poster') as HTMLImageElement;
-    const animation = host.querySelector('.loading-artwork img') as HTMLImageElement;
-    const source = host.querySelector('source');
-
     expect(poster.getAttribute('src')).toBe('/loadings/nandini/poster.png');
     expect(poster.getAttribute('fetchpriority')).toBe('high');
-    expect(animation.getAttribute('fetchpriority')).toBe('low');
-    expect(source?.getAttribute('srcset')).toBeNull();
+    expect(host.querySelector('.loading-artwork')).toBeNull();
 
     poster.dispatchEvent(new Event('load'));
     fixture.detectChanges();
-    expect(source?.getAttribute('srcset')).toBe('/loadings/nandini/animated.webp');
+    const animation = host.querySelector('.loading-artwork img') as HTMLImageElement;
+    expect(animation.getAttribute('fetchpriority')).toBe('low');
+    expect(host.querySelector('source')?.getAttribute('srcset')).toBe(
+      '/loadings/nandini/animated.webp',
+    );
 
     animation.dispatchEvent(new Event('error'));
     fixture.detectChanges();
