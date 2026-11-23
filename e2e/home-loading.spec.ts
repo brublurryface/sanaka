@@ -90,8 +90,14 @@ for (const motion of ['no-preference', 'reduce'] as const) {
       const clip = {
         x: Math.max(0, Math.floor(bounds.x)),
         y: Math.max(0, Math.floor(bounds.y)),
-        width: Math.min(viewport.width - Math.max(0, Math.floor(bounds.x)), Math.floor(bounds.width)),
-        height: Math.min(viewport.height - Math.max(0, Math.floor(bounds.y)), Math.floor(bounds.height)),
+        width: Math.min(
+          viewport.width - Math.max(0, Math.floor(bounds.x)),
+          Math.floor(bounds.width),
+        ),
+        height: Math.min(
+          viewport.height - Math.max(0, Math.floor(bounds.y)),
+          Math.floor(bounds.height),
+        ),
       };
       const frame = () => page.screenshot({ clip, scale: 'css', animations: 'allow' });
       const first = await frame();
