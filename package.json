@@ -61,7 +61,6 @@
     "@angular/build": "^22.2.6",
     "@angular/cli": "^22.2.6",
     "@angular/compiler-cli": "^22.2.4",
-    "@angular/platform-browser-dynamic": "^22.2.4",
     "@playwright/test": "^1.65.1",
     "@types/express": "^5.0.1",
     "@types/node": "^20.17.19",
