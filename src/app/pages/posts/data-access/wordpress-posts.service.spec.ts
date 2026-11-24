@@ -411,6 +411,8 @@ describe('WordPressPostsService', () => {
 
   it('should load a complete post with category lineage, tags, media and adjacent posts', () => {
     const sanitize = vi.spyOn(TestBed.inject(DomSanitizer), 'sanitize');
+    // O HTML hostil deve ser removido e o diagnóstico de segurança deve continuar visível.
+    const warn = vi.spyOn(console, 'warn');
     let result: PostDetail | null | undefined;
 
     service.getPostBySlug('voce').subscribe((post) => {
@@ -506,6 +508,10 @@ describe('WordPressPostsService', () => {
       ?.flush([{ slug: 'proxima', title: { rendered: 'Próxima' } }]);
 
     expect(sanitize).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledTimes(1);
+    expect(warn).toHaveBeenCalledWith(
+      expect.stringContaining('WARNING: sanitizing HTML stripped some content'),
+    );
     expect(result).toMatchObject({
       slug: 'voce',
       title: 'VOCÊ',

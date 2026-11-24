@@ -100,12 +100,33 @@ Não introduzir outra ferramenta sem identificar lacunas concretas.
 ## Compatibilidade e traduções
 
 Os testes do resolvedor de traduções SSR usam caminhos nativos do sistema operacional,
-sem assumir separadores de Linux. As suítes App, Home e Matrix leem os catálogos publicados
+sem assumir separadores de Linux. As suítes App, Home, Matrix e PostDetail leem os catálogos publicados
 por meio de uma fixture compartilhada, evitando catálogos parciais e chaves duplicadas.
 As configurações Vitest usam a extensão ESM explícita `.mts`.
 
 A validação Windows executa as suítes Angular e servidor com os mesmos limites de cobertura
-do Linux. A aprovação em ambos os sistemas ainda precisa ser comprovada pelo CI.
+do Linux. No commit `a58127c`, os dois ambientes aprovaram 880 testes Angular e 368 testes
+de servidor, com contadores de cobertura idênticos.
+
+Evidência: [Validate Sanaka](https://github.com/brublurryface/sanaka/actions/runs/45296714379).
+
+## Inventário de ocorrências da entrega
+
+- Traduções ausentes em testes de interface: os catálogos parciais foram substituídos pela
+  fixture compartilhada. O caso de retentativa no PostDetail verifica o texto renderizado.
+  A eliminação dos avisos restantes depende da nova validação.
+- Sanitização de HTML: o teste do serviço WordPress injeta um script e verifica a remoção.
+  O aviso esperado é mantido visível e passa a ser verificado explicitamente; não constitui
+  autorização para ignorar outros avisos de segurança.
+- Encerramento inesperado de worker Vitest no Windows local: não reproduzido no CI Windows
+  do commit `a58127c`. A revisão da suíte de newsletter identificou servidores HTTP em portas
+  efêmeras, encerramento de conexões e restauração de mocks e variáveis. A causa original
+  permanece indeterminada. Não foi alterada a concorrência nem adicionada retentativa.
+  Em nova ocorrência, registrar as versões de Node e npm, o comando, o log integral e o
+  resultado da repetição de `npm run test:server`, antes de alterar a configuração.
+- A proteção administrativa da main ainda precisa de confirmação por uma pessoa com
+  acesso às regras do repositório. O check agregador permanece obrigatório no fluxo
+  proposto, sem alegar que a regra administrativa já foi configurada.
 
 ## Limitações conhecidas da linha de base
 

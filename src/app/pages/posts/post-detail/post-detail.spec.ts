@@ -6,69 +6,15 @@ import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { RESPONSE_INIT } from '@angular/core';
 import { Title } from '@angular/platform-browser';
 import { ActivatedRoute, convertToParamMap, provideRouter } from '@angular/router';
-import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
+import { provideTransloco } from '@jsverse/transloco';
 import { BehaviorSubject, Observable, of, Subject, throwError } from 'rxjs';
 import { vi } from 'vitest';
+import { TranslationFixture } from '../../../../../testing/translation-fixture';
 
 import { PostDetail } from '../post';
 import { CharacterOboloService } from '../data-access/character-obolo.service';
 import { WORDPRESS_API_URL, WordPressPostsService } from '../data-access/wordpress-posts.service';
 import { PostDetailPage } from './post-detail';
-
-class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation(): Observable<Translation> {
-    return of({
-      posts: {
-        error: { retry: 'Tentar novamente' },
-        detail: {
-          loading: 'Abrindo a publicação...',
-          error: 'Não foi possível abrir esta publicação.',
-          notFound: 'Esta publicação não foi encontrada.',
-          back: 'Voltar à biblioteca',
-          progress: 'Progresso da leitura',
-          categories: 'Caminho de categorias',
-          category: 'Categoria',
-          categoriesGroup: 'Categorias',
-          relatedCategories: 'Também em {{ category }}',
-          tags: 'Tags',
-          exploreCategories: 'Explore categorias',
-          exploreTags: 'Explore tags',
-          readingTime: '{{ minutes }} min de leitura',
-          adjacent: 'Publicações próximas',
-          previous: 'Publicação anterior',
-          next: 'Próxima publicação',
-          obolo: {
-            moduleTitle: 'Óbolo de {{ name }}',
-            compactAction: 'Óbolo para {{ name }}',
-            offerAction: 'Ofertar óbolo',
-            confirmOffer: 'Ofertar um óbolo',
-            offered: 'Óbolo ofertado',
-            receivedOne: '{{ total }} recebido',
-            receivedMany: '{{ total }} recebidos',
-            receivedLabelOne: 'óbolo recebido',
-            receivedLabelMany: 'óbolos recebidos',
-            loading: 'Reunindo óbolos...',
-            unavailable: 'Contador temporariamente indisponível',
-            dialogEyebrow: 'Oferta à personagem',
-            invitation: 'Este gesto pertence a {{ name }}, não à publicação.',
-            submitting: 'Depositando o óbolo...',
-            success: 'Seu óbolo foi recebido por {{ name }}.',
-            loadError: 'Não foi possível consultar os óbolos agora.',
-            offerError: 'O óbolo não pôde ser depositado. Você pode tentar novamente.',
-            close: 'Fechar oferta de óbolo',
-            frontImageAlt: 'Frente do óbolo de {{ name }}',
-            backImageAlt: 'Verso do óbolo de {{ name }}',
-          },
-        },
-      },
-      app: {
-        pageTitles: { post: 'Publicação' },
-        pageDescriptions: { post: 'Leia esta publicação no santuário de Sanaka.' },
-      },
-      newsletter: { footerLink: 'Newsletter' },
-    });
-  }
-}
 
 describe('PostDetailPage', () => {
   let fixture: ComponentFixture<PostDetailPage>;
@@ -136,7 +82,7 @@ describe('PostDetailPage', () => {
             reRenderOnLangChange: true,
             prodMode: true,
           },
-          loader: MockTranslocoLoader,
+          loader: TranslationFixture,
         }),
       ],
     }).compileComponents();
@@ -174,7 +120,8 @@ describe('PostDetailPage', () => {
     fixture.detectChanges();
 
     expect(compiled.querySelector('app-page-loading')).toBeNull();
-    expect(compiled.querySelector('.post-detail__feedback[role="alert"] button')).not.toBeNull();
+    const retry = compiled.querySelector('.post-detail__feedback[role="alert"] button');
+    expect(retry?.textContent?.trim()).toBe('Tentar novamente');
   });
 
   it('should render the complete publication, taxonomy and navigation', () => {
