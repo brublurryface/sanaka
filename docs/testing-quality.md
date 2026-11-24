@@ -22,7 +22,7 @@ e [Article SSR experiment](https://github.com/brublurryface/sanaka/actions/runs/
 
 A cobertura Angular mede TypeScript de produção no escopo configurado pelo comando
 `test:coverage`; as rotas declarativas são excluídas. A cobertura do servidor considera
-os módulos explicitamente incluídos em `vitest.server.config.ts`. Esses números não
+os módulos explicitamente incluídos em `vitest.server.config.mts`. Esses números não
 representam cobertura de todos os arquivos, templates, estilos ou do código WordPress.
 
 ## Contratos de qualidade
@@ -82,8 +82,8 @@ de pendências reais. Não se considera uma etapa aprovada apenas porque foi pla
 ## Prevenção de falhas de entrega
 
 O protocolo local está em [CONTRIBUTING.md](../CONTRIBUTING.md). As fases do comando de
-validação são compartilhadas com o CI. A validação do código e a integração WordPress
-podem executar em paralelo; o check Validate Sanaka exige o sucesso de ambas.
+validação são compartilhadas com o CI. A validação Linux, a validação Windows e a integração WordPress executam em paralelo.
+O check Validate Sanaka exige o sucesso das três verificações.
 
 A versão de Node vem de `.node-version` e a versão de npm vem de `package.json`.
 O job de validação usa a imagem Playwright com navegadores pré-instalados, já adotada
@@ -96,6 +96,16 @@ completa às regras administrativas ficou indisponível para a integração.
 A auditoria de regras ESLint e de qualidade de templates continua pendente. O TypeScript
 estrito, os templates estritos, a análise arquitetural e a duplicação já são verificados.
 Não introduzir outra ferramenta sem identificar lacunas concretas.
+
+## Compatibilidade e traduções
+
+Os testes do resolvedor de traduções SSR usam caminhos nativos do sistema operacional,
+sem assumir separadores de Linux. As suítes App, Home e Matrix leem os catálogos publicados
+por meio de uma fixture compartilhada, evitando catálogos parciais e chaves duplicadas.
+As configurações Vitest usam a extensão ESM explícita `.mts`.
+
+A validação Windows executa as suítes Angular e servidor com os mesmos limites de cobertura
+do Linux. A aprovação em ambos os sistemas ainda precisa ser comprovada pelo CI.
 
 ## Limitações conhecidas da linha de base
 

@@ -2,9 +2,10 @@ import { provideHttpClient } from '@angular/common/http';
 import { Component } from '@angular/core';
 import { TestBed } from '@angular/core/testing';
 import { NavigationStart, provideRouter, Router } from '@angular/router';
-import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
+import { provideTransloco } from '@jsverse/transloco';
 import { filter, firstValueFrom, of, Subject } from 'rxjs';
 import { beforeEach, describe, expect, it, vi } from 'vitest';
+import { TranslationFixture } from '../../testing/translation-fixture';
 
 import { App } from './app';
 import { routes } from './app.routes';
@@ -20,65 +21,6 @@ import { SanakaverseBooksService } from './pages/sanakaverse/data-access/sanakav
 
 @Component({ template: 'Ready' })
 class ReadyPage {}
-
-class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation(lang: string) {
-    const translations = {
-      'pt-BR': {
-        posts: { loading: 'Carregando publicações...' },
-        newsletter: { footerLink: 'Newsletter' },
-        app: {
-          title: 'Sanaka',
-          navigation: {
-            ariaLabel: 'Navegação principal',
-            home: 'Início',
-            posts: 'Posts',
-            matrix: 'Matrix',
-            samvit: 'Saṃvit',
-            about: 'Sobre',
-          },
-          language: {
-            selector: 'Seletor de idioma',
-          },
-          footer: {
-            navigation: 'Navegação do rodapé',
-            about: 'Sobre',
-            contact: 'Contato',
-            sanakaverse: 'Sanaka-loka',
-            signature: 'Estudos entre códigos e presença.',
-          },
-        },
-      },
-      en: {
-        posts: { loading: 'Loading publications...' },
-        newsletter: { footerLink: 'Newsletter' },
-        app: {
-          title: 'Sanaka',
-          navigation: {
-            ariaLabel: 'Main navigation',
-            home: 'Home',
-            posts: 'Posts',
-            matrix: 'Matrix',
-            samvit: 'Saṃvit',
-            about: 'About',
-          },
-          language: {
-            selector: 'Language selector',
-          },
-          footer: {
-            navigation: 'Footer navigation',
-            about: 'About',
-            contact: 'Contact',
-            sanakaverse: 'Sanaka-loka',
-            signature: 'Studies between code and presence.',
-          },
-        },
-      },
-    };
-
-    return of(translations[lang as keyof typeof translations] ?? translations['pt-BR']);
-  }
-}
 
 describe('App', () => {
   let mockLanguagePreferenceService: {
@@ -108,7 +50,7 @@ describe('App', () => {
             reRenderOnLangChange: true,
             prodMode: true,
           },
-          loader: MockTranslocoLoader,
+          loader: TranslationFixture,
         }),
       ],
     }).compileComponents();

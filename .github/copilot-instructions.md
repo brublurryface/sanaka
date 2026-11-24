@@ -75,7 +75,7 @@
 - If the user provides complete file contents or an explicit implementation specification, treat that specification as the source of truth unless it conflicts with the current repository.
 - If the specification conflicts with the current codebase, stop and report the conflict instead of guessing.
 - Do not make speculative improvements outside the task.
-- Do not silently fix unrelated warnings.
+- Act as a critical reviewer, not a defender of the current implementation. Investigate warnings and errors with equal priority, even when functionality is unaffected. Never silence or dismiss warnings to obtain a passing check. Record findings and externally controlled blockers explicitly.
 - Standing authorization from the author (2026-10-17): commit and push the reviewed changes of a completed, validated delivery and open a pull request against `main` for her review. Do not ask for permission again for these steps.
 - Do not merge pull requests or delete branches unless explicitly requested. The author performs the merge.
 - Do not use destructive Git commands unless explicitly requested.

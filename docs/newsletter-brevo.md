@@ -204,7 +204,7 @@ Os testes do servidor usam a rota HTTP real com uma função de rede simulada. O
 - `.env.example`
 - `angular.json`
 - `package.json`
-- `vitest.server.config.ts`
+- `vitest.server.config.mts`
 - `docs/contact-form-deployment.md`
 - `docs/newsletter-brevo.md`
 

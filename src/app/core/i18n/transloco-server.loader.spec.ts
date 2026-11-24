@@ -10,17 +10,19 @@ import {
 
 describe('resolveServerTranslationsDirectory', () => {
   it('should prefer translations copied beside the production server bundle', () => {
-    const directoryExists = vi.fn((path: string) => path === '/app/browser/i18n');
+    const bundled = join('app', 'browser', 'i18n');
+    const directoryExists = vi.fn((path: string) => path === bundled);
 
-    expect(resolveServerTranslationsDirectory('/app/server', '/workspace', directoryExists)).toBe(
-      '/app/browser/i18n',
-    );
+    expect(
+      resolveServerTranslationsDirectory(join('app', 'server'), 'workspace', directoryExists),
+    ).toBe(bundled);
+    expect(directoryExists).toHaveBeenCalledWith(bundled);
   });
 
   it('should use public translations while Angular prerenders from a temporary bundle', () => {
-    expect(resolveServerTranslationsDirectory('/tmp/prerender', '/workspace', () => false)).toBe(
-      '/workspace/public/i18n',
-    );
+    expect(
+      resolveServerTranslationsDirectory(join('tmp', 'prerender'), 'workspace', () => false),
+    ).toBe(join('workspace', 'public', 'i18n'));
   });
 });
 

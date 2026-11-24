@@ -11,7 +11,7 @@
     "test": "ng test",
     "test:ci": "ng test --watch=false",
     "test:browser:security": "ng test --configuration=browser-security --watch=false",
-    "test:server": "vitest run --config vitest.server.config.ts --coverage && node scripts/check-coverage.mjs server",
+    "test:server": "vitest run --config vitest.server.config.mts --coverage && node scripts/check-coverage.mjs server",
     "test:coverage-policy": "node --test scripts/coverage-policy.test.mjs",
     "test:coverage": "ng test --watch=false --coverage --coverage-include=src/app/**/*.ts --coverage-exclude=src/app/**/*.routes.ts --coverage-reporters=text-summary --coverage-reporters=json-summary && node scripts/check-coverage.mjs angular",
     "duplication:check": "jscpd src/app --format typescript --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",

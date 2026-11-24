@@ -56,6 +56,8 @@ formatação, consulte o artefato `formatting-diagnostics` antes de tentar outra
   os consumidores afetados, as responsabilidades e as evidências de validação.
 - Execute `npm ci`, `npm run check` e `npm run test:e2e:types`. Para fluxos de navegador,
   execute `npm run test:e2e` com o build e os navegadores correspondentes à versão do lockfile.
+- Investigue warnings com a mesma prioridade dos errors, mesmo sem impacto funcional.
+  Não silencie avisos nem aceite defeitos de implementação porque a aplicação funciona.
 - Verifique todos os workflows no commit efetivamente revisado. Um check cancelado não é uma
   aprovação. Registre testes não executados e limitações de ambiente.
 - Não reduza limites de cobertura, desabilite testes, introduza retentativas ou aumente
