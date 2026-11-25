@@ -111,3 +111,29 @@ Os demais registros incluem três coincidências de comentários, limites de med
 animações independentes, além de contratos com variações intencionais. A revisão do contraste
 dos controles de Posts e a comparação visual continuam necessárias. O progresso de leitura
 foi registrado separadamente na [issue #126](https://github.com/brublurryface/sanaka/issues/126).
+
+## Investigação da falha de Home no commit 08b96dd
+
+O workflow [Browser critical flows](https://github.com/brublurryface/sanaka/actions/runs/45682830318)
+aprovou 174 de 175 testes. O caso de imagem pronta no Chromium mobile recebeu
+`/loadings/nandini/poster.png` indevidamente. O
+[trace](https://github.com/brublurryface/sanaka/actions/runs/45682830318/artifacts/15055811248)
+confirma resposta 200 do cenário antes do início do módulo Angular, seguida da
+requisição do poster. O teste já aguardava decode() antes de iniciar a hidratação.
+
+O componente repetia decode() e concorria com requestAnimationFrame. A API não fornece
+um indicador síncrono de decodificação pronta; complete indica conclusão do download,
+não necessariamente disponibilidade para pintura. A intervenção distingue o cenário
+já baixado (janela de 150 ms para confirmar decode) do download pendente (próximo frame).
+O prazo é uma política de apresentação, não um timeout de rede ou uma garantia de que
+o navegador nunca levará mais de 150 ms. A finalização da consulta ou a destruição do
+componente cancela a inscrição do indicador. Imagem pendente por mais tempo continua
+exibindo Nandinī. Erros continuam liberando a página sem Saṃvit sobre o cenário ausente.
+O teste de navegador original permanece intacto.
+
+O trace também contém observações CSP report-only sobre scripts inline, comportamento
+já inventariado em docs/security-response-headers.md, e avisos de decodificação WOFF2:
+a fixture de fontes devolve CSS vazio inclusive para requisições de fontes binárias.
+Esses achados são independentes da hipótese de disputa de agendamento e não foram
+silenciados. A política CSP permanece intacta; a fixture de fontes exige revisão própria.
+A correção precisa passar pela compilação e pelos testes reais em desktop e mobile.

@@ -124,6 +124,79 @@ describe('SanctuaryHero', () => {
     fixture.destroy();
   });
 
+  it.each(['ready', 'pending', 'error', 'leave'] as const)(
+    'handles an already downloaded scene: %s',
+    async (result) => {
+      vi.spyOn(HTMLImageElement.prototype, 'complete', 'get').mockReturnValue(true);
+      vi.spyOn(HTMLImageElement.prototype, 'naturalWidth', 'get').mockReturnValue(1672);
+      const descriptor = Object.getOwnPropertyDescriptor(HTMLImageElement.prototype, 'decode');
+      let finishDecode!: () => void;
+      const decoded = new Promise<void>((resolve, reject) => {
+        finishDecode = result === 'error' ? () => reject(new Error('decode')) : resolve;
+      });
+      const decode = vi.fn(() => decoded);
+      Object.defineProperty(HTMLImageElement.prototype, 'decode', {
+        configurable: true,
+        value: decode,
+      });
+
+      // O timer RxJS usa intervalos; mantenha os frames reais para reproduzir a disputa.
+      vi.useFakeTimers({ toFake: ['setInterval', 'clearInterval'] });
+      try {
+        const loading = TestBed.inject(PageLoadingState);
+        const begin = vi.spyOn(loading, 'begin');
+        const fixture = TestBed.createComponent(SanctuaryHero);
+        fixture.detectChanges();
+        const host: HTMLElement = fixture.nativeElement;
+        await fixture.whenStable();
+        expect(decode).toHaveBeenCalledOnce();
+
+        // A decodificação pode continuar pendente depois do primeiro frame.
+        await new Promise(requestAnimationFrame);
+        await fixture.whenStable();
+        fixture.detectChanges();
+        expect(host.querySelector('section')?.dataset['scene']).toBe('initial');
+        expect(begin).not.toHaveBeenCalled();
+
+        if (result === 'pending') {
+          await vi.advanceTimersByTimeAsync(150);
+          fixture.detectChanges();
+          await fixture.whenStable();
+          expect(loading.current()?.variant).toBe('nandini');
+        } else if (result === 'leave') {
+          fixture.destroy();
+          finishDecode();
+          await decoded;
+          await vi.advanceTimersByTimeAsync(150);
+          expect(loading.current()).toBeNull();
+          expect(begin).not.toHaveBeenCalled();
+          return;
+        }
+
+        finishDecode();
+        await decoded.catch(() => undefined);
+        await fixture.whenStable();
+        fixture.detectChanges();
+        expect(host.querySelector('section')?.dataset['scene']).toBe(
+          result === 'error' ? 'failed' : 'ready',
+        );
+        expect(loading.current()).toBeNull();
+        await vi.advanceTimersByTimeAsync(150);
+        fixture.detectChanges();
+        if (result !== 'pending') expect(begin).not.toHaveBeenCalled();
+        expect(loading.current()).toBeNull();
+        fixture.destroy();
+      } finally {
+        vi.useRealTimers();
+        if (descriptor) {
+          Object.defineProperty(HTMLImageElement.prototype, 'decode', descriptor);
+        } else {
+          Reflect.deleteProperty(HTMLImageElement.prototype, 'decode');
+        }
+      }
+    },
+  );
+
   it('should be created', () => {
     expect(TestBed.createComponent(SanctuaryHero).componentInstance).toBeTruthy();
   });

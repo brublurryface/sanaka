@@ -11,9 +11,21 @@ import {
 import { takeUntilDestroyed } from '@angular/core/rxjs-interop';
 import { RouterLink } from '@angular/router';
 import { TranslocoPipe } from '@jsverse/transloco';
-import { fromEvent, merge, type Observable, of, switchMap, take } from 'rxjs';
+import {
+  animationFrames,
+  finalize,
+  fromEvent,
+  merge,
+  type Observable,
+  of,
+  switchMap,
+  take,
+  timer,
+} from 'rxjs';
 
 import { PageLoading } from '../../../shared/loading-indicator/page-loading';
+
+const cachedSceneGraceMs = 150;
 
 @Component({
   imports: [RouterLink, TranslocoPipe, PageLoading],
@@ -33,13 +45,12 @@ export class SanctuaryHero {
       // O HTML já pode ter carregado o cenário antes da hidratação.
       const image = this.backdrop().nativeElement;
       const cached = image.complete;
-      // Exibe o loading apenas quando a imagem ainda não está pronta para ser
-      // mostrada no próximo quadro, inclusive se o download já terminou
-      // mas a decodificação continua pendente.
-      const frame = requestAnimationFrame(() => {
-        if (this.sceneState() === 'initial') this.sceneState.set('loading');
-      });
-      destroyRef.onDestroy(() => cancelAnimationFrame(frame));
+      // decode() é assíncrono mesmo quando a imagem já foi decodificada.
+      // Uma cena baixada tem uma janela curta para concluir essa confirmação,
+      // evitando solicitar Nandinī por uma disputa com o próximo frame.
+      const loading = (cached ? timer(cachedSceneGraceMs) : animationFrames())
+        .pipe(take(1))
+        .subscribe(() => this.sceneState.set('loading'));
 
       const settled: Observable<unknown> = cached
         ? of(null)
@@ -53,6 +64,7 @@ export class SanctuaryHero {
             return true;
           }),
           takeUntilDestroyed(destroyRef),
+          finalize(() => loading.unsubscribe()),
         )
         .subscribe({
           next: (ready) => this.sceneState.set(ready ? 'ready' : 'failed'),
