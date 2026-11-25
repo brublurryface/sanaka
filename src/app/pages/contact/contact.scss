@@ -1,3 +1,5 @@
+@use '../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 
@@ -37,8 +39,7 @@
 
   color: var(--sanaka-ivory);
 
-  font-size: var(--sanaka-type-hero-intro-size);
-  line-height: var(--sanaka-type-hero-intro-line-height);
+  @include typography.hero-intro;
 }
 
 .contact-content {

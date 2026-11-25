@@ -1,0 +1,30 @@
+// Os tokens continuam em styles.scss; estes mixins definem os papéis sem emitir seletores globais.
+// As dimensões, cores, margens e variações responsivas permanecem nos consumidores.
+@mixin page-title-scale {
+  font-size: var(--sanaka-type-page-title-size);
+  font-weight: var(--sanaka-type-page-title-weight);
+  line-height: var(--sanaka-type-page-title-line-height);
+  letter-spacing: var(--sanaka-type-page-title-spacing);
+}
+
+@mixin page-title {
+  font-family: var(--sanaka-font-display);
+  @include page-title-scale;
+}
+
+@mixin hero-intro {
+  font-size: var(--sanaka-type-hero-intro-size);
+  line-height: var(--sanaka-type-hero-intro-line-height);
+}
+
+@mixin editorial-eyebrow($size: var(--sanaka-type-editorial-label-size)) {
+  color: var(--sanaka-gold-soft);
+
+  font-family: var(--sanaka-font-body);
+  font-size: $size;
+  font-weight: var(--sanaka-type-eyebrow-weight);
+  line-height: var(--sanaka-type-eyebrow-line-height);
+  letter-spacing: var(--sanaka-type-eyebrow-spacing);
+
+  text-transform: uppercase;
+}

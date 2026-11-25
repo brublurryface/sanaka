@@ -1,3 +1,5 @@
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 }
@@ -54,15 +56,7 @@
 .section-eyebrow {
   margin: 0 0 1.5rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: var(--sanaka-type-eyebrow-weight);
-  line-height: var(--sanaka-type-eyebrow-line-height);
-  letter-spacing: var(--sanaka-type-eyebrow-spacing);
-
-  text-transform: uppercase;
+  @include typography.editorial-eyebrow;
 }
 
 .paths-heading h2 {

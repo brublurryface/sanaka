@@ -1,3 +1,5 @@
+@use '../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 
@@ -33,10 +35,7 @@
   max-width: 14ch;
   margin: 1.1rem 0 0;
 
-  font-size: var(--sanaka-type-page-title-size);
-  font-weight: var(--sanaka-type-page-title-weight);
-  line-height: var(--sanaka-type-page-title-line-height);
-  letter-spacing: var(--sanaka-type-page-title-spacing);
+  @include typography.page-title-scale;
 }
 
 .about-hero h1 span {
@@ -51,8 +50,7 @@
 
   color: var(--sanaka-ivory);
 
-  font-size: var(--sanaka-type-hero-intro-size);
-  line-height: var(--sanaka-type-hero-intro-line-height);
+  @include typography.hero-intro;
 
   white-space: pre-line;
 }

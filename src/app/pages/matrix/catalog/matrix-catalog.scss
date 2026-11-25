@@ -1,3 +1,5 @@
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 }
@@ -37,11 +39,7 @@
 
   color: var(--sanaka-ivory);
 
-  font-family: var(--sanaka-font-display);
-  font-size: var(--sanaka-type-page-title-size);
-  font-weight: var(--sanaka-type-page-title-weight);
-  line-height: var(--sanaka-type-page-title-line-height);
-  letter-spacing: var(--sanaka-type-page-title-spacing);
+  @include typography.page-title;
 
   text-wrap: balance;
 }
@@ -79,8 +77,7 @@
   max-width: var(--sanaka-measure-hero-intro);
   margin: 2rem 0 0;
   color: var(--sanaka-ivory);
-  font-size: var(--sanaka-type-hero-intro-size);
-  line-height: var(--sanaka-type-hero-intro-line-height);
+  @include typography.hero-intro;
 }
 
 .catalog-list {
