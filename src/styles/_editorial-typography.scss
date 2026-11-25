@@ -28,3 +28,34 @@
 
   text-transform: uppercase;
 }
+
+@mixin section-title-scale {
+  font-size: clamp(2.5rem, 4vw, 3.8rem);
+  line-height: 0.95;
+  letter-spacing: -0.035em;
+}
+
+@mixin signature {
+  font-family: var(--sanaka-font-display);
+  font-size: var(--sanaka-type-signature-size);
+  font-weight: 500;
+}
+
+@mixin gold-label($spacing) {
+  color: var(--sanaka-gold-soft);
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 700;
+  letter-spacing: $spacing;
+  text-transform: uppercase;
+}
+
+@mixin interface-label($spacing) {
+  color: var(--sanaka-gold-soft);
+
+  font-family: var(--sanaka-font-body);
+  font-size: var(--sanaka-type-editorial-label-size);
+  font-weight: 600;
+  letter-spacing: $spacing;
+
+  text-transform: uppercase;
+}

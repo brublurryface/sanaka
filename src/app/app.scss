@@ -1,3 +1,6 @@
+@use '../styles/focus-indicator' as focus;
+@use '../styles/editorial-typography' as typography;
+
 :host {
   min-height: 100vh;
   min-height: 100dvh;
@@ -210,8 +213,7 @@ mat-toolbar {
 }
 
 .main-nav a:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 6px;
+  @include focus.ring(1px, 6px);
 }
 
 /* -----------------------
@@ -343,15 +345,12 @@ mat-toolbar {
 
   color: var(--sanaka-ivory);
 
-  font-family: var(--sanaka-font-display);
-  font-size: var(--sanaka-type-signature-size);
-  font-weight: 500;
+  @include typography.signature;
   line-height: 1.2;
 }
 
 .app-footer__navigation a:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(1px, 5px);
 }
 
 .app-footer__navigation {
@@ -419,8 +418,7 @@ mat-toolbar {
 }
 
 .app-footer__future a:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(1px, 5px);
 }
 
 @keyframes footer-light-breathe {

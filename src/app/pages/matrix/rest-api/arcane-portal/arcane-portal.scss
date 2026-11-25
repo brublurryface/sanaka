@@ -1,3 +1,4 @@
+@use '../../../../../styles/focus-indicator' as focus;
 @use '../portal-controls';
 
 :host {
@@ -180,8 +181,7 @@ app-metatron-mark.portal-state__symbol {
 
 .portal-state button:focus-visible,
 .image-caption button:focus-visible {
-  outline: 2px solid var(--sanaka-ivory);
-  outline-offset: 3px;
+  @include focus.ring(2px, 3px, var(--sanaka-ivory));
 }
 
 .portal-state button:disabled {
@@ -319,8 +319,7 @@ app-metatron-mark.portal-state__symbol {
 }
 
 .image-caption__actions a:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 4px;
+  @include focus.ring(2px, 4px);
 }
 
 .portal-source {

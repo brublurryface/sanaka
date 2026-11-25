@@ -1,3 +1,5 @@
+@use '../../../../styles/focus-indicator' as focus;
+
 :host {
   display: block;
 }
@@ -55,8 +57,7 @@
   }
 
   a:focus-visible {
-    outline: 1px solid var(--sanaka-gold-soft);
-    outline-offset: 3px;
+    @include focus.ring(1px, 3px);
   }
 }
 

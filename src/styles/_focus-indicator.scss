@@ -1,0 +1,11 @@
+// O indicador mantém a geometria e a cor escolhidas por cada controle.
+// O seletor, a interação e o contexto de contraste pertencem ao consumidor.
+@mixin ring($width, $offset, $color: var(--sanaka-gold-soft)) {
+  outline: $width solid $color;
+  outline-offset: $offset;
+}
+
+@mixin gold-highlight {
+  background: var(--sanaka-gold-soft);
+  color: var(--sanaka-bg);
+}

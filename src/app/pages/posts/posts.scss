@@ -1,3 +1,4 @@
+@use '../../../styles/focus-indicator' as focus;
 @use '../../../styles/editorial-typography' as typography;
 
 :host {
@@ -86,8 +87,7 @@
 }
 
 .posts-header__sanakaverse:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(2px, 5px);
 }
 
 /* -----------------------
@@ -105,14 +105,7 @@
 
   margin-bottom: 0.65rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
+  @include typography.interface-label(0.12em);
 }
 
 .posts-search__control {
@@ -552,8 +545,7 @@
 
 .posts-filters__field select:focus-visible,
 .posts-filters button:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 3px;
+  @include focus.ring(2px, 3px);
 }
 
 .posts-filters__feedback {

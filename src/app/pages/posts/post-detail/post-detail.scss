@@ -1,3 +1,5 @@
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 
@@ -191,12 +193,7 @@
   justify-content: center;
   gap: 0.55rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  @include typography.gold-label(0.16em);
 }
 
 .post-reader__categories a,
@@ -400,12 +397,7 @@
 .post-reader__taxonomy p {
   margin: 0 0 0.8rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.16em;
-  text-transform: uppercase;
+  @include typography.gold-label(0.16em);
 }
 
 .post-reader__taxonomy-values,
@@ -469,12 +461,7 @@
 }
 
 .post-detail__adjacent a > span {
-  color: var(--sanaka-gold-soft);
-
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  @include typography.gold-label(0.14em);
 }
 
 .post-detail__adjacent strong {

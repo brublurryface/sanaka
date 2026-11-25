@@ -1,3 +1,6 @@
+@use '../../../../styles/focus-indicator' as focus;
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 
@@ -19,9 +22,7 @@
   scroll-margin-top: 7rem;
 
   color: var(--sanaka-ivory);
-  font-family: var(--sanaka-font-display);
-  font-size: var(--sanaka-type-signature-size);
-  font-weight: 500;
+  @include typography.signature;
 }
 
 .newsletter__intro h2:focus {
@@ -181,8 +182,7 @@
 
 .newsletter input:focus-visible,
 .newsletter button:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 4px;
+  @include focus.ring(2px, 4px);
 }
 
 .newsletter__email input:focus-visible,

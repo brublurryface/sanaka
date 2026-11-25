@@ -1,3 +1,4 @@
+@use '../../../../styles/focus-indicator' as focus;
 @use '../../../../styles/editorial-typography' as typography;
 
 :host {
@@ -147,14 +148,7 @@
 .path-label {
   margin: 0 0 0.45rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-
-  text-transform: uppercase;
+  @include typography.interface-label(0.14em);
 }
 
 .path-content h3 {
@@ -204,8 +198,7 @@
 }
 
 .path-card:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: -1px;
+  @include focus.ring(1px, -1px);
 }
 
 @media (max-width: 900px) {

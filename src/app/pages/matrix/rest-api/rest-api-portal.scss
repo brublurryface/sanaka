@@ -1,3 +1,4 @@
+@use '../../../../styles/focus-indicator' as focus;
 @use '../../../../styles/editorial-typography' as typography;
 @use 'portal-controls';
 
@@ -29,8 +30,7 @@
 
 .rest-hero__back:focus-visible,
 .rest-hero__action:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 4px;
+  @include focus.ring(2px, 4px);
 }
 
 .rest-hero h1 {
@@ -114,11 +114,7 @@
 
 .portal-controls > label,
 .portal-controls legend {
-  color: var(--sanaka-gold-soft);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  @include typography.gold-label(0.14em);
 }
 
 .portal-controls__field {
@@ -150,8 +146,7 @@
 .portal-controls input:focus-visible {
   position: relative;
   z-index: 1;
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: -2px;
+  @include focus.ring(2px, -2px);
 }
 
 .portal-controls__submit {
@@ -170,8 +165,7 @@
 }
 
 .portal-controls button:focus-visible {
-  outline: 2px solid var(--sanaka-ivory);
-  outline-offset: 3px;
+  @include focus.ring(2px, 3px, var(--sanaka-ivory));
 }
 
 .portal-controls button:disabled {
@@ -222,8 +216,7 @@
 }
 
 .portal-controls .portal-controls__clear:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: -0.4rem;
+  @include focus.ring(2px, -0.4rem);
 }
 
 .portal-controls fieldset {

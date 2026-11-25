@@ -1,3 +1,5 @@
+@use '../../../../../styles/focus-indicator' as focus;
+
 :host {
   display: block;
 }
@@ -105,8 +107,7 @@
 
 .obolo-widget__action:focus-visible,
 .obolo-widget__compact-action:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 0.35rem;
+  @include focus.ring(1px, 0.35rem);
 }
 
 .obolo-widget--compact {

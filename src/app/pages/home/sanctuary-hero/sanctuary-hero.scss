@@ -1,3 +1,4 @@
+@use '../../../../styles/focus-indicator' as focus;
 @use '../../../../styles/editorial-typography' as typography;
 
 :host {
@@ -300,8 +301,7 @@ h1 > span {
 }
 
 .action:focus-visible {
-  outline: 1px solid var(--sanaka-ivory);
-  outline-offset: 5px;
+  @include focus.ring(1px, 5px, var(--sanaka-ivory));
 }
 
 /* -----------------------
@@ -487,8 +487,7 @@ h1 > span {
 }
 
 .scroll-indicator:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 6px;
+  @include focus.ring(1px, 6px);
 }
 
 /* -----------------------

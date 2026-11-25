@@ -17,6 +17,7 @@
     "duplication:check": "jscpd src/app --format typescript --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",
     "duplication:check:all": "jscpd src/app --format typescript,markup,scss --min-lines 5 --min-tokens 50 --ignore \"**/*.spec.ts\" --threshold 3 --reporters console",
     "duplication:report": "jscpd src/app --min-lines 5 --min-tokens 50 --ignore **/*.spec.ts --reporters console",
+    "duplication:report:styles": "jscpd src --format scss --min-lines 5 --min-tokens 50 --reporters console",
     "format": "prettier --write .",
     "format:check": "prettier --check .",
     "audit:dependencies": "npm audit --audit-level=moderate",
@@ -33,7 +34,7 @@
     "test:git-policy": "node --test scripts/git-policy.test.mjs",
     "check:static": "npm run matrix:source:check && npm run architecture:check && npm run test:architecture && npm run test:state-contracts && npm run test:coverage-policy && npm run test:git-policy && npm run test:e2e:types",
     "check:tests": "npm run test:server && npm run test:coverage",
-    "check:build": "npm run duplication:check && npm run duplication:check:all && npm run build"
+    "check:build": "npm run duplication:check && npm run duplication:check:all && npm run duplication:report:styles && npm run build"
   },
   "private": true,
   "engines": {

@@ -1,3 +1,5 @@
+@use '../../../styles/focus-indicator' as focus;
+@use '../../../styles/editorial-layout' as layout;
 @use '../../../styles/editorial-typography' as typography;
 
 :host {
@@ -86,9 +88,7 @@
   align-items: center;
   gap: clamp(2rem, 4vw, 5rem);
 
-  width: var(--sanaka-page-shell-width);
-  margin-inline: auto;
-  padding-block: clamp(3rem, 6vw, 6rem) clamp(4.5rem, 8vw, 8rem);
+  @include layout.encounter-shell;
 }
 
 .not-found__copy {
@@ -177,8 +177,7 @@
 }
 
 .not-found__action:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(1px, 5px);
 }
 
 .not-found__action--primary {

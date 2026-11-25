@@ -1,3 +1,5 @@
+@use '../../../../styles/focus-indicator' as focus;
+@use '../exhibit-surface' as exhibit;
 @use '../../../../styles/editorial-typography' as typography;
 
 :host {
@@ -82,19 +84,15 @@
 
 .catalog-list {
   padding: var(--sanaka-space-page-content-start) 0 clamp(4rem, 8vw, 7rem);
-  background:
-    radial-gradient(circle at 12% 30%, rgba(123, 82, 180, 0.08), transparent 25rem),
-    linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));
+  @include exhibit.surface;
 }
 
 .catalog-heading h2,
 .upcoming-heading h2 {
   margin: 0.8rem 0 0;
   font-family: var(--sanaka-font-display);
-  font-size: clamp(2.5rem, 4vw, 3.8rem);
   font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  @include typography.section-title-scale;
 }
 
 .catalog-heading h2 > span {
@@ -134,8 +132,7 @@
 }
 
 .featured-experiment:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 4px;
+  @include focus.ring(2px, 4px);
 }
 
 .featured-experiment__number {
@@ -146,11 +143,7 @@
 }
 
 .featured-experiment__status {
-  color: var(--sanaka-gold-soft);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 700;
-  letter-spacing: 0.14em;
-  text-transform: uppercase;
+  @include typography.gold-label(0.14em);
 }
 
 .featured-experiment h3 {

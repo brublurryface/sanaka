@@ -1,3 +1,5 @@
+@use '../../../styles/focus-indicator' as focus;
+@use 'exhibit-surface' as exhibit;
 @use '../../../styles/editorial-typography' as typography;
 
 :host {
@@ -27,8 +29,7 @@
 }
 
 .matrix-hero__back:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(2px, 5px);
 }
 
 .matrix-hero h1 {
@@ -82,9 +83,7 @@
 
   scroll-margin-top: var(--sanaka-header-height, 64px);
 
-  background:
-    radial-gradient(circle at 12% 30%, rgba(123, 82, 180, 0.08), transparent 25rem),
-    linear-gradient(180deg, var(--sanaka-bg), #10151d 7rem, var(--sanaka-bg));
+  @include exhibit.surface;
 }
 
 .exhibit-heading h2 {
@@ -92,10 +91,8 @@
   margin: 1rem 0 0;
 
   font-family: var(--sanaka-font-display);
-  font-size: clamp(2.5rem, 4vw, 3.8rem);
   font-weight: 500;
-  line-height: 0.95;
-  letter-spacing: -0.035em;
+  @include typography.section-title-scale;
 }
 
 .exhibit-heading > p {
@@ -181,8 +178,7 @@ input:focus-visible {
   position: relative;
   z-index: 1;
 
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 1px;
+  @include focus.ring(2px, 1px);
 }
 
 .message-control button {
@@ -225,13 +221,11 @@ input:focus-visible {
 
 button:hover:not(:disabled),
 button:focus-visible {
-  background: var(--sanaka-gold-soft);
-  color: var(--sanaka-bg);
+  @include focus.gold-highlight;
 }
 
 button:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 3px;
+  @include focus.ring(2px, 3px);
 }
 
 button:disabled {

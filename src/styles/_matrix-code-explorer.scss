@@ -1,3 +1,5 @@
+@use 'focus-indicator' as focus;
+
 .matrix-code-explorer {
   .code-explorer__header {
     display: flex;
@@ -122,8 +124,7 @@
   }
 
   .code-window__pages button:focus-visible {
-    outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: -2px;
+    @include focus.ring(2px, -2px);
   }
 
   .code-window__title {
@@ -229,8 +230,7 @@
   }
 
   .code-window__navigation button:focus-visible {
-    outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: 2px;
+    @include focus.ring(2px, 2px);
   }
 }
 
