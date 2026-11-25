@@ -1,60 +1,10 @@
 import { ComponentFixture, TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { Translation, TranslocoLoader, provideTransloco } from '@jsverse/transloco';
-import { Observable, of } from 'rxjs';
+import { provideTransloco } from '@jsverse/transloco';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TranslationFixture } from '../../../../testing/translation-fixture';
 import { routes } from '../../app.routes';
 import { Home } from './home';
-
-class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation(_lang: string): Observable<Translation> {
-    return of({
-      home: {
-        hero: {
-          eyebrow: 'Sanctuary eyebrow',
-          title: {
-            line1: 'A line',
-            line2: 'another line',
-            line3: 'final.',
-          },
-          intro: 'Hero intro text.',
-          action: {
-            enter: 'Enter',
-            read: 'Read',
-          },
-          scroll: {
-            ariaLabel: 'Scroll aria label',
-            label: 'Scroll label',
-          },
-        },
-        paths: {
-          eyebrow: 'Paths eyebrow',
-          title: {
-            line1: 'Choose how',
-            line2: 'to traverse.',
-          },
-          intro: 'Paths intro text.',
-          card: {
-            readings: {
-              label: 'Archive',
-              title: 'Readings',
-              description: 'Readings description.',
-            },
-            matrix: {
-              label: 'Laboratory',
-              title: 'Matrix',
-              description: 'Matrix description.',
-            },
-            samvit: {
-              label: 'Presence',
-              description: 'Samvit description.',
-            },
-          },
-        },
-      },
-    });
-  }
-}
 
 describe('Home', () => {
   let fixture: ComponentFixture<Home>;
@@ -72,7 +22,7 @@ describe('Home', () => {
             reRenderOnLangChange: true,
             prodMode: true,
           },
-          loader: MockTranslocoLoader,
+          loader: TranslationFixture,
         }),
       ],
     }).compileComponents();

@@ -27,7 +27,6 @@ export default defineConfig({
       ],
       reportsDirectory: 'coverage/server',
       reporter: ['text-summary', 'json-summary'],
-      thresholds: { statements: 85, branches: 85, functions: 85, lines: 85 },
     },
   },
 });

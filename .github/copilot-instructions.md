@@ -55,6 +55,7 @@
 
 - Use Vitest-compatible APIs and commands.
 - Prefer behavior-focused tests.
+- Follow the [testing strategy and acceptance criteria](../docs/testing-quality.md). Preserve the coverage baseline and explain any intentional change to the measurement scope.
 - Do not test cosmetic CSS details unless the behavior itself depends on them.
 - For changed interactions, verify the applicable accessibility contracts at their real entry points, including accessible name and state, keyboard and focus, announcements and responsive behavior. Identify which checks ran in a browser and which still require assistive technology or a physical device.
 - When fake timers are used, restore real timers after the test.
@@ -63,16 +64,18 @@
 
 ## Workflow
 
-- Keep branch names in English, with a purpose prefix: `feat/`, `fix/`, `refactor/`, `docs/`, or `chore/`.
+- Keep branch names in English, following the purpose prefixes and contribution policy in [CONTRIBUTING.md](../CONTRIBUTING.md).
 - Use a short, descriptive scope after the prefix; do not add tool or assistant names such as `codex/`.
 - Keep one active pull request for the same delivery. Link and close a superseded proposal only after its replacement is ready; preserve review history.
 - Read relevant files before editing them.
+- Run the local preflight defined in CONTRIBUTING.md before publishing when a compatible environment is available. API commits bypass local hooks; explicitly record checks that could not run.
+- When formatting fails in CI, inspect the exact formatting patch before publishing another correction. Never weaken the formatting gate.
 - Keep changes strictly inside the requested scope.
 - Preserve unrelated code.
 - If the user provides complete file contents or an explicit implementation specification, treat that specification as the source of truth unless it conflicts with the current repository.
 - If the specification conflicts with the current codebase, stop and report the conflict instead of guessing.
 - Do not make speculative improvements outside the task.
-- Do not silently fix unrelated warnings.
+- Act as a critical reviewer, not a defender of the current implementation. Investigate warnings and errors with equal priority, even when functionality is unaffected. Never silence or dismiss warnings to obtain a passing check. Record findings and externally controlled blockers explicitly.
 - Standing authorization from the author (2026-10-17): commit and push the reviewed changes of a completed, validated delivery and open a pull request against `main` for her review. Do not ask for permission again for these steps.
 - Do not merge pull requests or delete branches unless explicitly requested. The author performs the merge.
 - Do not use destructive Git commands unless explicitly requested.

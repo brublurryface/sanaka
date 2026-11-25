@@ -1,104 +1,10 @@
 import { TestBed } from '@angular/core/testing';
 import { provideRouter } from '@angular/router';
-import { provideTransloco, TranslocoLoader } from '@jsverse/transloco';
-import { of } from 'rxjs';
+import { provideTransloco } from '@jsverse/transloco';
 import { beforeEach, describe, expect, it } from 'vitest';
+import { TranslationFixture } from '../../../../testing/translation-fixture';
 
 import { Matrix } from './matrix';
-
-class MockTranslocoLoader implements TranslocoLoader {
-  getTranslation() {
-    return of({
-      matrix: {
-        header: {
-          back: 'Back to the Matrix catalog',
-          eyebrow: 'Interactive laboratory',
-          title: { line1: 'Matrix', line2: 'Online' },
-          intro: 'Watch Angular respond.',
-          action: 'Enter the experiment',
-          imageAlt: 'Saṃvit, Kalika, and Bhū in conversation.',
-        },
-        exhibit: {
-          eyebrow: 'Experiment 01',
-          title: 'Components in conversation',
-          intro: 'A parent and child exchange data.',
-          guide: {
-            eyebrow: 'How to experiment',
-            title: 'Send the message through the circuit',
-            parent: { title: 'The parent sends', text: 'Write a message.' },
-            child: { title: 'The child chooses', text: 'Select a reply.' },
-            return: { title: 'The parent receives', text: 'Watch it return.' },
-          },
-          parent: {
-            eyebrow: 'Parent component',
-            title: 'Sender',
-            label: 'Message',
-            placeholder: 'Write a message',
-            hint: 'Start with a ready-made message.',
-            useExample: 'Use example',
-            exampleMessage: 'Did you receive this message?',
-            send: 'Send',
-            inputNote: 'passes a value to the child.',
-          },
-          child: {
-            eyebrow: 'Child component',
-            title: 'Receiver',
-            receivedLabel: 'Received value',
-            waiting: 'Waiting',
-            reply: 'Reply',
-            options: {
-              acknowledge: 'Confirm it was received',
-              measure: 'Count the characters',
-              echo: 'Return an echo',
-            },
-            outputNote: 'emits an event.',
-          },
-          return: {
-            label: 'Return to parent',
-            waiting: 'No reply yet',
-            responses: {
-              acknowledge: 'Child: message received.',
-              measure: 'Child: {{ count }} characters.',
-              echo: 'Child: {{ message }}',
-            },
-          },
-          timeline: {
-            eyebrow: 'Angular log',
-            title: 'What happened beneath the interface',
-            automatic: 'Updates automatically',
-            note: 'This panel does not receive clicks.',
-            parentState: 'Parent updates its state.',
-            binding: 'Angular evaluates the binding.',
-            childInput: 'Child receives the input.',
-            childOutput: 'Child emits an output.',
-            parentHandler: 'Parent handles the event.',
-          },
-          reset: 'Reset',
-          code: {
-            eyebrow: 'Code in motion',
-            title: 'See inside the circuit',
-            status: 'Snippet {{ current }} of {{ total }}',
-            previous: 'Previous',
-            next: 'Next',
-            pagination: 'Code snippets',
-            goTo: 'View snippet {{ page }}',
-            slides: {
-              parent: { title: 'Parent sends', description: 'Signals hold the value.' },
-              binding: { title: 'Template connects', description: 'Bindings connect both sides.' },
-              child: { title: 'Child receives', description: '@Input receives the value.' },
-              return: { title: 'Parent handles', description: '@Output returns the event.' },
-            },
-          },
-        },
-        explanation: {
-          action: { title: 'What do you do?', text: 'Send and reply.' },
-          angular: { title: 'What does Angular notice?', text: 'Bindings and events.' },
-          code: { title: 'What moves in code?', text: 'Data moves between components.' },
-        },
-      },
-    });
-  }
-}
 
 describe('Matrix', () => {
   beforeEach(async () => {
@@ -109,11 +15,11 @@ describe('Matrix', () => {
         provideTransloco({
           config: {
             availableLangs: ['pt-BR', 'en'],
-            defaultLang: 'pt-BR',
-            fallbackLang: 'pt-BR',
+            defaultLang: 'en',
+            fallbackLang: 'en',
             prodMode: true,
           },
-          loader: MockTranslocoLoader,
+          loader: TranslationFixture,
         }),
       ],
     }).compileComponents();

@@ -116,7 +116,7 @@
                 "src/app/core/wordpress/wordpress-text.browser.spec.ts"
               ],
               "exclude": ["src/server/**/*.spec.ts"],
-              "runnerConfig": "vitest.browser-security.config.ts"
+              "runnerConfig": "vitest.browser-security.config.mts"
             }
           }
         }
