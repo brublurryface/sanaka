@@ -1,3 +1,6 @@
+@use '../../../../styles/focus-indicator' as focus;
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 }
@@ -54,15 +57,7 @@
 .section-eyebrow {
   margin: 0 0 1.5rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: var(--sanaka-type-eyebrow-weight);
-  line-height: var(--sanaka-type-eyebrow-line-height);
-  letter-spacing: var(--sanaka-type-eyebrow-spacing);
-
-  text-transform: uppercase;
+  @include typography.editorial-eyebrow;
 }
 
 .paths-heading h2 {
@@ -153,14 +148,7 @@
 .path-label {
   margin: 0 0 0.45rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 600;
-  letter-spacing: 0.14em;
-
-  text-transform: uppercase;
+  @include typography.interface-label(0.14em);
 }
 
 .path-content h3 {
@@ -210,8 +198,7 @@
 }
 
 .path-card:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: -1px;
+  @include focus.ring(1px, -1px);
 }
 
 @media (max-width: 900px) {

@@ -1,0 +1,6 @@
+// As páginas de encontro compartilham o limite e o espaçamento vertical da cena.
+@mixin encounter-shell {
+  width: var(--sanaka-page-shell-width);
+  margin-inline: auto;
+  padding-block: clamp(3rem, 6vw, 6rem) clamp(4.5rem, 8vw, 8rem);
+}

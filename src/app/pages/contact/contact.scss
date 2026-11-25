@@ -1,3 +1,6 @@
+@use '../../../styles/focus-indicator' as focus;
+@use '../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 
@@ -37,8 +40,7 @@
 
   color: var(--sanaka-ivory);
 
-  font-size: var(--sanaka-type-hero-intro-size);
-  line-height: var(--sanaka-type-hero-intro-line-height);
+  @include typography.hero-intro;
 }
 
 .contact-content {
@@ -135,8 +137,7 @@
 .contact-message input:focus-visible,
 .contact-message textarea:focus-visible,
 .contact-message button:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 4px;
+  @include focus.ring(1px, 4px);
 }
 
 .contact-social__mark {

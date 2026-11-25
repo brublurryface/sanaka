@@ -1,3 +1,5 @@
+@use '../../../../styles/focus-indicator' as focus;
+
 :host {
   display: none;
 }
@@ -53,8 +55,7 @@
   }
 
   .about-puzzle-mobile__selector:focus-visible {
-    outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: -0.25rem;
+    @include focus.ring(2px, -0.25rem);
   }
 
   .about-puzzle-mobile__art {

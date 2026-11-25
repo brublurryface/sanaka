@@ -1,3 +1,5 @@
+@use '../../../../../styles/focus-indicator' as focus;
+
 :host {
   display: contents;
 }
@@ -78,8 +80,7 @@
 
 .obolo-dialog__close:focus-visible,
 .obolo-dialog__primary:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 0.25rem;
+  @include focus.ring(1px, 0.25rem);
 }
 
 .obolo-dialog__header {

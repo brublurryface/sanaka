@@ -1,3 +1,6 @@
+@use '../../../../styles/focus-indicator' as focus;
+@use '../../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 }
@@ -142,15 +145,7 @@
 .eyebrow {
   margin: 0 0 1.6rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-eyebrow-size);
-  font-weight: var(--sanaka-type-eyebrow-weight);
-  line-height: var(--sanaka-type-eyebrow-line-height);
-  letter-spacing: var(--sanaka-type-eyebrow-spacing);
-
-  text-transform: uppercase;
+  @include typography.editorial-eyebrow(var(--sanaka-type-eyebrow-size));
 }
 
 h1 {
@@ -306,8 +301,7 @@ h1 > span {
 }
 
 .action:focus-visible {
-  outline: 1px solid var(--sanaka-ivory);
-  outline-offset: 5px;
+  @include focus.ring(1px, 5px, var(--sanaka-ivory));
 }
 
 /* -----------------------
@@ -493,8 +487,7 @@ h1 > span {
 }
 
 .scroll-indicator:focus-visible {
-  outline: 1px solid var(--sanaka-gold-soft);
-  outline-offset: 6px;
+  @include focus.ring(1px, 6px);
 }
 
 /* -----------------------

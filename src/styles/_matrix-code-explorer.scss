@@ -1,3 +1,6 @@
+@use 'accessible-announcement' as announcement;
+@use 'focus-indicator' as focus;
+
 .matrix-code-explorer {
   .code-explorer__header {
     display: flex;
@@ -24,15 +27,7 @@
   }
 
   .code-explorer__announcement {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
+    @include announcement.visually-hidden;
   }
 
   .code-explorer__descriptions {
@@ -122,8 +117,7 @@
   }
 
   .code-window__pages button:focus-visible {
-    outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: -2px;
+    @include focus.ring(2px, -2px);
   }
 
   .code-window__title {
@@ -229,8 +223,7 @@
   }
 
   .code-window__navigation button:focus-visible {
-    outline: 2px solid var(--sanaka-gold-soft);
-    outline-offset: 2px;
+    @include focus.ring(2px, 2px);
   }
 }
 

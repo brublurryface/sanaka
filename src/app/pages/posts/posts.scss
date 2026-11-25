@@ -1,3 +1,6 @@
+@use '../../../styles/focus-indicator' as focus;
+@use '../../../styles/editorial-typography' as typography;
+
 :host {
   display: block;
 }
@@ -35,11 +38,7 @@
 
   color: var(--sanaka-ivory);
 
-  font-family: var(--sanaka-font-display);
-  font-size: var(--sanaka-type-page-title-size);
-  font-weight: var(--sanaka-type-page-title-weight);
-  line-height: var(--sanaka-type-page-title-line-height);
-  letter-spacing: var(--sanaka-type-page-title-spacing);
+  @include typography.page-title;
 
   text-wrap: balance;
 }
@@ -51,8 +50,7 @@
   color: var(--sanaka-ivory);
 
   font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-hero-intro-size);
-  line-height: var(--sanaka-type-hero-intro-line-height);
+  @include typography.hero-intro;
 
   white-space: pre-line;
 }
@@ -89,8 +87,7 @@
 }
 
 .posts-header__sanakaverse:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 5px;
+  @include focus.ring(2px, 5px);
 }
 
 /* -----------------------
@@ -108,14 +105,7 @@
 
   margin-bottom: 0.65rem;
 
-  color: var(--sanaka-gold-soft);
-
-  font-family: var(--sanaka-font-body);
-  font-size: var(--sanaka-type-editorial-label-size);
-  font-weight: 600;
-  letter-spacing: 0.12em;
-
-  text-transform: uppercase;
+  @include typography.interface-label(0.12em);
 }
 
 .posts-search__control {
@@ -555,8 +545,7 @@
 
 .posts-filters__field select:focus-visible,
 .posts-filters button:focus-visible {
-  outline: 2px solid var(--sanaka-gold-soft);
-  outline-offset: 3px;
+  @include focus.ring(2px, 3px);
 }
 
 .posts-filters__feedback {
