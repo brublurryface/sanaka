@@ -1,3 +1,4 @@
+@use '../../../../../styles/accessible-announcement' as announcement;
 @use '../../../../../styles/focus-indicator' as focus;
 @use '../portal-controls';
 
@@ -228,15 +229,7 @@ app-metatron-mark.portal-state__symbol {
 }
 
 .portal-announcement {
-  position: absolute;
-  width: 1px;
-  height: 1px;
-  padding: 0;
-  overflow: hidden;
-  border: 0;
-  clip: rect(0 0 0 0);
-  clip-path: inset(50%);
-  white-space: nowrap;
+  @include announcement.visually-hidden;
 }
 
 .image-caption {

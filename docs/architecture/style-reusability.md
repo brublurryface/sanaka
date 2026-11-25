@@ -69,3 +69,45 @@ de comportamento ou aparência. A equivalência do build precisa ser conferida n
 Não relaxar o limite global nem criar exclusões para obter aprovação artificial. O próximo
 relatório deverá comparar os resultados por linguagem, revisar o escopo dos estilos globais
 e distinguir semelhanças textuais de duplicações de responsabilidades.
+
+## Evidência da segunda intervenção e política de regressão
+
+O commit `b0324ac` passou nos três workflows:
+[Validate Sanaka](https://github.com/brublurryface/sanaka/actions/runs/45669706224),
+[Browser critical flows](https://github.com/brublurryface/sanaka/actions/runs/45669706399)
+e [Article SSR experiment](https://github.com/brublurryface/sanaka/actions/runs/45669706312).
+Não houve novos avisos inesperados. A cobertura e o tamanho bruto do bundle inicial foram
+preservados; a transferência estimada foi de 116,93 kB.
+
+Contadores de referência (linhas duplicadas/total; tokens duplicados/total; clones):
+
+- TypeScript em src/app: 106/9445; 936/65603; 14 clones.
+- HTML em src/app: 11/4004; 66/26166; 1 clone.
+- SCSS em src/app: 72/8020; 507/43936; 8 clones.
+- SCSS em src: 85/9246; 562/52252; 9 clones.
+
+A política em `scripts/duplication-policy.mjs` impede aumento dos números absolutos
+de linhas duplicadas, tokens duplicados e clones em cada formato. O limite agregado
+anterior de 3% continua no comando combinado. Uma regressão não pode ser compensada
+por outro formato, pelo crescimento do código ou pelo arredondamento. Os percentuais
+são informativos: reduzir código não duplicado pode elevar uma proporção sem criar
+duplicação. Relatórios vazios ou sem o formato esperado são falhas. O contrato JSON
+é o de jscpd 5.4.2, fixado no lockfile
+([documentação](https://jscpd.dev/reference/reporters/json)).
+
+O preflight executa uma varredura combinada em src/app e outra de SCSS em src. A varredura
+TypeScript isolada permanece disponível, mas não repete o trabalho no check:build.
+Os relatórios JSON são gravados em .jscpd (já ignorado pelo Git) e preservados no CI.
+Nove testes da política exercitam regressão isolada, tokens, clones, relatório inválido
+e variação do denominador. Alterações legítimas na medição precisam de revisão explícita;
+não aumentar a linha de base automaticamente.
+
+A nova extração `src/styles/_accessible-announcement.scss` centraliza o conjunto idêntico
+de declarações de ocultação visual das regiões de anúncio do Arcane Portal e do explorador
+de código. Preserva os seletores, o DOM e as regiões acessíveis. A classe global
+`.visually-hidden` possui outras declarações e não foi substituída.
+
+Os demais registros incluem três coincidências de comentários, limites de media queries e
+animações independentes, além de contratos com variações intencionais. A revisão do contraste
+dos controles de Posts e a comparação visual continuam necessárias. O progresso de leitura
+foi registrado separadamente na [issue #126](https://github.com/brublurryface/sanaka/issues/126).

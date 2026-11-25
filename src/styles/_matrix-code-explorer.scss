@@ -1,3 +1,4 @@
+@use 'accessible-announcement' as announcement;
 @use 'focus-indicator' as focus;
 
 .matrix-code-explorer {
@@ -26,15 +27,7 @@
   }
 
   .code-explorer__announcement {
-    position: absolute;
-    width: 1px;
-    height: 1px;
-    padding: 0;
-    overflow: hidden;
-    border: 0;
-    clip: rect(0 0 0 0);
-    clip-path: inset(50%);
-    white-space: nowrap;
+    @include announcement.visually-hidden;
   }
 
   .code-explorer__descriptions {

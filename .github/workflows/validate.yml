@@ -61,6 +61,15 @@ jobs:
           path: ${{ runner.temp }}/prettier.patch
           retention-days: 7
           if-no-files-found: error
+      - name: Preserve duplication reports
+        if: ${{ !cancelled() && hashFiles('.jscpd/**/jscpd-report.json') != '' }}
+        uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
+        with:
+          name: duplication-reports
+          path: .jscpd/**/jscpd-report.json
+          include-hidden-files: true
+          retention-days: 14
+          if-no-files-found: error
       - name: Preserve coverage reports
         if: ${{ !cancelled() }}
         uses: actions/upload-artifact@cf430e030ddbb5b0abf93d22962f4752f3646cd9 # v7
